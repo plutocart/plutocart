@@ -27,8 +27,6 @@ jobs:
       - name: Delete Docker Container
         run: docker-compose down
 
-
-
       - name: Check if Docker image backend exists
         id: check_image_backend
         run: |
@@ -44,9 +42,6 @@ jobs:
         run: |
           docker rmi quay.io/chisanuchakim/plutocart_backend
           echo "Docker image backend removed."
-
-
-
 
       - name: Check if Docker image backend api gateway exists
         id: check_image_api_gateway
