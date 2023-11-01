@@ -16,11 +16,19 @@ jobs:
         run: docker images
       - name: delete docker container
         run: docker-compose down
+      - name: Check if file mysql exists
+        run: |
+          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql" ]; then
+          mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart
+         else
+          echo "File 'mysql' not found."
+          fi
+        shell: bash
       - name: Check if Docker image backend exists
         id: check_image_backend
         run: |
-          if docker images quay.io/chisanuchakim/oasip-sy-5-backend | awk '{ print $1 ":" $2 }' | grep -q 'quay.io/chisanuchakim/oasip-sy-5-backend'; then
-            echo "::set-output name=image_exists::true"
+          if docker images quay.io/chisanuchakim/plutocart_backend | awk '{ print $1 ":" $2 }' | grep -q 'quay.io/chisanuchakim/plutocart_backend'; then
+          echo "::set-output name=image_exists::true"
           else
             echo "::set-output name=image_exists::false"
           fi
@@ -29,7 +37,7 @@ jobs:
       - name: Remove Docker image backend if it exists
         if: steps.check_image_backend.outputs.image_exists == 'true'
         run: |
-          docker rmi quay.io/chisanuchakim/oasip-sy-5-backend
+          docker rmi quay.io/chisanuchakim/plutocart_backend
           echo "Docker image backend removed."
 
 
@@ -58,5 +66,6 @@ jobs:
       - run: docker push quay.io/chisanuchakim/plutocart_api_gateway
       - run: docker image rmi backend backend_api_gateway
       - run: docker-compose up -d
+      - run: /home/sysadmin/actions-runner/_work/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart/plutocart
 
         
