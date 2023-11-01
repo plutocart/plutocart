@@ -12,10 +12,6 @@ jobs:
         uses: actions/checkout@v2
 
      - name: Set up MySQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
-        # Set up MySQL credentials using secrets.
         env:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
@@ -78,7 +74,7 @@ jobs:
           docker image rmi backend backend_api_gateway
           docker-compose up -d
 
-          
+
        - name: Import MySQL database
         run: |
           mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < plutocart.sql           
