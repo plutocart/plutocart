@@ -23,8 +23,8 @@ jobs:
 
       - name: Check if file mysql exists
         run: |
-          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql" ]; then
-            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart
+          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data " ]; then
+            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data  /home/sysadmin/actions-runner/_work/plutocart
           else
             echo "File 'mysql' not found."
           fi
@@ -77,7 +77,7 @@ jobs:
           docker image rmi backend_api_gateway
           docker push quay.io/chisanuchakim/plutocart_api_gateway
           docker image rmi backend backend_api_gateway
-          mv /home/sysadmin/actions-runner/_work/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart/plutocart
+          mv /home/sysadmin/actions-runner/_work/plutocart/mysql-data  /home/sysadmin/actions-runner/_work/plutocart/plutocart
           docker-compose up -d
 
       
