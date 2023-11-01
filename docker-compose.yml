@@ -1,0 +1,42 @@
+version: '3.3'
+services:
+  mysql:
+    container_name: db
+    image: docker.io/mysql:8.0
+    restart: always
+    volumes:
+      - ./script:/docker-entrypoint-initdb.d/
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: Kim-254500
+
+  backend:
+    container_name: backend
+    image: quay.io/chisanuchakim/plutocart_backend
+    restart: on-failure
+    depends_on:
+      - mysql
+  backend-gateway:
+    container_name: backend-gateway
+    image: quay.io/chisanuchakim/plutocart_api_gateway
+    restart: on-failure
+    depends_on:
+      - backend    
+
+  reverse_proxy:
+    image: nginx:1.20.2-alpine
+    container_name: reverse_proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      # - ./ssl/ip21sy5.crt:/etc/nginx/ssl/ip21sy5.crt:ro
+      # - ./ssl/ip21sy5.key:/etc/nginx/ssl/ip21sy5.key:ro
+      # - ../ssl/:/etc/nginx/ssl:ro
+    depends_on:
+      - mysql
+      - backend
+      - backend-gateway
