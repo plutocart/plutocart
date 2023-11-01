@@ -14,8 +14,8 @@ jobs:
 
       - name: Set up MySQL
         env:
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Kim-254500
           MYSQL_DATABASE: plutocart
         run: echo "Setting up MySQL"
 
