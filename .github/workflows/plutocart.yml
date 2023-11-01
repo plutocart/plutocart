@@ -13,7 +13,7 @@ jobs:
         run: |
           ls -l /home/sysadmin/actions-runner/_work/plutocart/plutocart/
           if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data" ]; then
-            sudo mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data /home/sysadmin/actions-runner/_work/plutocart
+            sudo visudo mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data /home/sysadmin/actions-runner/_work/plutocart
           else
             echo "File 'mysql' not found."
           fi
