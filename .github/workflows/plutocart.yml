@@ -11,6 +11,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+     - name: Set up MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+        # Set up MySQL credentials using secrets.
+        env:
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: plutocart
+
+      - name: Dump MySQL database
+        run: |
+          mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > plutocart.sql
+
       - name: Check Docker Container
         run: docker ps
 
@@ -63,5 +77,8 @@ jobs:
           docker push quay.io/chisanuchakim/plutocart_api_gateway
           docker image rmi backend backend_api_gateway
           docker-compose up -d
+       - name: Import MySQL database
+        run: |
+          mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < plutocart.sql           
 
       
