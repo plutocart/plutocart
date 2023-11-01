@@ -26,7 +26,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Remove Docker image if it exists
+      - name: Remove Docker image backend if it exists
         if: steps.check_image_backend.outputs.image_exists == 'true'
         run: |
           docker rmi quay.io/chisanuchakim/oasip-sy-5-backend
@@ -43,7 +43,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Remove Docker image if it exists
+      - name: Remove Docker image api gateway if it exists
         if: steps.check_image_api_gateway.outputs.image_exists == 'true'
         run: |
           docker rmi quay.io/chisanuchakim/plutocart_api_gateway
