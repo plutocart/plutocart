@@ -21,7 +21,10 @@ jobs:
 
       - name: Dump MySQL database
         run: |
-          mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > plutocart.sql
+          echo "MYSQL_USER: $MYSQL_USER"
+          echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+          mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > plutocart.sql
+        shell: /usr/bin/bash -e {0}
 
       - name: Check Docker Container
         run: docker ps
