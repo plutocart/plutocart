@@ -2,33 +2,39 @@ name: timeup-runner
 
 on:
   push:
-    branches: [ dev ]
-    
+    branches: [dev]
+
 jobs:
   build:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Check Docker Container
         run: docker ps
+
       - name: Check Docker Images
         run: docker images
-      - name: delete docker container
+
+      - name: Delete Docker Container
         run: docker-compose down
+
       - name: Check if file mysql exists
         run: |
           if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql" ]; then
-          mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart
-         else
-          echo "File 'mysql' not found."
+            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart
+          else
+            echo "File 'mysql' not found."
           fi
         shell: bash
+
       - name: Check if Docker image backend exists
         id: check_image_backend
         run: |
           if docker images quay.io/chisanuchakim/plutocart_backend | awk '{ print $1 ":" $2 }' | grep -q 'quay.io/chisanuchakim/plutocart_backend'; then
-          echo "::set-output name=image_exists::true"
+            echo "::set-output name=image_exists::true"
           else
             echo "::set-output name=image_exists::false"
           fi
@@ -41,6 +47,8 @@ jobs:
           echo "Docker image backend removed."
 
 
+
+          
       - name: Check if Docker image backend api gateway exists
         id: check_image_api_gateway
         run: |
@@ -57,15 +65,15 @@ jobs:
           docker rmi quay.io/chisanuchakim/plutocart_api_gateway
           echo "Docker image api gateway removed."
 
-      - run: cd /home/sysadmin/actions-runner/_work/plutocart/plutocart
-      - run: docker build -t backend -f backend.DockerFile .
-      - run: docker tag backend quay.io/chisanuchakim/plutocart_backend
-      - run: docker push quay.io/chisanuchakim/plutocart_backend
-      - run: docker build -t backend_api_gateway -f backend_api_gateway.DockerFile .
-      - run: docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
-      - run: docker push quay.io/chisanuchakim/plutocart_api_gateway
-      - run: docker image rmi backend backend_api_gateway
-      - run: docker-compose up -d
-      - run: /home/sysadmin/actions-runner/_work/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart/plutocart
-
-        
+      - name: Build and push Docker images
+        run: |
+          cd /home/sysadmin/actions-runner/_work/plutocart/plutocart
+          docker build -t backend -f backend.DockerFile .
+          docker tag backend quay.io/chisanuchakim/plutocart_backend
+          docker push quay.io/chisanuchakim/plutocart_backend
+          docker build -t backend_api_gateway -f backend_api_gateway.DockerFile .
+          docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
+          docker push quay.io/chisanuchakim/plutocart_api_gateway
+          docker image rmi backend backend_api_gateway
+          docker-compose up -d
+          /home/sysadmin/actions-runner/_work/plutocart/mysql /home/sysadmin/actions-runner/_work/plutocart/plutocart
