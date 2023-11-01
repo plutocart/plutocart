@@ -57,6 +57,6 @@ jobs:
       - run: docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
       - run: docker push quay.io/chisanuchakim/plutocart_api_gateway
       - run: docker image rmi backend backend_api_gateway
-      - run: docker-compose up
+      - run: docker-compose up -d
 
         
