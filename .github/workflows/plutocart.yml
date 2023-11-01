@@ -7,19 +7,25 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    services:
+      db:
+        image: docker.io/mysql:8.0
+        ports:
+          - 3306:3306
+        options: --name db
 
-    steps:
-      - name: Check if file mysql exists
+    steps:  
+     - name: Check if container is running
         run: |
-          ls -l /home/sysadmin/actions-runner/_work/plutocart/plutocart/
-          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data" ]; then
-            chmod 765 /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data
-            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data /home/sysadmin/actions-runner/_work/plutocart
+          if docker ps -a --format '{{.Names}}' | grep -q '^db$'; then
+            echo "Container 'db' is running"
+            # Perform actions inside the container if needed
+            # For example, run a database dump command
+            docker exec db /path/to/mysqldump -u root -p Kim-254500 plutocart > /home/sysadmin/actions-runner/_work/plutocart/plutocart.sql
           else
-            echo "File 'mysql' not found."
-          fi
-        shell: bash
-            
+            echo "Container 'db' is not running"
+            # Perform other actions if the container doesn't exist
+          fi  
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -81,7 +87,7 @@ jobs:
           docker image rmi backend_api_gateway
           docker push quay.io/chisanuchakim/plutocart_api_gateway
           docker image rmi backend backend_api_gateway
-          mv /home/sysadmin/actions-runner/_work/plutocart/mysql-data  /home/sysadmin/actions-runner/_work/plutocart/plutocart
+          mv /home/sysadmin/actions-runner/_work/plutocart/plutocart.sql /home/sysadmin/actions-runner/_work/plutocart/plutocart/script/plutocart.sql
           docker-compose up -d
 
       
