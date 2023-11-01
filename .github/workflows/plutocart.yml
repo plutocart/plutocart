@@ -1,0 +1,67 @@
+name: timeup-runner
+
+on:
+  push:
+    branches: [ dev ]
+    
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check Docker Container
+        run: docker ps
+      - name: Check Docker Images
+        run: docker images
+      - name: delete docker container
+        run: docker-compose down
+      - name: Check if Docker image backend exists
+        id: check_image_backend
+        run: |
+          if docker images quay.io/chisanuchakim/oasip-sy-5-backend | awk '{ print $1 ":" $2 }' | grep -q 'quay.io/chisanuchakim/oasip-sy-5-backend'; then
+            echo "::set-output name=image_exists::true"
+          else
+            echo "::set-output name=image_exists::false"
+          fi
+        shell: bash
+
+      - name: Remove Docker image if it exists
+        if: steps.check_image_backend.outputs.image_exists == 'true'
+        run: |
+          docker rmi quay.io/chisanuchakim/oasip-sy-5-backend
+          echo "Docker image removed."
+
+
+      - name: Check if Docker image backend api gateway exists
+        id: check_image_api_gateway
+        run: |
+          if docker images quay.io/chisanuchakim/plutocart_api_gateway | awk '{ print $1 ":" $2 }' | grep -q 'quay.io/chisanuchakim/plutocart_api_gateway'; then
+            echo "::set-output name=image_exists::true"
+          else
+            echo "::set-output name=image_exists::false"
+          fi
+        shell: bash
+
+      - name: Remove Docker image if it exists
+        if: steps.check_image_api_gateway.outputs.image_exists == 'true'
+        run: |
+          docker rmi quay.io/chisanuchakim/plutocart_api_gateway
+          echo "Docker image removed."
+
+
+      - name: Remove Docker image if it exists
+        if: steps.check_image_frontend.outputs.image_exists == 'true'
+        run: |
+          docker rmi quay.io/chisanuchakim/plutocart_frontend
+          echo "Docker image removed."
+
+      - run: docker build -t backend .
+      - run: docker tag backend quay.io/chisanuchakim/plutocart_backend
+      - run: docker push quay.io/chisanuchakim/plutocart_backend
+      - run: docker build -t backend_api_gateway
+      - run: docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
+      - run: docker push quay.io/chisanuchakim/plutocart_api_gateway
+      - run: docker compose up
+
+        
