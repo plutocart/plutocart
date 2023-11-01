@@ -66,14 +66,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<finalName>plutocart_backend</finalName>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -86,6 +78,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>plutocart_backend</finalName>
 	</build>
-
 </project>
