@@ -55,7 +55,7 @@ jobs:
         run: |
           docker rmi quay.io/chisanuchakim/plutocart_frontend
           echo "Docker image removed."
-
+      - run: cd/home/spadmin/actions-runner/_work/plutocart/plutocart
       - run: docker build -t backend .
       - run: docker tag backend quay.io/chisanuchakim/plutocart_backend
       - run: docker push quay.io/chisanuchakim/plutocart_backend
