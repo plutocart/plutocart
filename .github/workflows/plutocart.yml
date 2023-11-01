@@ -2,12 +2,13 @@ name: timeup-runner
 
 on:
   push:
-    branches: [dev]
+    branches:
+      - dev
 
 jobs:
   build:
     runs-on: self-hosted
-    steps:  
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -74,9 +75,6 @@ jobs:
           docker image rmi backend backend_api_gateway
           docker-compose up -d
 
-
-       - name: Import MySQL database
+      - name: Import MySQL database
         run: |
-          mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < plutocart.sql           
-
-      
+          mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < plutocart.sql
