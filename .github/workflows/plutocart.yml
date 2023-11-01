@@ -11,8 +11,9 @@ jobs:
     steps:
       - name: Check if file mysql exists
         run: |
-          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data " ]; then
-            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data  /home/sysadmin/actions-runner/_work/plutocart
+          ls -l /home/sysadmin/actions-runner/_work/plutocart/plutocart/
+          if [ -e "/home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data" ]; then
+            mv /home/sysadmin/actions-runner/_work/plutocart/plutocart/mysql-data /home/sysadmin/actions-runner/_work/plutocart
           else
             echo "File 'mysql' not found."
           fi
