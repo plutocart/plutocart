@@ -57,11 +57,9 @@ jobs:
           cd /home/sysadmin/actions-runner/_work/plutocart/plutocart
           docker build -t backend -f backend.DockerFile .
           docker tag backend quay.io/chisanuchakim/plutocart_backend
-          docker image rmi backend
           docker push quay.io/chisanuchakim/plutocart_backend
           docker build -t backend_api_gateway -f backend_api_gateway.DockerFile .
           docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
-          docker image rmi backend_api_gateway
           docker push quay.io/chisanuchakim/plutocart_api_gateway
           docker image rmi backend backend_api_gateway
           docker-compose up -d
