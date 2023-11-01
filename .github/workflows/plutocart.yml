@@ -2,7 +2,8 @@ name: timeup-runner
 
 on:
   push:
-    branches: [dev]
+    branches:
+      - dev
 
 jobs:
   build:
@@ -16,6 +17,7 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_DATABASE: plutocart
+        run: echo "Setting up MySQL"
 
       - name: Dump MySQL database
         run: |
