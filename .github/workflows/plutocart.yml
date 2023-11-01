@@ -7,13 +7,6 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    services:
-      db:
-        image: docker.io/mysql:8.0
-        ports:
-          - 3306:3306
-        options: --name db
-
     steps:  
       - name: Checkout code
         uses: actions/checkout@v2
