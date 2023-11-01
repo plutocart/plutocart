@@ -17,16 +17,16 @@ services:
     restart: on-failure
     depends_on:
       - mysql
-    ports:
-      - 8080:8080    
+    # ports:
+    #   - 8080:8080    
   backend-gateway:
     container_name: backend-gateway
     image: quay.io/chisanuchakim/plutocart_api_gateway
     restart: on-failure
     depends_on:
       - backend
-    ports:
-      - 8765:8765    
+    # ports:
+    #   - 8765:8765    
 
   reverse_proxy:
     image: nginx:1.20.2-alpine
