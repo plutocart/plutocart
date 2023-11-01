@@ -12,7 +12,7 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("api_route", r -> r.path("/api/**")
-                        .uri("http://cp23ej1.sit.kmutt.ac.th:8080"))
+                        .uri("lb://backend"))
                 // Add more routes as needed
                 .build();
     }
