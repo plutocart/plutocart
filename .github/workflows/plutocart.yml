@@ -11,21 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # - name: Set up MySQL
-      #   env:
-      #     MYSQL_USER: root
-      #     MYSQL_PASSWORD: Kim-254500
-      #     MYSQL_DATABASE: plutocart
-      #   run: echo "Setting up MySQL"
-
-      # - name: Dump MySQL database
-      #   run: |
-      #     echo "MYSQL_USER: $MYSQL_USER"
-      #     echo "MYSQL_DATABASE: $MYSQL_DATABASE"
-      #     mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > plutocart.sql
-      #   shell: /usr/bin/bash -e {0}
-
       - name: Check Docker Container
         run: docker ps
 
@@ -76,9 +61,11 @@ jobs:
           docker build -t backend_api_gateway -f backend_api_gateway.DockerFile .
           docker tag backend_api_gateway quay.io/chisanuchakim/plutocart_api_gateway
           docker push quay.io/chisanuchakim/plutocart_api_gateway
-          docker image rmi backend backend_api_gateway
+          docker rmi backend backend_api_gateway
           docker-compose up -d
 
-      # - name: Import MySQL database
-      #   run: |
-      #     mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < plutocart.sql
+      - name: Prune Docker images
+        run: |
+          # Forcefully prune Docker objects and press "yes"
+          docker image prune -f <<< 'yes'
+        continue-on-error: true  # Continue even if Docker prune fails
