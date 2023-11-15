@@ -66,12 +66,17 @@ public class WalletService {
 
     //    Update
     public ResponseEntity updateNameWallet(String wallet_name, Integer account_id, int wallet_id) {
-        if (wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id, wallet_id).getNameWallet())) {
-            return ResponseEntity.status(200).body("data up to date");
-        } else {
-            walletRepository.updateNameWallet(wallet_name, account_id, wallet_id);
-            return ResponseEntity.status(200).body("update wallet name is : " + " " + wallet_name);
-        }
+       try{
+           if (wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id, wallet_id).getNameWallet())) {
+               return ResponseEntity.status(200).body("data up to date");
+           } else {
+               walletRepository.updateNameWallet(wallet_name, account_id, wallet_id);
+               return ResponseEntity.status(200).body("update wallet name is : " + " " + wallet_name);
+           }
+       }
+       catch (Exception ex){
+           return  ResponseEntity.status(400).body("account id invalid");
+       }
     }
 
     public ResponseEntity updateStatusWallet(Integer account_id, int wallet_id) {
