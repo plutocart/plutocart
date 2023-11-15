@@ -66,10 +66,9 @@ public class WalletService {
 
     //    Update
     public ResponseEntity updateNameWallet(String wallet_name, Integer account_id, int wallet_id) {
-        if(wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id , wallet_id).getNameWallet())){
-            return  ResponseEntity.status(200).body("data up to date");
-        }
-        else{
+        if (wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id, wallet_id).getNameWallet())) {
+            return ResponseEntity.status(200).body("data up to date");
+        } else {
             walletRepository.updateNameWallet(wallet_name, account_id, wallet_id);
             return ResponseEntity.status(200).body("update wallet name is : " + " " + wallet_name);
         }
@@ -86,14 +85,13 @@ public class WalletService {
 
     // Delete
     public ResponseEntity deleteWalletByAccountIdAndWalletId(Integer account_id, int wallet_id) {
-        try {
+        if (walletRepository.findById(wallet_id).isPresent()) {
             walletRepository.deleteWalletByAccountIdAndWalletId(account_id, wallet_id);
             return ResponseEntity.ok().body("delete wallet number " + " " + wallet_id + " " + "account id" + " " + account_id);
-        }
-        catch (Exception ex){
+        } else {
             return ResponseEntity.status(400).body("can't delete because account id or wallet id invalid !");
         }
+
     }
-
-
 }
+
