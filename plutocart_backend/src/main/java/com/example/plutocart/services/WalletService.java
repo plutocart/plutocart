@@ -1,7 +1,5 @@
 package com.example.plutocart.services;
 
-import com.example.plutocart.constant.Message;
-import com.example.plutocart.constant.Response;
 import com.example.plutocart.dtos.WalletDto;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.repositories.AccountRepository;
@@ -28,8 +26,6 @@ public class WalletService {
     ModelMapper modelMapper;
     @Autowired
     WalletDto walletDto;
-    @Autowired
-    Response response;
 
 
     // Get
