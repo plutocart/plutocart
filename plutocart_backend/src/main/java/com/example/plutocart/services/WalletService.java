@@ -1,17 +1,23 @@
 package com.example.plutocart.services;
 
+import com.example.plutocart.dtos.WalletDto;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.WalletRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WalletService {
@@ -22,12 +28,71 @@ public class WalletService {
     WalletRepository walletRepository;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    WalletDto walletDto;
 
-     public void crateWallet(@RequestBody Wallet wallet) throws Exception {
-//            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // wait login
-         //        walletRepository.insertWalletByAccountID(wallet.getNameWallet(), wallet.getBalanceWallet(), accountRepository.findById(2).get().getId(), LocalDateTime.now(), LocalDateTime.now()); // account customer
-        walletRepository.insertWalletByAccountID(wallet.getNameWallet(), wallet.getBalanceWallet(), accountRepository.findById(1).get().getId(), LocalDateTime.now(), LocalDateTime.now()); // account guest
 
+    // Get
+    public List<WalletDto> getWalletByIdAccount(Integer account_id) {
+        try {
+            List<Wallet> walletList = walletRepository.viewWalletByAccountId(accountRepository.findById(account_id).get().getId());
+            return walletList.stream().map(e -> modelMapper.map(e, WalletDto.class)).collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id account not found !");
+        }
+
+    }
+
+    public WalletDto getWalletByIdAccountAndByWalletId(Integer account_id, int wallet_id) {
+        try {
+            Wallet wallet = walletRepository.viewWalletByAccountIdAndWalletId(accountRepository.findById(account_id).get().getId(), walletRepository.findById(wallet_id).get().getId());
+            return modelMapper.map(wallet, WalletDto.class);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id account or id wallet not found !");
+        }
+
+    }
+
+    //    Post
+    public ResponseEntity crateWallet(Wallet wallet, Integer account_id) {
+        try {
+            walletRepository.insertWalletByAccountID(wallet.getNameWallet(), wallet.getBalanceWallet(), accountRepository.findById(account_id).get().getId(), LocalDateTime.now(), LocalDateTime.now()); // account guest
+            return ResponseEntity.status(201).body("success");
+        } catch (Exception ex) {
+            return ResponseEntity.status(400).build();
+        }
+
+    }
+
+    //    Update
+    public ResponseEntity updateNameWallet(String wallet_name, Integer account_id, int wallet_id) {
+        if(wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id , wallet_id).getNameWallet())){
+            return  ResponseEntity.status(200).body("data up to date");
+        }
+        else{
+            walletRepository.updateNameWallet(wallet_name, account_id, wallet_id);
+            return ResponseEntity.status(200).body("update wallet name is : " + " " + wallet_name);
+        }
+    }
+
+    public ResponseEntity updateStatusWallet(Integer account_id, int wallet_id) {
+        try {
+            walletRepository.updateStatusWallet((byte) (walletRepository.findById(wallet_id).get().getStatusWallet() == 1 ? 0 : 1), accountRepository.findById(account_id).get().getId(), wallet_id);
+            return ResponseEntity.status(200).body("update status wallet" + " " + ":" + (byte) (walletRepository.findById(wallet_id).get().getStatusWallet() == 1 ? 0 : 1));
+        } catch (Exception ex) {
+            return ResponseEntity.status(400).body("account id or wallet id not found or data invalid");
+        }
+    }
+
+    // Delete
+    public ResponseEntity deleteWalletByAccountIdAndWalletId(Integer account_id, int wallet_id) {
+        try {
+            walletRepository.deleteWalletByAccountIdAndWalletId(account_id, wallet_id);
+            return ResponseEntity.ok().body("delete wallet number " + " " + wallet_id + " " + "account id" + " " + account_id);
+        }
+        catch (Exception ex){
+            return ResponseEntity.status(400).body("can't delete because account id or wallet id invalid !");
+        }
     }
 
 

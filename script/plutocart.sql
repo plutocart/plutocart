@@ -156,3 +156,40 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+insert into account (id_account , user_name , imei , email , password , account_role) values(1 , 'admin' , 'admin_imei' , 'admin@gmail.com' , 'adminpassword' , 2);
+
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(1 , 'Salary' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(2 , 'Pocket money' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(3 , 'Davidend' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(4 , 'Allowance' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(5 , 'Pension' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(6 , 'Reward' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(7 , 'Bonus' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(8 , 'Collect rent' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(9 , 'Win the lottery' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(10 , 'Freelance' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(11 , 'Part-time' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(12, 'Sell Things' , 1); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(13, 'Red envelope' , 1); 
+
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(14 , 'Food' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(15, 'Gasoline' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(16, 'Telephone bill' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(17, 'Medical' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(18, 'Shopping' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(19, 'Electricity bill' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(20, 'Water bill' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(21, 'Home installment' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(22, 'Travel' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(23, 'Fare' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(24, 'Drinking' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(25, 'Donate' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(26, 'Household items' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(27, 'Pay for rent' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(28, 'Transfer money to others' , 2); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category) values(29, 'Lottery' , 2); 
+
+insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(1 , 'admin wallet' , 100000.00 , default , 1 , now() , now());
+insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());

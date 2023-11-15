@@ -33,4 +33,7 @@ public class Wallet {
     @Column(name = "update_wallet_on", nullable = false)
     private Instant updateWalletOn;
 
+    @Column(name = "status_wallet", nullable = false)
+    private Byte statusWallet;
+
 }

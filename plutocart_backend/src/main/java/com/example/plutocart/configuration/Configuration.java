@@ -1,5 +1,6 @@
 package com.example.plutocart.configuration;
 
+import com.example.plutocart.dtos.WalletDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 
@@ -10,4 +11,7 @@ public class Configuration {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
+
+    @Bean
+    public WalletDto walletDto(){ return new WalletDto();}
 }
