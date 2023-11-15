@@ -1,5 +1,7 @@
 package com.example.plutocart.services;
 
+import com.example.plutocart.constant.Message;
+import com.example.plutocart.constant.Response;
 import com.example.plutocart.dtos.WalletDto;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.repositories.AccountRepository;
@@ -9,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -30,15 +28,17 @@ public class WalletService {
     ModelMapper modelMapper;
     @Autowired
     WalletDto walletDto;
+    @Autowired
+    Response response;
 
 
     // Get
-    public List<WalletDto> getWalletByIdAccount(Integer account_id) {
+    public ResponseEntity getWalletByIdAccount(Integer account_id) {
         try {
             List<Wallet> walletList = walletRepository.viewWalletByAccountId(accountRepository.findById(account_id).get().getId());
-            return walletList.stream().map(e -> modelMapper.map(e, WalletDto.class)).collect(Collectors.toList());
+            return  ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDto.class)).collect(Collectors.toList()));
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id account not found !");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id account  not found !");
         }
 
     }
@@ -59,7 +59,8 @@ public class WalletService {
             walletRepository.insertWalletByAccountID(wallet.getNameWallet(), wallet.getBalanceWallet(), accountRepository.findById(account_id).get().getId(), LocalDateTime.now(), LocalDateTime.now()); // account guest
             return ResponseEntity.status(201).body("success");
         } catch (Exception ex) {
-            return ResponseEntity.status(400).build();
+            System.out.println("test");
+            return ResponseEntity.status(400).body("");
         }
 
     }
