@@ -23,6 +23,10 @@ services:
   backend-gateway:
     container_name: backend-gateway
     image: quay.io/chisanuchakim/plutocart_api_gateway
+    volumes:
+      - ./plutocart/plutocart_api_gateway/ssl/keystore.p12:/ssl
+    environment:
+      - KEY_STORE_PATH=/ssl/keystore.p12
     restart: on-failure
     depends_on:
       - backend
