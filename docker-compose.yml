@@ -23,10 +23,6 @@ services:
   backend-gateway:
     container_name: backend-gateway
     image: quay.io/chisanuchakim/plutocart_api_gateway
-    volumes:
-      - ./keystore/keystore.jks :/ssl
-    environment:
-      - KEY_STORE_PATH=/ssl/keystore.jks 
     restart: on-failure
     depends_on:
       - backend
