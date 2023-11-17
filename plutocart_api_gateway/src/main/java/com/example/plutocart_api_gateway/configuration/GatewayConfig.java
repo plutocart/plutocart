@@ -1,5 +1,4 @@
 package com.example.plutocart_api_gateway.configuration;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
