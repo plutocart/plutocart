@@ -3,25 +3,24 @@ package com.example.plutocart.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "wallet")
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_wallet", nullable = false)
-    private Integer id;
+    private Integer walletId;
 
     @Column(name = "name_wallet", nullable = false, length = 45)
-    private String nameWallet;
+    private String walletName;
 
     @Column(name = "balance_wallet", nullable = false, precision = 13, scale = 2)
-    private BigDecimal balanceWallet;
+    private BigDecimal WalletBalance;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id_account", nullable = false)

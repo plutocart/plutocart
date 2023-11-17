@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 
 @Data
 public class WalletDto {
-    private int idWallet;
-    private String nameWallet;
-    private BigDecimal balanceWallet;
+    private int walletId;
+    private String walletName;
+    private BigDecimal WalletBalance;
     private Byte statusWallet;
 
 
