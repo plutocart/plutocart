@@ -29,7 +29,7 @@ public class WalletService {
 
 
     // Get
-    public ResponseEntity getWalletByIdAccount(Integer account_id) {
+    public ResponseEntity<?> getWalletByIdAccount(Integer account_id) {
         try {
             List<Wallet> walletList = walletRepository.viewWalletByAccountId(accountRepository.findById(account_id).get().getId());
             return  ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDto.class)).collect(Collectors.toList()));
@@ -50,7 +50,7 @@ public class WalletService {
     }
 
     //    Post
-    public ResponseEntity crateWallet(Wallet wallet, Integer account_id) {
+    public ResponseEntity<?> crateWallet(Wallet wallet, Integer account_id) {
         try {
             walletRepository.insertWalletByAccountID(wallet.getNameWallet(), wallet.getBalanceWallet(), accountRepository.findById(account_id).get().getId(), LocalDateTime.now(), LocalDateTime.now()); // account guest
             return ResponseEntity.status(201).body("success");
@@ -62,7 +62,7 @@ public class WalletService {
     }
 
     //    Update
-    public ResponseEntity updateNameWallet(String wallet_name, Integer account_id, int wallet_id) {
+    public ResponseEntity<?> updateNameWallet(String wallet_name, Integer account_id, int wallet_id) {
        try{
            if (wallet_name.equals(walletRepository.viewWalletByAccountIdAndWalletId(account_id, wallet_id).getNameWallet())) {
                return ResponseEntity.status(200).body("data up to date");
@@ -76,7 +76,7 @@ public class WalletService {
        }
     }
 
-    public ResponseEntity updateStatusWallet(Integer account_id, int wallet_id) {
+    public ResponseEntity<?> updateStatusWallet(Integer account_id, int wallet_id) {
         try {
             walletRepository.updateStatusWallet((byte) (walletRepository.findById(wallet_id).get().getStatusWallet() == 1 ? 0 : 1), accountRepository.findById(account_id).get().getId(), wallet_id);
             return ResponseEntity.status(200).body("update status wallet" + " " + ":" + (byte) (walletRepository.findById(wallet_id).get().getStatusWallet() == 1 ? 0 : 1));
@@ -86,7 +86,7 @@ public class WalletService {
     }
 
     // Delete
-    public ResponseEntity deleteWalletByAccountIdAndWalletId(Integer account_id, int wallet_id) {
+    public ResponseEntity<?> deleteWalletByAccountIdAndWalletId(Integer account_id, int wallet_id) {
         if (walletRepository.findById(wallet_id).isPresent()) {
             walletRepository.deleteWalletByAccountIdAndWalletId(account_id, wallet_id);
             return ResponseEntity.ok().body("delete wallet number " + " " + wallet_id + " " + "account id" + " " + account_id);
