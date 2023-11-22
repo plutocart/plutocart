@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,9 +33,9 @@ public class WalletService {
 
 
     // Get
-    public ResponseEntity<?> getWalletByIdAccount(Integer accountId) {
+    public ResponseEntity<List<WalletDTO>> getWalletByIdAccount(Integer accountId) {
         List<Wallet> walletList = walletRepository.viewWalletByAccountId(accountRepository.findById(accountId).orElseThrow().getAccountId());
-        return ResponseEntity.ok(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
     }
 
 
@@ -55,9 +56,9 @@ public class WalletService {
 
 
     //    Post
-    public WalletPostDTO crateWallet(Wallet wallet, Integer accountId) {
+    public ResponseEntity<WalletPostDTO> crateWallet(Wallet wallet, Integer accountId) {
         walletRepository.insertWalletByAccountID(wallet.getWalletName(), wallet.getWalletBalance(), accountRepository.findById(accountId).get().getAccountId(), LocalDateTime.now(), LocalDateTime.now());
-        return modelMapper.map(wallet, WalletPostDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(wallet, WalletPostDTO.class));
     }
 
     //    Update

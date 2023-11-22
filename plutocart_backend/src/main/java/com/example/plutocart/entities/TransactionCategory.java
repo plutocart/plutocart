@@ -1,6 +1,8 @@
 package com.example.plutocart.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +22,10 @@ public class TransactionCategory {
     @Lob
     @Column(name = "type_category", nullable = false)
     private String typeCategory;
+
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "image_icon_url", nullable = false, length = 100)
+    private String imageIconUrl;
 
 }

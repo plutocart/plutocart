@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -17,7 +18,7 @@ public class WalletController {
     @Autowired
     WalletService walletService;
     @GetMapping("/account/{account-id}/wallet")
-    private ResponseEntity<?> getWalletService( @Valid @PathVariable("account-id") String accountId) {
+    private ResponseEntity<List<WalletDTO>> getWalletService(@Valid @PathVariable("account-id") String accountId) {
         try {
             int acId = Integer.parseInt(accountId);
             return walletService.getWalletByIdAccount(acId);
@@ -34,7 +35,7 @@ public class WalletController {
     }
 
     @PostMapping("/account/{account-id}/wallet")
-    private WalletPostDTO createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") String accountId) {
+    private ResponseEntity<WalletPostDTO> createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") String accountId) {
         try {
             int acId = Integer.parseInt(accountId);
             return walletService.crateWallet(wallet, acId);
