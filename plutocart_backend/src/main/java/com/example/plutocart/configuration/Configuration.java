@@ -1,6 +1,6 @@
 package com.example.plutocart.configuration;
 
-import com.example.plutocart.dtos.WalletDto;
+import com.example.plutocart.dtos.wallet.WalletDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 
@@ -13,6 +13,6 @@ public class Configuration {
     }
 
     @Bean
-    public WalletDto walletDto(){ return new WalletDto();}
+    public WalletDTO walletDto(){ return new WalletDTO();}
 
 }

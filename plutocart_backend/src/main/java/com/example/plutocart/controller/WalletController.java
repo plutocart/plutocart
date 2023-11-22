@@ -1,48 +1,55 @@
 package com.example.plutocart.controller;
-import com.example.plutocart.dtos.WalletDto;
+import com.example.plutocart.dtos.wallet.WalletDTO;
+import com.example.plutocart.dtos.wallet.WalletPostDTO;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.services.WalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class WalletController {
 
     @Autowired
     WalletService walletService;
-
     @GetMapping("/account/{account-id}/wallet")
-    private List<WalletDto> getWalletService(@Valid @PathVariable("account-id") Integer accountId) {
-        return walletService.getWalletByIdAccount(accountId);
+    private ResponseEntity<?> getWalletService( @Valid @PathVariable("account-id") String accountId) {
+        try {
+            int acId = Integer.parseInt(accountId);
+            return walletService.getWalletByIdAccount(acId);
+        }
+        catch (Exception e){
+            throw new NoSuchElementException(e.getMessage());
+        }
+
     }
 
     @GetMapping("/account/{account-id}/wallet/{wallet-id}")
-    private WalletDto getWalletByWalletIdService(@Valid @PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") int walletId) {
-        return walletService.getWalletByIdAccountAndByWalletId(accountId, walletId);
+    private ResponseEntity<?> getWalletByWalletIdService(@Valid @PathVariable("account-id") String accountId, @PathVariable("wallet-id") String walletId) {
+            return walletService.getWalletByIdAccountAndByWalletId(accountId, walletId);
     }
 
     @PostMapping("/account/{account-id}/wallet")
-    private void createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") Integer accountId) {
-          walletService.crateWallet(wallet, accountId);
+    private WalletPostDTO createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") Integer accountId) {
+          return walletService.crateWallet(wallet, accountId);
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-name")
-    private  void updateNameWalletService(@Valid @RequestParam("wallet-name") String walletName, @PathVariable("account-id") Integer accountId , @PathVariable("wallet-id") int walletId ){
+    private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name" , defaultValue = "My Wallet") String walletName, @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId ){
          walletService.updateNameWallet(walletName,accountId, walletId );
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-status")
-    private void updateStatusWalletService(@Valid @PathVariable("account-id") int accountId , @PathVariable("wallet-id") int walletId){
+    private void updateStatusWalletService(@Valid @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId){
           walletService.updateStatusWallet(accountId , walletId);
     }
 
     @DeleteMapping("/account/{account-id}/wallet/{wallet-id}")
-    private void deleteWalletByAccountIdAndWalletId(@Valid @PathVariable("account-id") Integer accountId , @PathVariable("wallet-id") int walletId){
+    private void deleteWalletByAccountIdAndWalletId( @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId){
           walletService.deleteWalletByAccountIdAndWalletId(accountId , walletId);
     }
 

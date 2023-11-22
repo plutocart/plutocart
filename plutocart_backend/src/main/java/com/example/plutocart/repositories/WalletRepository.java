@@ -35,7 +35,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     @Modifying
     @Query(value = "update wallet set name_wallet = :walletName, update_wallet_on = now() where account_id_account = :accountId and id_wallet = :walletId", nativeQuery = true)
     @Transactional
-    void updateNameWallet( String walletName, Integer accountId,  int walletId);
+    void updateNameWallet(String walletName, Integer accountId, int walletId);
 
 
     @Transactional
