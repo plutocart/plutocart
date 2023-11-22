@@ -7,7 +7,7 @@ RUN mvn -Dmaven.test.skip package
 
 # Stage 2: Run the application
 FROM openjdk:17
-EXPOSE 8443
+EXPOSE 8080
 ARG JARFile=/app/target/plutocart_backend.jar
 COPY --from=build /app/target/plutocart_backend.jar /app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
