@@ -34,8 +34,15 @@ public class WalletController {
     }
 
     @PostMapping("/account/{account-id}/wallet")
-    private WalletPostDTO createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") Integer accountId) {
-          return walletService.crateWallet(wallet, accountId);
+    private WalletPostDTO createWalletService(@Valid @RequestBody Wallet wallet, @PathVariable("account-id") String accountId) {
+        try {
+            int acId = Integer.parseInt(accountId);
+            return walletService.crateWallet(wallet, acId);
+        }
+        catch (Exception e){
+            throw new NoSuchElementException(e.getMessage());
+        }
+
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-name")

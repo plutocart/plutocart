@@ -55,8 +55,8 @@ public class WalletService {
 
 
     //    Post
-    public WalletPostDTO crateWallet(Wallet wallet, Integer idAccount) {
-        walletRepository.insertWalletByAccountID(wallet.getWalletName(), wallet.getWalletBalance(), accountRepository.findById(idAccount).get().getAccountId(), LocalDateTime.now(), LocalDateTime.now());
+    public WalletPostDTO crateWallet(Wallet wallet, Integer accountId) {
+        walletRepository.insertWalletByAccountID(wallet.getWalletName(), wallet.getWalletBalance(), accountRepository.findById(accountId).get().getAccountId(), LocalDateTime.now(), LocalDateTime.now());
         return modelMapper.map(wallet, WalletPostDTO.class);
     }
 
