@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -62,11 +63,11 @@ public class WalletService {
     }
 
     //    Update
-    public void updateNameWallet(String walletName, String accountId, String walletId) {
+    public void updateWallet(String walletName , BigDecimal balanceWallet, String accountId, String walletId) {
         try {
             int acId = Integer.parseInt(accountId);
             int wId = Integer.parseInt(walletId);
-            walletRepository.updateNameWallet(walletName, acId, wId);
+            walletRepository.updateWallet(walletName, balanceWallet , acId, wId);
         } catch (Exception ex) {
             handleAccountIdAndWalletIdExceptions(accountId, walletId);
         }

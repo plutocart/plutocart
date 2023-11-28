@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/edit_wallet_popup.dart';
 
 class CardWallet extends StatefulWidget {
   const CardWallet({Key? key}) : super(key: key);
@@ -14,13 +16,12 @@ class _CardWalletState extends State<CardWallet> {
 
   @override
   void initState() {
-    context.read<WalletBloc>().add(getWalletById(1));
+    context.read<WalletBloc>().add(GetWalletById(1));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
         child: TextButton(
       onPressed: () {},
@@ -28,15 +29,14 @@ class _CardWalletState extends State<CardWallet> {
         foregroundColor: Colors.black,
         padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(25.0), 
+          borderRadius: BorderRadius.circular(25.0),
         ),
       ),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width * 1,
         decoration: ShapeDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
           shape: RoundedRectangleBorder(
             side: BorderSide(
               width: 1,
@@ -74,7 +74,7 @@ class _CardWalletState extends State<CardWallet> {
                     color: Colors.transparent,
                     child: Ink(
                       child: IconButton(
-                        onPressed: () {print("text");},
+                        onPressed: EditWallet,
                         icon: SizedBox(
                           width: 20,
                           height: 20,
@@ -193,5 +193,15 @@ class _CardWalletState extends State<CardWallet> {
         ),
       ),
     ));
+  }
+
+  EditWallet() {
+    showSlideDialog(
+      context: context,
+      child: EditWalletPopup(),
+      barrierColor: Colors.white.withOpacity(0.7),
+      pillColor: Colors.grey,
+      backgroundColor: Colors.white,
+    );
   }
 }

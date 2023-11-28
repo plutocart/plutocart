@@ -10,7 +10,7 @@ part 'wallet_state.dart';
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   WalletBloc() : super( WalletState()) {
 
-    on<getAllWallet>((event, emit) async {
+    on<GetAllWallet>((event, emit) async {
        List<Wallet> response = await walletRepository().getWalletAll(event.accountId);
       if(response.isEmpty) {
        throw new ArgumentError();
@@ -21,7 +21,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
     });
 
-    on<getWalletById>((event, emit) async {
+    on<GetWalletById>((event, emit) async {
        Wallet response = await walletRepository().getWalletById(event.accountId);
       if(response.walletName.isEmpty) {
         emit(state.copyWith(walletName: "error" ));

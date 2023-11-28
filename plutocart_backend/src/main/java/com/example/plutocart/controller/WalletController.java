@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -47,8 +48,9 @@ public class WalletController {
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-name")
-    private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name" , defaultValue = "My Wallet") String walletName, @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId ){
-         walletService.updateNameWallet(walletName,accountId, walletId );
+    private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name" , defaultValue = "My Wallet") String walletName, @RequestParam(name = "balance-wallet") BigDecimal balanceWallet ,
+                                         @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId ){
+         walletService.updateWallet(walletName, balanceWallet ,accountId, walletId );
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-status")

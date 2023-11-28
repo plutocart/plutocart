@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
 import 'package:plutocart/src/models/helper.dart';
@@ -16,16 +14,14 @@ class plutocartApp extends StatefulWidget {
 }
 
 class _plutocartAppState extends State<plutocartApp> {
-  final walletBloc = BlocProvider(create: (context) => WalletBloc());
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [walletBloc],
-      child: MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: pageRoutes[_selectedIndex],
           floatingActionButton: ButtonTransaction(),
           bottomNavigationBar: BottomNavigatorBar(
@@ -38,7 +34,7 @@ class _plutocartAppState extends State<plutocartApp> {
         ),
         title: "Plutocart",
         routes: AppRoute.all,
-      ),
-    );
+      )
+    ;
   }
 }

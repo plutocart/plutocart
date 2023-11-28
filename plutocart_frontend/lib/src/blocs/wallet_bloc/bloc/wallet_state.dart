@@ -11,16 +11,17 @@ part of 'wallet_bloc.dart';
       this.dailyExpense = 0.0,
       this.dailyIncome = 0.0,
       this.walletBalance = 0.0,
-      this.walletStatus = 0
+      this.walletStatus = 0,
       });
+     
   WalletState copyWith(
-      {String? walletName, double? dailyExpense, double? dailyIncome , double? walletBalance , int? walletStatus}) {
+      {String? walletName, double? dailyExpense, double? dailyIncome , double? walletBalance , int? walletStatus , bool? hightPopupActive}) {
     return WalletState(
         walletName: walletName ?? this.walletName,
         dailyExpense: dailyExpense ?? this.dailyExpense,
         dailyIncome: dailyIncome ?? this.dailyIncome, 
         walletBalance: walletBalance?? this.walletBalance,
-        walletStatus: walletStatus?? this.walletStatus);
+        walletStatus: walletStatus?? this.walletStatus );
   }
 
   List<WalletState> ListCopyWith(List<Wallet> wallets){

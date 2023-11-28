@@ -5,15 +5,15 @@ abstract  class WalletEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class getAllWallet extends WalletEvent {
+class GetAllWallet extends WalletEvent {
   final int accountId;
-  getAllWallet(this.accountId);
+  GetAllWallet(this.accountId);
  }
 
 
-class getWalletById extends WalletEvent{
+class GetWalletById extends WalletEvent{
   final int accountId;
-  getWalletById(this.accountId);
+  GetWalletById(this.accountId);
 }
 
  
