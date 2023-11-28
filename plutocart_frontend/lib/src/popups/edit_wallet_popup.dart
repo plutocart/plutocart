@@ -12,10 +12,11 @@ class EditWalletPopup extends StatelessWidget {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
         final walletBloc = context.read<WalletBloc>();
-        final _nameWalletController =
-            TextEditingController(text: state.walletName);
-        final _amountMoneyController =
+        late final _nameWalletController =
+            TextEditingController(text: state.walletName.length > 0 ? state.walletName : "Unknow Wallet");
+        late final _amountMoneyController =
             TextEditingController(text: "${state.walletBalance}");
+
         return Container(
           height: MediaQuery.of(context).size.height * 0.4,
           child: Column(
@@ -57,23 +58,32 @@ class EditWalletPopup extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                width: 343,
-                height: 65,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Color(0xFF15616D)),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
                   maxLength: 20,
                   controller: _nameWalletController,
                   decoration: InputDecoration(
-                      labelText: "Name of wallet", border: InputBorder.none),
+                    labelText: "Name of wallet",
+                    labelStyle: TextStyle(
+                      color: Color(
+                          0xFF15616D), // Change the label text color to red
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 2,
+                          color: Color(
+                              0xFF15616D)), // Change border color when active
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1,
+                          color:
+                              Color(0xFF15616D)), // Border color when inactive
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
                   keyboardType: TextInputType.text,
                   style: TextStyle(
                     color: Color(0xFF1A9CB0),
@@ -83,25 +93,32 @@ class EditWalletPopup extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: 343,
-                height: 65,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Color(0xFF15616D)),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
                   maxLines: 1,
                   maxLength: 13,
                   controller: _amountMoneyController,
                   decoration: InputDecoration(
                     labelText: "Amount of wallet",
-                    border: InputBorder.none,
+                    labelStyle: TextStyle(
+                      color: Color(
+                          0xFF15616D), // Change the label text color to red
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 2,
+                          color: Color(
+                              0xFF15616D)), // Change border color when active
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1,
+                          color:
+                              Color(0xFF15616D)), // Border color when inactive
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                   keyboardType: TextInputType.numberWithOptions(
                       decimal: true, signed: false),

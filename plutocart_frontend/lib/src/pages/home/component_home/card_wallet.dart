@@ -55,7 +55,6 @@ class _CardWalletState extends State<CardWallet> {
                   Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: BlocBuilder<WalletBloc, WalletState>(
-                        
                         builder: (context, state) {
                           return Text(
                             state.walletName.length > 15
@@ -102,11 +101,7 @@ class _CardWalletState extends State<CardWallet> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(width: 32),
-                          state.walletName.isEmpty
-                              ? CircularProgressIndicator(
-                                  color: Color(0xFF15616D),
-                                )
-                              : Text(
+                          Text(
                                   "${state.walletBalance}",
                                   style: TextStyle(
                                       color: Color(0xFF15616D),
