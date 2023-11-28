@@ -102,7 +102,7 @@ class _CardWalletState extends State<CardWallet> {
                         children: [
                           SizedBox(width: 32),
                           Text(
-                                  "${state.walletBalance}",
+                                  state.walletBalance.toString(),
                                   style: TextStyle(
                                       color: Color(0xFF15616D),
                                       fontSize: 25,

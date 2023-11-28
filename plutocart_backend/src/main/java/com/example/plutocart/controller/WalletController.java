@@ -48,7 +48,7 @@ public class WalletController {
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-name")
-    private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name" , defaultValue = "My Wallet") String walletName, @RequestParam(name = "balance-wallet") BigDecimal balanceWallet ,
+    private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name" , defaultValue = "Unknown Wallet") String walletName, @RequestParam(name = "balance-wallet") BigDecimal balanceWallet ,
                                          @PathVariable("account-id") String accountId , @PathVariable("wallet-id") String walletId ){
          walletService.updateWallet(walletName, balanceWallet ,accountId, walletId );
     }

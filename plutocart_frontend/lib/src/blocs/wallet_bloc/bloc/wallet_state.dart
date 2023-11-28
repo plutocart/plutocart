@@ -10,7 +10,7 @@ part of 'wallet_bloc.dart';
       { this.walletName = "",
       this.dailyExpense = 0.0,
       this.dailyIncome = 0.0,
-      this.walletBalance = 0.0,
+      this.walletBalance = 1.1,
       this.walletStatus = 0,
       });
      
