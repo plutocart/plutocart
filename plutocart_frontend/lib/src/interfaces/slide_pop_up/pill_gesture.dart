@@ -33,7 +33,7 @@ class PillGesture extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50.0),
               ),
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 10.0),
           ],
         ),
       ),

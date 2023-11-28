@@ -27,6 +27,7 @@ class Wallet {
         statusWallet: json["statusWallet"],
         walletBalance: json["walletBalance"],
     );
+
     
 
     Map<String, String> toJson() => {

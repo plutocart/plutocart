@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
-import 'package:plutocart/src/pages/home/card_group.dart';
-import 'package:plutocart/src/pages/home/card_wallet.dart';
+import 'package:plutocart/src/pages/home/component_home/card_group.dart';
+import 'package:plutocart/src/pages/home/component_home/card_wallet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

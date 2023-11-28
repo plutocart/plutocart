@@ -10,6 +10,14 @@ class GetAllWallet extends WalletEvent {
   GetAllWallet(this.accountId);
  }
 
+ class UpdateWallet extends WalletEvent {
+  final int accountId;
+  final int walletId;
+  final String walletName;
+  final double walletBalance;
+  UpdateWallet(this.accountId, this.walletId , this.walletName, this.walletBalance);
+ }
+
 
 class GetWalletById extends WalletEvent{
   final int accountId;

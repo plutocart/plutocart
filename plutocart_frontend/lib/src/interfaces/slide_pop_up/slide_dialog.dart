@@ -31,11 +31,11 @@ class _SlideDialogState extends State<SlideDialog> {
 
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
-       double height =  MediaQuery.of(context).viewInsets.bottom > 0 ? 8.0  : 2.0;
+       double height =  MediaQuery.of(context).viewInsets.bottom > 0 ? 8.0  : 1.9;
         return AnimatedPadding(
           padding: MediaQuery.of(context).viewInsets +
               EdgeInsets.only(top: deviceHeight / height + _currentPosition),
-          duration: Duration(milliseconds: 100),
+          duration: Duration(milliseconds: 70),
           curve: Curves.decelerate,
           child: MediaQuery.removeViewInsets(
             removeLeft: true,
@@ -51,16 +51,18 @@ class _SlideDialogState extends State<SlideDialog> {
                   color: widget.backgroundColor,
                   elevation: 24.0,
                   type: MaterialType.card,
-                  child: Column(
-                    children: <Widget>[
-                      PillGesture(
-                        pillColor: widget.pillColor,
-                        onVerticalDragStart: _onVerticalDragStart,
-                        onVerticalDragEnd: _onVerticalDragEnd,
-                        onVerticalDragUpdate: _onVerticalDragUpdate,
-                      ),
-                      widget.child,
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        PillGesture(
+                          pillColor: widget.pillColor,
+                          onVerticalDragStart: _onVerticalDragStart,
+                          onVerticalDragEnd: _onVerticalDragEnd,
+                          onVerticalDragUpdate: _onVerticalDragUpdate,
+                        ),
+                        widget.child,
+                      ],
+                    ),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(

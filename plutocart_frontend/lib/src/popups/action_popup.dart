@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:plutocart/src/router/router.dart';
 
 class ActionPopup extends StatefulWidget {
   final String bottonFirstName;
   final String bottonSecondeName;
+  final Function api;
   const ActionPopup(
       {Key? key,
       required this.bottonFirstName,
-      required this.bottonSecondeName})
+      required this.bottonSecondeName,
+      required this.api})
       : super(key: key);
 
   @override
@@ -17,9 +20,9 @@ class _ActionPopupState extends State<ActionPopup> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only( top: 10, bottom: 8),
+      padding: const EdgeInsets.only(top: 10, bottom: 8),
       child: Padding(
-        padding: const EdgeInsets.only(left: 15 , right: 15),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -38,7 +41,6 @@ class _ActionPopupState extends State<ActionPopup> {
                 minimumSize: Size(160, 42), // Set minimum button size
                 backgroundColor: Colors.white, // Background color
                 foregroundColor: Color(0xFF15616D), // Text color
-      
               ),
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -57,7 +59,10 @@ class _ActionPopupState extends State<ActionPopup> {
               ),
             ),
             ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                widget.api();
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius:
@@ -71,7 +76,6 @@ class _ActionPopupState extends State<ActionPopup> {
                 minimumSize: Size(160, 42), // Set minimum button size
                 backgroundColor: Color(0xFF15616D), // Background color
                 foregroundColor: Color(0xFF15616D), // Text color
-      
               ),
               child: Container(
                 padding: const EdgeInsets.all(16),

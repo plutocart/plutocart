@@ -55,10 +55,11 @@ class _CardWalletState extends State<CardWallet> {
                   Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: BlocBuilder<WalletBloc, WalletState>(
+                        
                         builder: (context, state) {
                           return Text(
-                            state.walletName.length > 10
-                                ? "${state.walletName.substring(0, 11)}..."
+                            state.walletName.length > 15
+                                ? "${state.walletName.substring(0, 15)}..."
                                 : state.walletName,
                             style: TextStyle(
                                 color: Color(0xFF15616D),
@@ -200,7 +201,6 @@ class _CardWalletState extends State<CardWallet> {
       context: context,
       child: EditWalletPopup(),
       barrierColor: Colors.white.withOpacity(0.7),
-      pillColor: Colors.grey,
       backgroundColor: Colors.white,
     );
   }
