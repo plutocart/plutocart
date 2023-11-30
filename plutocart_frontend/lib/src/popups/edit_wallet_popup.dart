@@ -11,12 +11,10 @@ class EditWalletPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
-        final walletBloc = context.read<WalletBloc>();
         late final _nameWalletController =
             TextEditingController(text: state.walletName.length > 0 ? state.walletName : "Unknow Wallet");
         late final _amountMoneyController =
             TextEditingController(text: "${state.walletBalance}");
-
         return Container(
           height: MediaQuery.of(context).size.height * 0.4,
           child: Column(
@@ -61,7 +59,7 @@ class EditWalletPopup extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
-                  maxLength: 20,
+                  maxLength: 15,
                   controller: _nameWalletController,
                   decoration: InputDecoration(
                     labelText: "Name of wallet",
@@ -150,11 +148,12 @@ class EditWalletPopup extends StatelessWidget {
               ActionPopup(
                 bottonFirstName: "Cancel",
                 bottonSecondeName: "Confirm",
-                api: () {
+                api2: () {
                   double balanceWallet =
                       double.tryParse(_amountMoneyController.text) ?? 0.0;
-                  walletBloc.add(UpdateWallet(
-                      1, 1, _nameWalletController.text, balanceWallet));
+                  context.read<WalletBloc>().add(UpdateWallet(
+                      1, state.walletId, _nameWalletController.text, balanceWallet));
+                       Navigator.pop(context);
                 },
               )
             ],

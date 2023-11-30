@@ -38,6 +38,8 @@ dependencies:
   flutter_native_splash: ^2.2.16
   card_swiper : ^3.0.0
   flutter_swiper_view: "^1.1.8"
+  carousel_slider: ^4.2.1
+  lite_rolling_switch: ^1.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -98,6 +100,7 @@ flutter:
     - "assets/icon/graph_icon.png"
     - "assets/icon/goal_icon.png"
     - "assets/icon/edit_icon.png"
+    - "assets/icon/wallet_icon.png"
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

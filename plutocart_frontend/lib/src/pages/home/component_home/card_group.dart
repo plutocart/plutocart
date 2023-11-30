@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 
 class CardGroup extends StatefulWidget {
   final String subject;
@@ -26,10 +28,10 @@ class _CardGroupState extends State<CardGroup> {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.13,
           decoration: ShapeDecoration(
-            color: Colors.transparent,
+            color: Colors.white,
             shape: RoundedRectangleBorder(
               side: BorderSide(
-                width: 1,
+                width: 1.3,
                 strokeAlign: BorderSide.strokeAlignInside,
                 color: Color(0xFF1A9CB0),
               ),
@@ -50,25 +52,29 @@ class _CardGroupState extends State<CardGroup> {
                             fontWeight: FontWeight.w400,
                             fontFamily: "Roboto")),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      shape: StadiumBorder(),
-                      foregroundColor: Colors.black,
-                    ),
-                    child: Row(
-                      children: [
-                        Text("more",
-                            style: TextStyle(
-                                color: Color(0xFF707070),
-                                fontSize: 14,
-                                fontFamily: "Roboto")),
-                        Icon(
-                          Icons.navigate_next,
-                          color: Color(0xFF707070),
+                  BlocBuilder<WalletBloc, WalletState>(
+                    builder: (context, state) {
+                      return TextButton(
+                        onPressed: () {context.read<WalletBloc>().add(GetAllWallet(1));},
+                        style: TextButton.styleFrom(
+                          shape: StadiumBorder(),
+                          foregroundColor: Colors.black,
                         ),
-                      ],
-                    ),
+                        child: Row(
+                          children: [
+                            Text("more",
+                                style: TextStyle(
+                                    color: Color(0xFF707070),
+                                    fontSize: 14,
+                                    fontFamily: "Roboto")),
+                            Icon(
+                              Icons.navigate_next,
+                              color: Color(0xFF707070),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   )
                 ],
               )

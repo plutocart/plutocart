@@ -8,11 +8,13 @@ class SlideDialog extends StatefulWidget {
   final Widget child;
   final Color backgroundColor;
   final Color pillColor;
+  final double hightCard;
 
   SlideDialog({
     required this.child,
     required this.pillColor,
     required this.backgroundColor,
+    required this.hightCard,
   });
 
   @override
@@ -31,7 +33,7 @@ class _SlideDialogState extends State<SlideDialog> {
 
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
-       double height =  MediaQuery.of(context).viewInsets.bottom > 0 ? 8.0  : 1.9;
+       double height =  MediaQuery.of(context).viewInsets.bottom > 0 ? 8.0  : widget.hightCard;
         return AnimatedPadding(
           padding: MediaQuery.of(context).viewInsets +
               EdgeInsets.only(top: deviceHeight / height + _currentPosition),

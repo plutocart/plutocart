@@ -26,15 +26,19 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   "Plutocart",
                   style: TextStyle(
-                      color: Color(0xFF15616D),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Roboto"),
+                    color: Color(0xFF15616D),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Roboto",
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: Image.asset("assets/icon/icon_launch.png",
-                      width: 25, height: 25),
+                  child: Image.asset(
+                    "assets/icon/icon_launch.png",
+                    width: 25,
+                    height: 25,
+                  ),
                 )
               ],
             ),
@@ -44,17 +48,14 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<WalletBloc, WalletState>(
         builder: (context, state) {
-          return Container(
-            child: Padding(
+          return SingleChildScrollView(
+            child: Container(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   CardWallet(),
                   SizedBox(height: 25),
-                  CardGroup(
-                    "Transaction",
-                    subject: 'Transactions',
-                  ),
+                  CardGroup("Transaction", subject: 'Transactions'),
                   SizedBox(height: 16),
                   CardGroup("Goals", subject: 'Goals'),
                   SizedBox(height: 16),

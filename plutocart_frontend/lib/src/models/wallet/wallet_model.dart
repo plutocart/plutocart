@@ -11,13 +11,13 @@ String walletByIdToJson(Wallet data) => json.encode(data.toJson());
 class Wallet {
     int walletId;
     String walletName;
-    int statusWallet;
+    int? statusWallet;
     double walletBalance;
 
     Wallet({
         required this.walletId,
         required this.walletName,
-        required this.statusWallet,
+         this.statusWallet,
         required this.walletBalance,
     });
 

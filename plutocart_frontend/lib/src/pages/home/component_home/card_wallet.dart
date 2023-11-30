@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/edit_wallet_popup.dart';
+import 'package:plutocart/src/popups/list_wallet_popup.dart';
 
 class CardWallet extends StatefulWidget {
   const CardWallet({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _CardWalletState extends State<CardWallet> {
   Widget build(BuildContext context) {
     return Container(
         child: TextButton(
-      onPressed: () {},
+      onPressed: ShowWallets,
       style: TextButton.styleFrom(
         foregroundColor: Colors.black,
         padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
@@ -35,16 +36,17 @@ class _CardWalletState extends State<CardWallet> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width * 1,
-        decoration: ShapeDecoration(
-          color: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignInside,
-              color: Color(0xFF1A9CB0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 2,
+              offset: Offset(2, 2),
+              spreadRadius: 0,
             ),
-            borderRadius: BorderRadius.circular(20),
-          ),
+          ],
         ),
         child: Container(
           child: Column(children: [
@@ -59,7 +61,9 @@ class _CardWalletState extends State<CardWallet> {
                           return Text(
                             state.walletName.length > 15
                                 ? "${state.walletName.substring(0, 15)}..."
-                                : state.walletName,
+                                : state.walletName.length == 0
+                                    ? "Unknown Wallet"
+                                    : state.walletName,
                             style: TextStyle(
                                 color: Color(0xFF15616D),
                                 fontSize: 14,
@@ -102,13 +106,13 @@ class _CardWalletState extends State<CardWallet> {
                         children: [
                           SizedBox(width: 32),
                           Text(
-                                  state.walletBalance.toString(),
-                                  style: TextStyle(
-                                      color: Color(0xFF15616D),
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Roboto"),
-                                ),
+                            state.walletBalance.toString(),
+                            style: TextStyle(
+                                color: Color(0xFF15616D),
+                                fontSize: 25,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Roboto"),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(right: 15),
                             child: Padding(
@@ -193,10 +197,19 @@ class _CardWalletState extends State<CardWallet> {
 
   EditWallet() {
     showSlideDialog(
-      context: context,
-      child: EditWalletPopup(),
-      barrierColor: Colors.white.withOpacity(0.7),
-      backgroundColor: Colors.white,
-    );
+        context: context,
+        child: EditWalletPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.9);
+  }
+
+  ShowWallets() {
+    showSlideDialog(
+        context: context,
+        child: ListWalletPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.9);
   }
 }

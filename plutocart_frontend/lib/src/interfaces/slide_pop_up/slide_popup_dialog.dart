@@ -23,6 +23,7 @@ Future<T?>? showSlideDialog<T>({
   Duration transitionDuration = const Duration(milliseconds: 300),
   Color? pillColor,
   Color? backgroundColor,
+  double? hightCard
 }) {
   assert(context != null);
   assert(child != null);
@@ -46,6 +47,7 @@ Future<T?>? showSlideDialog<T>({
             child: child,
             pillColor: pillColor ?? Colors.blueGrey,
             backgroundColor: backgroundColor ?? Theme.of(context).canvasColor,
+            hightCard: hightCard!,
           ),
         ),
       );

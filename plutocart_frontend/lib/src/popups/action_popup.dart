@@ -4,12 +4,13 @@ import 'package:plutocart/src/router/router.dart';
 class ActionPopup extends StatefulWidget {
   final String bottonFirstName;
   final String bottonSecondeName;
-  final Function api;
+  final Function? api1;
+  final Function? api2;
   const ActionPopup(
       {Key? key,
       required this.bottonFirstName,
       required this.bottonSecondeName,
-      required this.api})
+       this.api1 , this.api2})
       : super(key: key);
 
   @override
@@ -26,6 +27,7 @@ class _ActionPopupState extends State<ActionPopup> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            //1
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
@@ -58,10 +60,11 @@ class _ActionPopupState extends State<ActionPopup> {
                 ),
               ),
             ),
+             //2
             ElevatedButton(
               onPressed: () {
-                widget.api();
-                Navigator.pop(context);
+                widget.api2!();
+                
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
