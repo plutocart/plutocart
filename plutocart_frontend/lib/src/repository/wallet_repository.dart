@@ -1,8 +1,27 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 
 class walletRepository {
   final dio = Dio();
+
+  Future deleteWalletById(int accountId  , int walletId) async {
+    try {
+      Response response = await dio.delete(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/${walletId}');
+      if (response.statusCode == 200) {
+          log(1);  
+      } else if (response.statusCode == 404) {
+        throw Exception('Resource not found');
+      } else {
+        throw Exception('Unexpected error occurred: ${response.statusCode}');
+      }
+    } catch (error, stacktrace) {
+      print("Error: $error - Stacktrace: $stacktrace");
+      throw error;
+    }
+  }
 
  Future<dynamic> updateWallet(int accountId, int walletId, String walletName, double balanceWallet) async {
   try {
@@ -66,10 +85,10 @@ class walletRepository {
     }
   }
 
-  Future<Wallet> getWalletById(int accountId) async {
+  Future<Wallet> getWalletById(int accountId , int walletId) async {
     try {
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/1');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/${walletId}');
       if (response.statusCode == 200) {
         Wallet responseData = Wallet.fromJson(response.data);
         return responseData;

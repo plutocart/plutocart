@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/more_vert_popup.dart';
 
 class ListWalletPopup extends StatefulWidget {
@@ -15,7 +16,7 @@ class ListWalletPopup extends StatefulWidget {
 class _ListWalletPopupState extends State<ListWalletPopup> {
   @override
   void initState() {
-          context.read<WalletBloc>().add(GetAllWallet(1));
+    context.read<WalletBloc>().add(GetAllWallet(1));
     super.initState();
   }
 
@@ -65,10 +66,14 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
             ),
             BlocBuilder<WalletBloc, WalletState>(
               builder: (context, state) {
+                List<dynamic>? list = state.wallets;
                 return Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Column(
-                      children: List.generate(state.wallets.length, (index) {
+                      children: List.generate(list.length, (index) {
+                        if(list== null || list == '_'){
+                           context.read<WalletBloc>().add(GetAllWallet(1));
+                           }
                         return Container(
                           width: 320,
                           height: 57,
@@ -165,20 +170,28 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                           onTap: () {},
                                           onDoubleTap: () {}),
                                     ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.more_vert_outlined,
-                                        color: Color(
-                                            0XFF15616D), // Set the color here
-                                      ),
-                                      onPressed: () {
-                                        // WalletBloc().add(GetWalletId(state.wallets[index].walletId));
-                                        context.read<WalletBloc>().add(
-                                            MapEventToState(
-                                                state.wallets[index].walletId,
-                                                state.wallets[index].walletName,
-                                                state.wallets[index].walletBalance));
-                                        more_vert();
+                                    BlocBuilder<WalletBloc, WalletState>(
+                                      builder: (context, state) {
+                                        return IconButton(
+                                          icon: Icon(
+                                            Icons.more_vert_outlined,
+                                            color: Color(
+                                                0XFF15616D), // Set the color here
+                                          ),
+                                          onPressed: () async {
+                                            await more_vert();
+                                            context
+                                                .read<WalletBloc>()
+                                                .add(MapEventToState(
+                                                  state.wallets[index].walletId,
+                                                  state.wallets[index]
+                                                      .walletName,
+                                                  state.wallets[index]
+                                                      .walletBalance,
+                                                ));
+                                             list = null; 
+                                          },
+                                        );
                                       },
                                     )
                                   ],

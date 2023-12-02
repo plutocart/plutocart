@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:plutocart/src/router/router.dart';
 
 class ActionPopup extends StatefulWidget {
   final String bottonFirstName;
   final String bottonSecondeName;
-  final Function? api1;
-  final Function? api2;
+  final Function? bottonFirstNameFunction;
+  final Function? bottonSecondeNameFunction;
   const ActionPopup(
       {Key? key,
       required this.bottonFirstName,
       required this.bottonSecondeName,
-       this.api1 , this.api2})
+       this.bottonFirstNameFunction , this.bottonSecondeNameFunction})
       : super(key: key);
 
   @override
@@ -29,7 +28,7 @@ class _ActionPopupState extends State<ActionPopup> {
           children: [
             //1
             ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => widget.bottonFirstNameFunction!(),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius:
@@ -63,8 +62,7 @@ class _ActionPopupState extends State<ActionPopup> {
              //2
             ElevatedButton(
               onPressed: () {
-                widget.api2!();
-                
+                widget.bottonSecondeNameFunction!();       
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

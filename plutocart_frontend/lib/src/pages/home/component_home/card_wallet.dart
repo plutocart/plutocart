@@ -17,7 +17,7 @@ class _CardWalletState extends State<CardWallet> {
 
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetWalletById(1));
+    context.read<WalletBloc>().add(GetWalletById(1 , 1));
     super.initState();
   }
 
@@ -198,7 +198,7 @@ class _CardWalletState extends State<CardWallet> {
   EditWallet() {
     showSlideDialog(
         context: context,
-        child: EditWalletPopup(),
+        child: EditWalletPopup(numberPopUp1: 1 , numberPopUp2: 1,),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.9);

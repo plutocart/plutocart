@@ -5,14 +5,18 @@ import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 
 class EditWalletPopup extends StatelessWidget {
-  const EditWalletPopup({Key? key}) : super(key: key);
+  final int? numberPopUp1;
+  final int? numberPopUp2;
+  const EditWalletPopup({Key? key, this.numberPopUp1 , this.numberPopUp2}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
-        late final _nameWalletController =
-            TextEditingController(text: state.walletName.length > 0 ? state.walletName : "Unknow Wallet");
+        late final _nameWalletController = TextEditingController(
+            text: state.walletName.length > 0
+                ? state.walletName
+                : "Unknow Wallet");
         late final _amountMoneyController =
             TextEditingController(text: "${state.walletBalance}");
         return Container(
@@ -148,12 +152,19 @@ class EditWalletPopup extends StatelessWidget {
               ActionPopup(
                 bottonFirstName: "Cancel",
                 bottonSecondeName: "Confirm",
-                api2: () {
+                bottonFirstNameFunction: () {
+                  for (int i = 0; i < numberPopUp1!; i++) {
+                    Navigator.pop(context);
+                  }
+                },
+                bottonSecondeNameFunction: () {
                   double balanceWallet =
                       double.tryParse(_amountMoneyController.text) ?? 0.0;
-                  context.read<WalletBloc>().add(UpdateWallet(
-                      1, state.walletId, _nameWalletController.text, balanceWallet));
-                       Navigator.pop(context);
+                  context.read<WalletBloc>().add(UpdateWallet(1, state.walletId,
+                      _nameWalletController.text, balanceWallet));
+                  for (int i = 0; i < numberPopUp2!; i++) {
+                    Navigator.pop(context);
+                  }
                 },
               )
             ],

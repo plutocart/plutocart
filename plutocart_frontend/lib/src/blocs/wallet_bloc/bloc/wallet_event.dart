@@ -4,10 +4,21 @@ abstract class WalletEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+class MapEventToState extends WalletEvent {
+  final int? walletId;
+  final String? walletName;
+  final double? walletBalance;
+  MapEventToState(this.walletId, this.walletName, this.walletBalance);
+}
 
 class GetAllWallet extends WalletEvent {
   final int accountId;
   GetAllWallet(this.accountId);
+}
+class GetWalletById extends WalletEvent {
+  final int accountId;
+  final int walletId;
+  GetWalletById(this.accountId , this.walletId);
 }
 
 class UpdateWallet extends WalletEvent {
@@ -25,14 +36,10 @@ class UpdateStatusWallet extends WalletEvent {
   UpdateStatusWallet(this.accountId, this.walletId);
 }
 
-class MapEventToState extends WalletEvent {
-  final int? walletId;
-  final String? walletName;
-  final double? walletBalance;
-  MapEventToState(this.walletId, this.walletName, this.walletBalance);
+class DeleteWallet extends WalletEvent {
+  final int accountId;
+  final int walletId;
+  DeleteWallet(this.accountId, this.walletId);
 }
 
-class GetWalletById extends WalletEvent {
-  final int accountId;
-  GetWalletById(this.accountId);
-}
+

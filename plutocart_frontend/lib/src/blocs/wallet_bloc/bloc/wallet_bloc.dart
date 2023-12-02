@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/repository/wallet_repository.dart';
@@ -8,9 +9,21 @@ part 'wallet_state.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   WalletBloc() : super(WalletState()) {
-
     on<MapEventToState>((event, emit) {
-      emit(state.copyWith(walletId: event.walletId , walletName: event.walletName , walletBalance:event.walletBalance));
+      emit(state.copyWith(
+          walletId: event.walletId,
+          walletName: event.walletName,
+          walletBalance: event.walletBalance));
+    });
+
+    on<DeleteWallet>((event, emit) async {
+      try {
+        print("accountId : ${event.accountId} : walletID : ${event.walletId}");
+          await walletRepository().deleteWalletById(event.accountId, event.walletId);
+      } catch (error) {
+        print("Error: $error");
+        throw error;
+      }
     });
 
     on<UpdateWallet>((event, emit) async {
@@ -36,10 +49,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       }
     });
 
-       on<UpdateStatusWallet>((event, emit) async {
+    on<UpdateStatusWallet>((event, emit) async {
       try {
-        Wallet response = await walletRepository().updateStatusWallet(
-         event.accountId, event.walletId);
+        Wallet response = await walletRepository()
+            .updateStatusWallet(event.accountId, event.walletId);
 
         if (response != null) {
           // emit(state.copyWith(
@@ -55,7 +68,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     });
 
     on<GetWalletById>((event, emit) async {
-      Wallet response = await walletRepository().getWalletById(event.accountId);
+      Wallet response = await walletRepository().getWalletById(event.accountId , event.walletId);
       if (response.walletName.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {
@@ -71,10 +84,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {
-        emit(state.copyWith(wallets: response.map((walletData){
-          return Wallet(walletId:walletData['walletId'] , walletName: walletData['walletName'] , 
-          statusWallet: walletData['statusWallet'] , walletBalance: walletData['walletBalance']);
-        }).toList() ));
+        emit(state.copyWith(
+            wallets: response.map((walletData) {
+          return Wallet(
+              walletId: walletData['walletId'],
+              walletName: walletData['walletName'],
+              statusWallet: walletData['statusWallet'],
+              walletBalance: walletData['walletBalance']);
+        }).toList()));
         // print(response);
       }
     });
