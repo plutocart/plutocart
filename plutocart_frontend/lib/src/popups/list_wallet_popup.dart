@@ -66,14 +66,12 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
             ),
             BlocBuilder<WalletBloc, WalletState>(
               builder: (context, state) {
-                List<dynamic>? list = state.wallets;
                 return Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Column(
-                      children: List.generate(list.length, (index) {
-                        if(list== null || list == '_'){
-                           context.read<WalletBloc>().add(GetAllWallet(1));
-                           }
+                      children: List.generate(state.wallets.length, (index) {
+                        final Wallet wallet = state.wallets[index];
+                        print("kikikik : ${wallet.walletName}");
                         return Container(
                           width: 320,
                           height: 57,
@@ -110,7 +108,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${state.wallets[index].walletName}",
+                                            "${wallet.walletName}",
                                             style: TextStyle(
                                               color: Color(0xFF15616D),
                                               fontSize: 16,
@@ -119,7 +117,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             ),
                                           ),
                                           Text(
-                                            "${state.wallets[index].walletBalance}",
+                                            "${wallet.walletBalance}",
                                             style: TextStyle(
                                               color: Color(0xFF707070),
                                               fontSize: 16,
@@ -137,7 +135,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                     Container(
                                       height: 30,
                                       child: LiteRollingSwitch(
-                                          value: state.wallets[index]
+                                          value: wallet
                                                   .statusWallet ==
                                               1,
                                           width: 85,
@@ -154,7 +152,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                               const Duration(milliseconds: 100),
                                           onChanged: (bool status) {
                                             setState(() {
-                                              state.wallets[index]
+                                              wallet
                                                       .statusWallet =
                                                   status ? 1 : 0;
                                             });
@@ -162,7 +160,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             context.read<WalletBloc>().add(
                                                   UpdateStatusWallet(
                                                       1,
-                                                      state.wallets[index]
+                                                      wallet
                                                           .walletId),
                                                 );
                                           },
@@ -170,28 +168,23 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                           onTap: () {},
                                           onDoubleTap: () {}),
                                     ),
-                                    BlocBuilder<WalletBloc, WalletState>(
-                                      builder: (context, state) {
-                                        return IconButton(
-                                          icon: Icon(
-                                            Icons.more_vert_outlined,
-                                            color: Color(
-                                                0XFF15616D), // Set the color here
-                                          ),
-                                          onPressed: () async {
-                                            await more_vert();
-                                            context
-                                                .read<WalletBloc>()
-                                                .add(MapEventToState(
-                                                  state.wallets[index].walletId,
-                                                  state.wallets[index]
-                                                      .walletName,
-                                                  state.wallets[index]
-                                                      .walletBalance,
-                                                ));
-                                             list = null; 
-                                          },
-                                        );
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.more_vert_outlined,
+                                        color: Color(
+                                            0XFF15616D), // Set the color here
+                                      ),
+                                      onPressed: () {
+                                        more_vert(
+                                            wallet.walletId , 
+                                            wallet);
+                                        context
+                                            .read<WalletBloc>()
+                                            .add(MapEventToState(
+                                              wallet.walletId,
+                                              wallet.walletName,
+                                              wallet.walletBalance,
+                                            ));
                                       },
                                     )
                                   ],
@@ -210,10 +203,16 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
     );
   }
 
-  more_vert() {
+  more_vert(int walletId , Wallet wallet) {
     showSlideDialog(
         context: context,
-        child: MoreVertPopup(),
+        child: MoreVertPopup(
+          listFunction: () {
+            context.read<WalletBloc>().add(DeleteWallet(1, walletId));
+            Navigator.pop(context);
+          },
+          wallet: wallet
+        ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.3);

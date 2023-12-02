@@ -20,6 +20,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       try {
         print("accountId : ${event.accountId} : walletID : ${event.walletId}");
           await walletRepository().deleteWalletById(event.accountId, event.walletId);
+          final List<Wallet> newListWallet = [...state.wallets];
+          newListWallet.removeWhere((element) => element.walletId == event.walletId);
+          emit(state.copyWith(wallets: newListWallet));
       } catch (error) {
         print("Error: $error");
         throw error;
@@ -34,11 +37,15 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           event.walletName,
           event.walletBalance,
         );
-
         if (response.toString().isNotEmpty) {
+           final List<Wallet> newListWallet = [...state.wallets];
+          Wallet wallet = newListWallet.where((element) => element.walletId == event.walletId,).first;
+          wallet = Wallet( walletId: wallet.walletId  , walletName: event.walletName, walletBalance: event.walletBalance);
+          int index = newListWallet.indexWhere((element) => element.walletId == event.walletId);
+          newListWallet.replaceRange(index, index+1, [wallet]);
           emit(state.copyWith(
-              walletName: event.walletName,
-              walletBalance: event.walletBalance));
+              wallets: newListWallet
+              ));
         } else {
           throw ArgumentError('Wallet update failed.');
         }

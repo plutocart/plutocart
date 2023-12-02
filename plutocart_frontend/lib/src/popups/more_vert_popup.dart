@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/edit_wallet_popup.dart';
 
 class MoreVertPopup extends StatefulWidget {
-  const MoreVertPopup({Key? key}) : super(key: key);
+  final Function()? listFunction;
+  final Wallet? wallet;
+  const MoreVertPopup({Key? key, this.listFunction , this.wallet}) : super(key: key);
 
   @override
   _MoreVertPopupState createState() => _MoreVertPopupState();
@@ -27,19 +30,15 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
               width: 350,
               height: 60,
               child: ElevatedButton(
-                onPressed: EditWallet,
-                child: BlocBuilder<WalletBloc, WalletState>(
-                  builder: (context, state) {
-                    return Text(
-                      "Edit",
-                      style: TextStyle(
-                        color: Color(0xFF15616D),
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    );
-                  },
+                onPressed:()=> EditWallet(widget.wallet),
+                child: Text(
+                  "Edit",
+                  style: TextStyle(
+                    color: Color(0xFF15616D),
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -54,37 +53,28 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: SizedBox(
-                width: 350,
-                height: 60,
-                child: BlocBuilder<WalletBloc, WalletState>(
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      onPressed: () {
-                      context.read<WalletBloc>().add(DeleteWallet(1, state.walletId));
-                      context.read<WalletBloc>().add(GetAllWallet(1));
-                      Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Delete',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w700,
-                        ),
+                  width: 350,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: widget.listFunction,
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
                       ),
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: Color(0XFF15616D), // Border color
-                            ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Color(0XFF15616D), // Border color
                           ),
-                          backgroundColor: Color(0XFFDD0000)),
-                    );
-                  },
-                ),
-              ),
+                        ),
+                        backgroundColor: Color(0XFFDD0000)),
+                  )),
             ),
           ],
         ),
@@ -92,10 +82,14 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
     );
   }
 
-  EditWallet() {
+  EditWallet(Wallet? wallet) {
     showSlideDialog(
         context: context,
-        child: EditWalletPopup(numberPopUp1: 2 , numberPopUp2: 2,),
+        child: EditWalletPopup(
+          numberPopUp1: 2,
+          numberPopUp2: 2,
+          wallet: wallet,
+        ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.9);

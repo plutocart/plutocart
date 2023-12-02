@@ -15,7 +15,7 @@ class WalletState extends Equatable {
       this.walletBalance = 0.0,
       this.walletStatus = 1,
       this.wallets = const [],
-      this.walletId = 1});
+      this.walletId = 1 });
 
   WalletState copyWith(
       {String? walletName,
