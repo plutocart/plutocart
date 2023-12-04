@@ -16,7 +16,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
 //    Get
 
     @Transactional
-    @Query(value = "select * from wallet where account_id_account = :accountId and status_wallet = true " , nativeQuery = true)
+    @Query(value = "select * from wallet where account_id_account = :accountId " , nativeQuery = true)
     List<Wallet> viewWalletByAccountId(int accountId);
 
     @Transactional
