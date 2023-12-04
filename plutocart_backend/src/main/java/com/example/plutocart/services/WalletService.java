@@ -39,6 +39,12 @@ public class WalletService {
         return ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
     }
 
+    public ResponseEntity<List<WalletDTO>> getWalletByIdAccountStatusOn(Integer accountId) {
+        List<Wallet> walletList = walletRepository.viewWalletByAccountIdStatusOn(accountRepository.findById(accountId).orElseThrow().getAccountId());
+        return ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
+    }
+
+
 
     public ResponseEntity<?> getWalletByIdAccountAndByWalletId(String accountId, String walletId) {
         try {

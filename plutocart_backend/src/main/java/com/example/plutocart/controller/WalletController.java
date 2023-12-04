@@ -29,6 +29,17 @@ public class WalletController {
         }
 
     }
+    @GetMapping("/account/{account-id}/wallet/status-on")
+    private ResponseEntity<List<WalletDTO>> getAllWalletStatusOn(@Valid @PathVariable("account-id") String accountId) {
+        try {
+            int acId = Integer.parseInt(accountId);
+            return walletService.getWalletByIdAccountStatusOn(acId);
+        }
+        catch (Exception e){
+            throw new NoSuchElementException(e.getMessage());
+        }
+
+    }
 
     @GetMapping("/account/{account-id}/wallet/{wallet-id}")
     private ResponseEntity<?> getWalletByWalletIdService(@Valid @PathVariable("account-id") String accountId, @PathVariable("wallet-id") String walletId) {
