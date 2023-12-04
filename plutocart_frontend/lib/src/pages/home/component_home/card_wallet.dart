@@ -19,7 +19,7 @@ class _CardWalletState extends State<CardWallet> {
 
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWallet(1));
+    context.read<WalletBloc>().add(GetAllWalletOpen(1));
     super.initState();
   }
 

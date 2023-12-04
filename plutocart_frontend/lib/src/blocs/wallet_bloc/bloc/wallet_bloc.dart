@@ -99,5 +99,21 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         // print(response);
       }
     });
+
+    on<GetAllWalletOpen>((event, emit) async {
+      List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
+      if (response.isEmpty) {
+        throw ArgumentError("Wallet not found");
+      } else {
+        emit(state.copyWith(
+            wallets: response.map((walletData) {
+          return Wallet(
+              walletId: walletData['walletId'],
+              walletName: walletData['walletName'],
+              statusWallet: walletData['statusWallet'],
+              walletBalance: walletData['walletBalance']);
+        }).toList()));
+      }
+    });
   }
 }
