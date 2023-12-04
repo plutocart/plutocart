@@ -20,7 +20,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     List<Wallet> viewWalletByAccountId(int accountId);
 
     @Transactional
-    @Query(value = "select * from wallet where account_id_account = :accountId and status_wallet = 1 limit 7 " , nativeQuery = true)
+    @Query(value = "select * from wallet where account_id_account = :accountId and status_wallet = 1 limit 6 " , nativeQuery = true)
     List<Wallet> viewWalletByAccountIdStatusOn(int accountId);
 
     @Transactional
