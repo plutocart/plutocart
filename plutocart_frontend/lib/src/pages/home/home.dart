@@ -53,7 +53,11 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  CardWallet(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2, // constrain height
+                     width: MediaQuery.of(context).size.width * 1,
+                    child: CardWallet(),
+                  ),
                   SizedBox(height: 25),
                   CardGroup("Transaction", subject: 'Transactions'),
                   SizedBox(height: 16),

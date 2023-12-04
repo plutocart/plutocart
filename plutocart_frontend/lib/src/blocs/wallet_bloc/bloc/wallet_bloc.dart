@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/repository/wallet_repository.dart';
-
 part 'wallet_event.dart';
 part 'wallet_state.dart';
 
@@ -86,8 +84,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     });
 
     on<GetAllWallet>((event, emit) async {
-      List<dynamic> response =
-          await walletRepository().getWalletAll(event.accountId);
+      List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {

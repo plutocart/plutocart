@@ -70,8 +70,6 @@ class walletRepository {
       Response response = await dio.get(
           'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet');
       if (response.statusCode == 200) {
-        print("200 ok get all wallet");
-        print(response.data.runtimeType);
         List<dynamic> wallets = response.data!;
         return wallets;
       } else if (response.statusCode == 404) {

@@ -71,7 +71,6 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                     child: Column(
                       children: List.generate(state.wallets.length, (index) {
                         final Wallet wallet = state.wallets[index];
-                        print("kikikik : ${wallet.walletName}");
                         return Container(
                           width: 320,
                           height: 57,
