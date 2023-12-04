@@ -100,7 +100,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       }
     });
 
-    on<GetAllWalletOpen>((event, emit) async {
+      on<GetAllWalletOpenStatus>((event, emit) async {
       List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
@@ -113,7 +113,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               statusWallet: walletData['statusWallet'],
               walletBalance: walletData['walletBalance']);
         }).toList()));
+        // print(response);
       }
     });
+
   }
 }

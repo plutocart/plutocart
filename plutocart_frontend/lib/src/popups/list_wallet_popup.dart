@@ -50,7 +50,10 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                       clipBehavior: Clip.hardEdge,
                       color: Colors.transparent,
                       child: IconButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          Navigator.pop(context);
+                        },
                         icon: SizedBox(
                           child: ImageIcon(
                             AssetImage('assets/icon/cancle_icon.png'),
@@ -134,9 +137,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                     Container(
                                       height: 30,
                                       child: LiteRollingSwitch(
-                                          value: wallet
-                                                  .statusWallet ==
-                                              1,
+                                          value: wallet.statusWallet == 1,
                                           width: 85,
                                           textOn: 'Show',
                                           textOff: 'No',
@@ -151,16 +152,13 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                               const Duration(milliseconds: 100),
                                           onChanged: (bool status) {
                                             setState(() {
-                                              wallet
-                                                      .statusWallet =
+                                              wallet.statusWallet =
                                                   status ? 1 : 0;
                                             });
                                             // Then trigger the bloc event to update the status
                                             context.read<WalletBloc>().add(
                                                   UpdateStatusWallet(
-                                                      1,
-                                                      wallet
-                                                          .walletId),
+                                                      1, wallet.walletId),
                                                 );
                                           },
                                           onSwipe: () {},
@@ -174,9 +172,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             0XFF15616D), // Set the color here
                                       ),
                                       onPressed: () {
-                                        more_vert(
-                                            wallet.walletId , 
-                                            wallet);
+                                        more_vert(wallet.walletId, wallet);
                                         context
                                             .read<WalletBloc>()
                                             .add(MapEventToState(
@@ -202,16 +198,16 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
     );
   }
 
-  more_vert(int walletId , Wallet wallet) {
+  more_vert(int walletId, Wallet wallet) {
     showSlideDialog(
         context: context,
         child: MoreVertPopup(
-          listFunction: () {
-            context.read<WalletBloc>().add(DeleteWallet(1, walletId));
-            Navigator.pop(context);
-          },
-          wallet: wallet
-        ),
+            listFunction: () {
+              context.read<WalletBloc>().add(DeleteWallet(1, walletId));
+              FocusScope.of(context).unfocus();
+              Navigator.pop(context);
+            },
+            wallet: wallet),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.3);

@@ -19,7 +19,7 @@ class _CardWalletState extends State<CardWallet> {
 
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWalletOpen(1));
+    context.read<WalletBloc>().add(GetAllWallet(1));
     super.initState();
   }
 
@@ -85,7 +85,7 @@ class _CardWalletState extends State<CardWallet> {
                             color: Colors.transparent,
                             child: Ink(
                               child: IconButton(
-                                onPressed: ()=> EditWallet(wallet),
+                                onPressed: () => EditWallet(wallet),
                                 icon: SizedBox(
                                   width: 20,
                                   height: 20,
@@ -205,7 +205,15 @@ class _CardWalletState extends State<CardWallet> {
           itemCount: state.wallets.length,
           viewportFraction: 1,
           scale: 0.9,
-          loop:false,
+          loop: false,
+          pagination: SwiperPagination(
+            builder: DotSwiperPaginationBuilder(
+              color: Colors.grey.shade300,
+              activeColor: Color(0XFF15616D),   
+            ),
+          margin: EdgeInsets.all(5.0) ,
+          
+            ),
         );
       },
     );
@@ -214,11 +222,8 @@ class _CardWalletState extends State<CardWallet> {
   EditWallet(Wallet? wallet) {
     showSlideDialog(
         context: context,
-        child: EditWalletPopup(
-          numberPopUp1: 1,
-          numberPopUp2: 1,
-          wallet: wallet
-        ),
+        child:
+            EditWalletPopup(numberPopUp1: 1, numberPopUp2: 1, wallet: wallet),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.9);

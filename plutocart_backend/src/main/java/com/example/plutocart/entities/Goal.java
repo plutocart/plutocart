@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,5 +37,8 @@ public class Goal {
 
     @Column(name = "update_goal_on", nullable = false)
     private Instant updateGoalOn;
+
+    @OneToMany(mappedBy = "goalIdGoal")
+    private Set<Transaction> transactions = new LinkedHashSet<>();
 
 }

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -29,5 +32,14 @@ public class Account {
     @Lob
     @Column(name = "account_role", nullable = false)
     private String accountRole;
+
+    @OneToMany(mappedBy = "accountIdAccount")
+    private Set<Debt> debts = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "accountIdAccount")
+    private Set<Goal> goals = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "accountIdAccount")
+    private Set<Wallet> wallets = new LinkedHashSet<>();
 
 }

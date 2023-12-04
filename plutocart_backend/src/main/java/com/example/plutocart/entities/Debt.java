@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,5 +43,8 @@ public class Debt {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id_account", nullable = false)
     private Account accountIdAccount;
+
+    @OneToMany(mappedBy = "debtIdDebt")
+    private Set<Transaction> transactions = new LinkedHashSet<>();
 
 }

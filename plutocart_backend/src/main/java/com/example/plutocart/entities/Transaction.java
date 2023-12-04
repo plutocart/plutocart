@@ -1,6 +1,7 @@
 package com.example.plutocart.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,5 +39,23 @@ public class Transaction {
 
     @Column(name = "update_transaction_on", nullable = false)
     private Instant updateTransactionOn;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tran_category_id_category", nullable = false)
+    private TransactionCategory tranCategoryIdCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debt_id_debt")
+    private Debt debtIdDebt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goal_id_goal")
+    private Goal goalIdGoal;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "wallet_id_wallet", nullable = false)
+    private Wallet walletIdWallet;
 
 }

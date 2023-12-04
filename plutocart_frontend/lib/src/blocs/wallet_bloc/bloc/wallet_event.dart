@@ -15,9 +15,9 @@ class GetAllWallet extends WalletEvent {
   final int accountId;
   GetAllWallet(this.accountId);
 }
-class GetAllWalletOpen extends WalletEvent {
+class GetAllWalletOpenStatus extends WalletEvent {
   final int accountId;
-  GetAllWalletOpen(this.accountId);
+  GetAllWalletOpenStatus(this.accountId);
 }
 class GetWalletById extends WalletEvent {
   final int accountId;

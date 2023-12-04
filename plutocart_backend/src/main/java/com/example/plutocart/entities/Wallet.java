@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -28,7 +30,7 @@ public class Wallet {
 
     @Digits(integer = 13, fraction = 2, message = "Invalid decimal value")
     @DecimalMin(value = "1.00", inclusive = false, message = "wallet balance should be greater than 1.00")
-    @DecimalMax(value = "99999999999.99", inclusive = true, message = "wallet balance exceeds maximum value 99999999999.99")
+    @DecimalMax(value = "9999999999.99", message = "wallet balance exceeds maximum value 99999999999.99")
     @NotNull(message = "balance wallet is null")
     @Column(name = "balance_wallet", nullable = false, precision = 13, scale = 2)
     private BigDecimal WalletBalance;
@@ -45,5 +47,8 @@ public class Wallet {
 
     @Column(name = "status_wallet", nullable = false)
     private Byte statusWallet;
+
+    @OneToMany(mappedBy = "walletIdWallet")
+    private Set<Transaction> transactions = new LinkedHashSet<>();
 
 }
