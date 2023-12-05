@@ -126,7 +126,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               statusWallet: walletData['statusWallet'],
               walletBalance: walletData['walletBalance']);
         }).toList()));
-        // print(response);
       }
     });
   }

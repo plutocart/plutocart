@@ -15,7 +15,6 @@ import java.util.Set;
 @Entity
 @Table(name = "wallet")
 public class Wallet {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_wallet", nullable = false)

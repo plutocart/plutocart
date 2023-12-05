@@ -35,7 +35,6 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     void insertWalletByAccountId( String walletName , BigDecimal balanceWallet  , Integer accountId );
 
 //    Put
-
     @Modifying
     @Query(value = "update wallet set name_wallet = :walletName, balance_wallet = :balanceWallet ,update_wallet_on = now() where account_id_account = :accountId and id_wallet = :walletId", nativeQuery = true)
     @Transactional
@@ -48,7 +47,6 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     void updateStatusWallet(byte walletStatus , int accountId ,int walletId);
 
  // Delete
-
     @Transactional
     @Modifying
     @Procedure(procedureName = "deleteWalletBYWalletId")
