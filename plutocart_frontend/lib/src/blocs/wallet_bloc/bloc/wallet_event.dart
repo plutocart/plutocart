@@ -13,7 +13,8 @@ class MapEventToState extends WalletEvent {
 
 class GetAllWallet extends WalletEvent {
   final int accountId;
-  GetAllWallet(this.accountId);
+  bool? enableOnlyStatusOnCard = false;
+  GetAllWallet(this.accountId , {this.enableOnlyStatusOnCard});
 }
 class GetAllWalletOpenStatus extends WalletEvent {
   final int accountId;

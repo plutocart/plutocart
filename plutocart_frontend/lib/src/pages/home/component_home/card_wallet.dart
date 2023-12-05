@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
-import 'package:plutocart/src/popups/edit_wallet_popup.dart';
-import 'package:plutocart/src/popups/list_wallet_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/list_wallet_popup.dart';
 
 class CardWallet extends StatefulWidget {
   const CardWallet({Key? key}) : super(key: key);
@@ -27,40 +28,50 @@ class _CardWalletState extends State<CardWallet> {
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
       builder: (context, state) {
+        final List<Wallet> removeStatusOff =
+            state.wallets.where((e) => e.statusWallet == 1).toList();
         return Swiper(
           itemBuilder: (BuildContext context, int index) {
-            if (index == state.wallets.length-1) {
+            if (index == removeStatusOff.length || removeStatusOff.length == 0) {
               return Container(
-                  child: TextButton(
-                      onPressed: ShowWallets,
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
+                child: TextButton(
+                  onPressed: CreateWallet,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 2,
+                          offset: Offset(2, 2),
+                          spreadRadius: 0,
                         ),
-                      ),
-                      child: Container(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          width: MediaQuery.of(context).size.width * 1,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 2,
-                                offset: Offset(2, 2),
-                                spreadRadius: 0,
-                              ),
-                            ],
-                          ))));
+                      ],
+                    ),
+                    child: Center(child: Text("Add wallet")),
+                  ),
+                ),
+              );
             } else {
-              Wallet wallet = state.wallets[index];
+              Wallet wallet = removeStatusOff[index];
               return Container(
                   child: TextButton(
-                onPressed: ShowWallets,
+                onPressed: () async {
+                  await ShowWallets();
+                  context
+                      .read<WalletBloc>()
+                      .add(GetAllWallet(1, enableOnlyStatusOnCard: true));
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
@@ -228,10 +239,10 @@ class _CardWalletState extends State<CardWallet> {
               ));
             }
           },
-          itemCount: state.wallets.length ,
+          itemCount: removeStatusOff.length +1,
           viewportFraction: 1,
           scale: 0.9,
-          loop: false,
+          loop: true,
           pagination: SwiperPagination(
             builder: DotSwiperPaginationBuilder(
               color: Colors.grey.shade300,
@@ -254,12 +265,24 @@ class _CardWalletState extends State<CardWallet> {
         hightCard: 1.9);
   }
 
-  ShowWallets() {
+  Future<void> ShowWallets() async {
     showSlideDialog(
         context: context,
         child: ListWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.9);
+  }
+
+  CreateWallet() {
+    showSlideDialog(
+        context: context,
+        child: CreateWalletPopup(
+          numberPopUp1: 2,
+          numberPopUp2: 2,
+        ),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2);
   }
 }

@@ -20,7 +20,7 @@ Future<T?>? showSlideDialog<T>({
   required Widget child,
   Color? barrierColor,
   bool barrierDismissible = true,
-  Duration transitionDuration = const Duration(milliseconds: 300),
+  Duration transitionDuration = const Duration(milliseconds: 150),
   Color? pillColor,
   Color? backgroundColor,
   double? hightCard

@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`transaction_category` (
   `id_transaction_category` INT NOT NULL AUTO_INCREMENT,
   `name_transaction_category` VARCHAR(45) NOT NULL,
   `type_category` ENUM('income', 'expense', 'goal', 'debt') NOT NULL,
-  `image_icon_url` VARCHAR(100) NOT NULL,
+  `image_icon_url` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`id_transaction_category`),
   UNIQUE INDEX `name_transaction_category_UNIQUE` (`name_transaction_category` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`transaction` (
   `date_transaction` DATETIME NOT NULL,
   `tran_category_id_category` INT NOT NULL,
   `description` VARCHAR(100) NULL DEFAULT NULL,
-  `image_url` VARCHAR(100) NULL DEFAULT NULL,
+  `image_url` VARCHAR(200) NULL DEFAULT NULL,
   `debt_id_debt` INT NULL,
   `goal_id_goal` INT NULL,
   `create_transaction_on` DATETIME NOT NULL,
@@ -161,36 +161,58 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 insert into account (id_account , user_name , imei , email , password , account_role) values(1 , 'admin' , 'admin_imei' , 'admin@gmail.com' , 'adminpassword' , 2);
 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(1 , 'Salary' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(2 , 'Pocket money' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(3 , 'Davidend' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(4 , 'Allowance' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(5 , 'Pension' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(6 , 'Reward' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(7 , 'Bonus' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(8 , 'Collect rent' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(9 , 'Win the lottery' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(10 , 'Freelance' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(11 , 'Part-time' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(12, 'Sell Things' , 1 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(13, 'Red envelope' , 1 , "test.com"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(1 , 'Salary' , 1 , 'https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856731/category_images/Icon-%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%B7%E0%B8%AD%E0%B8%99.png'); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(2 , 'Pocket money' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856978/category_images/Icon-%E0%B8%A5%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(3 , 'Davidend' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856997/category_images/Icon-%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%82%E0%B8%99%E0%B8%A1.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(4 , 'Allowance' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857421/category_images/Icon-Allowance.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(5 , 'Pension' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857447/category_images/Icon-Pension.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(6 , 'Reward' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857460/category_images/Icon-Reward.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(7 , 'Bonus' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857474/category_images/Icon-Bonus.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(8 , 'Collect rent' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857502/category_images/Icon-Collect_rent.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(9 , 'Win the lottery' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857526/category_images/Icon-Win_Lottery.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(10 , 'Freelance' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857547/category_images/Icon-Part_time.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(11 , 'Part-time' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857564/category_images/Icon-Freelance.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(12, 'Sell Things' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857574/category_images/Icon-Sell_things.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(13, 'Red envelope' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857581/category_images/Icon-%E0%B8%AD%E0%B8%B1%E0%B9%88%E0%B8%87%E0%B9%80%E0%B8%9B%E0%B8%B2.png"); 
 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(14 , 'Food' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(15, 'Gasoline' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(16, 'Telephone bill' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(17, 'Medical' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(18, 'Shopping' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(19, 'Electricity bill' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(20, 'Water bill' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(21, 'Home installment' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(22, 'Travel' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(23, 'Fare' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(24, 'Drinking' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(25, 'Donate' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(26, 'Household items' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(27, 'Pay for rent' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(28, 'Transfer money to others' , 2 , "test.com"); 
-insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(29, 'Lottery' , 2 , "test.com"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(14 , 'Food' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857873/category_images/Icon-eat.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(15, 'Gasoline' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857881/category_images/Icon-Gasoline.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(16, 'Telephone bill' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857895/category_images/Icon-Telephone%20bill.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(17, 'Medical' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857943/category_images/Icon-Medical.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(18, 'Shopping' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857954/category_images/Icon-Shopping.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(19, 'Electricity bill' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857970/category_images/Icon-Electric.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(20, 'Water bill' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857986/category_images/Icon-water.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(21, 'Home installment' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700857998/category_images/Icon-home.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(22, 'Travel' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858007/category_images/Icon-Travel.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(23, 'Fare' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858038/category_images/Icon-fare.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(24, 'Drinking' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858050/category_images/Icon-Drink.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(25, 'Donate' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858062/category_images/Icon-Donate.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(26, 'Household items' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858086/category_images/Icon-Home_items.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(27, 'Pay for rent' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858104/category_images/Icon-Rent.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(28, 'Transfer money to others' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700858112/category_images/Icon-Transfer_money.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(29, 'Lottery' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700930017/test/Icon-Lottery.png"); 
 
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(1 , 'admin wallet' , 100000.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
+
+DELIMITER //
+CREATE PROCEDURE InsertIntoWallet( in walletName varchar(15) , in balanceWallet decimal(13 ,2) ,  in accountId int)
+BEGIN
+    DECLARE account_count INT;
+    SELECT COUNT(*) into account_count  FROM wallet WHERE account_id_account = accountId;
+    IF account_count <6 THEN
+        INSERT INTO wallet ( name_wallet, balance_wallet, status_wallet, account_id_account, create_wallet_on, update_wallet_on)
+        VALUES ( walletName, balanceWallet, default, accountId, NOW(), NOW());
+	 ELSE
+        SELECT 'Maximum wallet limit reached for this account.' AS status;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteWalletBYWalletId( in walletId int , in accountId int)
+BEGIN
+   DELETE FROM transaction WHERE wallet_id_wallet = walletId;
+	DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
+END //
+DELIMITER ;

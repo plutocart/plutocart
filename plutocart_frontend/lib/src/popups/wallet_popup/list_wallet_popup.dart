@@ -155,7 +155,6 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                               wallet.statusWallet =
                                                   status ? 1 : 0;
                                             });
-                                            // Then trigger the bloc event to update the status
                                             context.read<WalletBloc>().add(
                                                   UpdateStatusWallet(
                                                       1, wallet.walletId),

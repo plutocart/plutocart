@@ -3,6 +3,7 @@ import com.example.plutocart.entities.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +31,8 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
 //    Post
     @Transactional
     @Modifying
-    @Query(value = "insert into  wallet (name_wallet , balance_wallet , account_id_account , create_wallet_on , update_wallet_on)" +
-            " values(:walletName , :walletBalance , :accountId , :createWalletOn , :updateWalletOn)" , nativeQuery = true)
-    void insertWalletByAccountID(String walletName , BigDecimal walletBalance  , Integer accountId , LocalDateTime createWalletOn , LocalDateTime updateWalletOn);
+    @Procedure(procedureName  = "InsertIntoWallet")
+    void insertWalletByAccountId( String walletName , BigDecimal balanceWallet  , Integer accountId );
 
 //    Put
 
@@ -51,6 +51,6 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "delete from wallet where id_wallet = :walletId and account_id_account = :accountId" , nativeQuery = true)
+    @Procedure(procedureName = "deleteWalletBYWalletId")
     void deleteWalletByAccountIdAndWalletId(int accountId ,int walletId);
 }

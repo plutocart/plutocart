@@ -64,7 +64,7 @@ public class WalletService {
 
     //    Post
     public ResponseEntity<WalletPostDTO> crateWallet(Wallet wallet, Integer accountId) {
-        walletRepository.insertWalletByAccountID(wallet.getWalletName(), wallet.getWalletBalance(), accountRepository.findById(accountId).get().getAccountId(), LocalDateTime.now(), LocalDateTime.now());
+        walletRepository.insertWalletByAccountId(wallet.getWalletName(), wallet.getWalletBalance(), accountRepository.findById(accountId).get().getAccountId());
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(wallet, WalletPostDTO.class));
     }
 

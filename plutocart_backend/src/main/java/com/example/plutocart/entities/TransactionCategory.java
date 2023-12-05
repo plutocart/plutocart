@@ -28,7 +28,7 @@ public class TransactionCategory {
 
     @Size(max = 100)
     @NotNull
-    @Column(name = "image_icon_url", nullable = false, length = 100)
+    @Column(name = "image_icon_url", nullable = false, length = 200)
     private String imageIconUrl;
 
     @OneToMany(mappedBy = "tranCategoryIdCategory")

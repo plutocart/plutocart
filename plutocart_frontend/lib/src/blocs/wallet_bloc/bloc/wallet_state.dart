@@ -6,7 +6,7 @@ class WalletState extends Equatable {
   final double dailyIncome;
   final double walletBalance;
   final int walletStatus;
-  final List<dynamic> wallets;
+  final List<Wallet> wallets;
   final int walletId;
   const WalletState(
       {this.walletName = "",
@@ -15,7 +15,7 @@ class WalletState extends Equatable {
       this.walletBalance = 0.0,
       this.walletStatus = 1,
       this.wallets = const [],
-      this.walletId = 1 });
+      this.walletId = 1 ,});
 
   WalletState copyWith(
       {String? walletName,
@@ -33,7 +33,7 @@ class WalletState extends Equatable {
         walletBalance: walletBalance ?? this.walletBalance,
         walletStatus: walletStatus ?? this.walletStatus,
         wallets: wallets ?? this.wallets,
-        walletId: walletId?? this.walletId);
+        walletId: walletId?? this.walletId );
   }
 
 

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
-import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/edit_wallet_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
 
 class MoreVertPopup extends StatefulWidget {
   final Function()? listFunction;
@@ -94,4 +91,5 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
         backgroundColor: Colors.white,
         hightCard: 1.9);
   }
+  
 }

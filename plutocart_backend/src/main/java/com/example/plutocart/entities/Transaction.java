@@ -31,7 +31,7 @@ public class Transaction {
     @Column(name = "description", length = 100)
     private String description;
 
-    @Column(name = "image_url", length = 100)
+    @Column(name = "image_url", length = 200)
     private String imageUrl;
 
     @Column(name = "create_transaction_on", nullable = false)
@@ -53,7 +53,6 @@ public class Transaction {
     @JoinColumn(name = "goal_id_goal")
     private Goal goalIdGoal;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "wallet_id_wallet", nullable = false)
     private Wallet walletIdWallet;
