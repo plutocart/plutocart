@@ -32,7 +32,7 @@ class walletRepository {
       Response response = await dio.delete(
           'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/${walletId}');
       if (response.statusCode == 200) {
-           return response.data!;  
+           log(1);
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {
