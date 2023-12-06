@@ -103,7 +103,7 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
           numberPopUp2: 2,
           wallet: wallet,
           listFunction : (){
-            context.read<WalletBloc>().add(DeleteWallet(1, wallet.walletId));
+            context.read<WalletBloc>().add(DeleteWallet(1, wallet.walletId!));
              FocusScope.of(context).unfocus();
              Navigator.pop(context);
           }

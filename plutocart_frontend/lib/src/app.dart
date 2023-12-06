@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
 import 'package:plutocart/src/models/helper.dart';
 import 'package:plutocart/src/router/router.dart';
+
 
 final navigatorState = GlobalKey<NavigatorState>();
 
@@ -14,6 +16,7 @@ class plutocartApp extends StatefulWidget {
 }
 
 class _plutocartAppState extends State<plutocartApp> {
+   bool isConnected = true; 
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
@@ -37,4 +40,5 @@ class _plutocartAppState extends State<plutocartApp> {
       )
     ;
   }
+
 }

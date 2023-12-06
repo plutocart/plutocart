@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/repository/wallet_repository.dart';
 part 'wallet_event.dart';
@@ -12,6 +13,30 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           walletId: event.walletId,
           walletName: event.walletName,
           walletBalance: event.walletBalance));
+    });
+
+    on<CreateWallet>((event, emit) async {
+            print("wallets -1");
+      Map<String, dynamic> response = await walletRepository().createWallet(event.accountId, event.walletName, event.walletBalance);
+      Wallet wallet = new Wallet(accountId: response['accountId'], 
+      walletBalance: response['walletBalance'] , walletName: response['walletName'] , walletId: response['walletId'] );
+          print("wallets 0");
+      if (response.isNotEmpty) {
+        print("wallets 1");
+        List<Wallet> responseWallet = [...state.wallets];
+        responseWallet.add(wallet);
+        final List<Wallet> newListWallet = responseWallet.map((e) {
+            return Wallet(
+              walletId: e.walletId,
+              walletName: e.walletName,
+              statusWallet: e.statusWallet,
+              walletBalance: e.walletBalance
+            );
+          }).toList();
+                  print("wallets 3");
+        emit(state.copyWith(wallets: newListWallet));
+                  print("wallets 4 : ${newListWallet.length}");
+      }
     });
 
     on<DeleteWallet>((event, emit) async {
@@ -39,14 +64,18 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         );
         if (response.toString().isNotEmpty) {
           final List<Wallet> newListWallet = [...state.wallets];
-          Wallet wallet = newListWallet.where(
-                (element) => element.walletId == event.walletId,).first;
+          Wallet wallet = newListWallet
+              .where(
+                (element) => element.walletId == event.walletId,
+              )
+              .first;
           wallet = Wallet(
               walletId: wallet.walletId,
               walletName: event.walletName,
               walletBalance: event.walletBalance,
               statusWallet: wallet.statusWallet);
-          int index = newListWallet.indexWhere((element) => element.walletId == event.walletId);
+          int index = newListWallet
+              .indexWhere((element) => element.walletId == event.walletId);
           newListWallet.replaceRange(index, index + 1, [wallet]);
 
           emit(state.copyWith(wallets: newListWallet));
@@ -90,14 +119,11 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     });
 
     on<GetAllWallet>((event, emit) async {
-      List<dynamic> response =
-          await walletRepository().getWalletAll(event.accountId);
-
+      List<dynamic> response = await walletRepository().getWalletAll(event.accountId);
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {
         if (event.enableOnlyStatusOnCard == true) {
-          print("kim's status");
           response.where((element) => element['statusWallet'] == 1).toList();
         }
         emit(state.copyWith(

@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +29,7 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+   bool isConnected = true;
   @override
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
@@ -39,7 +44,46 @@ class _MyWidgetState extends State<MyWidget> {
             )),
             home: Scaffold(
               resizeToAvoidBottomInset: false,
-              body: plutocartApp(),
+              body: isConnected ?  plutocartApp() : NoConnectionPage(),
             )));
   }
+
+   Future<void> checkConnectivity() async {
+  var connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        isConnected = false; // ปรับสถานะการเชื่อมต่อ
+      });
+  } else if (connectivityResult == ConnectivityResult.wifi ||
+      connectivityResult == ConnectivityResult.mobile) {
+      setState(() {
+        isConnected = true; // ปรับสถานะการเชื่อมต่อ
+      });
+  }
+}
+late StreamSubscription<ConnectivityResult> subscription;
+
+void initConnectivity() {
+  subscription = Connectivity().onConnectivityChanged.listen((result) {
+    if (result == ConnectivityResult.none) {
+      // No internet connection
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.mobile) {
+      // Connected to WiFi or mobile data
+    }
+  });
+}
+
+@override
+void initState() {
+  super.initState();
+  checkConnectivity();
+  initConnectivity();
+}
+
+@override
+void dispose() {
+  super.dispose();
+  subscription.cancel();
+}
 }

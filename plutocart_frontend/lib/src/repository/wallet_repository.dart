@@ -16,6 +16,7 @@ class walletRepository {
       Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet' , data: requestBody);
       if (response.statusCode == 201) {
           print("create successfully");
+          return response.data;
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {

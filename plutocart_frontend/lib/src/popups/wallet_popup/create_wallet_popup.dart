@@ -4,16 +4,18 @@ import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/popups/input_field_wallet.dart';
 
 class CreateWalletPopup extends StatefulWidget {
-  final int? numberPopUp1;
-  final int? numberPopUp2;
-  const CreateWalletPopup({Key? key, this.numberPopUp1, this.numberPopUp2})
-      : super(key: key);
+  const CreateWalletPopup({Key? key}) : super(key: key);
 
   @override
   _CreateWalletPopupState createState() => _CreateWalletPopupState();
 }
 
 class _CreateWalletPopupState extends State<CreateWalletPopup> {
+  @override
+  void initState() {
+    context.read<WalletBloc>().add(GetAllWallet(1 , enableOnlyStatusOnCard: true));
+    super.initState();
+  }
   TextEditingController _nameWalletController = new TextEditingController();
   TextEditingController _amountMoneyController = new TextEditingController();
 
@@ -48,11 +50,14 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                 amountMoneyController: _amountMoneyController,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22 , bottom: 22),
+                padding: const EdgeInsets.only(left: 22, right: 22, bottom: 22),
                 child: ElevatedButton(
-                  onPressed: ()  {
-
-                  } ,
+                  onPressed: () {
+                    double amount = double.parse(_amountMoneyController.text);
+                      context.read<WalletBloc>().add(CreateWallet(1, _nameWalletController.text, amount));
+                    FocusScope.of(context).unfocus();
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius:

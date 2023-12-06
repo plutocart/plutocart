@@ -11,6 +11,7 @@ class MapEventToState extends WalletEvent {
   MapEventToState(this.walletId, this.walletName, this.walletBalance);
 }
 
+// ignore: must_be_immutable
 class GetAllWallet extends WalletEvent {
   final int accountId;
   bool? enableOnlyStatusOnCard = false;
@@ -45,6 +46,12 @@ class DeleteWallet extends WalletEvent {
   final int accountId;
   final int walletId;
   DeleteWallet(this.accountId, this.walletId);
+}
+class CreateWallet extends WalletEvent {
+  final int accountId;
+  final String walletName;
+  final double walletBalance;
+  CreateWallet(this.accountId, this.walletName, this.walletBalance);
 }
 
 

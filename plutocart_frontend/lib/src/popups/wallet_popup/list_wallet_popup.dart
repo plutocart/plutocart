@@ -157,7 +157,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             });
                                             context.read<WalletBloc>().add(
                                                   UpdateStatusWallet(
-                                                      1, wallet.walletId),
+                                                      1, wallet.walletId!),
                                                 );
                                           },
                                           onSwipe: () {},
@@ -171,7 +171,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             0XFF15616D), // Set the color here
                                       ),
                                       onPressed: () {
-                                        more_vert(wallet.walletId, wallet);
+                                        more_vert(wallet.walletId!, wallet);
                                         context
                                             .read<WalletBloc>()
                                             .add(MapEventToState(

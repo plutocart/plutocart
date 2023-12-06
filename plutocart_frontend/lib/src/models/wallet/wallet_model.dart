@@ -5,14 +5,14 @@ List<Wallet> walletAllFromJson(String str) => List<Wallet>.from(json.decode(str)
 String walletByIdToJson(Wallet data) => json.encode(data.toJson());
 
 class Wallet {
-    int walletId;
+    int? walletId;
     int? accountId;
     String walletName;
     int? statusWallet;
     double walletBalance;
 
     Wallet({
-        required this.walletId,
+        this.walletId,
         this.accountId,
         required this.walletName,
          this.statusWallet,

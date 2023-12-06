@@ -38,7 +38,7 @@ class _CardWalletState extends State<CardWallet> {
                 removeStatusOff.length == 0) {
               return Container(
                 child: FractionallySizedBox(
-                  heightFactor:0.7,
+                  heightFactor: 0.7,
                   widthFactor: 0.98,
                   child: Container(
                     decoration: BoxDecoration(
@@ -54,19 +54,107 @@ class _CardWalletState extends State<CardWallet> {
                       ],
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                       TextButton(
-                          onPressed: () => state.wallets.length < 6 ? createWallet() : (){} ,
-                          child: state.wallets.length < 6 ?  Text("Add wallet") : Text("Wallet is full"),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: state.wallets.length < 6 ? 15 : 0, top: 10),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image:
+                                      AssetImage('assets/icon/plus_icon.png'),
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                ElevatedButton(
+                                  onPressed: state.wallets.length < 6
+                                      ? () async {
+                                          await createWallet();
+                                          context.read<WalletBloc>().add(
+                                              GetAllWallet(1,
+                                                  enableOnlyStatusOnCard:
+                                                      true));
+                                        }
+                                      : null, 
+                                  child: state.wallets.length < 6
+                                      ? Text("Add new wallet")
+                                      : Text("Wallet is full"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Color(0xFF15616D),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 1, color: Color(0xFF15616D)),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ).copyWith(
+                                    overlayColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        if (states.contains( MaterialState.hovered) && state.wallets.length < 6) {
+                                          return Colors.transparent;
+                                        }
+                                          return Color(0x4015616D);  
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ]),
                         ),
-                        TextButton(
-                          onPressed: () async {
-                            await showWallets();
-                            context.read<WalletBloc>().add(
-                                GetAllWallet(1, enableOnlyStatusOnCard: true));
-                          },
-                          child: Text("Show list wallet"),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 100,
+                              decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    width: 1.5,
+                                    color: Color(0xFF15616D),
+                                  ),
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              right: state.wallets.length < 6 ? 30 : 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(
+                                image:
+                                    AssetImage('assets/icon/icon_launch.png'),
+                                height: 40,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    await showWallets();
+                                    context.read<WalletBloc>().add(GetAllWallet(
+                                        1,
+                                        enableOnlyStatusOnCard: true));
+                                  },
+                                  child: Text("Your wallets"),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Color(0xFF15616D),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 1, color: Color(0xFF15616D)),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -190,7 +278,7 @@ class _CardWalletState extends State<CardWallet> {
                               height: 20,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Column(
                                   children: [
@@ -209,6 +297,22 @@ class _CardWalletState extends State<CardWallet> {
                                             fontWeight: FontWeight.w500,
                                             fontFamily: 'Roboto')),
                                   ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          width: 1.5,
+                                          color: Color(0xFF15616D),
+                                        ),
+                                        borderRadius: BorderRadius
+                                            .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 Container(
                                   height: 0,
@@ -253,7 +357,7 @@ class _CardWalletState extends State<CardWallet> {
           itemCount: removeStatusOff.length + 1,
           viewportFraction: 1,
           scale: 0.9,
-          loop: true,
+          loop: false,
           pagination: SwiperPagination(
             builder: DotSwiperPaginationBuilder(
               color: Colors.grey.shade300,
@@ -285,13 +389,10 @@ class _CardWalletState extends State<CardWallet> {
         hightCard: 1.9);
   }
 
-  createWallet() {
+  createWallet() async {
     showSlideDialog(
         context: context,
-        child: CreateWalletPopup(
-          numberPopUp1: 2,
-          numberPopUp2: 2,
-        ),
+        child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2);
