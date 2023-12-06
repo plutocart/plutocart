@@ -32,7 +32,10 @@ class _CardWalletState extends State<CardWallet> {
       builder: (context, state) {
         final List<Wallet> removeStatusOff =
             state.wallets.where((e) => e.statusWallet == 1).toList();
+            print("index : ${state.currentColossalIndex}");
         return Swiper(
+          index:  state.currentColossalIndex,
+          onIndexChanged: (index)=> context.read<WalletBloc>().add(OnIndexChanged(index)) ,
           itemBuilder: (BuildContext context, int index) {
             if (index == removeStatusOff.length ||
                 removeStatusOff.length == 0) {
@@ -54,19 +57,28 @@ class _CardWalletState extends State<CardWallet> {
                       ],
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              left: state.wallets.length < 6 ? 15 : 0, top: 10),
+                              left: state.wallets.length < 6 ? 10 : 10, top: 10),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image(
-                                  image:
-                                      AssetImage('assets/icon/plus_icon.png'),
-                                  height: 30,
-                                ),
+                                state.wallets.length < 6
+                                    ? Image(
+                                        image: AssetImage(
+                                            'assets/icon/plus_icon.png'),
+                                        height: 30,
+                                      )
+                                    : Transform.rotate(
+                                        angle: 45 * 3.141592653589793 / 180,
+                                        child: Image(
+                                          image: AssetImage(
+                                              'assets/icon/plus_icon.png'),
+                                          height: 30, color: Color(0x5015616D),
+                                        ),
+                                      ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -79,7 +91,7 @@ class _CardWalletState extends State<CardWallet> {
                                                   enableOnlyStatusOnCard:
                                                       true));
                                         }
-                                      : null, 
+                                      : null,
                                   child: state.wallets.length < 6
                                       ? Text("Add new wallet")
                                       : Text("Wallet is full"),
@@ -88,17 +100,19 @@ class _CardWalletState extends State<CardWallet> {
                                     foregroundColor: Color(0xFF15616D),
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
-                                          width: 1, color: Color(0xFF15616D)),
+                                      width: 1, color: Color(0xFF15616D)),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ).copyWith(
                                     overlayColor: MaterialStateProperty
                                         .resolveWith<Color>(
                                       (Set<MaterialState> states) {
-                                        if (states.contains( MaterialState.hovered) && state.wallets.length < 6) {
+                                        if (states.contains(
+                                                MaterialState.hovered) &&
+                                            state.wallets.length < 6) {
                                           return Colors.transparent;
                                         }
-                                          return Color(0x4015616D);  
+                                        return Color(0x4015616D);
                                       },
                                     ),
                                   ),
@@ -124,7 +138,7 @@ class _CardWalletState extends State<CardWallet> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              right: state.wallets.length < 6 ? 30 : 0),
+                              right: state.wallets.length < 6 ? 30 : 20),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -357,7 +371,7 @@ class _CardWalletState extends State<CardWallet> {
           itemCount: removeStatusOff.length + 1,
           viewportFraction: 1,
           scale: 0.9,
-          loop: false,
+          loop: true,
           pagination: SwiperPagination(
             builder: DotSwiperPaginationBuilder(
               color: Colors.grey.shade300,

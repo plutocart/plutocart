@@ -54,4 +54,9 @@ class CreateWallet extends WalletEvent {
   CreateWallet(this.accountId, this.walletName, this.walletBalance);
 }
 
+class OnIndexChanged extends WalletEvent {
+  final int index;
+  OnIndexChanged(this.index);
+}
+
 
