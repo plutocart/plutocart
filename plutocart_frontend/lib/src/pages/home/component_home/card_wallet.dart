@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,20 +34,13 @@ class _CardWalletState extends State<CardWallet> {
             state.wallets.where((e) => e.statusWallet == 1).toList();
         return Swiper(
           itemBuilder: (BuildContext context, int index) {
-            if (index == removeStatusOff.length || removeStatusOff.length == 0) {
+            if (index == removeStatusOff.length ||
+                removeStatusOff.length == 0) {
               return Container(
-                child: TextButton(
-                  onPressed: CreateWallet,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
+                child: FractionallySizedBox(
+                  heightFactor:0.7,
+                  widthFactor: 0.98,
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: MediaQuery.of(context).size.width * 1,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -58,7 +53,23 @@ class _CardWalletState extends State<CardWallet> {
                         ),
                       ],
                     ),
-                    child: Center(child: Text("Add wallet")),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                       TextButton(
+                          onPressed: () => state.wallets.length < 6 ? createWallet() : (){} ,
+                          child: state.wallets.length < 6 ?  Text("Add wallet") : Text("Wallet is full"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await showWallets();
+                            context.read<WalletBloc>().add(
+                                GetAllWallet(1, enableOnlyStatusOnCard: true));
+                          },
+                          child: Text("Show list wallet"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -67,7 +78,7 @@ class _CardWalletState extends State<CardWallet> {
               return Container(
                   child: TextButton(
                 onPressed: () async {
-                  await ShowWallets();
+                  await showWallets();
                   context
                       .read<WalletBloc>()
                       .add(GetAllWallet(1, enableOnlyStatusOnCard: true));
@@ -120,7 +131,7 @@ class _CardWalletState extends State<CardWallet> {
                               color: Colors.transparent,
                               child: Ink(
                                 child: IconButton(
-                                  onPressed: () => EditWallet(wallet),
+                                  onPressed: () => editWallet(wallet),
                                   icon: SizedBox(
                                     width: 20,
                                     height: 20,
@@ -239,7 +250,7 @@ class _CardWalletState extends State<CardWallet> {
               ));
             }
           },
-          itemCount: removeStatusOff.length +1,
+          itemCount: removeStatusOff.length + 1,
           viewportFraction: 1,
           scale: 0.9,
           loop: true,
@@ -255,7 +266,7 @@ class _CardWalletState extends State<CardWallet> {
     );
   }
 
-  EditWallet(Wallet? wallet) {
+  editWallet(Wallet? wallet) {
     showSlideDialog(
         context: context,
         child:
@@ -265,7 +276,7 @@ class _CardWalletState extends State<CardWallet> {
         hightCard: 1.9);
   }
 
-  Future<void> ShowWallets() async {
+  Future<void> showWallets() async {
     showSlideDialog(
         context: context,
         child: ListWalletPopup(),
@@ -274,7 +285,7 @@ class _CardWalletState extends State<CardWallet> {
         hightCard: 1.9);
   }
 
-  CreateWallet() {
+  createWallet() {
     showSlideDialog(
         context: context,
         child: CreateWalletPopup(

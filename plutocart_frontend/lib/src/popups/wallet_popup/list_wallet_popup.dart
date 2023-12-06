@@ -200,15 +200,11 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
   more_vert(int walletId, Wallet wallet) {
     showSlideDialog(
         context: context,
-        child: MoreVertPopup(
-            listFunction: () {
-              context.read<WalletBloc>().add(DeleteWallet(1, walletId));
-              FocusScope.of(context).unfocus();
-              Navigator.pop(context);
-            },
-            wallet: wallet),
+        child: MoreVertPopup(wallet: wallet),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.3);
   }
+  
+
 }

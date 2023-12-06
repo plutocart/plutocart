@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
+import 'package:plutocart/src/popups/bottom_sheet_delete.dart';
 import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
 
 class MoreVertPopup extends StatefulWidget {
@@ -53,7 +56,7 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
                   width: 350,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: widget.listFunction,
+                    onPressed: ()=> buttomSheetDelete(widget.wallet!),
                     child: Text(
                       'Delete',
                       style: TextStyle(
@@ -90,6 +93,24 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.9);
+  }
+
+   buttomSheetDelete(Wallet wallet) {
+    showSlideDialog(
+        context: context,
+        child: BottomSheetDelete(
+          numberPopUp1: 2,
+          numberPopUp2: 2,
+          wallet: wallet,
+          listFunction : (){
+            context.read<WalletBloc>().add(DeleteWallet(1, wallet.walletId));
+             FocusScope.of(context).unfocus();
+             Navigator.pop(context);
+          }
+        ),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.6);
   }
   
 }
