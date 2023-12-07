@@ -1,5 +1,7 @@
 package com.example.plutocart.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -53,8 +55,10 @@ public class Transaction {
     @JoinColumn(name = "goal_id_goal")
     private Goal goalIdGoal;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "wallet_id_wallet", nullable = false)
     private Wallet walletIdWallet;
+
 
 }

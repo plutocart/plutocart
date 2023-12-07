@@ -19,21 +19,6 @@ public class CloudinaryService {
     @Autowired
     TransactionCategoryRepository transactionCategoryRepository;
 
-//    public String uploadImage(MultipartFile file, String folderName, int transactionCategoryId) throws IOException {
-//        // Extract the original filename
-//        String imageName = file.getOriginalFilename();
-//
-//        // Include the folder name as part of the 'public_id'
-//        String publicId = folderName + "/" + imageName;
-//
-//        // You can include additional parameters if needed
-//        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("public_id", publicId));
-//        String imageUrl = (String) uploadResult.get("secure_url");
-//
-//        transactionCategoryRepository.updateTransactionCategoryImageIconUrl(imageUrl, transactionCategoryId);
-//        return imageUrl;
-//    }
-
     public <T> String uploadImage(
             MultipartFile file,
             String folderName,
