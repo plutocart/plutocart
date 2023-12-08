@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/more_vert_popup.dart';
@@ -74,6 +75,8 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                     child: Column(
                       children: List.generate(state.wallets.length, (index) {
                         final Wallet wallet = state.wallets[index];
+                        print(
+                            "index : ${index} : ${wallet.statusWallet} : ,,, : ${wallet.walletName}");
                         return Container(
                           width: 320,
                           height: 57,
@@ -136,33 +139,28 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                   children: [
                                     Container(
                                       height: 30,
-                                      child: LiteRollingSwitch(
-                                          value: wallet.statusWallet == 1,
-                                          width: 85,
-                                          textOn: 'Show',
-                                          textOff: 'No',
-                                          colorOn: Color(0XFF15616D),
-                                          colorOff: Color(0XFF707070),
-                                          iconOn: Icons.done,
-                                          iconOff: Icons.remove_circle_outline,
-                                          textSize: 14.0,
-                                          textOnColor: Colors.white,
-                                          textOffColor: Colors.white,
-                                          animationDuration:
-                                              const Duration(milliseconds: 100),
-                                          onChanged: (bool status) {
-                                            setState(() {
-                                              wallet.statusWallet =
-                                                  status ? 1 : 0;
-                                            });
-                                            context.read<WalletBloc>().add(
-                                                  UpdateStatusWallet(
-                                                      1, wallet.walletId!),
-                                                );
-                                          },
-                                          onSwipe: () {},
-                                          onTap: () {},
-                                          onDoubleTap: () {}),
+                                     
+                                 
+                                      child: FlutterSwitch(
+                                        width: 80,
+                                        value: wallet.statusWallet == 1,
+                                        showOnOff: true,
+                                        activeColor: Color(0XFF15616D),
+                                        activeText: "Show",
+                                        activeTextColor: Colors.white,
+                                        activeTextFontWeight: FontWeight.w400,
+                                        inactiveColor: Colors.grey,
+                                        inactiveText: "No",
+                                        inactiveTextColor: Colors.white,
+                                        inactiveTextFontWeight: FontWeight.w400,
+                                        onToggle: (bool status) {
+                                          context.read<WalletBloc>().add(
+                                              UpdateStatusWallet(
+                                                  1,
+                                                  wallet.walletId!,
+                                                  status ? 1 : 0));
+                                        },
+                                      ),
                                     ),
                                     IconButton(
                                       icon: Icon(
@@ -170,14 +168,17 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                         color: Color(
                                             0XFF15616D), // Set the color here
                                       ),
-                                      onPressed: () {
-                                        more_vert(wallet.walletId!, wallet);
+                                      onPressed: () async {
+                                        await more_vert(
+                                            wallet.walletId!, wallet);
+
                                         context
                                             .read<WalletBloc>()
                                             .add(MapEventToState(
                                               wallet.walletId,
                                               wallet.walletName,
                                               wallet.walletBalance,
+                                              wallet.statusWallet,
                                             ));
                                       },
                                     )
@@ -205,6 +206,4 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
         backgroundColor: Colors.white,
         hightCard: 1.3);
   }
-  
-
 }

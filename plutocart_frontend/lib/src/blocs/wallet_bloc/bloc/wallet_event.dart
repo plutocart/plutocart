@@ -8,7 +8,8 @@ class MapEventToState extends WalletEvent {
   final int? walletId;
   final String? walletName;
   final double? walletBalance;
-  MapEventToState(this.walletId, this.walletName, this.walletBalance);
+  final int? walletStatus;
+  MapEventToState(this.walletId, this.walletName, this.walletBalance, this.walletStatus);
 }
 
 // ignore: must_be_immutable
@@ -39,7 +40,8 @@ class UpdateWallet extends WalletEvent {
 class UpdateStatusWallet extends WalletEvent {
   final int accountId;
   final int walletId;
-  UpdateStatusWallet(this.accountId, this.walletId);
+  final int walletStatus;
+  UpdateStatusWallet(this.accountId, this.walletId, this.walletStatus);
 }
 
 class DeleteWallet extends WalletEvent {
@@ -52,6 +54,11 @@ class CreateWallet extends WalletEvent {
   final String walletName;
   final double walletBalance;
   CreateWallet(this.accountId, this.walletName, this.walletBalance);
+}
+
+class OnIndexChanged extends WalletEvent {
+  final int index;
+  OnIndexChanged(this.index);
 }
 
 

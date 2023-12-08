@@ -23,17 +23,23 @@ class _plutocartAppState extends State<plutocartApp> {
   Widget build(BuildContext context) {
     return  MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: pageRoutes[_selectedIndex],
-          floatingActionButton: ButtonTransaction(),
-          bottomNavigationBar: BottomNavigatorBar(
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
+        home: Stack(
+          children:[
+             Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: pageRoutes[_selectedIndex],
+            floatingActionButton: ButtonTransaction(),
+            bottomNavigationBar: BottomNavigatorBar(
+              onTap: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+            ),
           ),
+          //  Center(child:  CircularProgressIndicator(),)
+          ]
+         
         ),
         title: "Plutocart",
         routes: AppRoute.all,
