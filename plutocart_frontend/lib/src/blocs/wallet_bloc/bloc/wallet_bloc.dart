@@ -32,16 +32,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       if (response.isNotEmpty) {
         print("wallets 1");
         List<Wallet> responseWallet = [...state.wallets];
+        print("wallets :  ${wallet.walletId}" );
         responseWallet.add(wallet);
-        final List<Wallet> newListWallet = responseWallet.map((e) {
-          return Wallet(
-              walletId: e.walletId,
-              walletName: e.walletName,
-              statusWallet: e.statusWallet,
-              walletBalance: e.walletBalance);
-        }).toList();
         emit(state.copyWith(
-            wallets: newListWallet));
+            wallets: responseWallet));
       }
     });
 
@@ -80,8 +74,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               walletName: event.walletName,
               walletBalance: event.walletBalance,
               statusWallet: wallet.statusWallet);
-          int index = newListWallet
-              .indexWhere((element) => element.walletId == event.walletId);
+          int index = newListWallet.indexWhere((element) => element.walletId == event.walletId);
+          print("index: ${index}");
           newListWallet.replaceRange(index, index + 1, [wallet]);
 
           emit(state.copyWith(wallets: newListWallet));

@@ -373,6 +373,7 @@ class _CardWalletState extends State<CardWallet> {
           loop: true,
           pagination: SwiperPagination(
             builder: DotSwiperPaginationBuilder(
+              space: 2,
               color: Colors.grey.shade300,
               activeColor: Color(0XFF15616D),
             ),
@@ -405,7 +406,7 @@ class _CardWalletState extends State<CardWallet> {
   createWallet() async {
     showSlideDialog(
         context: context,
-        child: CreateWalletPopup(),
+        child:  CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -138,58 +139,8 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                   children: [
                                     Container(
                                       height: 30,
-                                      // child: LiteRollingSwitch(
-                                      //     value: wallet.statusWallet == 1 ? true : false,
-                                      //     width: 85,
-                                      //     textOn: 'Show',
-                                      //     textOff: 'No',
-                                      //     colorOn: Color(0XFF15616D),
-                                      //     colorOff: Color(0XFF707070),
-                                      //     iconOn: Icons.done,
-                                      //     iconOff: Icons.remove_circle_outline,
-                                      //     textSize: 14.0,
-                                      //     textOnColor: Colors.white,
-                                      //     textOffColor: Colors.white,
-                                      //     animationDuration:
-                                      //         const Duration(milliseconds: 100),
-                                      //     onChanged: (bool status) {
-                                      //       context.read<WalletBloc>().add(
-                                      //             UpdateStatusWallet(
-                                      //                 1,
-                                      //                 wallet.walletId!,
-                                      //                 status == true ? 1 : 0),
-                                      //           );
-                                      //     },
-                                      //     onSwipe: () {},
-                                      //     onTap: () {},
-                                      //     onDoubleTap: () {}),
-                                      // child: InkWell(
-                                      //   child: Text(
-                                      //       wallet.statusWallet.toString()),
-                                      //   onTap: () {
-                                      //     setState(() {
-                                      //       context.read<WalletBloc>().add(
-                                      //             UpdateStatusWallet(
-                                      //                 1,
-                                      //                 wallet.walletId!,
-                                      //                 wallet.statusWallet ==true
-                                      //                     ? 1
-                                      //                     : 0),
-                                      //           );
-                                      //     });
-                                      //   },
-                                      // ),
-                                      // child: Switch(
-                                      //     value: wallet.statusWallet == 1,
-                                      //     activeColor: Color(0XFFFFFFFF),
-                                      //     activeTrackColor: Color(0XFF15616D),
-                                      //     onChanged: (bool status) {
-                                      //       context.read<WalletBloc>().add(
-                                      //           UpdateStatusWallet(
-                                      //               1,
-                                      //               wallet.walletId!,
-                                      //               status == true ? 1 : 0));
-                                      //     }),
+                                     
+                                 
                                       child: FlutterSwitch(
                                         width: 80,
                                         value: wallet.statusWallet == 1,
