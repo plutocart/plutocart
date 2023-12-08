@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -7,6 +8,9 @@ part 'wallet_event.dart';
 part 'wallet_state.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
+
+final swiperController = SwiperController();
+
   WalletBloc() : super(WalletState()) {
     on<MapEventToState>((event, emit) {
       emit(state.copyWith(
@@ -24,18 +28,18 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       Map<String, dynamic> response = await walletRepository()
           .createWallet(event.accountId, event.walletName, event.walletBalance);
       Wallet wallet = new Wallet(
+          walletId: response["walletId"],
           accountId: event.accountId,
           walletBalance: event.walletBalance,
           walletName: event.walletName,
           statusWallet: 1);
-      print("wallets 0 : ${wallet.statusWallet} ");
       if (response.isNotEmpty) {
-        print("wallets 1");
         List<Wallet> responseWallet = [...state.wallets];
-        print("wallets :  ${wallet.walletId}" );
         responseWallet.add(wallet);
         emit(state.copyWith(
             wallets: responseWallet));
+            List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
+            swiperController.move(walletList.length - 1);
       }
     });
 
@@ -48,6 +52,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             .removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
             wallets: newListWallet,));
+            swiperController.move(state.currentColossalIndex);
       } catch (error) {
         print("Error: $error");
         throw error;
@@ -79,6 +84,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           newListWallet.replaceRange(index, index + 1, [wallet]);
 
           emit(state.copyWith(wallets: newListWallet));
+            swiperController.move(state.currentColossalIndex);
         } else {
           throw ArgumentError('Wallet update failed.');
         }
@@ -90,6 +96,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     });
 
     on<UpdateStatusWallet>((event, emit) async {
+            List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
       try {
         final int index = state.currentColossalIndex == state.wallets.length
             ? state.currentColossalIndex - 1
@@ -110,6 +117,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         if (response != null) {
           emit(state.copyWith(
               wallets: responseWallet, currentColossalIndex: index));
+                swiperController.move(state.currentColossalIndex - walletList.length -1 == 0 ? 1 : 0 );
         } else {
           throw ArgumentError('Wallet update failed.');
         }

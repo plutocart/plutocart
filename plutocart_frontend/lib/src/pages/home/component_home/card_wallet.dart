@@ -368,6 +368,7 @@ class _CardWalletState extends State<CardWallet> {
             }
           },
           itemCount: removeStatusOff.length + 1,
+          controller: context.read<WalletBloc>().swiperController,
           viewportFraction: 1,
           scale: 0.9,
           loop: true,
