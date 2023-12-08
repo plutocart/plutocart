@@ -12,7 +12,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       emit(state.copyWith(
           walletId: event.walletId,
           walletName: event.walletName,
-          walletBalance: event.walletBalance));
+          walletBalance: event.walletBalance,
+          walletStatus: event.walletStatus));
     });
 
     on<OnIndexChanged>((event, emit) {
@@ -20,7 +21,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     });
 
     on<CreateWallet>((event, emit) async {
-      print("wallets 9999");
       Map<String, dynamic> response = await walletRepository()
           .createWallet(event.accountId, event.walletName, event.walletBalance);
       Wallet wallet = new Wallet(
@@ -40,25 +40,20 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
               statusWallet: e.statusWallet,
               walletBalance: e.walletBalance);
         }).toList();
-        print("wallets 3");
-        emit(state.copyWith(wallets: newListWallet));
-        print("wallets 4 : ${newListWallet.length}");
+        emit(state.copyWith(
+            wallets: newListWallet));
       }
     });
 
     on<DeleteWallet>((event, emit) async {
       try {
-        final int index = state.currentColossalIndex == state.wallets.length
-            ? 0
-            : state.currentColossalIndex ;
-        print("accountId : ${event.accountId} : walletID : ${event.walletId}");
         await walletRepository()
             .deleteWalletById(event.accountId, event.walletId);
         final List<Wallet> newListWallet = [...state.wallets];
         newListWallet
             .removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
-            wallets: newListWallet, currentColossalIndex: index));
+            wallets: newListWallet,));
       } catch (error) {
         print("Error: $error");
         throw error;
@@ -102,23 +97,25 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
     on<UpdateStatusWallet>((event, emit) async {
       try {
+        final int index = state.currentColossalIndex == state.wallets.length
+            ? state.currentColossalIndex - 1
+            : state.currentColossalIndex;
         Wallet response = await walletRepository()
             .updateStatusWallet(event.accountId, event.walletId);
-        List<dynamic> responseWallet =
-            await walletRepository().getWalletAll(event.accountId);
-        responseWallet
-            .where((element) => element['statusWallet'] == 1)
-            .toList();
+        List<Wallet> responseWallet = [...state.wallets];
+        int indexWallet = responseWallet
+            .indexWhere((element) => element.walletId == event.walletId);
+        responseWallet.replaceRange(indexWallet, indexWallet + 1, [
+          Wallet(
+              walletName: responseWallet[indexWallet].walletName,
+              walletBalance: responseWallet[indexWallet].walletBalance,
+              statusWallet: event.walletStatus,
+              walletId: event.walletId,
+              accountId: event.accountId)
+        ]);
         if (response != null) {
-          final List<Wallet> newListWallet = responseWallet.map((e) {
-            return Wallet(
-              walletId: e['walletId'],
-              walletName: e['walletName'],
-              statusWallet: e['statusWallet'],
-              walletBalance: e['walletBalance'],
-            );
-          }).toList();
-          emit(state.copyWith(wallets: newListWallet));
+          emit(state.copyWith(
+              wallets: responseWallet, currentColossalIndex: index));
         } else {
           throw ArgumentError('Wallet update failed.');
         }

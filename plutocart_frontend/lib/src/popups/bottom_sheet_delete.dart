@@ -119,9 +119,7 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
               }
             },
             bottonSecondeNameFunction: () {
-              context
-                  .read<WalletBloc>()
-                  .add(DeleteWallet(1, widget.wallet.walletId!));
+              context.read<WalletBloc>().add(DeleteWallet(1, widget.wallet.walletId!));
               for (int i = 0; i < widget.numberPopUp2!; i++) {
                 Navigator.pop(context);
               }

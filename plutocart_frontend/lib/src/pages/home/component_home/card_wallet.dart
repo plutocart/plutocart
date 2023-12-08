@@ -32,7 +32,6 @@ class _CardWalletState extends State<CardWallet> {
       builder: (context, state) {
         final List<Wallet> removeStatusOff =
             state.wallets.where((e) => e.statusWallet == 1).toList();
-            print("index : ${state.currentColossalIndex}");
         return Swiper(
           index:  state.currentColossalIndex,
           onIndexChanged: (index)=> context.read<WalletBloc>().add(OnIndexChanged(index)) ,
