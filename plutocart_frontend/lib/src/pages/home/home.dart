@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
       body: BlocBuilder<WalletBloc, WalletState>(
         builder: (context, state) {
           return Skeletonizer(
+            containersColor: Colors.grey.shade100,
             enabled: state.isLoading,
             ignoreContainers: false,
             child: SingleChildScrollView(
