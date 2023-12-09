@@ -9,15 +9,18 @@ class WalletState extends Equatable {
   final List<Wallet> wallets;
   final int walletId;
   final int currentColossalIndex;
-  const WalletState(
-      {this.walletName = "",
-      this.dailyExpense = 0.0,
-      this.dailyIncome = 0.0,
-      this.walletBalance = 0.0,
-      this.walletStatus = 1,
-      this.wallets = const [],
-      this.walletId = 1 , 
-      this.currentColossalIndex = 0});
+  final bool isLoading;
+  const WalletState({
+    this.walletName = "",
+    this.dailyExpense = 0.0,
+    this.dailyIncome = 0.0,
+    this.walletBalance = 0.0,
+    this.walletStatus = 1,
+    this.wallets = const [],
+    this.walletId = 1,
+    this.currentColossalIndex = 0,
+    this.isLoading = false,
+  });
 
   WalletState copyWith(
       {String? walletName,
@@ -26,8 +29,10 @@ class WalletState extends Equatable {
       double? walletBalance,
       int? walletStatus,
       bool? hightPopupActive,
-      List<Wallet>? wallets ,
-      int? walletId , int? currentColossalIndex}) {
+      List<Wallet>? wallets,
+      int? walletId,
+      int? currentColossalIndex,
+      bool? isLoading}) {
     return WalletState(
         walletName: walletName ?? this.walletName,
         dailyExpense: dailyExpense ?? this.dailyExpense,
@@ -35,12 +40,21 @@ class WalletState extends Equatable {
         walletBalance: walletBalance ?? this.walletBalance,
         walletStatus: walletStatus ?? this.walletStatus,
         wallets: wallets ?? this.wallets,
-        walletId: walletId?? this.walletId , 
-        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex );
+        walletId: walletId ?? this.walletId,
+        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex,
+        isLoading: isLoading ?? this.isLoading);
   }
 
-
   @override
-  List<Object> get props =>
-      [walletName, dailyExpense, dailyIncome, walletBalance, walletStatus , wallets , walletId , currentColossalIndex];
+  List<Object> get props => [
+        walletName,
+        dailyExpense,
+        dailyIncome,
+        walletBalance,
+        walletStatus,
+        wallets,
+        walletId,
+        currentColossalIndex,
+        isLoading
+      ];
 }

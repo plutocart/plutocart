@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/home/component_home/card_group.dart';
 import 'package:plutocart/src/pages/home/component_home/card_wallet.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -48,22 +49,26 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<WalletBloc, WalletState>(
         builder: (context, state) {
-          return SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.27, // constrain height
-                     width: MediaQuery.of(context).size.width * 1,
-                    child: CardWallet(),
-                  ),
-                  CardGroup("Transaction", subject: 'Transactions'),
-                  SizedBox(height: 6),
-                  CardGroup("Goals", subject: 'Goals'),
-                  SizedBox(height: 6),
-                  CardGroup("Debts", subject: 'Debts'),
-                ],
+          return Skeletonizer(
+            enabled: state.isLoading,
+            ignoreContainers: true,
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.27, // constrain height
+                       width: MediaQuery.of(context).size.width * 1,
+                      child: CardWallet(),
+                    ),
+                    CardGroup("Transaction", subject: 'Transactions'),
+                    SizedBox(height: 6),
+                    CardGroup("Goals", subject: 'Goals'),
+                    SizedBox(height: 6),
+                    CardGroup("Debts", subject: 'Debts'),
+                  ],
+                ),
               ),
             ),
           );
