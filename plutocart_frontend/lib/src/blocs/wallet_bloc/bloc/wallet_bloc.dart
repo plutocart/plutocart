@@ -52,7 +52,7 @@ final swiperController = SwiperController();
             .removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
             wallets: newListWallet,));
-            swiperController.move(state.currentColossalIndex);
+            swiperController.move(newListWallet.length - 1);
       } catch (error) {
         print("Error: $error");
         throw error;

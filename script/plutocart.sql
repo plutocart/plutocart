@@ -196,17 +196,31 @@ insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , a
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
 
 DELIMITER //
+
 CREATE PROCEDURE InsertIntoWallet( in walletName varchar(15) , in balanceWallet decimal(13 ,2) ,  in accountId int)
 BEGIN
     DECLARE account_count INT;
-    SELECT COUNT(*) into account_count  FROM wallet WHERE account_id_account = accountId;
-    IF account_count <6 THEN
-        INSERT INTO wallet ( name_wallet, balance_wallet, status_wallet, account_id_account, create_wallet_on, update_wallet_on)
-        VALUES ( walletName, balanceWallet, default, accountId, NOW(), NOW());
-	 ELSE
-        SELECT 'Maximum wallet limit reached for this account.' AS status;
+    DECLARE emoji_check BOOLEAN DEFAULT TRUE;
+    
+    -- Check if the wallet name contains emoji
+    SET emoji_check = CONVERT(walletName USING utf8mb4) = walletName;
+
+    IF emoji_check THEN
+        SELECT COUNT(*) INTO account_count FROM wallet WHERE account_id_account = accountId;
+        
+        IF account_count < 6 THEN
+            INSERT INTO wallet (name_wallet, balance_wallet, status_wallet, account_id_account, create_wallet_on, update_wallet_on)
+            VALUES (walletName, balanceWallet, DEFAULT, accountId, NOW(), NOW());
+        ELSE
+            SELECT 'Maximum wallet limit reached for this account.' AS status;
+        END IF;
+        
+    ELSE
+        SELECT 'Invalid emoji in wallet name' AS status;
     END IF;
+    
 END //
+
 DELIMITER ;
 
 DELIMITER //
