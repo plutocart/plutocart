@@ -28,61 +28,69 @@ class _CardGroupState extends State<CardGroup> {
           ),
         ),
         child: Skeleton.ignorePointer(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.13,
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 1.3,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                  color: HomePageState().isLoading  == true ? Color(0xFF1A9CB0) : Colors.grey.shade200,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: Container(
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text("${widget.subject}",
-                          style: TextStyle(
-                              color: Color(0xFF15616D),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto")),
+          child: BlocBuilder<HomePageBloc, HomePageState>(
+            builder: (context, state) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.13,
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      width: 1.3,
+                      strokeAlign: BorderSide.strokeAlignInside,
+                      color: state.isLoading == true
+                          ? Colors.grey.shade200
+                          : Color(0xFF1A9CB0),
                     ),
-                    BlocBuilder<WalletBloc, WalletState>(
-                      builder: (context, state) {
-                        return TextButton(
-                          onPressed: () {context.read<WalletBloc>().add(GetAllWallet(1));},
-                          style: TextButton.styleFrom(
-                            shape: StadiumBorder(),
-                            foregroundColor: Colors.black,
-                          ),
-                          child: Row(
-                            children: [
-                              Text("more",
-                                  style: TextStyle(
-                                      color: Color(0xFF707070),
-                                      fontSize: 14,
-                                      fontFamily: "Roboto")),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Color(0xFF707070),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Container(
+                  child: Column(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text("${widget.subject}",
+                              style: TextStyle(
+                                  color: Color(0xFF15616D),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto")),
+                        ),
+                        BlocBuilder<WalletBloc, WalletState>(
+                          builder: (context, state) {
+                            return TextButton(
+                              onPressed: () {
+                                context.read<WalletBloc>().add(GetAllWallet(1));
+                              },
+                              style: TextButton.styleFrom(
+                                shape: StadiumBorder(),
+                                foregroundColor: Colors.black,
                               ),
-                            ],
-                          ),
-                        );
-                      },
+                              child: Row(
+                                children: [
+                                  Text("more",
+                                      style: TextStyle(
+                                          color: Color(0xFF707070),
+                                          fontSize: 14,
+                                          fontFamily: "Roboto")),
+                                  Icon(
+                                    Icons.navigate_next,
+                                    color: Color(0xFF707070),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      ],
                     )
-                  ],
-                )
-              ]),
-            ),
+                  ]),
+                ),
+              );
+            },
           ),
         ));
   }
