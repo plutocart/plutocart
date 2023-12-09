@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           return Skeletonizer(
             enabled: state.isLoading,
-            ignoreContainers: true,
+            ignoreContainers: false,
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(10.0),
