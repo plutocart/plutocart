@@ -128,35 +128,25 @@ final swiperController = SwiperController();
       }
     });
 
-   on<GetAllWallet>((event, emit) async {
-  try {
-    emit(state.copyWith(isLoading: true));
-    List<dynamic> response = await walletRepository().getWalletAll(event.accountId);
-
-    if (state.isLoading == false) {
-      throw ArgumentError("Wallet not found");
-    } else {
-      List<dynamic> filteredResponse = response;
-      if (event.enableOnlyStatusOnCard == true) {
-        filteredResponse = response.where((element) => element['statusWallet'] == 1).toList();
-      }
-      emit(state.copyWith(
-        isLoading: false, // Set isLoading to false after API call completes
-        wallets: filteredResponse.map((walletData) {
+    on<GetAllWallet>((event, emit) async {
+      List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
+      if (response.isEmpty) {
+        throw ArgumentError("Wallet not found");
+      } else {
+        if (event.enableOnlyStatusOnCard == true) {
+          response.where((element) => element['statusWallet'] == 1).toList();
+        }
+        emit(state.copyWith(
+            wallets: response.map((walletData) {
           return Wallet(
-            walletId: walletData['walletId'],
-            walletName: walletData['walletName'],
-            statusWallet: walletData['statusWallet'],
-            walletBalance: walletData['walletBalance'],
-          );
-        }).toList(),
-      ));
-    }
-  } catch (error) {
-    emit(state.copyWith(isLoading: false));
-  }
-});
-
+              walletId: walletData['walletId'],
+              walletName: walletData['walletName'],
+              statusWallet: walletData['statusWallet'],
+              walletBalance: walletData['walletBalance']);
+        }).toList()));
+        
+      }
+    });
     
 
     on<GetAllWalletOpenStatus>((event, emit) async {
