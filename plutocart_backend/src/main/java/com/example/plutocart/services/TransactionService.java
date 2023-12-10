@@ -3,6 +3,7 @@ package com.example.plutocart.services;
 import com.cloudinary.Cloudinary;
 import com.example.plutocart.dtos.transaction.TResDelDTO;
 import com.example.plutocart.dtos.transaction.TResPostDTO;
+import com.example.plutocart.dtos.transaction.TResStmNowDTO;
 import com.example.plutocart.dtos.transaction.TransactionResponseGetDTO;
 import com.example.plutocart.entities.Transaction;
 import com.example.plutocart.repositories.AccountRepository;
@@ -53,6 +54,18 @@ public class TransactionService {
         return response;
     }
 
+    @Transactional
+    public GenericResponse getTransactionByAccountIdLimitThree(Integer accountId) {
+        GenericResponse response = new GenericResponse();
+
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountId);
+        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
+
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
+    }
+
     public GenericResponse getTransactionByWalletId(Integer walletId) {
         GenericResponse response = new GenericResponse();
 
@@ -90,6 +103,32 @@ public class TransactionService {
     }
 
     @Transactional
+    public GenericResponse getTodayIncome(Integer accountId) {
+        GenericResponse response = new GenericResponse();
+        TResStmNowDTO tRes = new TResStmNowDTO();
+
+        List<BigDecimal> todayIncome = transactionRepository.viewTodayIncome(accountId);
+
+        tRes.setIncome(todayIncome.get(0));
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
+    }
+
+    @Transactional
+    public GenericResponse getTodayExpense(Integer accountId) {
+        GenericResponse response = new GenericResponse();
+        TResStmNowDTO tRes = new TResStmNowDTO();
+
+        List<BigDecimal> todayIncome = transactionRepository.viewTodayExpense(accountId);
+
+        tRes.setExpense(todayIncome.get(0));
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
+    }
+
+    @Transactional
     public GenericResponse createTransaction(Integer walletId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
@@ -115,7 +154,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType,LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
+    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;

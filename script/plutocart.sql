@@ -396,3 +396,58 @@ BEGIN
     WHERE id_wallet = walletId;
 END //
 DELIMITER ;
+
+-- view latested 3 transaction
+DELIMITER //
+CREATE PROCEDURE viewTransactionByAccountIdLimitThree(in accountId int)
+BEGIN
+	SELECT t.*
+FROM transaction t
+JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
+WHERE w.account_id_account = accountId
+ORDER BY t.create_transaction_on DESC
+LIMIT 3;
+END //
+DELIMITER ;
+
+-- view daily income
+DELIMITER //
+
+CREATE PROCEDURE viewTodayIncome(IN accountId INT)
+BEGIN
+    DECLARE todayIncome DECIMAL(10, 2);
+    DECLARE today DATE;
+    SET today = CURDATE();
+
+    SELECT IFNULL(SUM(t.stm_transaction), 0) INTO todayIncome
+    FROM transaction t
+    JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
+    WHERE w.account_id_account = accountId
+        AND DATE(t.date_transaction) = today
+        AND t.statement_type = 1; -- Assuming 1 is the code for 'income'
+
+    SELECT todayIncome AS todayIncome;
+END //
+
+DELIMITER ;
+
+-- view daily expense
+DELIMITER //
+
+CREATE PROCEDURE viewTodayExpense(IN accountId INT)
+BEGIN
+    DECLARE todayIncome DECIMAL(10, 2);
+    DECLARE today DATE;
+    SET today = CURDATE();
+
+    SELECT IFNULL(SUM(t.stm_transaction), 0) INTO todayIncome
+    FROM transaction t
+    JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
+    WHERE w.account_id_account = accountId
+        AND DATE(t.date_transaction) = today
+        AND t.statement_type = 2; -- Assuming 1 is the code for 'income'
+
+    SELECT todayIncome AS todayIncome;
+END //
+
+DELIMITER ;

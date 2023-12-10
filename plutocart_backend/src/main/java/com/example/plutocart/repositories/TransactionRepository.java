@@ -20,6 +20,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> viewTransactionByAccountId(Integer accountId);
 
     @Transactional
+    @Procedure(procedureName = "viewTransactionByAccountIdLimitThree")
+    List<Transaction> viewTransactionByAccountIdLimitThree(Integer accountId);
+
+    @Transactional
     @Query(value = "SELECT * FROM transaction where wallet_id_wallet = :walletId", nativeQuery = true)
     List<Transaction> viewTransactionByWalletId(Integer walletId);
 
@@ -30,6 +34,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Transactional
     @Query(value = "SELECT * FROM transaction where id_transaction = :transactionId", nativeQuery = true)
     Transaction viewTransactionByTransactionId(Integer transactionId);
+
+    @Transactional
+    @Procedure(procedureName = "viewTodayIncome")
+    List<BigDecimal> viewTodayIncome(Integer accountId);
+
+    @Transactional
+    @Procedure(procedureName = "viewTodayExpense")
+    List<BigDecimal> viewTodayExpense(Integer accountId);
 
 
     @Transactional

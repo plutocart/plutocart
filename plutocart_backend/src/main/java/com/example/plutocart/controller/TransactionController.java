@@ -26,6 +26,12 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/account/{account-id}/transaction-limit")
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdLimitThree(@PathVariable("account-id") Integer accountId) {
+        GenericResponse result = transactionService.getTransactionByAccountIdLimitThree(accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("/wallet/{wallet-id}/transaction")
     private ResponseEntity<GenericResponse> getTransactionByWalletId(@PathVariable("wallet-id") Integer walletId) {
         GenericResponse result = transactionService.getTransactionByWalletId(walletId);
@@ -43,6 +49,19 @@ public class TransactionController {
         GenericResponse result = transactionService.getTransactionByTransactionId(transactionId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @GetMapping("/account/{account-id}/income")
+    private ResponseEntity<GenericResponse> getTodayIncome(@PathVariable("account-id") Integer accountId) {
+        GenericResponse result = transactionService.getTodayIncome(accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/account/{account-id}/expense")
+    private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId) {
+        GenericResponse result = transactionService.getTodayExpense(accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 
     @PostMapping("/wallet/{wallet-id}/transaction")
     private ResponseEntity<GenericResponse> createTransactions(@RequestParam(name = "file", required = false) MultipartFile file,
