@@ -12,5 +12,5 @@ public interface TransactionCategoryRepository extends JpaRepository<Transaction
     @Transactional
     @Modifying
     @Query(value = "UPDATE transaction_category SET image_icon_url = :imageIconUrl WHERE id_transaction_category = :transactionCategoryId", nativeQuery = true)
-    void updateTransactionCategoryImageIconUrl(String imageIconUrl, int transactionCategoryId);
+    void updateTransactionCategoryImageIconUrl(String imageIconUrl, Integer transactionCategoryId);
 }

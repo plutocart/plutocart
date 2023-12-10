@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class TResPostDTO {
+    private Integer transactionId;
     private Integer walletId;
     private BigDecimal stmTransaction;
     private Integer statementType;

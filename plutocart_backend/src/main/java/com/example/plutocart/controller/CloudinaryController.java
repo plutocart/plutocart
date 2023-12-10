@@ -21,4 +21,10 @@ public class CloudinaryController {
 //        return cloudinaryService.uploadImage(file, folderName, entityId, transactionCategoryRepository::updateTransactionCategoryImageIconUrl, transactionCategoryRepository);
         return cloudinaryService.uploadImage(file, folderName, entityId, transactionCategoryRepository::updateTransactionCategoryImageIconUrl);
     }
+
+    @DeleteMapping("/delete-image/{transactionCategoryId}")
+    public void deleteImage(@PathVariable("transactionCategoryId") int transactionCategoryId) throws Exception {
+        cloudinaryService.deleteImageAndUpdateDatabaseTranCat(transactionCategoryId);
+    }
+
 }

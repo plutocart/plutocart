@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -30,8 +31,26 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Query(value = "SELECT * FROM transaction where id_transaction = :transactionId", nativeQuery = true)
     Transaction viewTransactionByTransactionId(Integer transactionId);
 
+
     @Transactional
     @Modifying
     @Procedure(procedureName = "InsertIntoTransactionByWalletId")
-    void InsertIntoTransactionByWalletId(BigDecimal stmTransaction, Integer statementType, Integer walletId);
+    void InsertIntoTransactionByWalletId(Integer walletId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction,
+                                         String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE transaction SET image_url = :imageUrl WHERE id_transaction = :transactionId", nativeQuery = true)
+    void updateImageUrlInTransactionToCloud(String imageUrl, Integer transactionId);
+
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "DeleteTransactionByTransactionId")
+    void deleteTransactionByTransactionId(Integer transactionId, BigDecimal stmTransaction, String stmType, Integer walletId);
+
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "UpdateTransaction")
+    void updateTransaction(Integer walletId, Integer transactionId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 }

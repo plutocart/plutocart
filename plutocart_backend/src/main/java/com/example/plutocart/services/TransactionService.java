@@ -1,7 +1,7 @@
 package com.example.plutocart.services;
 
 import com.cloudinary.Cloudinary;
-import com.example.plutocart.constants.ErrorMessage;
+import com.example.plutocart.dtos.transaction.TResDelDTO;
 import com.example.plutocart.dtos.transaction.TResPostDTO;
 import com.example.plutocart.dtos.transaction.TransactionResponseGetDTO;
 import com.example.plutocart.entities.Transaction;
@@ -15,7 +15,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,8 @@ public class TransactionService {
     TransactionRepository transactionRepository;
     @Autowired
     TransactionCategoryRepository transactionCategoryRepository;
+    @Autowired
+    CloudinaryService cloudinaryService;
 
 
     @Transactional
@@ -84,15 +90,76 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse createTransaction(TResPostDTO transactionReq, Integer walletId) {
+    public GenericResponse createTransaction(Integer walletId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException {
         GenericResponse response = new GenericResponse();
+        TResPostDTO tRes = new TResPostDTO();
+        String imageUrl = null;
 
-        transactionRepository.InsertIntoTransactionByWalletId(transactionReq.getStmTransaction(),transactionReq.getStatementType(), walletId);
-        transactionReq.setWalletId(walletId);
-        transactionReq.setDescription("Create Success");
+        if (!file.isEmpty()) {
+            imageUrl = cloudinaryService.uploadImageInTransaction(file, transactionRepository::updateImageUrlInTransactionToCloud);
+        }
+
+        transactionRepository.InsertIntoTransactionByWalletId(walletId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
+        Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(walletId).get(transactionRepository.viewTransactionByWalletId(walletId).toArray().length - 1);
+
+
+        tRes.setTransactionId(currentTransaction.getId());
+        tRes.setStmTransaction(stmTransaction);
+        tRes.setStatementType(statementType);
+        tRes.setWalletId(walletId);
+        tRes.setDescription("Create Success");
 
         response.setStatus(ResultCode.SUCCESS);
-        response.setData(transactionReq);
+        response.setData(tRes);
+        return response;
+    }
+
+    @Transactional
+    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType,LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
+        GenericResponse response = new GenericResponse();
+        TResPostDTO tRes = new TResPostDTO();
+        String imageUrl = null;
+
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+
+        if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
+            if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
+                cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
+            }
+
+            if (!file.isEmpty()) {
+                imageUrl = cloudinaryService.uploadImageInTransaction(file, transactionRepository::updateImageUrlInTransactionToCloud);
+            }
+
+            transactionRepository.updateTransaction(walletId, transactionId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
+        }
+
+        tRes.setTransactionId(transactionId);
+        tRes.setWalletId(walletId);
+        tRes.setDescription("Delete Success");
+
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
+    }
+
+    @Transactional
+    public GenericResponse deleteTransaction(Integer walletId, Integer transactionId) throws Exception {
+        GenericResponse response = new GenericResponse();
+        TResDelDTO tRes = new TResDelDTO();
+
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+
+        if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
+            cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
+            transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId());
+        }
+
+        tRes.setId(transaction.getId());
+        tRes.setDescription("Delete Success");
+
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
         return response;
     }
 
