@@ -52,7 +52,7 @@ final swiperController = SwiperController();
             .removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
             wallets: newListWallet,));
-            swiperController.move(state.currentColossalIndex);
+            swiperController.move(newListWallet.length - 1);
       } catch (error) {
         print("Error: $error");
         throw error;
@@ -129,8 +129,7 @@ final swiperController = SwiperController();
     });
 
     on<GetAllWallet>((event, emit) async {
-      List<dynamic> response =
-          await walletRepository().getWalletAll(event.accountId);
+      List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {
@@ -145,9 +144,10 @@ final swiperController = SwiperController();
               statusWallet: walletData['statusWallet'],
               walletBalance: walletData['walletBalance']);
         }).toList()));
-        // print(response);
+        
       }
     });
+    
 
     on<GetAllWalletOpenStatus>((event, emit) async {
       List<dynamic> response =

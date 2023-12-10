@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/input_field_wallet.dart';
+import 'package:plutocart/src/popups/wallet_popup/input_field_wallet.dart';
 
 class EditWalletPopup extends StatefulWidget {
   final int? numberPopUp1;

@@ -5,7 +5,7 @@ import 'package:plutocart/src/pages/transaction/transaction.dart';
 class AppRoute{
   static const home = 'home';
   static const login = 'login';
-    static const transaction = 'transaction';
+  static const transaction = 'transaction';
 
  static get all => <String , WidgetBuilder>{
   home:(context) => const HomePage(),

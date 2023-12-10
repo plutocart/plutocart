@@ -14,7 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema plutocart
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `plutocart` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `plutocart` DEFAULT CHARACTER SET utf8mb4 ;
 USE `plutocart` ;
 
 -- -----------------------------------------------------
@@ -194,8 +194,10 @@ insert into transaction_category (id_transaction_category , name_transaction_cat
 
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(1 , 'admin wallet' , 100000.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
+insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(3 , 'admin 🥲🐇' , 1111111.00 , default , 1 , now() , now());
 
 DELIMITER //
+
 CREATE PROCEDURE InsertIntoWallet( in walletName varchar(15) , in balanceWallet decimal(13 ,2) ,  in accountId int)
 BEGIN
     DECLARE account_count INT;
@@ -206,7 +208,9 @@ BEGIN
 	 ELSE
         SELECT 'Maximum wallet limit reached for this account.' AS status;
     END IF;
+    
 END //
+
 DELIMITER ;
 
 DELIMITER //
