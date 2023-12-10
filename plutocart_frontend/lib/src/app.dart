@@ -23,7 +23,6 @@ class _plutocartAppState extends State<plutocartApp> {
     super.initState();
   }
 
-  bool isConnected = true;
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override

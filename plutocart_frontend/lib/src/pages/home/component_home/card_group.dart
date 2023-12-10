@@ -33,13 +33,15 @@ class _CardGroupState extends State<CardGroup> {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.13,
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: state.isLoading == true
+                          ? Colors.grey.shade100
+                          : Colors.white,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       width: 1.3,
                       strokeAlign: BorderSide.strokeAlignInside,
                       color: state.isLoading == true
-                          ? Colors.grey.shade200
+                          ? Colors.white
                           : Color(0xFF1A9CB0),
                     ),
                     borderRadius: BorderRadius.circular(20),

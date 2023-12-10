@@ -47,7 +47,7 @@ class _CardWalletState extends State<CardWallet> {
                     widthFactor: 0.98,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: HomePageState().isLoading == true ? Colors.white : Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
@@ -98,7 +98,7 @@ class _CardWalletState extends State<CardWallet> {
                                         ? Text("Add new wallet")
                                         : Text("Wallet is full"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: HomePageState().isLoading ? Colors.white : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
@@ -163,7 +163,7 @@ class _CardWalletState extends State<CardWallet> {
                                     },
                                     child: Text("Your wallets"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: HomePageState().isLoading == true ? Colors.white : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
