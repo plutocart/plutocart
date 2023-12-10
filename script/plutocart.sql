@@ -220,3 +220,179 @@ BEGIN
 	DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
 END //
 DELIMITER ;
+
+-- view transaction by account id 
+DELIMITER //
+CREATE PROCEDURE viewTransactionByAccountId(in accountId int)
+BEGIN
+	select t.* from transaction t join wallet w on
+    t.wallet_id_wallet = w.id_wallet where w.account_id_account = accountId;
+END //
+DELIMITER ;
+
+-- create transaction 
+DELIMITER //
+CREATE PROCEDURE InsertIntoTransactionByWalletId(
+    IN walletId INT,
+    IN stmTransaction DECIMAL(10, 2),
+    IN statementType INT,
+    IN dateTransaction DATETIME,
+    IN descriptionOfT varchar(100),
+    IN imageUrl varchar(200),
+	IN debtIdDebt INT,
+    IN goalIdGoal INT
+)
+BEGIN
+    DECLARE tranCategoryIdCategory INT;
+    DECLARE createTransactionOn DATETIME;
+    DECLARE updateTransactionOn DATETIME;
+    DECLARE balanceAdjustment DECIMAL(10, 2);
+
+    SET tranCategoryIdCategory = 1;
+    SET createTransactionOn = NOW();
+    SET updateTransactionOn = NOW();
+
+    -- Determine the balance adjustment based on the statement type
+    IF statementType = 1 THEN
+        SET balanceAdjustment = stmTransaction;  -- Income
+    ELSEIF statementType = 2 THEN
+        SET balanceAdjustment = -stmTransaction; -- Expense
+    ELSE
+        -- Handle other statement types if needed
+        SET balanceAdjustment = 0;
+    END IF;
+
+    -- Insert into the transaction table
+    INSERT INTO transaction (
+        stm_transaction,
+        statement_type,
+        date_transaction,
+        tran_category_id_category,
+        description,
+        image_url,
+        debt_id_debt,
+        goal_id_goal,
+        create_transaction_on,
+        update_transaction_on,
+        wallet_id_wallet
+    ) VALUES (
+        stmTransaction,
+        statementType,
+        dateTransaction,
+        tranCategoryIdCategory,
+        descriptionOfT,
+        imageUrl,
+        debtIdDebt,
+        goalIdGoal,
+        createTransactionOn,
+        updateTransactionOn,
+        walletId
+    );
+
+    -- Update the balance_wallet in the wallet table
+    UPDATE wallet
+    SET balance_wallet = balance_wallet + balanceAdjustment
+    WHERE id_wallet = walletId;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE DeleteTransactionByTransactionId(
+    IN transactionId INT,
+    IN stmTransaction DECIMAL(10, 2),
+    IN stmType VARCHAR(10),
+    IN walletId INT
+)
+BEGIN
+    DECLARE balanceAdjustment DECIMAL(10, 2);
+
+    -- Delete the transaction by transactionId
+    DELETE FROM transaction WHERE id_transaction = transactionId;
+
+    -- Determine the balance adjustment based on the statement type
+    IF stmType = 'income' THEN
+        SET balanceAdjustment = -stmTransaction;  -- Invert for income
+    ELSEIF stmType = 'expense' THEN
+        SET balanceAdjustment = stmTransaction;   -- Keep as is for expense
+    ELSE
+        -- Handle other statement types if needed
+        SET balanceAdjustment = 0;
+    END IF;
+
+    -- Update the balance_wallet in the wallet table
+    UPDATE wallet
+    SET balance_wallet = balance_wallet + balanceAdjustment
+    WHERE id_wallet = walletId;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE UpdateTransaction(
+    IN walletId INT,
+    IN transactionId INT,
+    IN stmTransaction DECIMAL(10, 2),
+    IN statementType INT,
+    IN dateTransaction DATETIME,
+    IN description VARCHAR(100),
+    IN imageUrl VARCHAR(200),
+    IN debtIdDebt INT,
+    IN goalIdGoal INT
+)
+BEGIN
+    DECLARE oldStmTransaction DECIMAL(10, 2);
+    DECLARE currentBalance DECIMAL(10, 2);
+    DECLARE newBalance DECIMAL(10, 2);
+    DECLARE stmType INT;
+    DECLARE updateTransactionOn DATETIME;
+    
+    SET updateTransactionOn = NOW();
+
+    -- Get the old stmTransaction value and statementType
+    SELECT stm_transaction, statement_type INTO oldStmTransaction, stmType
+    FROM transaction
+    WHERE id_transaction = transactionId;
+
+    -- Get the current balance
+    SELECT balance_wallet INTO currentBalance
+    FROM wallet
+    WHERE id_wallet = walletId;
+
+    -- Update the wallet table based on statementType
+    IF stmType = 1 THEN
+        -- Subtract the old stmTransaction for statementType = 1
+        UPDATE wallet
+        SET balance_wallet = balance_wallet - oldStmTransaction
+        WHERE id_wallet = walletId;
+    ELSEIF stmType = 2 THEN
+        -- Add the old stmTransaction for statementType = 2
+        UPDATE wallet
+        SET balance_wallet = balance_wallet + oldStmTransaction
+        WHERE id_wallet = walletId;
+    END IF;
+
+    -- Update the transaction table
+    UPDATE transaction
+    SET
+        stm_transaction = stmTransaction,
+        statement_type = statementType,
+        date_transaction = dateTransaction,
+        description = description,
+        image_url = imageUrl,
+        debt_id_debt = debtIdDebt,
+        goal_id_goal = goalIdGoal,
+        update_transaction_on = updateTransactionOn
+    WHERE id_transaction = transactionId;
+
+    -- Calculate new balance based on statementType
+    IF statementType = 1 THEN
+        SET newBalance = stmTransaction;
+    ELSEIF statementType = 2 THEN
+        SET newBalance = -stmTransaction;
+    END IF;
+
+    -- Update the wallet table with the new balance
+    UPDATE wallet
+    SET balance_wallet = balance_wallet + newBalance
+    WHERE id_wallet = walletId;
+END //
+DELIMITER ;
