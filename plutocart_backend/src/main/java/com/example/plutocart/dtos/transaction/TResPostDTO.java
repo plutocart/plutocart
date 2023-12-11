@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Getter
 @Setter
 public class TResPostDTO {
     private Integer transactionId;
-    private Integer walletId;
+    private Integer wId;
     private BigDecimal stmTransaction;
-    private Integer statementType;
+    private String statementType;
     private String description;
 }

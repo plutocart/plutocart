@@ -51,10 +51,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
                                          String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE transaction SET image_url = :imageUrl WHERE id_transaction = :transactionId", nativeQuery = true)
-    void updateImageUrlInTransactionToCloud(String imageUrl, Integer transactionId);
+//    @Transactional
+//    @Modifying
+//    @Query(value = "UPDATE transaction SET image_url = :imageUrl WHERE id_transaction = :transactionId", nativeQuery = true)
+//    void updateImageUrlInTransactionToCloud(String imageUrl, Integer transactionId);
 
     @Transactional
     @Modifying

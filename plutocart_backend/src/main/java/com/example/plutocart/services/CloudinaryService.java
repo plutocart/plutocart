@@ -56,9 +56,9 @@ public class CloudinaryService {
     }
 
     public <T> String uploadImageInTransaction(
-            MultipartFile file,
+            MultipartFile file
 //            int entityId,
-            BiConsumer<String, Integer> updateEntityImage
+//            BiConsumer<String, Integer> updateEntityImage
     ) throws IOException {
         // Extract the original filename
         String originalFilename = file.getOriginalFilename();

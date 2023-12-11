@@ -135,17 +135,22 @@ public class TransactionService {
         String imageUrl = null;
 
         if (!file.isEmpty()) {
-            imageUrl = cloudinaryService.uploadImageInTransaction(file, transactionRepository::updateImageUrlInTransactionToCloud);
+            imageUrl = cloudinaryService.uploadImageInTransaction(file);
         }
 
         transactionRepository.InsertIntoTransactionByWalletId(walletId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
         Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(walletId).get(transactionRepository.viewTransactionByWalletId(walletId).toArray().length - 1);
 
+        if (statementType == 1) {
+            tRes.setStatementType("income");
+        } else {
+            tRes.setStatementType("expense");
+        }
 
         tRes.setTransactionId(currentTransaction.getId());
         tRes.setStmTransaction(stmTransaction);
-        tRes.setStatementType(statementType);
-        tRes.setWalletId(walletId);
+//        tRes.setStatementType(statementType);
+        tRes.setWId(walletId);
         tRes.setDescription("Create Success");
 
         response.setStatus(ResultCode.SUCCESS);
@@ -156,10 +161,10 @@ public class TransactionService {
     @Transactional
     public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
         GenericResponse response = new GenericResponse();
-        TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;
 
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+        TResPostDTO transactionResponse = modelMapper.map(transaction, TResPostDTO.class);
 
         if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
             if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
@@ -167,38 +172,43 @@ public class TransactionService {
             }
 
             if (!file.isEmpty()) {
-                imageUrl = cloudinaryService.uploadImageInTransaction(file, transactionRepository::updateImageUrlInTransactionToCloud);
+                imageUrl = cloudinaryService.uploadImageInTransaction(file);
             }
 
             transactionRepository.updateTransaction(walletId, transactionId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
+        } else {
+            throw new Exception();
         }
 
-        tRes.setTransactionId(transactionId);
-        tRes.setWalletId(walletId);
-        tRes.setDescription("Delete Success");
+        transactionResponse.setTransactionId(transaction.getId());
+        transactionResponse.setWId(transaction.getWalletIdWallet().getWalletId());
+        transactionResponse.setDescription("Update Success");
 
         response.setStatus(ResultCode.SUCCESS);
-        response.setData(tRes);
+        response.setData(transactionResponse);
         return response;
     }
 
     @Transactional
     public GenericResponse deleteTransaction(Integer walletId, Integer transactionId) throws Exception {
         GenericResponse response = new GenericResponse();
-        TResDelDTO tRes = new TResDelDTO();
 
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+        TResPostDTO transactionResponse = modelMapper.map(transaction, TResPostDTO.class);
 
         if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
             cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
             transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId());
+        } else {
+            throw new Exception();
         }
 
-        tRes.setId(transaction.getId());
-        tRes.setDescription("Delete Success");
+        transactionResponse.setTransactionId(transaction.getId());
+        transactionResponse.setWId(transaction.getWalletIdWallet().getWalletId());
+        transactionResponse.setDescription("Delete Success");
 
         response.setStatus(ResultCode.SUCCESS);
-        response.setData(tRes);
+        response.setData(transactionResponse);
         return response;
     }
 
