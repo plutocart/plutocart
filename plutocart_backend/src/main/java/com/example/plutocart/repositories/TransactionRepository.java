@@ -37,11 +37,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     @Transactional
     @Procedure(procedureName = "viewTodayIncome")
-    List<BigDecimal> viewTodayIncome(Integer accountId);
+    List<BigDecimal> viewTodayIncome(Integer accountId, Integer walletId);
 
     @Transactional
     @Procedure(procedureName = "viewTodayExpense")
-    List<BigDecimal> viewTodayExpense(Integer accountId);
+    List<BigDecimal> viewTodayExpense(Integer accountId, Integer walletId);
 
 
     @Transactional

@@ -50,15 +50,15 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/account/{account-id}/income")
-    private ResponseEntity<GenericResponse> getTodayIncome(@PathVariable("account-id") Integer accountId) {
-        GenericResponse result = transactionService.getTodayIncome(accountId);
+    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-income")
+    private ResponseEntity<GenericResponse> getTodayIncome(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
+        GenericResponse result = transactionService.getTodayIncome(accountId, walletId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/account/{account-id}/expense")
-    private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId) {
-        GenericResponse result = transactionService.getTodayExpense(accountId);
+    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-expense")
+    private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
+        GenericResponse result = transactionService.getTodayExpense(accountId, walletId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

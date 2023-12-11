@@ -46,7 +46,7 @@ public class TransactionService {
     public GenericResponse getTransactionByAccountId(Integer accountId) {
         GenericResponse response = new GenericResponse();
 
-        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountId);
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(accountId).orElseThrow().getAccountId());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
         response.setStatus(ResultCode.SUCCESS);
@@ -58,7 +58,7 @@ public class TransactionService {
     public GenericResponse getTransactionByAccountIdLimitThree(Integer accountId) {
         GenericResponse response = new GenericResponse();
 
-        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountId);
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountRepository.findById(accountId).orElseThrow().getAccountId());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
         response.setStatus(ResultCode.SUCCESS);
@@ -69,7 +69,7 @@ public class TransactionService {
     public GenericResponse getTransactionByWalletId(Integer walletId) {
         GenericResponse response = new GenericResponse();
 
-        List<Transaction> transactionList = transactionRepository.viewTransactionByWalletId(walletId);
+        List<Transaction> transactionList = transactionRepository.viewTransactionByWalletId(walletRepository.findById(walletId).orElseThrow().getWalletId());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
         response.setStatus(ResultCode.SUCCESS);
@@ -83,7 +83,7 @@ public class TransactionService {
 //        List<Transaction> transactionList = transactionRepository.viewTransactionByWalletIdAndTransactionId(walletId,transactionId);
 //        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-        Transaction transaction = transactionRepository.viewTransactionByWalletIdAndTransactionId(walletId, transactionId);
+        Transaction transaction = transactionRepository.viewTransactionByWalletIdAndTransactionId(walletRepository.findById(walletId).orElseThrow().getWalletId(), transactionRepository.findById(transactionId).orElseThrow().getId());
         TransactionResponseGetDTO transactionResponse = modelMapper.map(transaction, TransactionResponseGetDTO.class);
 
         response.setStatus(ResultCode.SUCCESS);
@@ -94,7 +94,7 @@ public class TransactionService {
     public GenericResponse getTransactionByTransactionId(Integer transactionId) {
         GenericResponse response = new GenericResponse();
 
-        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionRepository.findById(transactionId).orElseThrow().getId());
         TransactionResponseGetDTO transactionResponse = modelMapper.map(transaction, TransactionResponseGetDTO.class);
 
         response.setStatus(ResultCode.SUCCESS);
@@ -103,11 +103,11 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse getTodayIncome(Integer accountId) {
+    public GenericResponse getTodayIncome(Integer accountId, Integer walletId) {
         GenericResponse response = new GenericResponse();
         TResStmNowDTO tRes = new TResStmNowDTO();
 
-        List<BigDecimal> todayIncome = transactionRepository.viewTodayIncome(accountId);
+        List<BigDecimal> todayIncome = transactionRepository.viewTodayIncome(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
         tRes.setIncome(todayIncome.get(0));
         response.setStatus(ResultCode.SUCCESS);
@@ -116,11 +116,11 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse getTodayExpense(Integer accountId) {
+    public GenericResponse getTodayExpense(Integer accountId, Integer walletId) {
         GenericResponse response = new GenericResponse();
         TResStmNowDTO tRes = new TResStmNowDTO();
 
-        List<BigDecimal> todayIncome = transactionRepository.viewTodayExpense(accountId);
+        List<BigDecimal> todayIncome = transactionRepository.viewTodayExpense(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
         tRes.setExpense(todayIncome.get(0));
         response.setStatus(ResultCode.SUCCESS);

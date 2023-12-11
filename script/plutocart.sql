@@ -413,7 +413,7 @@ DELIMITER ;
 -- view daily income
 DELIMITER //
 
-CREATE PROCEDURE viewTodayIncome(IN accountId INT)
+CREATE PROCEDURE viewTodayIncome(IN accountId INT, IN walletId INT)
 BEGIN
     DECLARE todayIncome DECIMAL(10, 2);
     DECLARE today DATE;
@@ -423,6 +423,7 @@ BEGIN
     FROM transaction t
     JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
     WHERE w.account_id_account = accountId
+        AND w.id_wallet = walletId
         AND DATE(t.date_transaction) = today
         AND t.statement_type = 1; -- Assuming 1 is the code for 'income'
 
@@ -434,7 +435,7 @@ DELIMITER ;
 -- view daily expense
 DELIMITER //
 
-CREATE PROCEDURE viewTodayExpense(IN accountId INT)
+CREATE PROCEDURE viewTodayExpense(IN accountId INT, IN walletId INT)
 BEGIN
     DECLARE todayIncome DECIMAL(10, 2);
     DECLARE today DATE;
@@ -444,6 +445,7 @@ BEGIN
     FROM transaction t
     JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
     WHERE w.account_id_account = accountId
+        AND w.id_wallet = walletId
         AND DATE(t.date_transaction) = today
         AND t.statement_type = 2; -- Assuming 1 is the code for 'income'
 
