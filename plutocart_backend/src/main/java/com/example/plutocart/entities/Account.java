@@ -1,6 +1,7 @@
 package com.example.plutocart.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Account {
     @Column(name = "imei", nullable = false, length = 15)
     private String imei;
 
+    @Email
     @Column(name = "email", length = 50)
     private String email;
 

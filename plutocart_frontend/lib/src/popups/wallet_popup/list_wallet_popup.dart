@@ -112,7 +112,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${wallet.walletName}",
+                                            "${wallet.walletName.length > 12 ? "${wallet.walletName.substring(0 , 12)}..." : wallet.walletName}",
                                             style: TextStyle(
                                               color: Color(0xFF15616D),
                                               fontSize: 16,

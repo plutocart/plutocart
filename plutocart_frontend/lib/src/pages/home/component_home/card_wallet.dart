@@ -220,8 +220,8 @@ class _CardWalletState extends State<CardWallet> {
                               Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    wallet.walletName.length > 15
-                                        ? "${wallet.walletName.substring(0, 15)}..."
+                                    wallet.walletName.length > 12
+                                        ? "${wallet.walletName.substring(0, 12)}..."
                                         : wallet.walletName.length == 0
                                             ? "Unknown Wallet"
                                             : wallet.walletName,

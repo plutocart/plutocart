@@ -21,7 +21,7 @@ USE `plutocart` ;
 -- Table `plutocart`.`account`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `plutocart`.`account` (
-  `id_account` INT NOT NULL,
+  `id_account` INT NOT NULL AUTO_INCREMENT,
   `user_name` VARCHAR(45) NOT NULL,
   `imei` VARCHAR(15) NOT NULL,
   `email` VARCHAR(50) NULL DEFAULT NULL,
