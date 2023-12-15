@@ -453,3 +453,23 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+-- account  
+-- create account guest by use imei
+DELIMITER //
+
+CREATE PROCEDURE createAccountByImei(IN inUserName VARCHAR(45), IN inImei VARCHAR(15))
+BEGIN
+    DECLARE countAccounts INT;
+
+    SELECT COUNT(*) INTO countAccounts FROM account WHERE imei = Imei AND account_role = 1;
+
+    IF countAccounts >= 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
+    ELSE
+        INSERT INTO account (user_name, imei, email, password, account_role)
+        VALUES (inUserName, inImei, NULL, NULL, DEFAULT);
+    END IF;
+END //
+DELIMITER ;
