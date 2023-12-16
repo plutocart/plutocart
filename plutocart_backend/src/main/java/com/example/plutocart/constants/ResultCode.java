@@ -1,4 +1,6 @@
-package com.example.plutocart.utils;
+package com.example.plutocart.constants;
+
+import com.example.plutocart.utils.Status;
 
 public class ResultCode {
     public static final Status SUCCESS = new Status("0", "Success.");

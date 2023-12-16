@@ -1,11 +1,9 @@
 package com.example.plutocart.services;
 
 import com.example.plutocart.dtos.account.AccountDTO;
-import com.example.plutocart.entities.Account;
-import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.utils.GenericResponse;
-import com.example.plutocart.utils.ResultCode;
+import com.example.plutocart.constants.ResultCode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

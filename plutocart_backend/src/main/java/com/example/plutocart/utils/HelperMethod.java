@@ -1,4 +1,4 @@
-package com.example.plutocart.helper;
+package com.example.plutocart.utils;
 
 import com.example.plutocart.constants.ErrorMessage;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;

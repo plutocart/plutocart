@@ -4,7 +4,7 @@ import com.example.plutocart.constants.ErrorMessage;
 import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.dtos.wallet.WalletPostDTO;
 import com.example.plutocart.entities.Wallet;
-import com.example.plutocart.helper.HelperMethod;
+import com.example.plutocart.utils.HelperMethod;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.WalletRepository;
 import org.modelmapper.ModelMapper;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;

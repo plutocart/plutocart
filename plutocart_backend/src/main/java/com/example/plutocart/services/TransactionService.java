@@ -1,7 +1,6 @@
 package com.example.plutocart.services;
 
 import com.cloudinary.Cloudinary;
-import com.example.plutocart.dtos.transaction.TResDelDTO;
 import com.example.plutocart.dtos.transaction.TResPostDTO;
 import com.example.plutocart.dtos.transaction.TResStmNowDTO;
 import com.example.plutocart.dtos.transaction.TransactionResponseGetDTO;
@@ -11,7 +10,7 @@ import com.example.plutocart.repositories.TransactionCategoryRepository;
 import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
 import com.example.plutocart.utils.GenericResponse;
-import com.example.plutocart.utils.ResultCode;
+import com.example.plutocart.constants.ResultCode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
