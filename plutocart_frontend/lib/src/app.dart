@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/home_page_bloc/bloc/home_page_bloc.dart';
+import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
 import 'package:plutocart/src/models/helper.dart';
@@ -22,17 +23,19 @@ class plutocartApp extends StatefulWidget {
 
 class _plutocartAppState extends State<plutocartApp> {
   final storage = new FlutterSecureStorage();
-  
+
   String _udid = 'Unknown';
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
-  void initState() {
-     super.initState();
-    context.read<HomePageBloc>().add(LoadingHomePage(1));
+  void initState()  {
+    super.initState();
     initPlatformState();
+    context.read<HomePageBloc>().add(LoadingHomePage(1));
+    context.read<LoginBloc>().add(loginGuest());
   }
-   Future<void> initPlatformState() async {
+
+  Future<void> initPlatformState() async {
     String udid;
     try {
       udid = await FlutterUdid.consistentUdid;
@@ -47,44 +50,50 @@ class _plutocartAppState extends State<plutocartApp> {
       _udid = udid;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     print("imei : ${_udid}");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocBuilder<HomePageBloc, HomePageState>(
-        builder: (context, state) {
-          return (1 + 1 == 2)
-              ? Skeletonizer(
-                  enabled: state.isLoading,
-                  effect: ShimmerEffect(duration: Duration(microseconds: 300)),
-                  child: Stack(
-                    children: [
-                      Scaffold(
-                        resizeToAvoidBottomInset: false,
-                        body: pageRoutes[_selectedIndex],
-                        floatingActionButton: ButtonTransaction(),
-                        bottomNavigationBar: BottomNavigatorBar(
-                          onTap: (index) {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                        ),
+      home: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, stateLogin) {
+          return BlocBuilder<HomePageBloc, HomePageState>(
+            builder: (context, stateHomePage) {
+              return (!stateLogin.imei.isEmpty)
+                  ? Skeletonizer(
+                      enabled: stateHomePage.isLoading,
+                      effect:
+                          ShimmerEffect(duration: Duration(microseconds: 300)),
+                      child: Stack(
+                        children: [
+                          Scaffold(
+                            resizeToAvoidBottomInset: false,
+                            body: pageRoutes[_selectedIndex],
+                            floatingActionButton: ButtonTransaction(),
+                            bottomNavigationBar: BottomNavigatorBar(
+                              onTap: (index) {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              : FutureBuilder(
-                  future: Future.delayed(Duration(seconds: 3)),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return HomeLogin();
-                    } else {
-                      return  LoadStartApp();
-                    }
-                  },
-                );
+                    )
+                  : FutureBuilder(
+                      future: Future.delayed(Duration(seconds: 3)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return HomeLogin();
+                        } else {
+                          return LoadStartApp();
+                        }
+                      },
+                    );
+            },
+          );
         },
       ),
       title: "Plutocart",
