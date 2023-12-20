@@ -26,10 +26,9 @@ final swiperController = SwiperController();
 
     on<CreateWallet>((event, emit) async {
       Map<String, dynamic> response = await walletRepository()
-          .createWallet(event.accountId, event.walletName, event.walletBalance);
+          .createWallet( event.walletName, event.walletBalance);
       Wallet wallet = new Wallet(
           walletId: response["walletId"],
-          accountId: event.accountId,
           walletBalance: event.walletBalance,
           walletName: event.walletName,
           statusWallet: 1);
@@ -46,7 +45,7 @@ final swiperController = SwiperController();
     on<DeleteWallet>((event, emit) async {
       try {
         await walletRepository()
-            .deleteWalletById(event.accountId, event.walletId);
+            .deleteWalletById(event.walletId);
         final List<Wallet> newListWallet = [...state.wallets];
         newListWallet
             .removeWhere((element) => element.walletId == event.walletId);
@@ -62,7 +61,6 @@ final swiperController = SwiperController();
     on<UpdateWallet>((event, emit) async {
       try {
         Wallet response = await walletRepository().updateWallet(
-          event.accountId,
           event.walletId,
           event.walletName,
           event.walletBalance,
@@ -102,7 +100,7 @@ final swiperController = SwiperController();
             ? state.currentColossalIndex - 1
             : state.currentColossalIndex;
         Wallet response = await walletRepository()
-            .updateStatusWallet(event.accountId, event.walletId);
+            .updateStatusWallet(event.walletId);
         List<Wallet> responseWallet = [...state.wallets];
         int indexWallet = responseWallet
             .indexWhere((element) => element.walletId == event.walletId);
@@ -111,8 +109,7 @@ final swiperController = SwiperController();
               walletName: responseWallet[indexWallet].walletName,
               walletBalance: responseWallet[indexWallet].walletBalance,
               statusWallet: event.walletStatus,
-              walletId: event.walletId,
-              accountId: event.accountId)
+              walletId: event.walletId,)
         ]);
         if (response != null) {
           emit(state.copyWith(
@@ -129,7 +126,7 @@ final swiperController = SwiperController();
     });
 
     on<GetAllWallet>((event, emit) async {
-      List<dynamic> response =await walletRepository().getWalletAll(event.accountId);
+      List<dynamic> response =await walletRepository().getWalletAll();
       if (response.isEmpty) {
         throw ArgumentError("Wallet not found");
       } else {
@@ -151,7 +148,7 @@ final swiperController = SwiperController();
 
     on<GetAllWalletOpenStatus>((event, emit) async {
       List<dynamic> response =
-          await walletRepository().getWalletAllStatusOn(event.accountId);
+          await walletRepository().getWalletAllStatusOn();
       if (response.isEmpty) {
         return;
       } else {

@@ -53,11 +53,11 @@ class _plutocartAppState extends State<plutocartApp> {
 
   @override
   Widget build(BuildContext context) {
-    print("imei : ${_udid}");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
+            storage.write(key: "accountId", value: stateLogin.accountId.toString());
           return BlocBuilder<HomePageBloc, HomePageState>(
             builder: (context, stateHomePage) {
               return (!stateLogin.imei.isEmpty)

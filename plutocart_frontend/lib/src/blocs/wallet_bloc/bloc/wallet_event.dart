@@ -14,9 +14,8 @@ class MapEventToState extends WalletEvent {
 
 // ignore: must_be_immutable
 class GetAllWallet extends WalletEvent {
-  final int accountId;
   bool? enableOnlyStatusOnCard = false;
-  GetAllWallet(this.accountId , {this.enableOnlyStatusOnCard});
+  GetAllWallet({this.enableOnlyStatusOnCard});
 }
 class GetAllWalletOpenStatus extends WalletEvent {
   final int accountId;

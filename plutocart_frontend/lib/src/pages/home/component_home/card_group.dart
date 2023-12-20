@@ -65,7 +65,7 @@ class _CardGroupState extends State<CardGroup> {
                           builder: (context, state) {
                             return TextButton(
                               onPressed: () {
-                                context.read<WalletBloc>().add(GetAllWallet(1));
+                                context.read<WalletBloc>().add(GetAllWallet());
                               },
                               style: TextButton.styleFrom(
                                 shape: StadiumBorder(),

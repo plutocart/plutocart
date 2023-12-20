@@ -24,7 +24,7 @@ class _CardWalletState extends State<CardWallet> {
 
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWallet(1));
+    context.read<WalletBloc>().add(GetAllWallet());
     super.initState();
   }
 
@@ -89,7 +89,7 @@ class _CardWalletState extends State<CardWallet> {
                                         ? () async {
                                             await createWallet();
                                             context.read<WalletBloc>().add(
-                                                GetAllWallet(1,
+                                                GetAllWallet(
                                                     enableOnlyStatusOnCard:
                                                         true));
                                           }
@@ -158,7 +158,7 @@ class _CardWalletState extends State<CardWallet> {
                                     onPressed: () async {
                                       await showWallets();
                                       context.read<WalletBloc>().add(GetAllWallet(
-                                          1,
+                                          
                                           enableOnlyStatusOnCard: true));
                                     },
                                     child: Text("Your wallets"),
@@ -187,7 +187,7 @@ class _CardWalletState extends State<CardWallet> {
                     await showWallets();
                     context
                         .read<WalletBloc>()
-                        .add(GetAllWallet(1, enableOnlyStatusOnCard: true));
+                        .add(GetAllWallet( enableOnlyStatusOnCard: true));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,

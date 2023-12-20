@@ -16,7 +16,7 @@ class ListWalletPopup extends StatefulWidget {
 class _ListWalletPopupState extends State<ListWalletPopup> {
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWallet(1));
+    context.read<WalletBloc>().add(GetAllWallet());
     super.initState();
   }
 

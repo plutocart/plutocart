@@ -13,7 +13,7 @@ class CreateWalletPopup extends StatefulWidget {
 class _CreateWalletPopupState extends State<CreateWalletPopup> {
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWallet(1 , enableOnlyStatusOnCard: true));
+    context.read<WalletBloc>().add(GetAllWallet( enableOnlyStatusOnCard: true));
     super.initState();
   }
   TextEditingController _nameWalletController = new TextEditingController();

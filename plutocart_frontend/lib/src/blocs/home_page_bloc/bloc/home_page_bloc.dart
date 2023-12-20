@@ -13,7 +13,7 @@ class HomePageBloc extends Bloc<HomePageBlocEvent, HomePageState> {
     on<LoadingHomePage>((event, emit) async {
   try {
     emit(state.copyWith(isLoading: true));
-    List<dynamic> response = await walletRepository().getWalletAll(event.accountId);
+    List<dynamic> response = await walletRepository().getWalletAll();
     if (response.isEmpty) {
       throw ArgumentError("Wallet not found");
     }
