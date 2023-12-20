@@ -20,7 +20,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @PostMapping("/account/imei")
+    @PostMapping("/account/register/guest")
     public ResponseEntity<GenericResponse> createAccountByImei(@Valid @RequestBody AccountDTO accountDTO){
         GenericResponse result = accountService.CreateAccountByImei(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);

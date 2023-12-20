@@ -31,7 +31,7 @@ class _plutocartAppState extends State<plutocartApp> {
   void initState()  {
     super.initState();
     initPlatformState();
-    context.read<HomePageBloc>().add(LoadingHomePage(1));
+    context.read<HomePageBloc>().add(LoadingHomePage());
     context.read<LoginBloc>().add(loginGuest());
   }
 

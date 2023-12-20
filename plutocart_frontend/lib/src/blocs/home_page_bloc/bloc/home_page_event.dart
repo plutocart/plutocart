@@ -6,6 +6,4 @@ abstract class HomePageBlocEvent extends Equatable {
 }
 
 class LoadingHomePage extends HomePageBlocEvent {
-  final int accountId;
-  LoadingHomePage(this.accountId);
 }

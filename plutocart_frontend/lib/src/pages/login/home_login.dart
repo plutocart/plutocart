@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plutocart/src/pages/login/sign_up.dart';
+import 'package:plutocart/src/router/router.dart';
 
 class HomeLogin extends StatefulWidget {
   const HomeLogin({Key? key}) : super(key: key);
@@ -125,7 +127,9 @@ class _HomeLoginState extends State<HomeLogin> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(_createRoute());
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
@@ -152,28 +156,24 @@ class _HomeLoginState extends State<HomeLogin> {
                     ],
                   ),
                 ),
-                AnimatedOpacity(
-                  opacity: opacityText,
-                  duration: Duration(milliseconds: 500),
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      alignment: Alignment(1, 2),
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    child: Text(
-                      'Try using it without registration.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400,
-                      ),
+                    alignment: Alignment(1, 2),
+                  ),
+                  child: Text(
+                    'Try using it without registration.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
@@ -206,4 +206,26 @@ class _HomeLoginState extends State<HomeLogin> {
       ],
     );
   }
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0); // Change the X value to 1.0 for sliding from left to right
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(
+        CurveTween(curve: curve),
+      );
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+
+
 }

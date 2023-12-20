@@ -29,4 +29,30 @@ final dio = Dio();
     }
     
   }
+
+
+Future createAccountGuest(String walletName) async {
+      final storage = new FlutterSecureStorage();
+       String? imei = await storage.read(key: "imei");
+    try {
+      Map<String, dynamic> requestBody = {
+      "userName": walletName,
+      "imei": imei,
+    };
+
+      Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/guest' , data: requestBody);
+      if (response.statusCode == 201) {
+          print("create successfully");
+          return response.data;
+      } else if (response.statusCode == 404) {
+        throw Exception('Resource not found');
+      } else {
+        throw Exception('Unexpected error occurred: ${response.statusCode}');
+      }
+    } catch (error, stacktrace) {
+      print("Error: $error - Stacktrace: $stacktrace");
+      throw error;
+    }
+  }
+
 }

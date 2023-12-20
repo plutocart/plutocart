@@ -119,7 +119,6 @@ final swiperController = SwiperController();
           throw ArgumentError('Wallet update failed.');
         }
       } catch (error) {
-        // Handle errors or re-throw if necessary
         print("Error: $error");
         throw error;
       }
@@ -145,7 +144,6 @@ final swiperController = SwiperController();
       }
     });
     
-
     on<GetAllWalletOpenStatus>((event, emit) async {
       List<dynamic> response =
           await walletRepository().getWalletAllStatusOn();
