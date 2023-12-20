@@ -20,4 +20,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Modifying
     @Procedure(procedureName = "createAccountByImei")
     void CreateAccountByImei(String userName , String imei);
+
+    @Query(value = "select * from account where  imei = :imei and account_role = 1" , nativeQuery = true)
+    Account getAccountByImeiAndRole(String imei);
+
 }

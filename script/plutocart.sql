@@ -23,8 +23,8 @@ USE `plutocart` ;
 CREATE TABLE IF NOT EXISTS `plutocart`.`account` (
   `id_account` INT NOT NULL AUTO_INCREMENT,
   `user_name` VARCHAR(45) NOT NULL,
-  `imei` VARCHAR(15) NOT NULL,
-  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `imei` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(50) NULL,
   `password` VARCHAR(100) NULL,
   `account_role` ENUM('guest', 'customer') NOT NULL,
   PRIMARY KEY (`id_account`),
@@ -459,17 +459,18 @@ DELIMITER ;
 -- create account guest by use imei
 DELIMITER //
 
-CREATE PROCEDURE createAccountByImei(IN inUserName VARCHAR(45), IN inImei VARCHAR(15))
+CREATE  PROCEDURE `createAccountByImei`(IN inUserName VARCHAR(45), IN InImei VARCHAR(200))
 BEGIN
     DECLARE countAccounts INT;
 
-    SELECT COUNT(*) INTO countAccounts FROM account WHERE imei = Imei AND account_role = 1;
+    SELECT COUNT(*) INTO countAccounts FROM account WHERE imei = InImei AND account_role = 1;
 
     IF countAccounts >= 1 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
     ELSE
         INSERT INTO account (user_name, imei, email, password, account_role)
-        VALUES (inUserName, inImei, NULL, NULL, DEFAULT);
+        VALUES (inUserName, InImei, null, NULL, DEFAULT);
     END IF;
+    SET countAccounts = 0;
 END //
 DELIMITER ;

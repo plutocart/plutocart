@@ -4,8 +4,12 @@ import 'package:plutocart/src/blocs/home_page_bloc/bloc/home_page_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
 import 'package:plutocart/src/models/helper.dart';
+import 'package:plutocart/src/pages/loading/load_start_app.dart';
+import 'package:plutocart/src/pages/login/home_login.dart';
 import 'package:plutocart/src/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_udid/flutter_udid.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final navigatorState = GlobalKey<NavigatorState>();
 
@@ -17,39 +21,70 @@ class plutocartApp extends StatefulWidget {
 }
 
 class _plutocartAppState extends State<plutocartApp> {
-  @override
-  void initState() {
-    context.read<HomePageBloc>().add(LoadingHomePage(1));
-    super.initState();
-  }
-
+  final storage = new FlutterSecureStorage();
+  
+  String _udid = 'Unknown';
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
+  void initState() {
+     super.initState();
+    context.read<HomePageBloc>().add(LoadingHomePage(1));
+    initPlatformState();
+  }
+   Future<void> initPlatformState() async {
+    String udid;
+    try {
+      udid = await FlutterUdid.consistentUdid;
+      await storage.write(key: "imei", value: udid);
+    } on Error {
+      udid = 'Failed to get UDID.';
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _udid = udid;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
+    print("imei : ${_udid}");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<HomePageBloc, HomePageState>(
         builder: (context, state) {
-          return Skeletonizer(
-            enabled: state.isLoading,
-            effect: ShimmerEffect(duration: Duration(microseconds: 300)),
-            child: Stack(children: [
-              Scaffold(
-                resizeToAvoidBottomInset: false,
-                body: pageRoutes[_selectedIndex],
-                floatingActionButton: ButtonTransaction(),
-                bottomNavigationBar: BottomNavigatorBar(
-                  onTap: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
+          return (1 + 1 == 2)
+              ? Skeletonizer(
+                  enabled: state.isLoading,
+                  effect: ShimmerEffect(duration: Duration(microseconds: 300)),
+                  child: Stack(
+                    children: [
+                      Scaffold(
+                        resizeToAvoidBottomInset: false,
+                        body: pageRoutes[_selectedIndex],
+                        floatingActionButton: ButtonTransaction(),
+                        bottomNavigationBar: BottomNavigatorBar(
+                          onTap: (index) {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : FutureBuilder(
+                  future: Future.delayed(Duration(seconds: 3)),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return HomeLogin();
+                    } else {
+                      return  LoadStartApp();
+                    }
                   },
-                ),
-              ),
-              //  Center(child:  CircularProgressIndicator(),)
-            ]),
-          );
+                );
         },
       ),
       title: "Plutocart",

@@ -21,10 +21,9 @@ public class Account {
     @Column(name = "user_name", nullable = false, length = 45)
     private String userName;
 
-    @Column(name = "imei", nullable = false, length = 15)
+    @Column(name = "imei", nullable = false, length = 200)
     private String imei;
 
-    @Email
     @Column(name = "email", length = 50)
     private String email;
 

@@ -64,5 +64,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Transactional
     @Modifying
     @Procedure(procedureName = "UpdateTransaction")
-    void updateTransaction(Integer walletId, Integer transactionId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
+    void updateTransaction(Integer walletId, Integer transactionId, BigDecimal stmTransaction, Integer statementType,
+                           LocalDateTime dateTransaction, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 }

@@ -20,7 +20,6 @@ void main() {
     FlutterNativeSplash.remove();
     runApp(MyWidget());
   });
-
 }
 
 class MyWidget extends StatefulWidget {
@@ -31,13 +30,13 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
-   bool isConnected = true;
+  bool isConnected = true;
   @override
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final homePageBloc = BlocProvider(create: (context) => HomePageBloc());
     return MultiBlocProvider(
-        providers: [walletBloc , homePageBloc],
+        providers: [walletBloc, homePageBloc],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -47,46 +46,47 @@ class _MyWidgetState extends State<MyWidget> {
             )),
             home: Scaffold(
               resizeToAvoidBottomInset: false,
-              body: isConnected ?  plutocartApp() : NoConnectionPage(),
+              body: isConnected ? plutocartApp() : NoConnectionPage(),
             )));
   }
 
-   Future<void> checkConnectivity() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
-  if (connectivityResult == ConnectivityResult.none) {
+  Future<void> checkConnectivity() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
       setState(() {
         isConnected = false; // ปรับสถานะการเชื่อมต่อ
       });
-  } else if (connectivityResult == ConnectivityResult.wifi ||
-      connectivityResult == ConnectivityResult.mobile) {
+    } else if (connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile) {
       setState(() {
         isConnected = true; // ปรับสถานะการเชื่อมต่อ
       });
-  }
-}
-late StreamSubscription<ConnectivityResult> subscription;
-
-void initConnectivity() {
-  subscription = Connectivity().onConnectivityChanged.listen((result) {
-    if (result == ConnectivityResult.none) {
-      // No internet connection
-    } else if (result == ConnectivityResult.wifi ||
-        result == ConnectivityResult.mobile) {
-      // Connected to WiFi or mobile data
     }
-  });
-}
+  }
 
-@override
-void initState() {
-  super.initState();
-  checkConnectivity();
-  initConnectivity();
-}
+  late StreamSubscription<ConnectivityResult> subscription;
 
-@override
-void dispose() {
-  super.dispose();
-  subscription.cancel();
-}
+  void initConnectivity() {
+    subscription = Connectivity().onConnectivityChanged.listen((result) {
+      if (result == ConnectivityResult.none) {
+        // No internet connection
+      } else if (result == ConnectivityResult.wifi ||
+          result == ConnectivityResult.mobile) {
+        // Connected to WiFi or mobile data
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnectivity();
+    initConnectivity();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+  }
 }

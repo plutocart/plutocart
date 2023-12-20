@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: '3.1.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -44,6 +44,8 @@ dependencies:
   flutter_switch: ^0.3.2
   lite_rolling_switch: ^1.0.1
   skeletonizer: ^0.8.0
+  flutter_secure_storage: ^9.0.0
+  flutter_udid: ^2.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -96,6 +98,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - "assets/icon/logo_login_icon.png"
+    - "assets/icon/logo_loading_icon.png"
     - "assets/icon/icon_launch.png"
     - "assets/icon/cancle_icon.png"
     - "assets/icon/transaction_icon.png"
