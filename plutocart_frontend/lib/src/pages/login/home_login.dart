@@ -207,8 +207,8 @@ class _HomeLoginState extends State<HomeLogin> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        height: MediaQuery.of(context).size.height * 0.2914,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: MediaQuery.of(context).size.height * 0.2,
                         decoration: ShapeDecoration(
                           color: Color(0xFF15616D),
                           shape: RoundedRectangleBorder(

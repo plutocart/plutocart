@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 
 class InputFieldWallet extends StatefulWidget {
   final String lableTextField1;
@@ -21,11 +22,6 @@ class InputFieldWallet extends StatefulWidget {
 class _InputFieldWalletState extends State<InputFieldWallet> {
   @override
   Widget build(BuildContext context) {
-    // double amount = double.tryParse(widget.amountMoneyController.text) ?? 0.0;
-
-    print("check num length : ${widget.amountMoneyController.text.length}");
-    print(
-        "check num length : ${widget.amountMoneyController.text.length >= 0}");
     return Column(
       children: [
         Padding(
@@ -66,11 +62,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
-            onChanged: (value) {
-              setState(() {
-                // Any specific logic for this TextField can go here
-              });
-            },
+      
           ),
         ),
         Padding(
@@ -116,7 +108,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             ),
             onChanged: (value) {
               setState(() {
-                // Your validation and modification logic here
+                
               });
             },
           ),

@@ -19,6 +19,7 @@ final swiperController = SwiperController();
           walletBalance: event.walletBalance,
           walletStatus: event.walletStatus));
     });
+    
 
     on<OnIndexChanged>((event, emit) {
       emit(state.copyWith(currentColossalIndex: event.index));

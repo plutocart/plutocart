@@ -11,14 +11,40 @@ class CreateWalletPopup extends StatefulWidget {
 }
 
 class _CreateWalletPopupState extends State<CreateWalletPopup> {
+  late TextEditingController _nameWalletController;
+  TextEditingController _amountMoneyController = TextEditingController();
+
   @override
   void initState() {
-    context.read<WalletBloc>().add(GetAllWallet( enableOnlyStatusOnCard: true));
+    _nameWalletController = TextEditingController();
+    _nameWalletController.addListener(_onNameWalletChanged);
+    _amountMoneyController.addListener(_onAmountChanged);
+    context.read<WalletBloc>().add(GetAllWallet(enableOnlyStatusOnCard: true));
     super.initState();
   }
-  TextEditingController _nameWalletController = new TextEditingController();
-  TextEditingController _amountMoneyController = new TextEditingController(text: "0.0");
-  
+
+  @override
+  void dispose() {
+    _nameWalletController.dispose();
+    _amountMoneyController.dispose();
+    super.dispose();
+  }
+
+  bool _isNameValid = false;
+  bool _isAmountValid = false;
+
+  void _onNameWalletChanged() {
+    setState(() {
+      _isNameValid = _nameWalletController.text.isNotEmpty;
+    });
+  }
+
+  void _onAmountChanged() {
+    setState(() {
+      _isAmountValid = _amountMoneyController.text.isNotEmpty || double.parse(_amountMoneyController.text) == 0.0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
@@ -40,8 +66,9 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
               ),
               Center(
                 child: Image(
-                    image: AssetImage('assets/icon/wallet_icon.png'),
-                    height: 50),
+                  image: AssetImage('assets/icon/wallet_icon.png'),
+                  height: 50,
+                ),
               ),
               InputFieldWallet(
                 lableTextField1: "Name of Wallet",
@@ -52,27 +79,25 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
               Padding(
                 padding: const EdgeInsets.only(left: 22, right: 22, bottom: 22),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if(_nameWalletController.text.length > 0) {
-                  double amount = double.parse(_amountMoneyController.text);
-                      context.read<WalletBloc>().add(CreateWallet(_nameWalletController.text, amount));
-                    FocusScope.of(context).unfocus();
-                    Navigator.pop(context);
-                    }
-                    
-                  },
+                  onPressed: _isNameValid && _isAmountValid
+                      ? () {
+                          double amount = double.parse(_amountMoneyController.text);
+                          context.read<WalletBloc>().add(CreateWallet(_nameWalletController.text, amount));
+                          FocusScope.of(context).unfocus();
+                          Navigator.pop(context);
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20), // Reduce the border radius
+                      borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
                         width: 1,
-                        color: Color(0xFF15616D),
+                        color: _isNameValid && _isAmountValid ? Color(0xFF15616D) : Colors.transparent,
                       ),
                     ),
-                    minimumSize: Size(160, 42), // Set minimum button size
-                    backgroundColor: Color(0xFF15616D), // Background color
-                    foregroundColor: Colors.white, // Text color
+                    minimumSize: Size(160, 42),
+                    backgroundColor: _isNameValid && _isAmountValid ? Color(0xFF15616D) : Colors.transparent,
+                    foregroundColor: Colors.white,
                   ),
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -84,7 +109,7 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                           fontSize: 14,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w700,
-                          height: 1.0, // Adjust the line height
+                          height: 1.0,
                         ),
                       ),
                     ),

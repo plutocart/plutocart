@@ -102,67 +102,78 @@ class _SignUpState extends State<SignUp> {
         BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _userNameAccountController.text.length > 0 ? Color(0xFF15616D) : Colors.red.shade100,
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: _userNameAccountController.text.length > 0
+                      ? Color(0xFF15616D)
+                      : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-                onPressed: () async {
-                  if(_userNameAccountController.text.length > 0){
- context
-                      .read<LoginBloc>().add(createAccountGuest(_userNameAccountController.text));
-                  FocusScope.of(context).unfocus();
-
-                  // Show the AlertDialog
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 20),
-                            Text('Loading...'),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-
-                  await Future.delayed(
-                      Duration(seconds: 1)); // Wait for 3 seconds
-
-                  // Check if the dialog is still open
-                  if (Navigator.of(context, rootNavigator: true).canPop()) {
-                    Navigator.of(context, rootNavigator: true)
-                        .pop(); // Dismiss the AlertDialog
-                  }
-
-                  // Navigate to the home screen
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRoute.home,
-                    (route) => false,
-                  );
-                  }
-                 
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                     _userNameAccountController.text.length > 1 ? "Continue As Guest" : "Please input username",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w400,
+                    side: BorderSide(
+                      color: _userNameAccountController.text.length > 0
+                          ? Color(0xFF15616D)
+                          : Colors.transparent,
                     ),
                   ),
+                  ),
+              onPressed: _userNameAccountController.text.length > 0
+                  ? () async {
+                      if (_userNameAccountController.text.length > 0) {
+                        context.read<LoginBloc>().add(createAccountGuest(
+                            _userNameAccountController.text));
+                        FocusScope.of(context).unfocus();
+
+                        // Show the AlertDialog
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 20),
+                                  Text('Loading...'),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+
+                        await Future.delayed(
+                            Duration(seconds: 1)); // Wait for 3 seconds
+
+                        // Check if the dialog is still open
+                        if (Navigator.of(context, rootNavigator: true)
+                            .canPop()) {
+                          Navigator.of(context, rootNavigator: true)
+                              .pop(); // Dismiss the AlertDialog
+                        }
+
+                        // Navigate to the home screen
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          AppRoute.app,
+                          (route) => false,
+                        );
+                      }
+                    }
+                  : null,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  _userNameAccountController.text.length > 0
+                      ? "Continue As Guest"
+                      : "Please input username",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-                );
+              ),
+            );
           },
         ),
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),

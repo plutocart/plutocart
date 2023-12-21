@@ -7,20 +7,19 @@ part 'load_state.dart';
 
 class LoadBloc extends Bloc<loadEvent, LoadState> {
   LoadBloc() : super(LoadState()) {
+
     on<LoadingHomePage>((event, emit) async {
-      try {
-        emit(state.copyWith(isLoading: true));
-        
-        await Future.delayed(Duration(seconds: 1));
-        
-        List<dynamic> response = await walletRepository().getWalletAll();
-        if (response.isEmpty) {
-          throw ArgumentError("Wallet not found");
-        }
-        emit(state.copyWith(isLoading: false));
-      } catch (error) {
-        emit(state.copyWith(isLoading: false));
-      }
-    });
+  try {
+    emit(state.copyWith(isLoading: true));
+    List<dynamic> response = await walletRepository().getWalletAll();
+    if (response.isEmpty) {
+      throw ArgumentError("Wallet not found");
+    }
+    emit(state.copyWith(
+      isLoading: false,));
+  } catch (error) {
+    emit(state.copyWith(isLoading: false));
+  }
+});
   }
 }
