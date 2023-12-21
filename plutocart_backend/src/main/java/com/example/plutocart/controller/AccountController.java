@@ -25,4 +25,9 @@ public class AccountController {
         GenericResponse result = accountService.CreateAccountByImei(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+    @PostMapping("/account/register/customer")
+    public ResponseEntity<GenericResponse> createAccountByGoogle(@Valid @RequestBody AccountDTO accountDTO){
+        GenericResponse result = accountService.CreateAccountByGoogle(accountDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
 }

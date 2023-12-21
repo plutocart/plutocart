@@ -473,3 +473,20 @@ BEGIN
     SET countAccounts = 0;
 END //
 DELIMITER ;
+
+-- create account customer by Google account
+CREATE  PROCEDURE `createAccountByGoogle`(IN inUserName VARCHAR(45), IN InImei VARCHAR(200) , in InEmail VARCHAR(50))
+BEGIN
+    DECLARE countAccounts INT;
+
+    SELECT COUNT(*) INTO countAccounts FROM account WHERE email = InEmail AND account_role = 2;
+
+    IF countAccounts >= 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
+    ELSE
+        INSERT INTO account (user_name, imei, email, account_role)
+        VALUES (inUserName, InImei, InEmail, 2);
+    END IF;
+    SET countAccounts = 0;
+END //
+DELIMITER ;

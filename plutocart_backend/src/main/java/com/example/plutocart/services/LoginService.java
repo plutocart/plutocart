@@ -18,11 +18,11 @@ public class LoginService {
     @Autowired
     ModelMapper modelMapper;
 
-    public GenericResponse loginGuestByImei(String imei){
+    public GenericResponse loginGuestByImei(String imei , int accountRole){
         GenericResponse response = new GenericResponse();
         IMEIEncryption imeiEncryption = new IMEIEncryption();
         try {
-            Account account = accountRepository.getAccountByImeiAndRole(imeiEncryption.encryptIMEI(imei));
+            Account account = accountRepository.getAccountByImeiAndRole(imeiEncryption.encryptIMEI(imei) , accountRole);
             response.setData( modelMapper.map(account , AccountDTO.class));
             response.setStatus(ResultCode.SUCCESS);
             return response;
@@ -32,4 +32,20 @@ public class LoginService {
             return response;
         }
     }
+
+    public GenericResponse loginGoogle(String email , int accountRole){
+        GenericResponse response = new GenericResponse();
+        try {
+            Account account = accountRepository.getAccountByGoogleAndRole(email , accountRole);
+            response.setData( modelMapper.map(account , AccountDTO.class));
+            response.setStatus(ResultCode.SUCCESS);
+            return response;
+        }
+        catch (Exception ex){
+            response.setStatus(ResultCode.NOT_FOUND);
+            return response;
+        }
+    }
+
+
 }

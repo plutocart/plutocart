@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/pages/login/google_login.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class SignUp extends StatefulWidget {
@@ -103,18 +104,18 @@ class _SignUpState extends State<SignUp> {
           builder: (context, state) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: _userNameAccountController.text.length > 0
-                      ? Color(0xFF15616D)
-                      : Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: BorderSide(
-                      color: _userNameAccountController.text.length > 0
-                          ? Color(0xFF15616D)
-                          : Colors.transparent,
-                    ),
+                backgroundColor: _userNameAccountController.text.length > 0
+                    ? Color(0xFF15616D)
+                    : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: _userNameAccountController.text.length > 0
+                        ? Color(0xFF15616D)
+                        : Colors.transparent,
                   ),
-                  ),
+                ),
+              ),
               onPressed: _userNameAccountController.text.length > 0
                   ? () async {
                       if (_userNameAccountController.text.length > 0) {
@@ -187,27 +188,44 @@ class _SignUpState extends State<SignUp> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-            onPressed: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Register With Goolge",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w400,
+        Padding(
+          padding: const EdgeInsets.only(left: 20 , right: 20 , top: 10),
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-            )),
+              onPressed: () {
+               GoogleSignInService.handleSignIn();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Image(
+                        image: AssetImage('assets/icon/google_icon.png'),
+                        width: MediaQuery.sizeOf(context).width * 0.08,
+                      ),
+                    ),
+                    Text(
+                      "Sign up With Goolge",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ),
       ]),
     );
   }

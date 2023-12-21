@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/models/login/login_model.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginRespository{
 final dio = Dio();
@@ -29,6 +30,7 @@ final dio = Dio();
     }
     
   }
+  
 
 
 Future createAccountGuest(String walletName) async {
@@ -57,5 +59,40 @@ Future createAccountGuest(String walletName) async {
       throw error;
     }
   }
+
+  // Login Google
+
+  static List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+  static GoogleSignIn _googleSignIn = GoogleSignIn(
+    // clientId: '232792221897-6n5d0jvhfpeacnq16s630arh3rs4k5qn.apps.googleusercontent.com',
+    scopes: scopes,
+  );
+
+  static Future<void> handleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser != null) {
+        print("email: ${googleUser.email}");
+        
+      }
+    } catch (error) {
+      print('Error signing in: $error');
+    }
+  }
+
+  // Logout goole
+
+  static Future<void> handleSignOut() async {
+    try {
+      await _googleSignIn.disconnect();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+
 
 }

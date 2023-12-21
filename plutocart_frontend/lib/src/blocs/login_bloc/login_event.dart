@@ -13,3 +13,5 @@ abstract class LoginEvent extends Equatable {
     final String userName;
     createAccountGuest(this.userName);
   }
+
+  
