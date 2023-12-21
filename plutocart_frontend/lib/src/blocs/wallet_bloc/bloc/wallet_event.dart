@@ -18,41 +18,35 @@ class GetAllWallet extends WalletEvent {
   GetAllWallet({this.enableOnlyStatusOnCard});
 }
 class GetAllWalletOpenStatus extends WalletEvent {
-  final int accountId;
-  GetAllWalletOpenStatus(this.accountId);
+  GetAllWalletOpenStatus();
 }
 class GetWalletById extends WalletEvent {
-  final int accountId;
   final int walletId;
-  GetWalletById(this.accountId , this.walletId);
+  GetWalletById( this.walletId);
 }
 
 class UpdateWallet extends WalletEvent {
-  final int accountId;
   final int walletId;
   final String walletName;
   final double walletBalance;
   UpdateWallet(
-      this.accountId, this.walletId, this.walletName, this.walletBalance);
+       this.walletId, this.walletName, this.walletBalance);
 }
 
 class UpdateStatusWallet extends WalletEvent {
-  final int accountId;
   final int walletId;
   final int walletStatus;
-  UpdateStatusWallet(this.accountId, this.walletId, this.walletStatus);
+  UpdateStatusWallet( this.walletId, this.walletStatus);
 }
 
 class DeleteWallet extends WalletEvent {
-  final int accountId;
   final int walletId;
-  DeleteWallet(this.accountId, this.walletId);
+  DeleteWallet(this.walletId);
 }
 class CreateWallet extends WalletEvent {
-  final int accountId;
   final String walletName;
   final double walletBalance;
-  CreateWallet(this.accountId, this.walletName, this.walletBalance);
+  CreateWallet(this.walletName, this.walletBalance);
 }
 
 class OnIndexChanged extends WalletEvent {

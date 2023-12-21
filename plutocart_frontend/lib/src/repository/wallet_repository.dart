@@ -11,6 +11,7 @@ class walletRepository {
       final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
          int id = int.parse(accountId!);
+         print("iddd : ${id}");
     try {
       Map<String, dynamic> requestBody = {
       "walletName": walletName,

@@ -155,7 +155,6 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                         onToggle: (bool status) {
                                           context.read<WalletBloc>().add(
                                               UpdateStatusWallet(
-                                                  1,
                                                   wallet.walletId!,
                                                   status ? 1 : 0));
                                         },

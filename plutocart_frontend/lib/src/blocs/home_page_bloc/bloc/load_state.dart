@@ -1,16 +1,16 @@
-part of 'home_page_bloc.dart';
+part of 'load_bloc.dart';
 
-class HomePageState extends Equatable {
+class LoadState extends Equatable {
   final bool isLoading;
   final int accountId;
-  const HomePageState({
+  const LoadState({
     this.isLoading = false,
     this.accountId = 0
   });
 
-  HomePageState copyWith(
+  LoadState copyWith(
       {bool? isLoading , String? accountId}) {
-    return HomePageState(
+    return LoadState(
         isLoading: isLoading ?? this.isLoading , accountId: this.accountId);
   }
 

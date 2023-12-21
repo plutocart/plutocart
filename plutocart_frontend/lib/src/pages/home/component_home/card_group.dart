@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/home_page_bloc.dart';
+import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -28,7 +28,7 @@ class _CardGroupState extends State<CardGroup> {
           ),
         ),
         child: Skeleton.ignorePointer(
-          child: BlocBuilder<HomePageBloc, HomePageState>(
+          child: BlocBuilder<LoadBloc, LoadState>(
             builder: (context, state) {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.13,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/home_page_bloc.dart';
+import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
@@ -14,42 +14,25 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final navigatorState = GlobalKey<NavigatorState>();
 
-class plutocartApp extends StatefulWidget {
-  const plutocartApp({Key? key}) : super(key: key);
+class PlutocartApp extends StatefulWidget {
+  const PlutocartApp({Key? key}) : super(key: key);
 
   @override
   _plutocartAppState createState() => _plutocartAppState();
 }
 
-class _plutocartAppState extends State<plutocartApp> {
+class _plutocartAppState extends State<PlutocartApp> {
   final storage = new FlutterSecureStorage();
-
-  String _udid = 'Unknown';
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
   void initState()  {
     super.initState();
-    initPlatformState();
-    context.read<HomePageBloc>().add(LoadingHomePage());
+    context.read<LoadBloc>().add(LoadingHomePage());
     context.read<LoginBloc>().add(loginGuest());
   }
 
-  Future<void> initPlatformState() async {
-    String udid;
-    try {
-      udid = await FlutterUdid.consistentUdid;
-      await storage.write(key: "imei", value: udid);
-    } on Error {
-      udid = 'Failed to get UDID.';
-    }
 
-    if (!mounted) return;
-
-    setState(() {
-      _udid = udid;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +40,7 @@ class _plutocartAppState extends State<plutocartApp> {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
-            storage.write(key: "accountId", value: stateLogin.accountId.toString());
-          return BlocBuilder<HomePageBloc, HomePageState>(
+          return BlocBuilder<LoadBloc, LoadState>(
             builder: (context, stateHomePage) {
               return (!stateLogin.imei.isEmpty)
                   ? Skeletonizer(

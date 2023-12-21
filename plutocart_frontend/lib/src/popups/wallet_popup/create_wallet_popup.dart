@@ -17,8 +17,8 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
     super.initState();
   }
   TextEditingController _nameWalletController = new TextEditingController();
-  TextEditingController _amountMoneyController = new TextEditingController();
-
+  TextEditingController _amountMoneyController = new TextEditingController(text: "0.0");
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletBloc, WalletState>(
@@ -53,10 +53,13 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                 padding: const EdgeInsets.only(left: 22, right: 22, bottom: 22),
                 child: ElevatedButton(
                   onPressed: () {
-                    double amount = double.parse(_amountMoneyController.text);
-                      context.read<WalletBloc>().add(CreateWallet(1, _nameWalletController.text, amount));
+                    if(_nameWalletController.text.length > 0) {
+                  double amount = double.parse(_amountMoneyController.text);
+                      context.read<WalletBloc>().add(CreateWallet(_nameWalletController.text, amount));
                     FocusScope.of(context).unfocus();
                     Navigator.pop(context);
+                    }
+                    
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

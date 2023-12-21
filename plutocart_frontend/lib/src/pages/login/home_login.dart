@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:plutocart/src/pages/login/sign_up.dart';
 import 'package:plutocart/src/router/router.dart';
 
@@ -10,6 +12,8 @@ class HomeLogin extends StatefulWidget {
 }
 
 class _HomeLoginState extends State<HomeLogin> {
+  final storage = new FlutterSecureStorage();
+  String _udid = 'Unknown';
   double opacityContainer = 0.0;
   double opacityImage = 0.0;
   double opacityButtons = 0.0;
@@ -19,7 +23,24 @@ class _HomeLoginState extends State<HomeLogin> {
   @override
   void initState() {
     super.initState();
+        initPlatformState();
     _startOpacityAnimation();
+  }
+    Future<void> initPlatformState() async {
+    String udid;
+    try {
+      udid = await FlutterUdid.consistentUdid;
+      await storage.write(key: "imei", value: udid);
+      print("udid : $udid");
+    } on Error {
+      udid = 'Failed to get UDID.';
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _udid = udid;
+    });
   }
 
   void _startOpacityAnimation() {
@@ -56,6 +77,7 @@ class _HomeLoginState extends State<HomeLogin> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         AnimatedOpacity(

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/home_page_bloc.dart';
+import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -47,7 +47,7 @@ class _CardWalletState extends State<CardWallet> {
                     widthFactor: 0.98,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: HomePageState().isLoading == true ? Colors.white : Colors.grey.shade100,
+                        color: LoadState().isLoading == true ? Colors.white : Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
@@ -98,11 +98,11 @@ class _CardWalletState extends State<CardWallet> {
                                         ? Text("Add new wallet")
                                         : Text("Wallet is full"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: HomePageState().isLoading ? Colors.white : Colors.grey.shade100,
+                                      backgroundColor: LoadState().isLoading ? Colors.white : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                        width: 1, color: HomePageState().isLoading == true ? Color(0xFF15616D) : Colors.grey.shade200),
+                                        width: 1, color: LoadState().isLoading == true ? Color(0xFF15616D) : Colors.grey.shade200),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ).copyWith(
@@ -163,11 +163,11 @@ class _CardWalletState extends State<CardWallet> {
                                     },
                                     child: Text("Your wallets"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: HomePageState().isLoading == true ? Colors.white : Colors.grey.shade100,
+                                      backgroundColor: LoadState().isLoading == true ? Colors.white : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                            width: 1, color: HomePageState().isLoading == true ? Color(0xFF15616D) : Colors.grey.shade200),
+                                            width: 1, color: LoadState().isLoading == true ? Color(0xFF15616D) : Colors.grey.shade200),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     )),
@@ -222,9 +222,7 @@ class _CardWalletState extends State<CardWallet> {
                                   child: Text(
                                     wallet.walletName.length > 12
                                         ? "${wallet.walletName.substring(0, 12)}..."
-                                        : wallet.walletName.length == 0
-                                            ? "Unknown Wallet"
-                                            : wallet.walletName,
+                                        : wallet.walletName,
                                     style: TextStyle(
                                         color: Color(0xFF15616D),
                                         fontSize: 14,

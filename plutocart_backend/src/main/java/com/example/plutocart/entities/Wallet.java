@@ -28,7 +28,7 @@ public class Wallet {
     private String walletName;
 
     @Digits(integer = 13, fraction = 2, message = "Invalid decimal value")
-    @DecimalMin(value = "1.00", inclusive = false, message = "wallet balance should be greater than 1.00")
+    @DecimalMin(value = "0.0", inclusive = false, message = "wallet balance should be greater than 0.0")
     @DecimalMax(value = "9999999999.99", message = "wallet balance exceeds maximum value 99999999999.99")
     @NotNull(message = "balance wallet is null")
     @Column(name = "balance_wallet", nullable = false, precision = 13, scale = 2)

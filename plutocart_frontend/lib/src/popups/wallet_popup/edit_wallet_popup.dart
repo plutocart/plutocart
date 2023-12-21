@@ -84,6 +84,8 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
             lableTextField2: "Amount of wallet",
             nameWalletController: _nameWalletController,
             amountMoneyController: _amountMoneyController,
+    
+        
           ),
 
           ActionPopup(
@@ -99,7 +101,6 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
               double balanceWallet =
                   double.tryParse(_amountMoneyController.text) ?? 0.0;
               context.read<WalletBloc>().add(UpdateWallet(
-                  1,
                   widget.wallet?.walletId ?? 0,
                   _nameWalletController.text,
                   balanceWallet));

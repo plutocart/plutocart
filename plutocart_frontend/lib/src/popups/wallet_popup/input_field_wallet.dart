@@ -21,6 +21,11 @@ class InputFieldWallet extends StatefulWidget {
 class _InputFieldWalletState extends State<InputFieldWallet> {
   @override
   Widget build(BuildContext context) {
+    // double amount = double.tryParse(widget.amountMoneyController.text) ?? 0.0;
+
+    print("check num length : ${widget.amountMoneyController.text.length}");
+    print(
+        "check num length : ${widget.amountMoneyController.text.length >= 0}");
     return Column(
       children: [
         Padding(
@@ -31,19 +36,26 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             decoration: InputDecoration(
               labelText: widget.lableTextField1,
               labelStyle: TextStyle(
-                color: Color(0xFF15616D), // Change the label text color to red
+                color: widget.nameWalletController.text.isNotEmpty
+                    ? Color(0xFF15616D)
+                    : Colors.red,
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    width: 2,
-                    color:
-                        Color(0xFF15616D)), // Change border color when active
+                  width: 2,
+                  color: widget.nameWalletController.text.isNotEmpty
+                      ? Color(0xFF15616D)
+                      : Colors.red,
+                ),
                 borderRadius: BorderRadius.circular(16),
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    width: 1,
-                    color: Color(0xFF15616D)), // Border color when inactive
+                  width: 1,
+                  color: widget.nameWalletController.text.isNotEmpty
+                      ? Color(0xFF15616D)
+                      : Colors.red,
+                ),
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
@@ -54,6 +66,11 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
+            onChanged: (value) {
+              setState(() {
+                // Any specific logic for this TextField can go here
+              });
+            },
           ),
         ),
         Padding(
@@ -63,54 +80,45 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             decoration: InputDecoration(
               labelText: widget.lableTextField2,
               labelStyle: TextStyle(
-                color: Color(0xFF15616D), // เปลี่ยนสีข้อความ label เป็นสีแดง
+                color: widget.amountMoneyController.text.isNotEmpty
+                    ? Color(0xFF15616D)
+                    : Colors.red,
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
-                  color: Color(0xFF15616D), // เปลี่ยนสีขอบเมื่อเป็นสถานะ active
+                  color: widget.amountMoneyController.text.isNotEmpty
+                      ? Color(0xFF15616D)
+                      : Colors.red,
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 1,
-                  color:
-                      Color(0xFF15616D), // เปลี่ยนสีขอบเมื่อเป็นสถานะ inactive
+                  color: widget.amountMoneyController.text.isNotEmpty
+                      ? Color(0xFF15616D)
+                      : Colors.red,
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            keyboardType: TextInputType.numberWithOptions(
-                decimal: true), // กำหนดให้รับค่าตัวเลขและทศนิยม
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.deny(RegExp(
-                  r'[^\d.]')), // ไม่ยอมให้ป้อนตัวอักษรที่ไม่ใช่ตัวเลขหรือจุดทศนิยม
+              FilteringTextInputFormatter.deny(RegExp(r'[^\d.]')),
               LengthLimitingTextInputFormatter(13),
             ],
-            onChanged: (value) {
-              if (value.contains('.') &&
-                  value.indexOf('.') != value.lastIndexOf('.')) {
-                // If there's more than one decimal point, remove the extra one
-                widget.amountMoneyController.text =
-                    value.substring(0, value.lastIndexOf('.'));
-              } else if (value.contains('.') &&
-                  value.substring(value.indexOf('.') + 1).length > 2) {
-                // If there's a decimal point and more than two digits after it, limit to two digits
-                widget.amountMoneyController.text =
-                    value.substring(0, value.indexOf('.') + 3);
-              } else if (value.length == 10 && !value.contains('.')) {
-                // If no decimal point and total length is 10 characters, prevent further input
-                widget.amountMoneyController.text =
-                    value.substring(0, value.length - 1);
-              }
-            },
             style: TextStyle(
               color: Color(0xFF1A9CB0),
               fontSize: 18,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
+            onChanged: (value) {
+              setState(() {
+                // Your validation and modification logic here
+              });
+            },
           ),
         ),
       ],

@@ -41,7 +41,7 @@ class NoConnectionPage extends StatelessWidget {
                   // If internet connection is available, navigate back to the app
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => plutocartApp(),
+                      builder: (context) => PlutocartApp(),
                     ),
                   );
                 }
