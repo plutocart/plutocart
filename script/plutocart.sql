@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`account` (
   `user_name` VARCHAR(45) NOT NULL,
   `imei` VARCHAR(200) NOT NULL,
   `email` VARCHAR(50) NULL,
-  `password` VARCHAR(100) NULL,
   `account_role` ENUM('guest', 'customer') NOT NULL,
   PRIMARY KEY (`id_account`),
   UNIQUE INDEX `email_google_UNIQUE` (`email` ASC) VISIBLE)
@@ -159,7 +158,7 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-insert into account (id_account , user_name , imei , email , password , account_role) values(1 , 'admin' , 'admin_imei' , 'admin@gmail.com' , 'adminpassword' , 2);
+insert into account (id_account , user_name , imei , email  , account_role) values(1 , 'admin' , 'admin_imei' , 'admin@gmail.com'  , 2);
 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(1 , 'Salary' , 1 , 'https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856731/category_images/Icon-%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%B7%E0%B8%AD%E0%B8%99.png'); 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(2 , 'Pocket money' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856978/category_images/Icon-%E0%B8%A5%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99.png"); 
@@ -468,8 +467,8 @@ BEGIN
     IF countAccounts >= 1 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
     ELSE
-        INSERT INTO account (user_name, imei, email, password, account_role)
-        VALUES (inUserName, InImei, null, NULL, DEFAULT);
+        INSERT INTO account (user_name, imei, email, account_role)
+        VALUES (inUserName, InImei, null, DEFAULT);
     END IF;
     SET countAccounts = 0;
 END //

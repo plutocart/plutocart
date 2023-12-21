@@ -178,7 +178,7 @@ class _SignUpState extends State<SignUp> {
         ),
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),
         Text(
-          "Or do you already have an account?",
+          "Or sign up by google account?",
           style: TextStyle(
             decoration: TextDecoration.none,
             color: Color(0xFF15616D),
@@ -199,7 +199,7 @@ class _SignUpState extends State<SignUp> {
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Text(
-                "Continue With Goolge",
+                "Register With Goolge",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,

@@ -26,10 +26,6 @@ public class Account {
 
     @Column(name = "email", length = 50)
     private String email;
-
-    @Column(name = "password", length = 100)
-    private String password;
-
     @Lob
     @Column(name = "account_role", nullable = false)
     private String accountRole;

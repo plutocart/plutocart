@@ -114,9 +114,7 @@ class _HomeLoginState extends State<HomeLogin> {
                     width: MediaQuery.of(context).size.width * 0.6,
                   ),
                 ),
-                SizedBox(
-                  height: 9,
-                ),
+              
                 AnimatedOpacity(
                   opacity: opacityButtons,
                   duration: Duration(milliseconds: 300),
@@ -178,27 +176,27 @@ class _HomeLoginState extends State<HomeLogin> {
                     ],
                   ),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    alignment: Alignment(1, 2),
-                  ),
-                  child: Text(
-                    'Try using it without registration.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
+                // TextButton(
+                //   onPressed: () {},
+                //   style: TextButton.styleFrom(
+                //     foregroundColor: Colors.transparent,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(20.0),
+                //     ),
+                //     alignment: Alignment(1, 2),
+                //   ),
+                //   child: Text(
+                //     'Try using it without registration.',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //       decoration: TextDecoration.underline,
+                //       color: Colors.black,
+                //       fontSize: 14,
+                //       fontFamily: 'Roboto',
+                //       fontWeight: FontWeight.w400,
+                //     ),
+                //   ),
+                // ),
                 AnimatedOpacity(
                   opacity: opacityLastContainer,
                   duration: Duration(milliseconds: 500),
