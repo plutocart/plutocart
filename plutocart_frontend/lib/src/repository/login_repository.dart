@@ -1,24 +1,42 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:plutocart/src/models/login/login_model.dart';
-import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:plutocart/src/pages/login/home_login.dart';
 
-class LoginRespository{
-final dio = Dio();
+class LoginRespository {
+  final dio = Dio();
+  String _udid = 'Unknown';
+  final storage = new FlutterSecureStorage();
+  Future<void> initPlatformState() async {
+    String udid;
+    try {
+      udid = await FlutterUdid.consistentUdid;
+      await storage.write(key: "imei", value: udid);
+      print("udid : $udid");
+    } on Error {
+      udid = 'Failed to get UDID.';
+    }
+  }
 
-  Future<Login> loginGuest() async {
-    final storage = new FlutterSecureStorage();
-
+  Future loginGuest() async {
+    await initPlatformState();
     String? value = await storage.read(key: "imei");
+    print("value = ${value}");
     Map<String, dynamic> requestParam = {
-      "imei": value,
+      "imei":
+          value,
     };
     try {
-      Response response = await dio.get('https://capstone23.sit.kmutt.ac.th/ej1/api/login/guest' , queryParameters: requestParam);
+      Response response = await dio.get(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/login/guest',
+          queryParameters: requestParam);
       if (response.statusCode == 200) {
-        Login responseData = Login.fromJson(response.data);
-        return responseData; 
+        await storage.write(
+            key: "accountId",
+            value: response.data['data']['accountId'].toString());
+        return response.data;
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {
@@ -28,25 +46,25 @@ final dio = Dio();
       print("Error: $error - Stacktrace: $stacktrace");
       throw error;
     }
-    
   }
-  
 
-
-Future createAccountGuest() async {
-  
-      final storage = new FlutterSecureStorage();
-       String? imei = await storage.read(key: "imei");
-       print("imeis!! : $imei");
+  Future createAccountGuest() async {
+    final storage = new FlutterSecureStorage();
+    String? imei = await storage.read(key: "imei");
+    print("imeis!! : $imei");
     try {
       Map<String, dynamic> requestBody = {
-      "imei": imei,
-    };
-      Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/guest' , data: requestBody);
+        "imei": imei,
+      };
+      Response response = await dio.post(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/guest',
+          data: requestBody);
       if (response.statusCode == 201) {
-             await storage.write(key: "accountId", value: response.data['data']['accountId'].toString());
-          print("create successfully");
-          return response.data;
+        await storage.write(
+            key: "accountId",
+            value: response.data['data']['accountId'].toString());
+        print("create successfully");
+        return response.data;
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {
@@ -61,22 +79,21 @@ Future createAccountGuest() async {
   // Login Google
 
   static List<String> scopes = <String>[
-  'email',
-  'https://www.googleapis.com/auth/contacts.readonly',
-];
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ];
   static GoogleSignIn _googleSignIn = GoogleSignIn(
     // clientId: '232792221897-6n5d0jvhfpeacnq16s630arh3rs4k5qn.apps.googleusercontent.com',
     scopes: scopes,
   );
 
   static Future<void> handleSignIn() async {
-       final storage = new FlutterSecureStorage();
+    final storage = new FlutterSecureStorage();
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser != null) {
         print("email: ${googleUser.email}");
         storage.write(key: "email", value: googleUser.email);
-        
       }
     } catch (error) {
       print('Error signing in: $error');
@@ -86,7 +103,7 @@ Future createAccountGuest() async {
   // Logout goole
 
   static Future<void> handleSignOut() async {
-     final storage = new FlutterSecureStorage();
+    final storage = new FlutterSecureStorage();
     try {
       await _googleSignIn.disconnect();
       storage.delete(key: "email");
@@ -94,7 +111,4 @@ Future createAccountGuest() async {
       print(error);
     }
   }
-
-
-
 }

@@ -35,10 +35,11 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
-    final homePageBloc = BlocProvider(create: (context) => LoadBloc());
+    final loadBloc = BlocProvider(create: (context) => LoadBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
+
     return MultiBlocProvider(
-        providers: [walletBloc, homePageBloc , loginBloc],
+        providers: [walletBloc, loadBloc , loginBloc],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

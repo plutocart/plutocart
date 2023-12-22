@@ -8,15 +8,17 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState()) {
+    
     on<loginGuest>((event, emit) async {
-      Login response = await LoginRespository().loginGuest();
-      if (response.data.imei == "") {
+         Map<String, dynamic> response = await LoginRespository().loginGuest();
+      print("bloc id account : ${response['data']['accountId']}");
+      if (response['data']['imei'] == "") {
         throw ArgumentError("please register a guest");
       } else {
         emit(state.copyWith(
-            imei: response.data.imei,
-            accountRole: response.data.accountRole,
-            accountId: response.data.accountId));
+            imei: response['data']['imei'],
+            accountRole:response['data']['accountRole'],
+            accountId: response['data']['accountId']));
       }
     });
 

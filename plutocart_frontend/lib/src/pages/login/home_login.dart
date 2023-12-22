@@ -23,25 +23,9 @@ class _HomeLoginState extends State<HomeLogin> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
     _startOpacityAnimation();
   }
-    Future<void> initPlatformState() async {
-    String udid;
-    try {
-      udid = await FlutterUdid.consistentUdid;
-      await storage.write(key: "imei", value: udid);
-      print("udid : $udid");
-    } on Error {
-      udid = 'Failed to get UDID.';
-    }
 
-    if (!mounted) return;
-
-    setState(() {
-      _udid = udid;
-    });
-  }
 
   void _startOpacityAnimation() {
     Future.delayed(Duration(milliseconds: 300), () {

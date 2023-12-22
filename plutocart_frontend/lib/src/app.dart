@@ -42,6 +42,8 @@ class _plutocartAppState extends State<PlutocartApp> {
         builder: (context, stateLogin) {
           return BlocBuilder<LoadBloc, LoadState>(
             builder: (context, stateHomePage) {
+              print("Start1");
+                  print("Start1 : ${!stateLogin.imei.isEmpty}");
               return (!stateLogin.imei.isEmpty)
                   ? Skeletonizer(
                       enabled: stateHomePage.isLoading,
