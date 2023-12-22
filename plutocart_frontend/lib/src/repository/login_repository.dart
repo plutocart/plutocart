@@ -33,15 +33,13 @@ final dio = Dio();
   
 
 
-Future createAccountGuest(String walletName) async {
+Future createAccountGuest() async {
   
       final storage = new FlutterSecureStorage();
        String? imei = await storage.read(key: "imei");
-       print("wallet name: $walletName");
        print("imeis!! : $imei");
     try {
       Map<String, dynamic> requestBody = {
-      "userName": walletName,
       "imei": imei,
     };
       Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/guest' , data: requestBody);
@@ -78,7 +76,6 @@ Future createAccountGuest(String walletName) async {
       if (googleUser != null) {
         print("email: ${googleUser.email}");
         storage.write(key: "email", value: googleUser.email);
-        storage.write(key: "username", value: googleUser.displayName);
         
       }
     } catch (error) {
@@ -93,7 +90,6 @@ Future createAccountGuest(String walletName) async {
     try {
       await _googleSignIn.disconnect();
       storage.delete(key: "email");
-      storage.delete(key: "username");
     } catch (error) {
       print(error);
     }

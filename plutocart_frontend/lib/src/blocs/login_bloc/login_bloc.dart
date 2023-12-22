@@ -11,7 +11,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<loginGuest>((event, emit) async {
       Login response = await LoginRespository().loginGuest();
       if (response.data.imei == "") {
-        print("imeis : nooooo");
         throw ArgumentError("please register a guest");
       } else {
         emit(state.copyWith(
@@ -22,12 +21,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<createAccountGuest>((event, emit) async {
-      Map<String, dynamic> response = await LoginRespository().createAccountGuest(event.userName);
+      Map<String, dynamic> response = await LoginRespository().createAccountGuest();
       if (response.isEmpty) {
         throw ArgumentError("haven't number imei");
       } else {
         emit(state.copyWith(
-            userName: event.userName, accountId: response['data']['accountId']));
+             accountId: response['data']['accountId']));
       }
     });
   }

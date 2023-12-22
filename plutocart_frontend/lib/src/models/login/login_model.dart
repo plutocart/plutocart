@@ -30,14 +30,12 @@ class Login {
 
 class Data {
     int accountId;
-    String userName;
     String imei;
     dynamic email;
     String accountRole;
 
     Data({
         required this.accountId,
-        required this.userName,
         required this.imei,
         required this.email,
         required this.accountRole,
@@ -45,7 +43,6 @@ class Data {
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
         accountId: json["accountId"],
-        userName: json["userName"],
         imei: json["imei"],
         email: json["email"],
         accountRole: json["accountRole"],
@@ -53,7 +50,6 @@ class Data {
 
     Map<String, dynamic> toJson() => {
         "accountId": accountId,
-        "userName": userName,
         "imei": imei,
         "email": email,
         "accountRole": accountRole,

@@ -23,7 +23,7 @@ class _HomeLoginState extends State<HomeLogin> {
   @override
   void initState() {
     super.initState();
-        initPlatformState();
+    initPlatformState();
     _startOpacityAnimation();
   }
     Future<void> initPlatformState() async {
@@ -176,27 +176,6 @@ class _HomeLoginState extends State<HomeLogin> {
                     ],
                   ),
                 ),
-                // TextButton(
-                //   onPressed: () {},
-                //   style: TextButton.styleFrom(
-                //     foregroundColor: Colors.transparent,
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(20.0),
-                //     ),
-                //     alignment: Alignment(1, 2),
-                //   ),
-                //   child: Text(
-                //     'Try using it without registration.',
-                //     textAlign: TextAlign.center,
-                //     style: TextStyle(
-                //       decoration: TextDecoration.underline,
-                //       color: Colors.black,
-                //       fontSize: 14,
-                //       fontFamily: 'Roboto',
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //   ),
-                // ),
                 AnimatedOpacity(
                   opacity: opacityLastContainer,
                   duration: Duration(milliseconds: 500),

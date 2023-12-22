@@ -12,8 +12,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController _userNameAccountController =
-      new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,114 +56,58 @@ class _SignUpState extends State<SignUp> {
         SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.05,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: TextField(
-            maxLength: 25,
-            controller: _userNameAccountController,
-            decoration: InputDecoration(
-              labelText: "Username",
-              labelStyle: TextStyle(
-                color: _userNameAccountController.text.length > 1
-                    ? Color(0xFF15616D)
-                    : Colors.red, // Change the label text color to red
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 2,
-                    color: _userNameAccountController.text.length > 1
-                        ? Color(0xFF15616D)
-                        : Colors.red), // Change border color when active
-                borderRadius: BorderRadius.circular(16),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: _userNameAccountController.text.length > 1
-                        ? Color(0xFF15616D)
-                        : Colors.red), // Border color when inactive
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            keyboardType: TextInputType.text,
-            style: TextStyle(
-              color: Color(0xFF1A9CB0),
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,
-            ),
-            onChanged: (value) {
-              setState(
-                  () {}); // ใช้ setState เพื่อ rebuild widget tree เมื่อข้อมูลเปลี่ยนแปลง
-            },
-          ),
-        ),
         BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: _userNameAccountController.text.length > 0
-                    ? Color(0xFF15616D)
-                    : Colors.transparent,
+                backgroundColor: Color(0xFF15616D),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: _userNameAccountController.text.length > 0
-                        ? Color(0xFF15616D)
-                        : Colors.transparent,
-                  ),
+                  side: BorderSide(color: Color(0xFF15616D)),
                 ),
               ),
-              onPressed: _userNameAccountController.text.length > 0
-                  ? () async {
-                      if (_userNameAccountController.text.length > 0) {
-                        context.read<LoginBloc>().add(createAccountGuest(
-                            _userNameAccountController.text));
-                        FocusScope.of(context).unfocus();
+              onPressed: () async {
+                context.read<LoginBloc>().add(createAccountGuest());
+                FocusScope.of(context).unfocus();
 
-                        // Show the AlertDialog
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(height: 20),
-                                  Text('Loading...'),
-                                ],
-                              ),
-                            );
-                          },
-                        );
+                // Show the AlertDialog
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                          Text('Loading...'),
+                        ],
+                      ),
+                    );
+                  },
+                );
 
-                        await Future.delayed(
-                            Duration(seconds: 1)); // Wait for 3 seconds
+                await Future.delayed(
+                    Duration(seconds: 1)); // Wait for 3 seconds
 
-                        // Check if the dialog is still open
-                        if (Navigator.of(context, rootNavigator: true)
-                            .canPop()) {
-                          Navigator.of(context, rootNavigator: true)
-                              .pop(); // Dismiss the AlertDialog
-                        }
+                // Check if the dialog is still open
+                if (Navigator.of(context, rootNavigator: true).canPop()) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop(); // Dismiss the AlertDialog
+                }
 
-                        // Navigate to the home screen
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          AppRoute.app,
-                          (route) => false,
-                        );
-                      }
-                    }
-                  : null,
+                // Navigate to the home screen
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoute.app,
+                  (route) => false,
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  _userNameAccountController.text.length > 0
-                      ? "Continue As Guest"
-                      : "Please input username",
+                  "Continue As Guest",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -189,17 +131,16 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20 , right: 20 , top: 10),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
               onPressed: () {
-               GoogleSignInService.handleSignIn();
+                GoogleSignInService.handleSignIn();
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
