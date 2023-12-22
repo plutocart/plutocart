@@ -24,7 +24,7 @@ public class AccountService {
         GenericResponse response = new GenericResponse();
        try {
            String imE = imeiEncryption.encryptIMEI(accountDTO.getImei());
-           accountRepository.CreateAccountByImei(accountDTO.getUserName() , imE);
+           accountRepository.CreateAccountByImei(imE);
            Account account = accountRepository.getAccountByImeiAndRole(imE , 1);
            accountDTO.setImei(imE);
            accountDTO.setAccountRole(account.getAccountRole());
@@ -44,7 +44,7 @@ public class AccountService {
         GenericResponse response = new GenericResponse();
         try {
             String imE = imeiEncryption.encryptIMEI(accountDTO.getImei());
-            accountRepository.CreateAccountByGoogle(accountDTO.getUserName() , imE , accountDTO.getEmail());
+            accountRepository.CreateAccountByGoogle(imE , accountDTO.getEmail());
             Account account = accountRepository.getAccountByGoogleAndRole(accountDTO.getEmail() , 2);
             accountDTO.setImei(imE);
             accountDTO.setEmail(accountDTO.getEmail());

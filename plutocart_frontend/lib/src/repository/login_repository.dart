@@ -72,10 +72,13 @@ Future createAccountGuest(String walletName) async {
   );
 
   static Future<void> handleSignIn() async {
+       final storage = new FlutterSecureStorage();
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser != null) {
         print("email: ${googleUser.email}");
+        storage.write(key: "email", value: googleUser.email);
+        storage.write(key: "username", value: googleUser.displayName);
         
       }
     } catch (error) {
@@ -86,8 +89,11 @@ Future createAccountGuest(String walletName) async {
   // Logout goole
 
   static Future<void> handleSignOut() async {
+     final storage = new FlutterSecureStorage();
     try {
       await _googleSignIn.disconnect();
+      storage.delete(key: "email");
+      storage.delete(key: "username");
     } catch (error) {
       print(error);
     }

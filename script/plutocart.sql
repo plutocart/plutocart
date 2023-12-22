@@ -158,7 +158,7 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-insert into account (id_account , user_name , imei , email  , account_role) values(1 , 'admin' , 'admin_imei' , 'admin@gmail.com'  , 2);
+insert into account (id_account  , imei , email  , account_role) values(1 , 'admin_imei' , 'admin@gmail.com'  , 2);
 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(1 , 'Salary' , 1 , 'https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856731/category_images/Icon-%E0%B9%80%E0%B8%87%E0%B8%B4%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%B7%E0%B8%AD%E0%B8%99.png'); 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(2 , 'Pocket money' , 1 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700856978/category_images/Icon-%E0%B8%A5%E0%B8%87%E0%B8%97%E0%B8%B8%E0%B8%99.png"); 
@@ -458,7 +458,7 @@ DELIMITER ;
 -- create account guest by use imei
 DELIMITER //
 
-CREATE  PROCEDURE `createAccountByImei`(IN inUserName VARCHAR(45), IN InImei VARCHAR(200))
+CREATE  PROCEDURE `createAccountByImei`(IN InImei VARCHAR(200))
 BEGIN
     DECLARE countAccounts INT;
 
@@ -467,15 +467,16 @@ BEGIN
     IF countAccounts >= 1 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
     ELSE
-        INSERT INTO account (user_name, imei, email, account_role)
-        VALUES (inUserName, InImei, null, DEFAULT);
+        INSERT INTO account (imei, email, account_role)
+        VALUES ( InImei, null, DEFAULT);
     END IF;
     SET countAccounts = 0;
 END //
 DELIMITER ;
 
 -- create account customer by Google account
-CREATE  PROCEDURE `createAccountByGoogle`(IN inUserName VARCHAR(45), IN InImei VARCHAR(200) , in InEmail VARCHAR(50))
+DELIMITER //
+CREATE  PROCEDURE `createAccountByGoogle`( IN InImei VARCHAR(200) , in InEmail VARCHAR(50))
 BEGIN
     DECLARE countAccounts INT;
 
@@ -484,8 +485,8 @@ BEGIN
     IF countAccounts >= 1 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not register becuase account same imei and account role';
     ELSE
-        INSERT INTO account (user_name, imei, email, account_role)
-        VALUES (inUserName, InImei, InEmail, 2);
+        INSERT INTO account (imei, email, account_role)
+        VALUES (InImei, InEmail, 2);
     END IF;
     SET countAccounts = 0;
 END //

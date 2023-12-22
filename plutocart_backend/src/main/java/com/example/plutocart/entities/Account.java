@@ -18,9 +18,6 @@ public class Account {
     @Column(name = "id_account", nullable = false)
     private Integer accountId;
 
-    @Column(name = "user_name", nullable = false, length = 45)
-    private String userName;
-
     @Column(name = "imei", nullable = false, length = 200)
     private String imei;
 
