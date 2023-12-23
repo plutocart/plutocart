@@ -6,12 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
 void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([
@@ -35,11 +35,10 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
-    final loadBloc = BlocProvider(create: (context) => LoadBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
 
     return MultiBlocProvider(
-        providers: [walletBloc, loadBloc , loginBloc],
+        providers: [walletBloc , loginBloc],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

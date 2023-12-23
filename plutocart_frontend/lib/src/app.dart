@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
 import 'package:plutocart/src/models/helper.dart';
@@ -28,7 +28,6 @@ class _plutocartAppState extends State<PlutocartApp> {
   @override
   void initState()  {
     super.initState();
-    context.read<LoadBloc>().add(LoadingHomePage());
     context.read<LoginBloc>().add(loginGuest());
   }
 
@@ -40,13 +39,12 @@ class _plutocartAppState extends State<PlutocartApp> {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
-          return BlocBuilder<LoadBloc, LoadState>(
-            builder: (context, stateHomePage) {
-              print("Start1");
+          return BlocBuilder<WalletBloc, WalletState>(
+            builder: (context, walletState) {
                   print("Start1 : ${!stateLogin.imei.isEmpty}");
               return (!stateLogin.imei.isEmpty)
                   ? Skeletonizer(
-                      enabled: stateHomePage.isLoading,
+                      enabled: walletState.status == WalletStatus.loading,
                       effect:
                           ShimmerEffect(duration: Duration(microseconds: 300)),
                       child: Stack(

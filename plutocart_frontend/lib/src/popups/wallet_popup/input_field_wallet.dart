@@ -107,6 +107,21 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               fontWeight: FontWeight.w400,
             ),
             onChanged: (value) {
+               if (value.contains('.') &&
+                  value.indexOf('.') != value.lastIndexOf('.')) {
+                // If there's more than one decimal point, remove the extra one
+                widget.amountMoneyController.text =
+                    value.substring(0, value.lastIndexOf('.'));
+              } else if (value.contains('.') &&
+                  value.substring(value.indexOf('.') + 1).length > 2) {
+                // If there's a decimal point and more than two digits after it, limit to two digits
+                widget.amountMoneyController.text =
+                    value.substring(0, value.indexOf('.') + 3);
+              } else if (value.length == 10 && !value.contains('.')) {
+                // If no decimal point and total length is 10 characters, prevent further input
+                widget.amountMoneyController.text =
+                    value.substring(0, value.length - 1);
+              }
               setState(() {
                 
               });

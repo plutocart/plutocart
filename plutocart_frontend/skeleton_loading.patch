@@ -1,0 +1,268 @@
+diff --git forkSrcPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_bloc.dart forkDstPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_bloc.dart
+index 186cb81e7e5bbf24266436b1ddc29801e63393b3..59cb1a7adbcb1331e36d6acbe733ea1c5328447a 100644
+--- forkSrcPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_bloc.dart
++++ forkDstPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_bloc.dart
+@@ -8,8 +8,7 @@ part 'wallet_event.dart';
+ part 'wallet_state.dart';
+ 
+ class WalletBloc extends Bloc<WalletEvent, WalletState> {
+-
+-final swiperController = SwiperController();
++  final swiperController = SwiperController();
+ 
+   WalletBloc() : super(WalletState()) {
+     on<MapEventToState>((event, emit) {
+@@ -19,15 +18,13 @@ final swiperController = SwiperController();
+           walletBalance: event.walletBalance,
+           walletStatus: event.walletStatus));
+     });
+-    
+ 
+     on<OnIndexChanged>((event, emit) {
+       emit(state.copyWith(currentColossalIndex: event.index));
+     });
+ 
+     on<CreateWallet>((event, emit) async {
+-      Map<String, dynamic> response = await walletRepository()
+-          .createWallet( event.walletName, event.walletBalance);
++      Map<String, dynamic> response = await walletRepository().createWallet(event.walletName, event.walletBalance);
+       Wallet wallet = new Wallet(
+           walletId: response["walletId"],
+           walletBalance: event.walletBalance,
+@@ -36,23 +33,21 @@ final swiperController = SwiperController();
+       if (response.isNotEmpty) {
+         List<Wallet> responseWallet = [...state.wallets];
+         responseWallet.add(wallet);
+-        emit(state.copyWith(
+-            wallets: responseWallet));
+-            List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
+-            swiperController.move(walletList.length - 1);
++        emit(state.copyWith(wallets: responseWallet));
++        List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
++        swiperController.move(walletList.length - 1);
+       }
+     });
+ 
+     on<DeleteWallet>((event, emit) async {
+       try {
+-        await walletRepository()
+-            .deleteWalletById(event.walletId);
++        await walletRepository().deleteWalletById(event.walletId);
+         final List<Wallet> newListWallet = [...state.wallets];
+-        newListWallet
+-            .removeWhere((element) => element.walletId == event.walletId);
++        newListWallet.removeWhere((element) => element.walletId == event.walletId);
+         emit(state.copyWith(
+-            wallets: newListWallet,));
+-            swiperController.move(newListWallet.length - 1);
++          wallets: newListWallet,
++        ));
++        swiperController.move(newListWallet.length - 1);
+       } catch (error) {
+         print("Error: $error");
+         throw error;
+@@ -83,7 +78,7 @@ final swiperController = SwiperController();
+           newListWallet.replaceRange(index, index + 1, [wallet]);
+ 
+           emit(state.copyWith(wallets: newListWallet));
+-            swiperController.move(state.currentColossalIndex);
++          swiperController.move(state.currentColossalIndex);
+         } else {
+           throw ArgumentError('Wallet update failed.');
+         }
+@@ -95,27 +90,25 @@ final swiperController = SwiperController();
+     });
+ 
+     on<UpdateStatusWallet>((event, emit) async {
+-            List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
++      List<Wallet> walletList = state.wallets.where((element) => element.statusWallet == 1).toList();
+       try {
+         final int index = state.currentColossalIndex == state.wallets.length
+             ? state.currentColossalIndex - 1
+             : state.currentColossalIndex;
+-        Wallet response = await walletRepository()
+-            .updateStatusWallet(event.walletId);
++        Wallet response = await walletRepository().updateStatusWallet(event.walletId);
+         List<Wallet> responseWallet = [...state.wallets];
+-        int indexWallet = responseWallet
+-            .indexWhere((element) => element.walletId == event.walletId);
++        int indexWallet = responseWallet.indexWhere((element) => element.walletId == event.walletId);
+         responseWallet.replaceRange(indexWallet, indexWallet + 1, [
+           Wallet(
+-              walletName: responseWallet[indexWallet].walletName,
+-              walletBalance: responseWallet[indexWallet].walletBalance,
+-              statusWallet: event.walletStatus,
+-              walletId: event.walletId,)
++            walletName: responseWallet[indexWallet].walletName,
++            walletBalance: responseWallet[indexWallet].walletBalance,
++            statusWallet: event.walletStatus,
++            walletId: event.walletId,
++          )
+         ]);
+         if (response != null) {
+-          emit(state.copyWith(
+-              wallets: responseWallet, currentColossalIndex: index));
+-                swiperController.move(state.currentColossalIndex - walletList.length -1 == 0 ? 1 : 0 );
++          emit(state.copyWith(wallets: responseWallet, currentColossalIndex: index));
++          swiperController.move(state.currentColossalIndex - walletList.length - 1 == 0 ? 1 : 0);
+         } else {
+           throw ArgumentError('Wallet update failed.');
+         }
+@@ -126,7 +119,7 @@ final swiperController = SwiperController();
+     });
+ 
+     on<GetAllWallet>((event, emit) async {
+-      List<dynamic> response =await walletRepository().getWalletAll();
++      List<dynamic> response = await walletRepository().getWalletAll();
+       if (response.isEmpty) {
+         throw ArgumentError("Wallet not found");
+       } else {
+@@ -134,20 +127,21 @@ final swiperController = SwiperController();
+           response.where((element) => element['statusWallet'] == 1).toList();
+         }
+         emit(state.copyWith(
+-            wallets: response.map((walletData) {
+-          return Wallet(
++          wallets: response.map((walletData) {
++            return Wallet(
+               walletId: walletData['walletId'],
+               walletName: walletData['walletName'],
+               statusWallet: walletData['statusWallet'],
+-              walletBalance: walletData['walletBalance']);
+-        }).toList()));
+-        
++              walletBalance: walletData['walletBalance'],
++            );
++          }).toList(),
++          status: WalletStatus.loaded
++        ));
+       }
+     });
+-    
++
+     on<GetAllWalletOpenStatus>((event, emit) async {
+-      List<dynamic> response =
+-          await walletRepository().getWalletAllStatusOn();
++      List<dynamic> response = await walletRepository().getWalletAllStatusOn();
+       if (response.isEmpty) {
+         return;
+       } else {
+diff --git forkSrcPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_state.dart forkDstPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_state.dart
+index 0128dc51472b54216c0f3986816683422fd9e141..5a256c7182b2fa831360cc98f2def56a8cff1c8b 100644
+--- forkSrcPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_state.dart
++++ forkDstPrefix/plutocart_frontend/lib/src/blocs/wallet_bloc/bloc/wallet_state.dart
+@@ -1,6 +1,9 @@
+ part of 'wallet_bloc.dart';
+ 
++enum WalletStatus { loading, loaded }
++
+ class WalletState extends Equatable {
++  final WalletStatus status;
+   final String walletName;
+   final double dailyExpense;
+   final double dailyIncome;
+@@ -9,38 +12,52 @@ class WalletState extends Equatable {
+   final List<Wallet> wallets;
+   final int walletId;
+   final int currentColossalIndex;
+-  const WalletState(
+-      {this.walletName = "",
+-      this.dailyExpense = 0.0,
+-      this.dailyIncome = 0.0,
+-      this.walletBalance = 0.0,
+-      this.walletStatus = 1,
+-      this.wallets = const [],
+-      this.walletId = 1 , 
+-      this.currentColossalIndex = 0});
++  const WalletState({
++    this.status = WalletStatus.loading,
++    this.walletName = "",
++    this.dailyExpense = 0.0,
++    this.dailyIncome = 0.0,
++    this.walletBalance = 0.0,
++    this.walletStatus = 1,
++    this.wallets = const [],
++    this.walletId = 1,
++    this.currentColossalIndex = 0,
++  });
+ 
+-  WalletState copyWith(
+-      {String? walletName,
+-      double? dailyExpense,
+-      double? dailyIncome,
+-      double? walletBalance,
+-      int? walletStatus,
+-      bool? hightPopupActive,
+-      List<Wallet>? wallets ,
+-      int? walletId , int? currentColossalIndex}) {
++  WalletState copyWith({
++    WalletStatus? status,
++    String? walletName,
++    double? dailyExpense,
++    double? dailyIncome,
++    double? walletBalance,
++    int? walletStatus,
++    bool? hightPopupActive,
++    List<Wallet>? wallets,
++    int? walletId,
++    int? currentColossalIndex,
++  }) {
+     return WalletState(
++        status: status ?? this.status,
+         walletName: walletName ?? this.walletName,
+         dailyExpense: dailyExpense ?? this.dailyExpense,
+         dailyIncome: dailyIncome ?? this.dailyIncome,
+         walletBalance: walletBalance ?? this.walletBalance,
+         walletStatus: walletStatus ?? this.walletStatus,
+         wallets: wallets ?? this.wallets,
+-        walletId: walletId?? this.walletId , 
+-        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex );
++        walletId: walletId ?? this.walletId,
++        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex);
+   }
+ 
+-
+   @override
+-  List<Object> get props =>
+-      [walletName, dailyExpense, dailyIncome, walletBalance, walletStatus , wallets , walletId , currentColossalIndex];
++  List<Object> get props => [
++        status,
++        walletName,
++        dailyExpense,
++        dailyIncome,
++        walletBalance,
++        walletStatus,
++        wallets,
++        walletId,
++        currentColossalIndex
++      ];
+ }
+diff --git forkSrcPrefix/plutocart_frontend/lib/src/app.dart forkDstPrefix/plutocart_frontend/lib/src/app.dart
+index 4230e681e25323a90da8df3ec618599385ab0c39..80fb538f62cbb351ba38a036e1269c520c9017bf 100644
+--- forkSrcPrefix/plutocart_frontend/lib/src/app.dart
++++ forkDstPrefix/plutocart_frontend/lib/src/app.dart
+@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_bloc/flutter_bloc.dart';
+ import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
+ import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
++import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+ import 'package:plutocart/src/models/bottom_navigator_bar.dart';
+ import 'package:plutocart/src/models/button_transaction.dart';
+ import 'package:plutocart/src/models/helper.dart';
+@@ -40,13 +41,13 @@ class _plutocartAppState extends State<PlutocartApp> {
+       debugShowCheckedModeBanner: false,
+       home: BlocBuilder<LoginBloc, LoginState>(
+         builder: (context, stateLogin) {
+-          return BlocBuilder<LoadBloc, LoadState>(
+-            builder: (context, stateHomePage) {
++          return BlocBuilder<WalletBloc, WalletState>(
++            builder: (context, walletState) {
+               print("Start1");
+                   print("Start1 : ${!stateLogin.imei.isEmpty}");
+               return (!stateLogin.imei.isEmpty)
+                   ? Skeletonizer(
+-                      enabled: stateHomePage.isLoading,
++                      enabled: walletState.status == WalletStatus.loading,
+                       effect:
+                           ShimmerEffect(duration: Duration(microseconds: 300)),
+                       child: Stack(

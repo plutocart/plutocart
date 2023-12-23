@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -28,19 +27,19 @@ class _CardGroupState extends State<CardGroup> {
           ),
         ),
         child: Skeleton.ignorePointer(
-          child: BlocBuilder<LoadBloc, LoadState>(
+          child: BlocBuilder<WalletBloc, WalletState>(
             builder: (context, state) {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.13,
                 decoration: ShapeDecoration(
-                  color: state.isLoading == true
+                  color: state.status == WalletStatus.loading
                           ? Colors.grey.shade100
                           : Colors.white,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       width: 1.3,
                       strokeAlign: BorderSide.strokeAlignInside,
-                      color: state.isLoading == true
+                      color: state.status == WalletStatus.loading
                           ? Colors.white
                           : Color(0xFF1A9CB0),
                     ),

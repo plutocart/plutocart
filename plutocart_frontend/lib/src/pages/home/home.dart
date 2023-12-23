@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/home_page_bloc/bloc/load_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/home/component_home/card_group.dart';
 import 'package:plutocart/src/pages/home/component_home/card_wallet.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,9 +40,7 @@ class _HomePageState extends State<HomePage> {
         ),
         elevation: 0,
       ),
-      body: BlocBuilder<LoadBloc, LoadState>(
-        builder: (context, state) {
-          return SingleChildScrollView(
+      body: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -64,9 +58,8 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-          );
-        },
-      ),
+          )
+      
     );
   }
 }
