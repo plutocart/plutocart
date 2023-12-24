@@ -9,6 +9,7 @@ import 'package:plutocart/src/pages/login/home_login.dart';
 class LoginRespository {
   final dio = Dio();
   String _udid = 'Unknown';
+  String email = "Unknown";
   final storage = new FlutterSecureStorage();
   Future<void> initPlatformState() async {
     String udid;
@@ -76,11 +77,16 @@ class LoginRespository {
     }
   }
 
+
+
+
   
 Future loginCustomer() async {
     await initPlatformState();
     String? imei = await storage.read(key: "imei");
     String? email = await storage.read(key: "email");
+    print("login successfully : $imei");
+    print("login successfully : $email ");
     Map<String, dynamic> requestParam = {"imei": imei, "email": email};
     try {
       Response response = await dio.get(
@@ -104,7 +110,9 @@ Future loginCustomer() async {
 
   Future createAccountCustomer() async {
     final storage = new FlutterSecureStorage();
-    handleSignIn();
+    await _googleSignIn.signOut();
+    await  storage.delete(key: "email");
+    await handleSignIn();
     String? imei = await storage.read(key: "imei");
     String? email = await storage.read(key: "email");
      print("email2 : ${imei}");
@@ -144,7 +152,6 @@ Future loginCustomer() async {
   static Future<void> handleSignIn() async {
     final storage = new FlutterSecureStorage();
     try {
-      handleSignOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser != null) {
         print("email: ${googleUser.email}");

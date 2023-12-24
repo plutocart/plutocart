@@ -45,29 +45,34 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         accountId: response['data']['accountId'],
         email: response['data']['email'],
         imei: response['data']['imei'],
+        hasAccountCustomer: true
       ));
       print("starto1 : ${LoginState().email}");
     }
   } catch (error) {
     // Handle the error here
     print('Error during account creation: $error');
-    // You can emit an error state or perform other error handling as needed
-    // emit(ErrorState()); // Example of emitting an error state in Bloc/Cubit
   }
 });
 
 
-     on<loginCustomer>((event, emit) async {
-         Map<String, dynamic> response = await LoginRespository().loginCustomer();
-      if (response['data']['imei'] == "" && response['data']['email'] == "") {
-        throw ArgumentError("please register a guest");
-      } else {
-        emit(state.copyWith(
-            imei: response['data']['imei'],
-            email: response['data']['email'],
-            accountRole:response['data']['accountRole'],
-            accountId: response['data']['accountId']));
-      }
-    });
+  on<loginCustomer>((event, emit) async {
+  Map<String, dynamic> response = await LoginRespository().loginCustomer();
+  if (response['data'] == null ||
+      response['data']['imei'] == null ||
+      response['data']['email'] == null ||
+      response['data']['imei'] == "" ||
+      response['data']['email'] == "") {
+    throw ArgumentError("Please register as a guest.");
+  } else {
+    emit(state.copyWith(
+      imei: response['data']['imei'],
+      email: response['data']['email'],
+      accountRole: response['data']['accountRole'],
+      accountId: response['data']['accountId'],
+    ));
+  }
+});
+
   }
 }

@@ -27,15 +27,15 @@ class _plutocartAppState extends State<PlutocartApp> {
   @override
   void initState()  {
     super.initState();
+    context.read<LoginBloc>().add(loginCustomer());
     context.read<LoginBloc>().add(loginGuest());
-    
   }
 
+    
 
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
@@ -46,7 +46,7 @@ class _plutocartAppState extends State<PlutocartApp> {
                     print("Start1.2 : ${!stateLogin.email.isEmpty}");
                     print("Start1.2.3  ${stateLogin.email}");
                       print("Start1.2.4  ${stateLogin.imei}");
-              return (!stateLogin.imei.isEmpty || !stateLogin.email.isEmpty)
+              return (!stateLogin.imei.isEmpty ||   !stateLogin.imei.isEmpty)
                   ? Skeletonizer(
                       enabled: walletState.status == WalletStatus.loading,
                       effect:

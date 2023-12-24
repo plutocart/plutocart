@@ -139,41 +139,44 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               onPressed: () async {
-                context.read<LoginBloc>().add(createAccountCustomer());
-                FocusScope.of(context).unfocus();
-                // Show the AlertDialog
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 20),
-                          Text('Loading...'),
-                        ],
-                      ),
-                    );
-                  },
-                );
+                if (LoginState().hasAccountCustomer == false) {
+                  context.read<LoginBloc>().add(createAccountCustomer());
+                  FocusScope.of(context).unfocus();
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 20),
+                            Text('Loading...'),
+                          ],
+                        ),
+                      );
+                    },
+                  );
 
-                await Future.delayed(
-                    Duration(seconds: 1)); // Wait for 3 seconds
+                  await Future.delayed(
+                      Duration(seconds: 1)); // Wait for 3 seconds
 
-                // Check if the dialog is still open
-                if (Navigator.of(context, rootNavigator: true).canPop()) {
-                  Navigator.of(context, rootNavigator: true)
-                      .pop(); // Dismiss the AlertDialog
+                  // Check if the dialog is still open
+                  if (Navigator.of(context, rootNavigator: true).canPop()) {
+                    Navigator.of(context, rootNavigator: true)
+                        .pop(); // Dismiss the AlertDialog
+                  }
+
+                  // Navigate to the home screen
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoute.app,
+                    (route) => false,
+                  );
+                } else {
+                  customSignUpPopup(context, "Can't register it");
                 }
-
-                // Navigate to the home screen
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoute.app,
-                  (route) => false,
-                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -201,6 +204,52 @@ class _SignUpState extends State<SignUp> {
               )),
         ),
       ]),
+    );
+  }
+
+  void customSignUpPopup(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            margin: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
