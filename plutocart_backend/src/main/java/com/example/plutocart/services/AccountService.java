@@ -43,16 +43,19 @@ public class AccountService {
         IMEIEncryption imeiEncryption = new IMEIEncryption();
         GenericResponse response = new GenericResponse();
         try {
-            String imE = imeiEncryption.encryptIMEI(accountDTO.getImei());
-            accountRepository.CreateAccountByGoogle(imE , accountDTO.getEmail());
-            Account account = accountRepository.getAccountByGoogleAndRole(accountDTO.getEmail() , 2);
-            accountDTO.setImei(imE);
-            accountDTO.setEmail(accountDTO.getEmail());
-            accountDTO.setAccountRole(account.getAccountRole());
-            accountDTO.setAccountId(account.getAccountId());
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(accountDTO);
-            return response;
+            if(accountDTO.getEmail() != null){
+                String imE = imeiEncryption.encryptIMEI(accountDTO.getImei());
+                accountRepository.CreateAccountByGoogle(imE , accountDTO.getEmail());
+                Account account = accountRepository.getAccountByGoogleAndRole(accountDTO.getEmail() , 2);
+                accountDTO.setImei(imE);
+                accountDTO.setEmail(accountDTO.getEmail());
+                accountDTO.setAccountRole(account.getAccountRole());
+                accountDTO.setAccountId(account.getAccountId());
+                response.setStatus(ResultCode.SUCCESS);
+                response.setData(accountDTO);
+                return response;
+            }
+
         }
         catch (Exception ex){
             response.setStatus(ResultCode.BAD_REQUEST);

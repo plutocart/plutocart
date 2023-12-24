@@ -20,7 +20,7 @@ public class Account {
 
     @Column(name = "imei", nullable = false, length = 200)
     private String imei;
-
+    @Email
     @Column(name = "email", length = 50)
     private String email;
     @Lob

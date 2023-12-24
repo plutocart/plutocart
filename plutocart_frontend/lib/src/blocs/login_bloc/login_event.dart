@@ -8,8 +8,12 @@ abstract class LoginEvent extends Equatable {
 
   class loginGuest extends LoginEvent{
   }
-
+ class loginCustomer extends LoginEvent{
+  }
   class createAccountGuest extends LoginEvent{
+  }
+
+    class createAccountCustomer extends LoginEvent{
   }
 
   

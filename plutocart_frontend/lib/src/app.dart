@@ -22,19 +22,20 @@ class PlutocartApp extends StatefulWidget {
 }
 
 class _plutocartAppState extends State<PlutocartApp> {
-  final storage = new FlutterSecureStorage();
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
   @override
   void initState()  {
     super.initState();
     context.read<LoginBloc>().add(loginGuest());
+    
   }
 
 
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
@@ -42,7 +43,10 @@ class _plutocartAppState extends State<PlutocartApp> {
           return BlocBuilder<WalletBloc, WalletState>(
             builder: (context, walletState) {
                   print("Start1 : ${!stateLogin.imei.isEmpty}");
-              return (!stateLogin.imei.isEmpty)
+                    print("Start1.2 : ${!stateLogin.email.isEmpty}");
+                    print("Start1.2.3  ${stateLogin.email}");
+                      print("Start1.2.4  ${stateLogin.imei}");
+              return (!stateLogin.imei.isEmpty || !stateLogin.email.isEmpty)
                   ? Skeletonizer(
                       enabled: walletState.status == WalletStatus.loading,
                       effect:

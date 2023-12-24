@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
-import 'package:plutocart/src/pages/login/google_login.dart';
+import 'package:plutocart/src/repository/login_repository.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class SignUp extends StatefulWidget {
@@ -69,7 +69,6 @@ class _SignUpState extends State<SignUp> {
               onPressed: () async {
                 context.read<LoginBloc>().add(createAccountGuest());
                 FocusScope.of(context).unfocus();
-
                 // Show the AlertDialog
                 showDialog(
                   context: context,
@@ -139,8 +138,42 @@ class _SignUpState extends State<SignUp> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              onPressed: () {
-                GoogleSignInService.handleSignIn();
+              onPressed: () async {
+                context.read<LoginBloc>().add(createAccountCustomer());
+                FocusScope.of(context).unfocus();
+                // Show the AlertDialog
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                          Text('Loading...'),
+                        ],
+                      ),
+                    );
+                  },
+                );
+
+                await Future.delayed(
+                    Duration(seconds: 1)); // Wait for 3 seconds
+
+                // Check if the dialog is still open
+                if (Navigator.of(context, rootNavigator: true).canPop()) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop(); // Dismiss the AlertDialog
+                }
+
+                // Navigate to the home screen
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoute.app,
+                  (route) => false,
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
