@@ -113,7 +113,7 @@ class _HomeLoginState extends State<HomeLogin> {
                             messageButtonGuest: 'Continue As Guest',
                             messageButtonGoogle: " Sign In With Google",
                             signInGuest: LoginGuest(),
-                            signInCustomer: LoginCustomer(),
+                            signInCustomer: loginEmailGoole(),
                           )));
                         },
                         style: ElevatedButton.styleFrom(

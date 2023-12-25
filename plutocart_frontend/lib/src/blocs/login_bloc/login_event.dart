@@ -10,6 +10,10 @@ abstract class LoginEvent extends Equatable {
   }
  class LoginCustomer extends LoginEvent{
   }
+
+class loginEmailGoole extends LoginEvent{
+  
+}
   class CreateAccountGuest extends LoginEvent{
   }
 

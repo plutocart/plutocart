@@ -92,7 +92,7 @@ class LoginRepository {
       throw error;
     }
   }
-  
+
 
   Future<Map<String, dynamic>> createAccountCustomer() async {
     await _googleSignIn.signOut();
@@ -121,12 +121,40 @@ class LoginRepository {
       throw error;
     }
   }
+Future<Map<String, dynamic>> loginEmailGoogle() async {
+    await _googleSignIn.signOut();
+    await storage.delete(key: "email");
+    await handleSignIn();
+    String? imei = await storage.read(key: "imei");
+    String? email = await storage.read(key: "email");
+
+    try {
+          Response response = await dio.get(
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/customer',
+        queryParameters: {"imei": imei, "email": email},
+      );
+
+      if (response.statusCode == 200) {
+        await storage.write( key: "accountId", value: response.data['data']['accountId'].toString(),
+        );
+        return response.data;
+      } else {
+        throw Exception('Error: ${'404'}');
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw error;
+    }
+  }
+
+
 
   static GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
+    
   );
 
   static Future<void> handleSignIn() async {

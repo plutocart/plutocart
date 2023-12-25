@@ -60,6 +60,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
+
+        on<loginEmailGoole>((event, emit) async {
+      try {
+        Map<String, dynamic> response =
+            await LoginRepository().loginEmailGoogle();
+        print("starto1 : ${response['data']['email']}");
+        print("starto1 : ${response['data']['imei']}");
+        if (response.isEmpty) {
+            emit(state.copyWith(hasAccountCustomer: false));
+        } else {
+          emit(state.copyWith(
+            accountId: response['data']['accountId'],
+            email: response['data']['email'],
+            imei: response['data']['imei'],
+            hasAccountCustomer: true,
+          ));
+        }
+      } catch (error) {
+        print('Error during account creation: $error');
+      }
+    });
+
+    
+
    on<LoginCustomer>((event, emit) async {
   try {
     print("login customer : ");

@@ -11,7 +11,7 @@ class LoginInUp extends StatefulWidget {
   final String? messageButtonGuest;
   final String? messageButtonGoogle;
   final LoginGuest? signInGuest;
-  final LoginCustomer? signInCustomer;
+  final loginEmailGoole? signInCustomer;
   final CreateAccountGuest? signUpGuest;
   final CreateAccountCustomer? signUpCustomer;
   final String? signInOrUp;
