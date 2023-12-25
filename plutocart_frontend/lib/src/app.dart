@@ -35,7 +35,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
-          if (stateLogin.imei.isNotEmpty || stateLogin.email.isNotEmpty) {
+          if (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) {
             _isLoginComplete = true;
           } else {
             _isLoginComplete = false;

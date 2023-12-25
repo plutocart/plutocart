@@ -18,7 +18,7 @@ class LoginState extends Equatable {
       String? userName,
       String? email,
   
-      bool? hasAccountCustomer , bool? clickSignUp}) {
+       bool? clickSignUp}) {
     return LoginState(
         imei: imei ?? this.imei,
         accountRole: accountRole ?? this.accountRole,

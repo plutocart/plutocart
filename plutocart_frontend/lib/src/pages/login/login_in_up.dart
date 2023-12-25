@@ -88,7 +88,6 @@ class _LoginInUpState extends State<LoginInUp> {
                 context.read<LoginBloc>().add(widget.signInGuest!) :
                 context.read<LoginBloc>().add(widget.signUpGuest!);
                 FocusScope.of(context).unfocus();
-                // Show the AlertDialog
                 showDialog(
                   context: context,
                   barrierDismissible: false,

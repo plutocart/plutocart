@@ -8,8 +8,6 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginState()) {
-
-
     on<LoginGuest>((event, emit) async {
       Map<String, dynamic> response = await LoginRepository().loginGuest();
       print("bloc id account : ${response['data']['accountId']}");
@@ -46,13 +44,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         print("starto1 : ${response['data']['email']}");
         print("starto1 : ${response['data']['imei']}");
         if (response.isEmpty) {
-            emit(state.copyWith(hasAccountCustomer: false));
         } else {
           emit(state.copyWith(
             accountId: response['data']['accountId'],
             email: response['data']['email'],
             imei: response['data']['imei'],
-            hasAccountCustomer: true,
           ));
         }
       } catch (error) {
@@ -60,21 +56,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-
-        on<loginEmailGoole>((event, emit) async {
+    on<loginEmailGoole>((event, emit) async {
       try {
         Map<String, dynamic> response =
             await LoginRepository().loginEmailGoogle();
         print("starto1 : ${response['data']['email']}");
         print("starto1 : ${response['data']['imei']}");
         if (response.isEmpty) {
-            emit(state.copyWith(hasAccountCustomer: false));
         } else {
           emit(state.copyWith(
             accountId: response['data']['accountId'],
             email: response['data']['email'],
             imei: response['data']['imei'],
-            hasAccountCustomer: true,
           ));
         }
       } catch (error) {
@@ -82,31 +75,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-    
-
-   on<LoginCustomer>((event, emit) async {
-  try {
-    print("login customer : ");
-    Map<String, dynamic> response = await LoginRepository().loginCustomer();
-    if (response.containsKey('data') &&
-        response['data'] != null &&
-        response['data']['imei'] != null &&
-        response['data']['email'] != null &&
-        response['data']['imei'] != "" &&
-        response['data']['email'] != "") {
-      emit(state.copyWith(
-        imei: response['data']['imei'],
-        email: response['data']['email'],
-        accountRole: response['data']['accountRole'],
-        accountId: response['data']['accountId'],
-      ));
-    } else {
-      throw ArgumentError("Please register as a guest.");
-    }
-  } catch (error) {
-    print('Error during login: $error');
-  }
-});
-
+    on<LoginCustomer>((event, emit) async {
+      try {
+        print("login customer : ");
+        Map<String, dynamic> response = await LoginRepository().loginCustomer();
+        if (response.containsKey('data') &&
+            response['data'] != null &&
+            response['data']['imei'] != null &&
+            response['data']['email'] != null &&
+            response['data']['imei'] != "" &&
+            response['data']['email'] != "") {
+          emit(state.copyWith(
+            imei: response['data']['imei'],
+            email: response['data']['email'],
+            accountRole: response['data']['accountRole'],
+            accountId: response['data']['accountId'],
+          ));
+        } else {
+          throw ArgumentError("Please register as a guest.");
+        }
+      } catch (error) {
+        print('Error during login: $error');
+      }
+    });
   }
 }
