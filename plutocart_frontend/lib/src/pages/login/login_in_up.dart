@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/repository/login_repository.dart';
 import 'package:plutocart/src/router/router.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class LoginInUp extends StatefulWidget {
+  final String? pathImageDes;
+  final double? sizeImageDes;
+  final String? messageButtonGuest;
+  final String? messageButtonGoogle;
+  final LoginGuest? signInGuest;
+  final LoginCustomer? signInCustomer;
+  final CreateAccountGuest? signUpGuest;
+  final CreateAccountCustomer? signUpCustomer;
+  final String? signInOrUp;
+
+  const LoginInUp(
+      {Key? key,
+      this.pathImageDes,
+      this.sizeImageDes,
+      this.messageButtonGuest,
+      this.messageButtonGoogle, this.signInGuest, this.signInCustomer, this.signUpGuest, this.signUpCustomer, this.signInOrUp})
+      : super(key: key);
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _LoginInUpState createState() => _LoginInUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _LoginInUpState extends State<LoginInUp> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,8 +64,8 @@ class _SignUpState extends State<SignUp> {
           child: Row(
             children: [
               Image(
-                image: AssetImage('assets/icon/plutocart_des_icon.png'),
-                width: MediaQuery.sizeOf(context).width * 0.5,
+                image: AssetImage(widget.pathImageDes!),
+                width: MediaQuery.sizeOf(context).width * widget.sizeImageDes!,
               )
             ],
           ),
@@ -67,7 +84,9 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               onPressed: () async {
-                context.read<LoginBloc>().add(createAccountGuest());
+                widget.signInOrUp == "in" ?
+                context.read<LoginBloc>().add(widget.signInGuest!) :
+                context.read<LoginBloc>().add(widget.signUpGuest!);
                 FocusScope.of(context).unfocus();
                 // Show the AlertDialog
                 showDialog(
@@ -106,7 +125,7 @@ class _SignUpState extends State<SignUp> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  "Continue As Guest",
+                  widget.messageButtonGuest!,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -139,44 +158,45 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               onPressed: () async {
-                if (LoginState().hasAccountCustomer == false) {
-                  context.read<LoginBloc>().add(createAccountCustomer());
-                  FocusScope.of(context).unfocus();
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 20),
-                            Text('Loading...'),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                final storage = new FlutterSecureStorage();
+                String? imei = await storage.read(key: "imei");
+                print("email23 : ${imei}");
+                  widget.signInOrUp == "in" ?
+                context.read<LoginBloc>().add(widget.signInCustomer!) :
+                context.read<LoginBloc>().add(widget.signUpCustomer!);
+                FocusScope.of(context).unfocus();
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                          Text('Loading...'),
+                        ],
+                      ),
+                    );
+                  },
+                );
 
-                  await Future.delayed(
-                      Duration(seconds: 1)); // Wait for 3 seconds
+                await Future.delayed(
+                    Duration(seconds: 1)); // Wait for 3 seconds
 
-                  // Check if the dialog is still open
-                  if (Navigator.of(context, rootNavigator: true).canPop()) {
-                    Navigator.of(context, rootNavigator: true)
-                        .pop(); // Dismiss the AlertDialog
-                  }
-
-                  // Navigate to the home screen
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRoute.app,
-                    (route) => false,
-                  );
-                } else {
-                  customSignUpPopup(context, "Can't register it");
+                // Check if the dialog is still open
+                if (Navigator.of(context, rootNavigator: true).canPop()) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop(); // Dismiss the AlertDialog
                 }
+
+                // Navigate to the home screen
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoute.app,
+                  (route) => false,
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -191,7 +211,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     Text(
-                      "Sign up With Goolge",
+                      widget.messageButtonGoogle!,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -240,7 +260,7 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
+                      Navigator.of(context).pop();
                     },
                     child: Text('Close'),
                   ),

@@ -6,14 +6,14 @@ abstract class LoginEvent extends Equatable {
 
 }
 
-  class loginGuest extends LoginEvent{
+  class LoginGuest extends LoginEvent{
   }
- class loginCustomer extends LoginEvent{
+ class LoginCustomer extends LoginEvent{
   }
-  class createAccountGuest extends LoginEvent{
+  class CreateAccountGuest extends LoginEvent{
   }
 
-    class createAccountCustomer extends LoginEvent{
+    class CreateAccountCustomer extends LoginEvent{
   }
 
   

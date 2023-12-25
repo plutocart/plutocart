@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_udid/flutter_udid.dart';
-import 'package:plutocart/src/pages/login/sign_up.dart';
+import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/pages/login/login_in_up.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class HomeLogin extends StatefulWidget {
@@ -25,7 +26,6 @@ class _HomeLoginState extends State<HomeLogin> {
     super.initState();
     _startOpacityAnimation();
   }
-
 
   void _startOpacityAnimation() {
     Future.delayed(Duration(milliseconds: 300), () {
@@ -61,7 +61,6 @@ class _HomeLoginState extends State<HomeLogin> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         AnimatedOpacity(
@@ -98,7 +97,6 @@ class _HomeLoginState extends State<HomeLogin> {
                     width: MediaQuery.of(context).size.width * 0.6,
                   ),
                 ),
-              
                 AnimatedOpacity(
                   opacity: opacityButtons,
                   duration: Duration(milliseconds: 300),
@@ -106,7 +104,18 @@ class _HomeLoginState extends State<HomeLogin> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(_createRoute(LoginInUp(
+                            signInOrUp: "in",
+                            pathImageDes:
+                                'assets/icon/plutocart_welcome_des_icon.png',
+                            sizeImageDes: 0.8,
+                            messageButtonGuest: 'Continue As Guest',
+                            messageButtonGoogle: " Sign In With Google",
+                            signInGuest: LoginGuest(),
+                            signInCustomer: LoginCustomer(),
+                          )));
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
@@ -132,7 +141,15 @@ class _HomeLoginState extends State<HomeLogin> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).push(_createRoute());
+                          Navigator.of(context).push(_createRoute(LoginInUp(
+                            signInOrUp: "up",
+                            pathImageDes: 'assets/icon/plutocart_des_icon.png',
+                            sizeImageDes: 0.5,
+                            messageButtonGuest: 'Sign Up As Guest',
+                            messageButtonGoogle: " Sign Up With Google",
+                            signUpGuest: CreateAccountGuest(),
+                            signUpCustomer: CreateAccountCustomer(),
+                          )));
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -189,26 +206,25 @@ class _HomeLoginState extends State<HomeLogin> {
       ],
     );
   }
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => SignUp(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0); // Change the X value to 1.0 for sliding from left to right
-      var end = Offset.zero;
-      var curve = Curves.ease;
 
-      var tween = Tween(begin: begin, end: end).chain(
-        CurveTween(curve: curve),
-      );
+  Route _createRoute(Widget pageWidget) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => pageWidget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1.0,
+            0.0); // Change the X value to 1.0 for sliding from left to right
+        var end = Offset.zero;
+        var curve = Curves.ease;
 
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
+        var tween = Tween(begin: begin, end: end).chain(
+          CurveTween(curve: curve),
+        );
 
-
-
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 }

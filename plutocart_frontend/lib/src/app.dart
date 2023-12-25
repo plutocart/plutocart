@@ -9,30 +9,25 @@ import 'package:plutocart/src/pages/loading/load_start_app.dart';
 import 'package:plutocart/src/pages/login/home_login.dart';
 import 'package:plutocart/src/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:flutter_udid/flutter_udid.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-final navigatorState = GlobalKey<NavigatorState>();
 
 class PlutocartApp extends StatefulWidget {
   const PlutocartApp({Key? key}) : super(key: key);
 
   @override
-  _plutocartAppState createState() => _plutocartAppState();
+  _PlutocartAppState createState() => _PlutocartAppState();
 }
 
-class _plutocartAppState extends State<PlutocartApp> {
+class _PlutocartAppState extends State<PlutocartApp> {
+  bool _isLoginComplete = false;
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
+
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-    context.read<LoginBloc>().add(loginCustomer());
-    context.read<LoginBloc>().add(loginGuest());
+    context.read<LoginBloc>().add(LoginCustomer());
+    context.read<LoginBloc>().add(LoginGuest());
   }
-
-    
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,44 +35,47 @@ class _plutocartAppState extends State<PlutocartApp> {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
+          if (stateLogin.imei.isNotEmpty || stateLogin.email.isNotEmpty) {
+            _isLoginComplete = true;
+          } else {
+            _isLoginComplete = false;
+          }
+
           return BlocBuilder<WalletBloc, WalletState>(
             builder: (context, walletState) {
-                  print("Start1 : ${!stateLogin.imei.isEmpty}");
-                    print("Start1.2 : ${!stateLogin.email.isEmpty}");
-                    print("Start1.2.3  ${stateLogin.email}");
-                      print("Start1.2.4  ${stateLogin.imei}");
-              return (!stateLogin.imei.isEmpty ||   !stateLogin.imei.isEmpty)
-                  ? Skeletonizer(
-                      enabled: walletState.status == WalletStatus.loading,
-                      effect:
-                          ShimmerEffect(duration: Duration(microseconds: 300)),
-                      child: Stack(
-                        children: [
-                          Scaffold(
-                            resizeToAvoidBottomInset: false,
-                            body: pageRoutes[_selectedIndex],
-                            floatingActionButton: ButtonTransaction(),
-                            bottomNavigationBar: BottomNavigatorBar(
-                              onTap: (index) {
-                                setState(() {
-                                  _selectedIndex = index;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
+              if (_isLoginComplete) {
+                return Skeletonizer(
+                  enabled: walletState.status == WalletStatus.loading,
+                  effect: ShimmerEffect(duration: Duration(microseconds: 300)),
+                  child: Stack(
+                    children: [
+                      Scaffold(
+                        resizeToAvoidBottomInset: false,
+                        body: pageRoutes[_selectedIndex],
+                        floatingActionButton: ButtonTransaction(),
+                        bottomNavigationBar: BottomNavigatorBar(
+                          onTap: (index) {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                          },
+                        ),
                       ),
-                    )
-                  : FutureBuilder(
-                      future: Future.delayed(Duration(seconds: 3)),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return HomeLogin();
-                        } else {
-                          return LoadStartApp();
-                        }
-                      },
-                    );
+                    ],
+                  ),
+                );
+              } else {
+                return FutureBuilder(
+                  future: Future<void>.delayed(Duration(seconds: 3), () {}),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return HomeLogin();
+                    } else {
+                      return LoadStartApp();
+                    }
+                  },
+                );
+              }
             },
           );
         },

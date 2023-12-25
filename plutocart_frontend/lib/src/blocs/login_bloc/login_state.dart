@@ -5,15 +5,11 @@ class LoginState extends Equatable {
   final String accountRole;
   final int accountId;
   final String email;
-  final bool hasAccountGuest;
-  final bool hasAccountCustomer;
   const LoginState(
       {this.imei = "",
       this.accountRole = "guest",
       this.accountId = 0,
-      this.email = "",
-      this.hasAccountGuest = false,
-      this.hasAccountCustomer = false});
+      this.email = "",});
 
   LoginState copyWith(
       {String? imei,
@@ -21,15 +17,13 @@ class LoginState extends Equatable {
       int? accountId,
       String? userName,
       String? email,
-      bool? hasAccountGuest,
-      bool? hasAccountCustomer}) {
+  
+      bool? hasAccountCustomer , bool? clickSignUp}) {
     return LoginState(
         imei: imei ?? this.imei,
         accountRole: accountRole ?? this.accountRole,
         accountId: accountId ?? this.accountId,
-        email: email ?? this.email,
-        hasAccountCustomer: hasAccountCustomer ?? this.hasAccountCustomer,
-        hasAccountGuest: hasAccountGuest ?? this.hasAccountCustomer);
+        email: email ?? this.email,);
   }
 
   @override
@@ -38,7 +32,5 @@ class LoginState extends Equatable {
         accountRole,
         accountId,
         email,
-        hasAccountGuest,
-        hasAccountCustomer
       ];
 }
