@@ -235,18 +235,17 @@ CREATE PROCEDURE InsertIntoTransactionByWalletId(
     IN stmTransaction DECIMAL(10, 2),
     IN statementType INT,
     IN dateTransaction DATETIME,
+    IN tranCategoryIdCategory INT,
     IN descriptionOfT varchar(100),
     IN imageUrl varchar(200),
 	IN debtIdDebt INT,
     IN goalIdGoal INT
 )
 BEGIN
-    DECLARE tranCategoryIdCategory INT;
     DECLARE createTransactionOn DATETIME;
     DECLARE updateTransactionOn DATETIME;
     DECLARE balanceAdjustment DECIMAL(10, 2);
 
-    SET tranCategoryIdCategory = 1;
     SET createTransactionOn = NOW();
     SET updateTransactionOn = NOW();
 
@@ -331,6 +330,7 @@ CREATE PROCEDURE UpdateTransaction(
     IN stmTransaction DECIMAL(10, 2),
     IN statementType INT,
     IN dateTransaction DATETIME,
+	IN tranCategoryIdCategory INT,
     IN description VARCHAR(100),
     IN imageUrl VARCHAR(200),
     IN debtIdDebt INT,
@@ -374,6 +374,7 @@ BEGIN
         stm_transaction = stmTransaction,
         statement_type = statementType,
         date_transaction = dateTransaction,
+        tran_category_id_category = tranCategoryIdCategory,
         description = description,
         image_url = imageUrl,
         debt_id_debt = debtIdDebt,

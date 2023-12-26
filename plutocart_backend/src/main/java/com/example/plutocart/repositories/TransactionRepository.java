@@ -48,7 +48,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Modifying
     @Procedure(procedureName = "InsertIntoTransactionByWalletId")
     void InsertIntoTransactionByWalletId(Integer walletId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction,
-                                         String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
+                                         Integer transactionCategoryId, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 
 
 //    @Transactional
@@ -64,6 +64,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Transactional
     @Modifying
     @Procedure(procedureName = "UpdateTransaction")
-    void updateTransaction(Integer walletId, Integer transactionId, BigDecimal stmTransaction, Integer statementType,
-                           LocalDateTime dateTransaction, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
+    void updateTransaction(Integer walletId, Integer transactionId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction,
+                           Integer transactionCategoryId, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 }

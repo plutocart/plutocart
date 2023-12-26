@@ -1,16 +1,17 @@
 package com.example.plutocart.services;
 
 import com.cloudinary.Cloudinary;
+import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.transaction.TResPostDTO;
 import com.example.plutocart.dtos.transaction.TResStmNowDTO;
 import com.example.plutocart.dtos.transaction.TransactionResponseGetDTO;
 import com.example.plutocart.entities.Transaction;
+import com.example.plutocart.entities.TransactionCategory;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.TransactionCategoryRepository;
 import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
 import com.example.plutocart.utils.GenericResponse;
-import com.example.plutocart.constants.ResultCode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,7 +129,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse createTransaction(Integer walletId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException {
+    public GenericResponse createTransaction(Integer walletId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, Integer transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;
@@ -137,7 +138,9 @@ public class TransactionService {
             imageUrl = cloudinaryService.uploadImageInTransaction(file);
         }
 
-        transactionRepository.InsertIntoTransactionByWalletId(walletId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
+        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
+
+        transactionRepository.InsertIntoTransactionByWalletId(walletId, stmTransaction, statementType, dateTransaction,transactionCategory.getId(), description, imageUrl, debtIdDebt, goalIdGoal);
         Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(walletId).get(transactionRepository.viewTransactionByWalletId(walletId).toArray().length - 1);
 
         if (statementType == 1) {
@@ -158,10 +161,11 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
+    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, Integer transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
         GenericResponse response = new GenericResponse();
         String imageUrl = null;
 
+        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
         TResPostDTO transactionResponse = modelMapper.map(transaction, TResPostDTO.class);
 
@@ -174,7 +178,7 @@ public class TransactionService {
                 imageUrl = cloudinaryService.uploadImageInTransaction(file);
             }
 
-            transactionRepository.updateTransaction(walletId, transactionId, stmTransaction, statementType, dateTransaction, description, imageUrl, debtIdDebt, goalIdGoal);
+            transactionRepository.updateTransaction(walletId, transactionId, stmTransaction, statementType, dateTransaction, transactionCategory.getId(), description, imageUrl, debtIdDebt, goalIdGoal);
         } else {
             throw new Exception();
         }

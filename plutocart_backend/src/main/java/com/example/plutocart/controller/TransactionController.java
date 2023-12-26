@@ -69,6 +69,7 @@ public class TransactionController {
                                                                @RequestParam("statementType") Integer statementType,
                                                                @RequestParam(name = "dateTransaction", required = false)
                                                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
+                                                               @RequestParam(name = "transactionCategoryId") Integer transactionCategoryId,
                                                                @RequestParam(name = "description", required = false, defaultValue = "null") String description,
                                                                @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
                                                                @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
@@ -78,7 +79,7 @@ public class TransactionController {
 
         Integer actualDebtId = debtIdDebt.orElse(null);
         Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.createTransaction(walletId, file, stmTransaction, statementType, actualDateTransaction, description, actualDebtId, actualGoalId);
+        GenericResponse result = transactionService.createTransaction(walletId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, actualDebtId, actualGoalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -88,6 +89,7 @@ public class TransactionController {
                                                               @RequestParam("statementType") Integer statementType,
                                                               @RequestParam(name = "dateTransaction", required = false)
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
+                                                              @RequestParam(name = "transactionCategoryId") Integer transactionCategoryId,
                                                               @RequestParam(name = "description", required = false, defaultValue = "null") String description,
                                                               @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
                                                               @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
@@ -97,7 +99,7 @@ public class TransactionController {
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
         Integer actualDebtId = debtIdDebt.orElse(null);
         Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.updateTransaction(walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, description, actualDebtId, actualGoalId);
+        GenericResponse result = transactionService.updateTransaction(walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, actualDebtId, actualGoalId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
