@@ -7,95 +7,134 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  
   LoginBloc() : super(LoginState()) {
-    on<LoginGuest>((event, emit) async {
-      Map<String, dynamic> response = await LoginRepository().loginGuest();
-      print("bloc id account : ${response['data']['accountId']}");
-      if (response['data']['imei'] == "") {
-        throw ArgumentError("please register a guest");
-      } else {
-        emit(state.copyWith(
-            imei: response['data']['imei'],
-            accountRole: response['data']['accountRole'],
-            accountId: response['data']['accountId']));
-      }
-    });
+
+    // Guest
+ on<LoginGuest>((event, emit) async {
+  try {
+    Map<String, dynamic> response = await LoginRepository().loginGuest();
+    print("response loginGuest repository working ? : ${response['data']}");
+    if (response['data']['imei'] == null) {
+      print("imei not found in class login bloc function loginGuest");
+      final newState = state.copyWith(signInGuestSuccess: false);
+      emit(newState);
+    } else {
+      final newState = state.copyWith(
+        imei: response['data']['imei'],
+        accountRole: response['data']['accountRole'],
+        accountId: response['data']['accountId'],
+        signInGuestSuccess: true,
+      );
+      print("imei found in class login bloc function loginGuest imei : ${response['data']['imei']}");
+      print("imei found in class login bloc function loginGuest accountRole : ${response['data']['accountRole']}");
+      print("imei found in class login bloc function loginGuest accountId : ${response['data']['accountId']}");
+      print("imei found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
+      emit(newState);
+      // อย่าลืมเรียกใช้ emit(newState); เพื่ออัพเดทสถานะใน BLoC
+    }
+  } catch (e) {
+    print("not sign in guest account in login bloc class : $e");
+    final newState = state.copyWith(signInGuestSuccess: false);
+    print("imei not found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
+
+    emit(newState);
+    // อย่าลืมเรียกใช้ emit(newState); เพื่ออัพเดทสถานะใน BLoC
+  }
+});
+
+
 
     on<CreateAccountGuest>((event, emit) async {
+      print("start working create account guest");
       try {
         Map<String, dynamic> response =
             await LoginRepository().createAccountGuest();
-
-        if (response.isEmpty ||
-            response['data'] == null ||
-            response['data']['accountId'] == null) {
+        if (response['data'] == null) {
+          print(
+              "not created account guest in login bloc : ${response['data']}");
         } else {
+          print("create account guest in login bloc success");
           emit(state.copyWith(
-            accountId: response['data']['accountId'],
-          ));
+              accountId: response['data']['accountId'],
+              imei: response['data']['imei'],
+              hasAccountGuest: false,
+              signUpGuestSuccess: true));
+          print(
+              "check state imei from create account guest Login bloc: ${state.imei}");
+          print(
+              "check state accountId from create account guest Login bloc: ${state.accountId}");
+          print(
+              "check state accountRole from create account guest Login bloc: ${state.accountRole}");
         }
-      } catch (e) {}
+      } catch (e) {
+        emit(state.copyWith(hasAccountGuest: true, signUpGuestSuccess: false));
+        print(
+            "not call login repository createAccountGuesy() in class Login bloc");
+      }
     });
+
+    // Customer
 
     on<CreateAccountCustomer>((event, emit) async {
       try {
         Map<String, dynamic> response =
             await LoginRepository().createAccountCustomer();
-        print("starto1 : ${response['data']['email']}");
-        print("starto1 : ${response['data']['imei']}");
-        if (response.isEmpty) {
+        if (response.isNotEmpty) {
+          print("start create account customer in LoginBloc");
+          emit(state.copyWith(
+              accountId: response['data']['accountId'],
+              email: response['data']['email'],
+              accountRole: response['data']['accountRole'],
+              hasAccountCustomer: false,
+              signUpCustomerSuccess: true,
+              statusLoginGoogle: true));
+          print(
+              "check state imei from create account customer Login bloc: ${state.imei}");
+          print(
+              "check state accountId from create account customer Login bloc: ${state.accountId}");
+          print(
+              "check state accountRole from create account customer Login bloc: ${state.accountRole}");
+          print(
+              "check state email from create account customer Login bloc: ${state.email}");
+        }
+      } catch (e) {
+        final storage = FlutterSecureStorage();
+        String? email = await storage.read(key: "email");
+        print("check state  from create account customer Login bloc error:");
+        print(
+            "check state  from create account customer Login bloc errors: ${email}");
+        print(
+            "check state  from create account customer Login bloc errorss: ${state.accountId}");
+        if (email != null) {
+          emit(state.copyWith(
+              hasAccountCustomer: false,
+              signUpCustomerSuccess: true,
+              statusLoginGoogle: true,
+              email: email));
         } else {
           emit(state.copyWith(
-            accountId: response['data']['accountId'],
-            email: response['data']['email'],
-            imei: response['data']['imei'],
+            hasAccountCustomer: true,
+            signUpCustomerSuccess: false,
+            statusLoginGoogle: false,
           ));
         }
-      } catch (error) {
-        print('Error during account creation: $error');
-      }
-    });
-
-    on<loginEmailGoole>((event, emit) async {
-      try {
-        Map<String, dynamic> response =
-            await LoginRepository().loginEmailGoogle();
-        print("starto1 : ${response['data']['email']}");
-        print("starto1 : ${response['data']['imei']}");
-        if (response.isEmpty) {
-        } else {
-          emit(state.copyWith(
-            accountId: response['data']['accountId'],
-            email: response['data']['email'],
-            imei: response['data']['imei'],
-          ));
-        }
-      } catch (error) {
-        print('Error during account creation: $error');
       }
     });
 
     on<LoginCustomer>((event, emit) async {
-      try {
-        print("login customer : ");
-        Map<String, dynamic> response = await LoginRepository().loginCustomer();
-        if (response.containsKey('data') &&
-            response['data'] != null &&
-            response['data']['imei'] != null &&
-            response['data']['email'] != null &&
-            response['data']['imei'] != "" &&
-            response['data']['email'] != "") {
-          emit(state.copyWith(
+      Map<String, dynamic> response = await LoginRepository().loginCustomer();
+      print(
+          "response loginCustomer after create repository working ? : ${response['data']}");
+      if (response['data']['email'] == null) {
+        print(
+            "email not found in class login bloc function loginCustomer after create");
+      } else {
+        emit(state.copyWith(
             imei: response['data']['imei'],
-            email: response['data']['email'],
             accountRole: response['data']['accountRole'],
             accountId: response['data']['accountId'],
-          ));
-        } else {
-          throw ArgumentError("Please register as a guest.");
-        }
-      } catch (error) {
-        print('Error during login: $error');
+            email: response['data']['email']));
       }
     });
   }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
-import 'package:plutocart/src/pages/login/login_in_up.dart';
+import 'package:plutocart/src/pages/login/sign_up.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class HomeLogin extends StatefulWidget {
@@ -105,16 +104,7 @@ class _HomeLoginState extends State<HomeLogin> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).push(_createRoute(LoginInUp(
-                            signInOrUp: "in",
-                            pathImageDes:
-                                'assets/icon/plutocart_welcome_des_icon.png',
-                            sizeImageDes: 0.8,
-                            messageButtonGuest: 'Continue As Guest',
-                            messageButtonGoogle: " Sign In With Google",
-                            signInGuest: LoginGuest(),
-                            signInCustomer: loginEmailGoole(),
-                          )));
+                         Navigator.pushNamed(context, AppRoute.signIn);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -140,16 +130,8 @@ class _HomeLoginState extends State<HomeLogin> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(_createRoute(LoginInUp(
-                            signInOrUp: "up",
-                            pathImageDes: 'assets/icon/plutocart_des_icon.png',
-                            sizeImageDes: 0.5,
-                            messageButtonGuest: 'Sign Up As Guest',
-                            messageButtonGoogle: " Sign Up With Google",
-                            signUpGuest: CreateAccountGuest(),
-                            signUpCustomer: CreateAccountCustomer(),
-                          )));
+                        onPressed: () async {
+                          Navigator.pushNamed(context, AppRoute.signUp);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

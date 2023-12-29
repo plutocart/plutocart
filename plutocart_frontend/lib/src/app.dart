@@ -11,22 +11,22 @@ import 'package:plutocart/src/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlutocartApp extends StatefulWidget {
-  const PlutocartApp({Key? key}) : super(key: key);
+  
+  const PlutocartApp({Key? key }) : super(key: key);
 
   @override
   _PlutocartAppState createState() => _PlutocartAppState();
 }
 
 class _PlutocartAppState extends State<PlutocartApp> {
-  bool _isLoginComplete = false;
   int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
 
   @override
   void initState() {
     super.initState();
-    context.read<LoginBloc>().add(LoginCustomer());
     context.read<LoginBloc>().add(LoginGuest());
+    context.read<LoginBloc>().add(LoginCustomer());
   }
 
   @override
@@ -35,15 +35,11 @@ class _PlutocartAppState extends State<PlutocartApp> {
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
-          if (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) {
-            _isLoginComplete = true;
-          } else {
-            _isLoginComplete = false;
-          }
-
           return BlocBuilder<WalletBloc, WalletState>(
             builder: (context, walletState) {
-              if (_isLoginComplete) {
+              print("check case (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) : ${(stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty))}");
+                print("check case (stateLogin.hasAccountGuest == false && stateLogin.singUpGuestSuccess == true) : ${(stateLogin.hasAccountGuest == false && stateLogin.signUpGuestSuccess == true)}");
+              if ((stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) || (stateLogin.hasAccountGuest == false && stateLogin.signUpGuestSuccess == true) ) {
                 return Skeletonizer(
                   enabled: walletState.status == WalletStatus.loading,
                   effect: ShimmerEffect(duration: Duration(microseconds: 300)),
