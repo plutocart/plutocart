@@ -101,7 +101,7 @@ class _CardWalletState extends State<CardWallet> {
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                        width: 1, color: state.status == WalletStatus.loading ? Color(0xFF15616D) : Colors.grey.shade200),
+                                        width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ).copyWith(
@@ -166,7 +166,7 @@ class _CardWalletState extends State<CardWallet> {
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                            width: 1, color: state.status == WalletStatus.loading ? Color(0xFF15616D) : Colors.grey.shade200),
+                                            width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     )),
