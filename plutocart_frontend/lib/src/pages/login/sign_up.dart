@@ -144,15 +144,29 @@ class _SignUpState extends State<SignUp> {
                 )),
                 Column(
                   children: [
-                    Text(
-                      "Or sign up by google account?",
+                    Column(
+                      children: [
+                        Text(
+                          "Or sign up by google account? ",
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Color(0xFF15616D),
+                            fontSize: 16,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                      "Has an account? Google will automatically log in.",
                       style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Color(0xFF15616D),
-                        fontSize: 16,
+                        fontSize: 14,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w400,
                       ),
+                    ),
+                      ],
                     ),
                     BlocListener<LoginBloc, LoginState>(
                       listener: (context, state) async {

@@ -174,6 +174,32 @@ class LoginRepository {
     }
   }
 
+  Future<Map<String, dynamic>> loginEmailGoogle() async {
+    String? imei = await storage.read(key: "imei");
+    String? email = await storage.read(key: "email");
+     print("email login email google : ${email}");
+      print("email login imei google : ${imei}");
+    try {
+      print("start sign in google account");
+          Response response = await dio.get(
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/customer',
+        queryParameters: {"imei": imei, "email": email},
+      );
+      print("email google account and response:  ${response.data}" );
+
+      if (response.statusCode == 200 ) {
+        await storage.write( key: "accountId", value: response.data['data']['accountId'].toString(),
+        );
+        return response.data;
+      } else {
+        throw Exception('Error: ${'404'}');
+      }
+    } catch (error) {
+      print("Error login customer email google sign in error: $error");
+      throw error;
+    }
+  }
+
 // Google
 
   static GoogleSignIn _googleSignIn = GoogleSignIn(

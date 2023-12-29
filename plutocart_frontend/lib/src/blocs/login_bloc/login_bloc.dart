@@ -88,7 +88,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               accountRole: response['data']['accountRole'],
               hasAccountCustomer: false,
               signUpCustomerSuccess: true,
-              statusLoginGoogle: true));
+              signInCustomerSuccess: true));
           print(
               "check state imei from create account customer Login bloc: ${state.imei}");
           print(
@@ -110,13 +110,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(
               hasAccountCustomer: false,
               signUpCustomerSuccess: true,
-              statusLoginGoogle: true,
+              signInCustomerSuccess: true,
               email: email));
         } else {
           emit(state.copyWith(
             hasAccountCustomer: true,
             signUpCustomerSuccess: false,
-            statusLoginGoogle: false,
+            signInCustomerSuccess: false,
           ));
         }
       }
@@ -137,5 +137,34 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             email: response['data']['email']));
       }
     });
+
+   on<loginEmailGoole>((event, emit) async {
+      try {
+        Map<String, dynamic> response = await LoginRepository().loginEmailGoogle();
+        print("starto1 : ${response['data']['email']}");
+        print("starto1 : ${response['data']['imei']}");
+        if (response['data']['email'] == null) {
+           print(
+          "response loginCustomer after create repository loginEmailGoole working ? : ${response['data']}");
+          emit(state.copyWith(
+           signInGoogleStatus: false
+          ));
+        } else {
+          print("signin customer after create repository loginEmailGoole working ? :");
+          emit(state.copyWith(
+            accountId: response['data']['accountId'],
+            email: response['data']['email'],
+            imei: response['data']['imei'], signInGoogleStatus: true
+          ));
+        }
+      } catch (error) {
+        print('Error loginEmailGoole during account creation: $error');
+        final newState =  state.copyWith(
+           signInGoogleStatus: false
+          );
+        emit(newState);
+      }
+    });
+    
   }
 }

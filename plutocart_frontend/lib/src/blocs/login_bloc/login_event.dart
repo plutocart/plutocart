@@ -13,6 +13,7 @@ abstract class LoginEvent extends Equatable {
 
 class loginEmailGoole extends LoginEvent{
   
+  
 }
   class CreateAccountGuest extends LoginEvent{
   }

@@ -10,7 +10,8 @@ class LoginState extends Equatable {
   final bool signUpCustomerSuccess;
   final bool signUpGuestSuccess;
   final bool signInGuestSuccess;
-  final bool statusLoginGoogle;
+  final bool signInCustomerSuccess;
+  final bool signInGoogleStatus;
   const LoginState(
       {this.imei = "",
       this.accountRole = "guest",
@@ -20,8 +21,8 @@ class LoginState extends Equatable {
       this.hasAccountCustomer = false,
       this.signUpCustomerSuccess = false,
       this.signUpGuestSuccess = false,
-      this.statusLoginGoogle = true,
-      this.signInGuestSuccess = true});
+      this.signInCustomerSuccess = true,
+      this.signInGuestSuccess = true , this.signInGoogleStatus = true});
 
   LoginState copyWith(
       {String? imei,
@@ -32,8 +33,8 @@ class LoginState extends Equatable {
       bool? hasAccountCustomer,
       bool? signUpCustomerSuccess,
       bool? signUpGuestSuccess,
-      bool? statusLoginGoogle,
-      bool? signInGuestSuccess }) {
+      bool? signInCustomerSuccess,
+      bool? signInGuestSuccess , bool ? signInGoogleStatus }) {
     return LoginState(
         imei: imei ?? this.imei,
         accountRole: accountRole ?? this.accountRole,
@@ -42,10 +43,10 @@ class LoginState extends Equatable {
         hasAccountGuest: hasAccountGuest ?? this.hasAccountGuest,
         hasAccountCustomer: hasAccountCustomer ?? this.hasAccountCustomer,
         signUpCustomerSuccess:
-            signUpCustomerSuccess ?? this.signUpCustomerSuccess,
+        signUpCustomerSuccess ?? this.signUpCustomerSuccess,
         signUpGuestSuccess: signUpGuestSuccess ?? this.signUpGuestSuccess,
-        statusLoginGoogle: statusLoginGoogle ?? this.statusLoginGoogle,
-        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess);
+        signInCustomerSuccess: signInCustomerSuccess ?? this.signInCustomerSuccess,
+        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess , signInGoogleStatus : signInGoogleStatus ?? this.signInGoogleStatus);
   }
 
   @override
@@ -58,7 +59,7 @@ class LoginState extends Equatable {
         hasAccountCustomer,
         signUpCustomerSuccess,
         signUpGuestSuccess,
-        statusLoginGoogle,
-        signInGuestSuccess
+        signInCustomerSuccess,
+        signInGuestSuccess , signInGoogleStatus
       ];
 }
