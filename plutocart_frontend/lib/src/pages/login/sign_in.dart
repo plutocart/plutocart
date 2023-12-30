@@ -82,7 +82,7 @@ class _SignInState extends State<SignIn> {
                     } 
                   },
                   child: BlocBuilder<LoginBloc, LoginState>(
-                    builder: (context, state) {
+                    builder: (context, state) { 
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF15616D),

@@ -21,4 +21,9 @@ public interface TransactionCategoryRepository extends JpaRepository<Transaction
     @Query(value = "SELECT * FROM transaction_category where id_transaction_category = :transactionCategoryId", nativeQuery = true)
     TransactionCategory viewTransactionCategoryById(Integer transactionCategoryId);
 
+    @Transactional
+    @Query(value = "select * from transaction_category  where type_category = :tranCaType " , nativeQuery = true)
+    List<TransactionCategory> getAllTransactionCategory(Integer tranCaType);
+
+
 }
