@@ -16,7 +16,7 @@ public class CloudinaryController {
     @Autowired
     TransactionCategoryRepository transactionCategoryRepository;
 
-    @PostMapping("/upload-image/{entity-id}")
+    @PatchMapping("/upload-image/{entity-id}")
     public String uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("folderName") String folderName, @PathVariable("entity-id") int entityId) throws IOException {
 //        return cloudinaryService.uploadImage(file, folderName, entityId, transactionCategoryRepository::updateTransactionCategoryImageIconUrl, transactionCategoryRepository);
         return cloudinaryService.uploadImage(file, folderName, entityId, transactionCategoryRepository::updateTransactionCategoryImageIconUrl);
