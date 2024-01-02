@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/pages/home/component_home/card_group.dart';
 import 'package:plutocart/src/pages/home/component_home/card_wallet.dart';
 
@@ -10,6 +12,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+     context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

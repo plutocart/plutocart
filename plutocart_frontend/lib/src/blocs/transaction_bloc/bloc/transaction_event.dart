@@ -1,8 +1,17 @@
 part of 'transaction_bloc.dart';
 
-sealed class TransactionEvent extends Equatable {
-  const TransactionEvent();
-
+abstract class TransactionEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+ class createTransactionIncome extends TransactionEvent{
+   final int transactionCategoryId;
+   final int walletId;
+   final double stmTransaction;
+   final DateTime dateTimeTransaction;
+   final File? imageUrl;
+   final String? desctiption;
+   createTransactionIncome(this.transactionCategoryId , this.walletId , this.stmTransaction  , this.dateTimeTransaction , this.imageUrl , this.desctiption);
+  }
+

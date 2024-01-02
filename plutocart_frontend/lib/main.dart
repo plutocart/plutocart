@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
@@ -36,9 +37,10 @@ class _MyWidgetState extends State<MyWidget> {
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
+    final transactionCategoryBloc = BlocProvider(create: (context) => TransactionCategoryBloc());
 
     return MultiBlocProvider(
-        providers: [walletBloc , loginBloc],
+        providers: [walletBloc , loginBloc , transactionCategoryBloc],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
