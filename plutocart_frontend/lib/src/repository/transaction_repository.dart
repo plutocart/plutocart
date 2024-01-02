@@ -24,10 +24,22 @@ final dio = Dio();
     }
   }
 Future<Map<String, dynamic>> createTransactionInCome(int WalletId , File? file , double stmTransaction , String? description , int transactionCategoryId) async {
+  print("create transaction inCome repository WalletId : ${WalletId}");
+  print("create transaction inCome repository file : ${file}");
+  print("create transaction inCome repository stmTransaction : ${stmTransaction}");
+  print("create transaction inCome repository description : ${description}");
+  print("create transaction inCome repository transactionCategoryId : ${transactionCategoryId}");
     try {
+       FormData formData = FormData.fromMap({
+      "file": file == null ? "" : await MultipartFile.fromFile(file!.path),
+      "stmTransaction": stmTransaction,
+      "statementType": 1,
+      "description": description,
+      "transactionCategoryId": transactionCategoryId,
+    });
       Response response = await dio.post(
         'https://capstone23.sit.kmutt.ac.th/ej1/api/wallet/${WalletId}/transaction',
-        data: {"file": file , "stmTransaction": stmTransaction , "statementType": 1 ,"description" : description   , "transactionCategoryId" : transactionCategoryId},
+        data: formData,
       );
       print(
           "respone code in process create transaction income in class repository: ${response.statusCode}");

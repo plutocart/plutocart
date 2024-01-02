@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/type_transaction_router.dart';
@@ -152,9 +153,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                           borderSide: BorderSide(color: Color(0xFF15616D)),
                         ),
                       ),
-                      value: state.transactionCategoryInComeList[
-                              indexTransactionCategoryTypeIncome]
-                          ['nameTransactionCategory'],
+                      // value: state.transactionCategoryInComeList[
+                      //         indexTransactionCategoryTypeIncome]
+                          // ['nameTransactionCategory'],
                       items: state.transactionCategoryInComeList.map((value) {
                         return DropdownMenuItem(
                             value: value['nameTransactionCategory'],
@@ -242,7 +243,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             borderSide: BorderSide(color: Color(0xFF15616D)),
                           ),
                         ),
-                        value: walletState.wallets[indexWallet].walletName,
+                        // value: walletState.wallets[indexWallet].walletName,
                         items: walletState.wallets.map((valueWallet) {
                           return DropdownMenuItem(
                               value: valueWallet.walletName,
@@ -498,7 +499,10 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           bottonFirstNameFunction: () {
             Navigator.pop(context);
           },
-          bottonSecondeNameFunction: () {},
+          bottonSecondeNameFunction: () {
+              // context.read<TransactionBloc>().add(createTransactionIncome(transactionCategoryId, walletId, stmTransaction, dateTimeTransaction, imageUrl, desctiption));
+            context.read<TransactionBloc>().add(createTransactionIncome(1, 5, 9999, DateTime.now(), null, ""));
+          },
         )
       ],
     ));

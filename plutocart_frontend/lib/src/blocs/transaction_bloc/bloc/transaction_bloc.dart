@@ -12,15 +12,15 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   TransactionBloc() : super(TransactionState()) {
    
      on<createTransactionIncome>((event, emit) async {
-      print("start working create account guest");
+      print("start working create transaction income");
       try {
         Map<String, dynamic> response =
             await TransactionRepository().createTransactionInCome(event.walletId , event.imageUrl , event.stmTransaction , event.desctiption , event.transactionCategoryId);
         if (response['data'] == null) {
           print(
-              "not created account guest in login bloc : ${response['data']}");
+              "not created transacton income in transaction bloc : ${response['data']}");
         } else {
-          print("create account guest in login bloc success");
+          print("create transacton income in transaction bloc success");
           emit(state.copyWith(
               id: response['data']['id'],
               stmTransaction: response['data']['stmTransaction'],
@@ -28,6 +28,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
               description: response['data']['description'], walletId: response['data']['wid']));
         }
       } catch (e) {
+        print("Error creating transacton income in transaction bloc");
       }
     });
   }

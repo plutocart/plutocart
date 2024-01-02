@@ -31,7 +31,7 @@ public class TransactionCategory {
     @Column(name = "image_icon_url", nullable = false, length = 200)
     private String imageIconUrl;
 
-    @OneToMany(mappedBy = "tranCategoryIdCategory")
-    private Set<Transaction> transactions = new LinkedHashSet<>();
+//    @OneToMany(mappedBy = "tranCategoryIdCategory")
+//    private Set<Transaction> transactions = new LinkedHashSet<>();
 
 }
