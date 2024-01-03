@@ -134,7 +134,7 @@ public class TransactionService {
         TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;
 
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             imageUrl = cloudinaryService.uploadImageInTransaction(file);
         }
 
@@ -174,7 +174,7 @@ public class TransactionService {
                 cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
             }
 
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 imageUrl = cloudinaryService.uploadImageInTransaction(file);
             }
 
