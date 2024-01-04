@@ -21,7 +21,7 @@ class TransactionCategoryDropdown extends StatelessWidget {
         icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
         decoration: InputDecoration(
           labelText: "Choose Transaction Category",
-          labelStyle: TextStyle(color: Color(0xFF15616D)),
+          labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: Color(0xFF15616D)),

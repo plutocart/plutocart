@@ -20,7 +20,7 @@ class _AmountTextFieldState extends State<AmountTextField> {
         labelText: "Amount of money",
         labelStyle: TextStyle(
           color: widget.amountMoneyController.text.isNotEmpty
-              ? Color(0xFF15616D)
+              ? Color(0xFF1A9CB0)
               : Colors.red,
         ),
         focusedBorder: OutlineInputBorder(
@@ -48,7 +48,7 @@ class _AmountTextFieldState extends State<AmountTextField> {
         LengthLimitingTextInputFormatter(13),
       ],
       style: TextStyle(
-        color: Color(0xFF1A9CB0),
+        color: Color(0xFF15616D),
         fontSize: 18,
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,

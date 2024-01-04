@@ -115,8 +115,8 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 BlocListener<LoginBloc, LoginState>(
-                  listener: (context, stateLoginCustomer) {
-                    if (stateLoginCustomer.signInGoogleStatus == true) {
+                  listener: (context, stateLoginMember) {
+                    if (stateLoginMember.signInGoogleStatus == true) {
                       print("case 1: check login google == true");
                       Navigator.pushNamedAndRemoveUntil(
                         context,

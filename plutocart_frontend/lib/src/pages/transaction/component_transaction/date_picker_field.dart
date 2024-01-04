@@ -50,11 +50,12 @@ class _DatePickerFieldState extends State<DatePickerField> {
   Widget build(BuildContext context) {
     return TextField(
             controller: widget.tranDateController,
+            style: TextStyle(color: Color(0xFF15616D)),
             readOnly: true,
             decoration: InputDecoration(
               labelText: 'Selected Date',
               labelStyle: TextStyle(
-                color: Color(0xFF15616D), // กำหนดสีของข้อความ 'Selected Date'
+                color: Color(0xFF1A9CB0),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),

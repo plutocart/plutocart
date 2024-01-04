@@ -26,7 +26,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
   void initState() {
     super.initState();
     context.read<LoginBloc>().add(LoginGuest());
-    context.read<LoginBloc>().add(LoginCustomer());
+    context.read<LoginBloc>().add(LoginMember());
   }
 
   @override

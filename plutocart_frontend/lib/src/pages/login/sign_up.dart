@@ -80,10 +80,10 @@ class _SignUpState extends State<SignUp> {
                       AppRoute.app,
                       (route) => false,
                     );
-                  } else if ((state.hasAccountCustomer == false &&
-                          state.signUpCustomerSuccess == true) ||
-                      (state.hasAccountCustomer == true &&
-                          state.signUpCustomerSuccess == false)) {
+                  } else if ((state.hasAccountMember == false &&
+                          state.signUpMemberSuccess == true) ||
+                      (state.hasAccountMember == true &&
+                          state.signUpMemberSuccess == false)) {
                   } else {
                     print("check logic has account guest false");
                     customSignUpPopup(
@@ -181,11 +181,11 @@ class _SignUpState extends State<SignUp> {
                         print(
                             "check email signup class logic create account customer: ${state.email}");
                         print(
-                            "check logic has account customer : ${state.hasAccountCustomer}");
+                            "check logic has account customer : ${state.hasAccountMember}");
                         print(
-                            "check logic has account customer success : ${state.signUpCustomerSuccess}");
-                        if ((state.hasAccountCustomer == false &&
-                            state.signUpCustomerSuccess == true)) {
+                            "check logic has account customer success : ${state.signUpMemberSuccess}");
+                        if ((state.hasAccountMember == false &&
+                            state.signUpMemberSuccess == true)) {
                           print("check logic has account customer conmplete");
                           Navigator.pushNamedAndRemoveUntil(
                             context,
@@ -221,7 +221,7 @@ class _SignUpState extends State<SignUp> {
                           onPressed: () async {
                             context
                                 .read<LoginBloc>()
-                                .add(CreateAccountCustomer());
+                                .add(CreateAccountMember());
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),

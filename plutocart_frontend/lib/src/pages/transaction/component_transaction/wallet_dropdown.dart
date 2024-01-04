@@ -3,7 +3,7 @@ import 'package:plutocart/src/models/wallet/wallet_model.dart';
 
 class WalletDropdown extends StatelessWidget {
   final List<Wallet> walletList;
-  final String selectedWallet;
+  final dynamic selectedWallet;
   final Function(String?) onChanged;
 
   const WalletDropdown({
@@ -20,7 +20,7 @@ class WalletDropdown extends StatelessWidget {
       icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
       decoration: InputDecoration(
         labelText: "Choose Wallet",
-        labelStyle: TextStyle(color: Color(0xFF15616D)),
+        labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: Color(0xFF15616D)),
@@ -30,7 +30,7 @@ class WalletDropdown extends StatelessWidget {
           borderSide: BorderSide(color: Color(0xFF15616D)),
         ),
       ),
-      // value: selectedWallet,
+      value: selectedWallet,
       items: walletList.map((wallet) {
         return DropdownMenuItem<String>(
           value: wallet.walletName,

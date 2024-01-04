@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ButtonTransaction extends StatefulWidget {
@@ -32,14 +35,23 @@ class _ButtonTransactionState extends State<ButtonTransaction> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    createTransactionIncome();
+                BlocBuilder<WalletBloc, WalletState>(
+                  builder: (context, state) {
+                    return IconButton(
+                      onPressed: () {
+                        if (state.wallets.isEmpty) {
+                          createWallet();
+                        }
+                        else{
+                          createTransactionIncome();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    );
                   },
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
                 ),
               ],
             ),
@@ -48,10 +60,20 @@ class _ButtonTransactionState extends State<ButtonTransaction> {
       ],
     );
   }
-   createTransactionIncome() async {
+
+  createTransactionIncome() async {
     showSlideDialog(
         context: context,
-        child:  CardTransactionPopup(),
+        child: CardTransactionPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2);
+  }
+
+  createWallet() async {
+    showSlideDialog(
+        context: context,
+        child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2);

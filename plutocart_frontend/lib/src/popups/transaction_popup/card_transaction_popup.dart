@@ -130,8 +130,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                     builder: (context, walletState) {
                       return WalletDropdown(
                         walletList: walletState.wallets,
-                        selectedWallet:
-                            walletState.wallets[indexWallet].walletName,
+                        selectedWallet:walletState.wallets[indexWallet].walletName,
                         onChanged: (newValueWallet) {
                           indexWallet = walletState.wallets.indexWhere(
                               (element) =>

@@ -80,7 +80,7 @@ class LoginRepository {
 
   // Customer
 
-  Future<Map<String, dynamic>> createAccountCustomer() async {
+  Future<Map<String, dynamic>> createAccountMember() async {
     initPlatformState();
     await handleSignIn();
     String? imei = await storage.read(key: "imei");
@@ -91,7 +91,7 @@ class LoginRepository {
         "check email create Account customer classs repository login : ${email}");
     try {
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/customer',
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/member',
         data: {"imei": imei, "email": email},
       );
       print(
@@ -124,7 +124,7 @@ class LoginRepository {
     } catch (error) {
       if (email != null) {
         print("check email if signup then account dupicate");
-        loginCustomer();
+        loginMember();
       } else {
         print("Error create account customer: $error");
         await storage.write(
@@ -137,7 +137,7 @@ class LoginRepository {
     }
   }
 
-  Future<Map<String, dynamic>> loginCustomer() async {
+  Future<Map<String, dynamic>> loginMember() async {
     await initPlatformState();
     String? imei = await storage.read(key: "imei");
     String? email = await storage.read(key: "email");
@@ -147,7 +147,7 @@ class LoginRepository {
         "email in process login customer after create in class repository: ${email}");
     try {
       Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/customer',
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/member',
         queryParameters: {"imei": imei, "email": email},
       );
       print(
@@ -182,7 +182,7 @@ class LoginRepository {
     try {
       print("start sign in google account");
           Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/customer',
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/member',
         queryParameters: {"imei": imei, "email": email},
       );
       print("email google account and response:  ${response.data}" );

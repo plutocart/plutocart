@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`account` (
   `id_account` INT NOT NULL AUTO_INCREMENT,
   `imei` VARCHAR(200) NOT NULL,
   `email` VARCHAR(50) NULL,
-  `account_role` ENUM('guest', 'customer') NOT NULL,
+  `account_role` ENUM('guest', 'member') NOT NULL,
   PRIMARY KEY (`id_account`),
   UNIQUE INDEX `email_google_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -477,7 +477,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- create account customer by Google account
+-- create account member by Google account
 DELIMITER //
 CREATE  PROCEDURE `createAccountByGoogle`( IN InImei VARCHAR(200) , in InEmail VARCHAR(50))
 BEGIN

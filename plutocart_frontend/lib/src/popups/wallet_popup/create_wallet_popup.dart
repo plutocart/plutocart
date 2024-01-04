@@ -72,7 +72,6 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
               ),
               InputFieldWallet(
                 lableTextField1: "Name of Wallet",
-                lableTextField2: "The initial amount in your wallet",
                 nameWalletController: _nameWalletController,
                 amountMoneyController: _amountMoneyController,
               ),

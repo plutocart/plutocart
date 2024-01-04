@@ -74,21 +74,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-    // Customer
+    // Member
 
-    on<CreateAccountCustomer>((event, emit) async {
+    on<CreateAccountMember>((event, emit) async {
       try {
         Map<String, dynamic> response =
-            await LoginRepository().createAccountCustomer();
+            await LoginRepository().createAccountMember();
         if (response.isNotEmpty) {
           print("start create account customer in LoginBloc");
           emit(state.copyWith(
               accountId: response['data']['accountId'],
               email: response['data']['email'],
               accountRole: response['data']['accountRole'],
-              hasAccountCustomer: false,
-              signUpCustomerSuccess: true,
-              signInCustomerSuccess: true));
+              hasAccountMember: false,
+              signUpMemberSuccess: true,
+              signInMemberSuccess: true));
           print(
               "check state imei from create account customer Login bloc: ${state.imei}");
           print(
@@ -108,22 +108,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             "check state  from create account customer Login bloc errorss: ${state.accountId}");
         if (email != null) {
           emit(state.copyWith(
-              hasAccountCustomer: false,
-              signUpCustomerSuccess: true,
-              signInCustomerSuccess: true,
+              hasAccountMember: false,
+              signUpMemberSuccess: true,
+              signInMemberSuccess: true,
               email: email));
         } else {
           emit(state.copyWith(
-            hasAccountCustomer: true,
-            signUpCustomerSuccess: false,
-            signInCustomerSuccess: false,
+            hasAccountMember: true,
+            signUpMemberSuccess: false,
+            signInMemberSuccess: false,
           ));
         }
       }
     });
 
-    on<LoginCustomer>((event, emit) async {
-      Map<String, dynamic> response = await LoginRepository().loginCustomer();
+    on<LoginMember>((event, emit) async {
+      Map<String, dynamic> response = await LoginRepository().loginMember();
       print(
           "response loginCustomer after create repository working ? : ${response['data']}");
       if (response['data']['email'] == null) {

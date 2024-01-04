@@ -81,7 +81,6 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
           ),
           InputFieldWallet(
             lableTextField1: "Name of wallet",
-            lableTextField2: "Amount of wallet",
             nameWalletController: _nameWalletController,
             amountMoneyController: _amountMoneyController,
           ),
