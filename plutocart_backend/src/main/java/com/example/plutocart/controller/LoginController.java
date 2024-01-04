@@ -22,7 +22,7 @@ public class LoginController {
         GenericResponse result =  loginService.loginGuestByImei(imei , 1);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-    @GetMapping("/login/customer")
+    @GetMapping("/login/member")
     public ResponseEntity<GenericResponse> loginCustomer( @RequestParam(name = "email") String email ){
         GenericResponse result =  loginService.loginGoogle(email , 2);
         return ResponseEntity.status(HttpStatus.OK).body(result);
