@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 
 class TransactionRepository {
-final dio = Dio();
+  final dio = Dio();
 
   Future<Wallet> getTransactionAll(int id) async {
-
     try {
-      Response response = await dio.get('https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/1');
+      Response response = await dio.get(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/1');
       if (response.statusCode == 200) {
         Wallet responseData = Wallet.fromJson(response.data);
-        return responseData; 
+        return responseData;
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {
@@ -23,20 +23,42 @@ final dio = Dio();
       throw error;
     }
   }
-Future<Map<String, dynamic>> createTransactionInCome(int WalletId , File? file , double stmTransaction , String? description , int transactionCategoryId) async {
-  print("create transaction inCome repository WalletId : ${WalletId}");
-  print("create transaction inCome repository file : ${file}");
-  print("create transaction inCome repository stmTransaction : ${stmTransaction}");
-  print("create transaction inCome repository description : ${description}");
-  print("create transaction inCome repository transactionCategoryId : ${transactionCategoryId}");
+
+  Future<Map<String, dynamic>> createTransactionInCome(
+      int WalletId,
+      File? file,
+      double stmTransaction,
+      String dateTransaction ,
+      String? description,
+      int transactionCategoryId) async {
+    print("create transaction inCome repository WalletId : ${WalletId}");
+    print("create transaction inCome repository file : ${file}");
+    print(
+        "create transaction inCome repository stmTransaction : ${stmTransaction}");
+    print("create transaction inCome repository description : ${description}");
+    print(
+        "create transaction inCome repository transactionCategoryId : ${transactionCategoryId}");
     try {
-       FormData formData = FormData.fromMap({
-      "file": file == null ? "" : await MultipartFile.fromFile(file!.path),
-      "stmTransaction": stmTransaction,
-      "statementType": 1,
-      "description": description,
-      "transactionCategoryId": transactionCategoryId,
-    });
+       FormData formData;
+      if (file == null) {
+         formData = FormData.fromMap({
+          "stmTransaction": stmTransaction,
+          "statementType": 1,
+          "dateTransaction" : dateTransaction,
+          "description": description,
+          "transactionCategoryId": transactionCategoryId,
+        });
+      } else {
+         formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(file.path),
+          "stmTransaction": stmTransaction,
+          "statementType": 1,
+          "dateTransaction" : dateTransaction,
+          "description": description,
+          "transactionCategoryId": transactionCategoryId,
+        });
+      }
+
       Response response = await dio.post(
         'https://capstone23.sit.kmutt.ac.th/ej1/api/wallet/${WalletId}/transaction',
         data: formData,

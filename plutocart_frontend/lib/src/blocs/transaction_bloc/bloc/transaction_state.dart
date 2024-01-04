@@ -1,5 +1,5 @@
 part of 'transaction_bloc.dart';
-
+enum TransactionStatus { loading, loaded }
 class TransactionState extends Equatable {
   final int id;
   final double stmTransaction;
@@ -9,6 +9,7 @@ class TransactionState extends Equatable {
   final String description;
   final int tranCategoryIdCategory;
   final int walletId;
+  final TransactionStatus incomeStatus;
 
   TransactionState({
     this.id = 0,
@@ -17,7 +18,7 @@ class TransactionState extends Equatable {
     this.statementType = 0,
     DateTime? dateTransaction, // Nullable DateTime
     this.description = "",
-    this.tranCategoryIdCategory = 1, this.walletId = 0
+    this.tranCategoryIdCategory = 1, this.walletId = 0 , this.incomeStatus = TransactionStatus.loading
   }) : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -27,7 +28,7 @@ class TransactionState extends Equatable {
       int? statementType,
       DateTime? dateTransaction,
       String? description,
-      int? tranCategoryIdCategory , int? walletId}) {
+      int? tranCategoryIdCategory , int? walletId , TransactionStatus ?incomeStatus }) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -36,7 +37,7 @@ class TransactionState extends Equatable {
         dateTransaction: dateTransaction ?? this.dateTransaction,
         description: description ?? this.description,
         tranCategoryIdCategory:
-            tranCategoryIdCategory ?? this.tranCategoryIdCategory , walletId: walletId ?? this.walletId);
+            tranCategoryIdCategory ?? this.tranCategoryIdCategory , walletId: walletId ?? this.walletId , incomeStatus: incomeStatus ?? this.incomeStatus);
   }
 
   @override
@@ -47,6 +48,6 @@ class TransactionState extends Equatable {
         statementType,
         dateTransaction!,
         description,
-        tranCategoryIdCategory , walletId
+        tranCategoryIdCategory , walletId , incomeStatus
       ];
 }

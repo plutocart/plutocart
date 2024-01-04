@@ -10,12 +10,24 @@ part 'transaction_state.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   TransactionBloc() : super(TransactionState()) {
-   
-     on<createTransactionIncome>((event, emit) async {
+     on<resetIncomeStatus>((event, emit) async {
+      emit(state.copyWith(incomeStatus: TransactionStatus.loading , stmTransaction: 0.0));
+    });
+
+
+
+
+    on<createTransactionIncome>((event, emit) async {
       print("start working create transaction income");
       try {
-        Map<String, dynamic> response =
-            await TransactionRepository().createTransactionInCome(event.walletId , event.imageUrl , event.stmTransaction , event.desctiption , event.transactionCategoryId);
+        Map<String, dynamic> response = await TransactionRepository()
+            .createTransactionInCome(
+                event.walletId,
+                event.imageUrl,
+                event.stmTransaction,
+                event.dateTimeTransaction,
+                event.desctiption,
+                event.transactionCategoryId);
         if (response['data'] == null) {
           print(
               "not created transacton income in transaction bloc : ${response['data']}");
@@ -25,9 +37,13 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
               id: response['data']['id'],
               stmTransaction: response['data']['stmTransaction'],
               statementType: 1,
-              description: response['data']['description'], walletId: response['data']['wid']));
+              description: response['data']['description'],
+              walletId: response['data']['wid'],
+              incomeStatus: TransactionStatus.loaded));
+          print("after create income status is : ${state.incomeStatus}");
         }
       } catch (e) {
+        emit(state.copyWith(incomeStatus: TransactionStatus.loading));
         print("Error creating transacton income in transaction bloc");
       }
     });

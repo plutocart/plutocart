@@ -102,7 +102,7 @@ class _CardWalletState extends State<CardWallet> {
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
                                         width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
                                     ).copyWith(
                                       overlayColor: MaterialStateProperty
@@ -167,7 +167,7 @@ class _CardWalletState extends State<CardWallet> {
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
                                             width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(20),
                                       ),
                                     )),
                               ],

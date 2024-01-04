@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -64,8 +63,9 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
                     color: Colors.transparent,
                     child: IconButton(
                       onPressed: () {
-                         FocusScope.of(context).unfocus();
-                        Navigator.pop(context);},
+                        FocusScope.of(context).unfocus();
+                        Navigator.pop(context);
+                      },
                       icon: SizedBox(
                         child: ImageIcon(
                           AssetImage('assets/icon/cancle_icon.png'),
@@ -84,10 +84,7 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
             lableTextField2: "Amount of wallet",
             nameWalletController: _nameWalletController,
             amountMoneyController: _amountMoneyController,
-    
-        
           ),
-
           ActionPopup(
             bottonFirstName: "Cancel",
             bottonSecondeName: "Confirm",
