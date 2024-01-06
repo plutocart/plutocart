@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 class ImageSelectionScreen extends StatelessWidget {
   final XFile? image;
   final Function()? getImageFromCamera;
@@ -17,7 +18,6 @@ class ImageSelectionScreen extends StatelessWidget {
     required this.onViewImage,
     required this.onDeleteImage,
   }) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +105,21 @@ class ImageSelectionScreen extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: Color(0XFF15616D),
+                      bottom: 10,
+                      right: 10,
+                      child: GestureDetector(
+                        onTap: onDeleteImage, // ระบุ event ตามที่ต้องการ
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/icon/delete_image_icon.png'),
+                              fit: BoxFit.contain, // หรือเลือก fit ตามที่ต้องการ
+                            ),
+                          ),
                         ),
-                        onPressed: onDeleteImage,
                       ),
                     ),
                   ],

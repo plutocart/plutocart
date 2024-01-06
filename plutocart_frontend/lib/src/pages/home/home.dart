@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
      context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
+     context.read<TransactionCategoryBloc>().add(GetTransactionCategoryExpense());
     super.initState();
   }
   @override

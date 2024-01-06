@@ -24,8 +24,8 @@ class TransactionCategoryRepository{
 
   Future<dynamic> getTransactionTypeExpense() async {
     try {
-      print("start trasaction income in getTransactionTypeIncome Repository");
-      Response  response = await dio.get('https://capstone23.sit.kmutt.ac.th/ej1/api/transaction-category/income');
+      print("start trasaction income in getTransactionTypeExpense Repository");
+      Response  response = await dio.get('https://capstone23.sit.kmutt.ac.th/ej1/api/transaction-category/expense');
         print("check status code get transaction category repository income : ${response.statusCode} ");
         if(response.statusCode == 200){
             Map<String , dynamic> transactionCategory =  response.data;

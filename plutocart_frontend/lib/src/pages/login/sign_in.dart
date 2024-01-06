@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/repository/login_repository.dart';
 import 'package:plutocart/src/router/router.dart';
 
@@ -95,7 +96,7 @@ class _SignInState extends State<SignIn> {
                           context.read<LoginBloc>().add(LoginGuest());
                           await Future.delayed(Duration(milliseconds: 500));
                           if (context.read<LoginBloc>().state.signInGuestSuccess == false) {
-                            customSignUpPopup(context, "Account guest can't registered");
+                            customAlertPopup(context, "Account guest can't registered");
                           }
                         },
                         child: Padding(
@@ -160,7 +161,7 @@ class _SignInState extends State<SignIn> {
                            print("check logic customer login : ${context.read<LoginBloc>().state.signInGoogleStatus}");
                           if (context.read<LoginBloc>().state.signInGoogleStatus == false) {
                               print("show diaoLog login google not found");
-                            customSignUpPopup(context, "Account google can't registered");
+                            customAlertPopup(context, "Account google can't registered");
                           }
                           },
                           child: Padding(
@@ -202,66 +203,4 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  void customSignUpPopup(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                verticalDirection: VerticalDirection.down,
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(Icons.error_outline_rounded,
-                      color: Colors.red.shade200,
-                      size: MediaQuery.sizeOf(context).width * 0.4),
-                  Text(
-                    message,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Roboto'),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFF15616D)),
-                      fixedSize: MaterialStateProperty.all<Size>(Size(100, 30)),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side:
-                              BorderSide(color: Color(0xFF15616D), width: 2.0),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Close'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 }

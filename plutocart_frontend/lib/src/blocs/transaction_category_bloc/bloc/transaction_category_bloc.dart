@@ -26,5 +26,22 @@ class TransactionCategoryBloc extends Bloc<TransactionCategoryEvent, Transaction
           print("error statar test");
        }
     });
+
+        on<GetTransactionCategoryExpense>((event, emit) async {
+      print("start get transaction category expense bloc");
+       try{
+        print("try transaction category bloc");
+           Map<String , dynamic> response = await TransactionCategoryRepository().getTransactionTypeExpense();
+           if(response.containsKey('data')){
+           print("check data response in getTransaction category bloc expense : ${response['data']}"); 
+           emit(state.copyWith(transactionCategoryExpenseList: response['data']));
+           print("after emit state in getTransaction category bloc expense");
+           print("check emit transaction category income expense : ${state.transactionCategoryExpenseList}");
+           }     
+       }
+       catch(e){
+          print("error statar test");
+       }
+    });
   }
 }

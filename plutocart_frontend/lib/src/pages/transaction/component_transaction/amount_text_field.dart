@@ -49,7 +49,7 @@ class _AmountTextFieldState extends State<AmountTextField> {
       ],
       style: TextStyle(
         color: Color(0xFF15616D),
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,
       ),
@@ -64,7 +64,7 @@ class _AmountTextFieldState extends State<AmountTextField> {
           // If there's a decimal point and more than two digits after it, limit to two digits
           widget.amountMoneyController.text =
               value.substring(0, value.indexOf('.') + 3);
-        } else if (value.length == 10 && !value.contains('.')) {
+        } else if (value.length == 9 && !value.contains('.')) {
           // If no decimal point and total length is 10 characters, prevent further input
           widget.amountMoneyController.text =
               value.substring(0, value.length - 1);

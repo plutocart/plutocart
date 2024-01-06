@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
-class TransactionCategoryDropdown extends StatelessWidget {
+class TransactionCategoryDropdown extends StatefulWidget {
   final List<dynamic> transactionCategoryList;
-  final int indexTransactionCategoryTypeIncome;
+  final int indexTransactionCategoryType;
   final Function(int, int?) onCategoryChanged;
 
   const TransactionCategoryDropdown({
     Key? key,
     required this.transactionCategoryList,
-    required this.indexTransactionCategoryTypeIncome,
+    required this.indexTransactionCategoryType,
     required this.onCategoryChanged,
   }) : super(key: key);
+
+  @override
+  _TransactionCategoryDropdownState createState() =>
+      _TransactionCategoryDropdownState();
+}
+
+class _TransactionCategoryDropdownState
+    extends State<TransactionCategoryDropdown> {
+  bool isCategorySelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +30,23 @@ class TransactionCategoryDropdown extends StatelessWidget {
         icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
         decoration: InputDecoration(
           labelText: "Choose Transaction Category",
-          labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
+          labelStyle: TextStyle(
+            color: isCategorySelected ? Color(0xFF1A9CB0) : Colors.red,
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Color(0xFF15616D)),
+            borderSide: BorderSide(
+              color: isCategorySelected ? Color(0xFF15616D) : Colors.red,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.0),
-            borderSide: BorderSide(color: Color(0xFF15616D)),
+            borderSide: BorderSide(
+              color: isCategorySelected ? Color(0xFF15616D) : Colors.red,
+            ),
           ),
         ),
-        // value: transactionCategoryList[indexTransactionCategoryTypeIncome]
-        //     ['nameTransactionCategory'],
-        items: transactionCategoryList.map((value) {
+        items: widget.transactionCategoryList.map((value) {
           return DropdownMenuItem(
             value: value['nameTransactionCategory'],
             child: Row(
@@ -60,11 +73,15 @@ class TransactionCategoryDropdown extends StatelessWidget {
           );
         }).toList(),
         onChanged: (newValue) {
-          int newIndex = transactionCategoryList.indexWhere(
-              (element) => element['nameTransactionCategory'] == newValue);
-          int? newCategoryId = transactionCategoryList.firstWhere((element) =>
-              element['nameTransactionCategory'] == newValue)['id'];
-          onCategoryChanged(newIndex, newCategoryId);
+          setState(() {
+            int newIndex = widget.transactionCategoryList.indexWhere(
+                (element) => element['nameTransactionCategory'] == newValue);
+            int? newCategoryId = widget.transactionCategoryList
+                .firstWhere((element) =>
+                    element['nameTransactionCategory'] == newValue)['id'];
+            widget.onCategoryChanged(newIndex, newCategoryId);
+            isCategorySelected = true;
+          });
         },
       ),
     );

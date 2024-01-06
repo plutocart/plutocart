@@ -1,5 +1,7 @@
 part of 'transaction_bloc.dart';
+
 enum TransactionStatus { loading, loaded }
+
 class TransactionState extends Equatable {
   final int id;
   final double stmTransaction;
@@ -10,16 +12,24 @@ class TransactionState extends Equatable {
   final int tranCategoryIdCategory;
   final int walletId;
   final TransactionStatus incomeStatus;
+  final TransactionStatus expenseStatus;
+  final double dailyIncome;
+  final double dailyExpense;
 
-  TransactionState({
-    this.id = 0,
-    this.stmTransaction = 0.0,
-    this.imageIconUrl = "",
-    this.statementType = 0,
-    DateTime? dateTransaction, // Nullable DateTime
-    this.description = "",
-    this.tranCategoryIdCategory = 1, this.walletId = 0 , this.incomeStatus = TransactionStatus.loading
-  }) : dateTransaction = dateTransaction ?? DateTime.now();
+  TransactionState(
+      {this.id = 0,
+      this.stmTransaction = 0.0,
+      this.imageIconUrl = "",
+      this.statementType = 0,
+      DateTime? dateTransaction, // Nullable DateTime
+      this.description = "",
+      this.tranCategoryIdCategory = 1,
+      this.walletId = 0,
+      this.incomeStatus = TransactionStatus.loading,
+      this.expenseStatus = TransactionStatus.loading,
+      this.dailyExpense = 0.0,
+      this.dailyIncome = 0.0})
+      : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
       {int? id,
@@ -28,7 +38,12 @@ class TransactionState extends Equatable {
       int? statementType,
       DateTime? dateTransaction,
       String? description,
-      int? tranCategoryIdCategory , int? walletId , TransactionStatus ?incomeStatus }) {
+      int? tranCategoryIdCategory,
+      int? walletId,
+      TransactionStatus? incomeStatus,
+      TransactionStatus? expenseStatus,
+      double? dailyIncome,
+      double? dailyExpense}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -37,7 +52,11 @@ class TransactionState extends Equatable {
         dateTransaction: dateTransaction ?? this.dateTransaction,
         description: description ?? this.description,
         tranCategoryIdCategory:
-            tranCategoryIdCategory ?? this.tranCategoryIdCategory , walletId: walletId ?? this.walletId , incomeStatus: incomeStatus ?? this.incomeStatus);
+            tranCategoryIdCategory ?? this.tranCategoryIdCategory,
+        walletId: walletId ?? this.walletId,
+        incomeStatus: incomeStatus ?? this.incomeStatus,
+        expenseStatus: expenseStatus ?? this.expenseStatus,
+        dailyIncome: dailyIncome ?? this.dailyIncome , dailyExpense:  dailyExpense ?? this.dailyExpense);
   }
 
   @override
@@ -48,6 +67,9 @@ class TransactionState extends Equatable {
         statementType,
         dateTransaction!,
         description,
-        tranCategoryIdCategory , walletId , incomeStatus
+        tranCategoryIdCategory,
+        walletId,
+        incomeStatus,
+        expenseStatus , dailyIncome , dailyExpense
       ];
 }

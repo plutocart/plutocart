@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -35,8 +36,9 @@ class _CardWalletState extends State<CardWallet> {
             state.wallets.where((e) => e.statusWallet == 1).toList();
         return Skeleton.ignorePointer(
           child: Swiper(
-            index:  state.currentColossalIndex,
-            onIndexChanged: (index)=> context.read<WalletBloc>().add(OnIndexChanged(index)) ,
+            index: state.currentColossalIndex,
+            onIndexChanged: (index) =>
+                context.read<WalletBloc>().add(OnIndexChanged(index)),
             itemBuilder: (BuildContext context, int index) {
               if (index == removeStatusOff.length ||
                   removeStatusOff.length == 0) {
@@ -46,7 +48,9 @@ class _CardWalletState extends State<CardWallet> {
                     widthFactor: 0.98,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: state.status == WalletStatus.loading ? Colors.white : Colors.grey.shade100,
+                        color: state.status == WalletStatus.loading
+                            ? Colors.white
+                            : Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
@@ -62,7 +66,8 @@ class _CardWalletState extends State<CardWallet> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                left: state.wallets.length < 6 ? 10 : 10, top: 10),
+                                left: state.wallets.length < 6 ? 10 : 10,
+                                top: 10),
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -77,7 +82,8 @@ class _CardWalletState extends State<CardWallet> {
                                           child: Image(
                                             image: AssetImage(
                                                 'assets/icon/plus_icon.png'),
-                                            height: 30, color:Color(0x5015616D),
+                                            height: 30,
+                                            color: Color(0x5015616D),
                                           ),
                                         ),
                                   SizedBox(
@@ -97,11 +103,18 @@ class _CardWalletState extends State<CardWallet> {
                                         ? Text("Add new wallet")
                                         : Text("Wallet is full"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:state.status == WalletStatus.loading ? Colors.white : Colors.grey.shade100,
+                                      backgroundColor:
+                                          state.status == WalletStatus.loading
+                                              ? Colors.white
+                                              : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                        width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
+                                            width: 1,
+                                            color: state.status ==
+                                                    WalletStatus.loading
+                                                ? Colors.white
+                                                : Colors.grey.shade400),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                     ).copyWith(
@@ -156,17 +169,24 @@ class _CardWalletState extends State<CardWallet> {
                                 ElevatedButton(
                                     onPressed: () async {
                                       await showWallets();
-                                      context.read<WalletBloc>().add(GetAllWallet(
-                                          
-                                          enableOnlyStatusOnCard: true));
+                                      context.read<WalletBloc>().add(
+                                          GetAllWallet(
+                                              enableOnlyStatusOnCard: true));
                                     },
                                     child: Text("Your wallets"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: state.status == WalletStatus.loading ? Colors.white : Colors.grey.shade100,
+                                      backgroundColor:
+                                          state.status == WalletStatus.loading
+                                              ? Colors.white
+                                              : Colors.grey.shade100,
                                       foregroundColor: Color(0xFF15616D),
                                       shape: RoundedRectangleBorder(
                                         side: BorderSide(
-                                            width: 1, color: state.status == WalletStatus.loading ? Colors.white  : Colors.grey.shade400),
+                                            width: 1,
+                                            color: state.status ==
+                                                    WalletStatus.loading
+                                                ? Colors.white
+                                                : Colors.grey.shade400),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                     )),
@@ -186,7 +206,7 @@ class _CardWalletState extends State<CardWallet> {
                     await showWallets();
                     context
                         .read<WalletBloc>()
-                        .add(GetAllWallet( enableOnlyStatusOnCard: true));
+                        .add(GetAllWallet(enableOnlyStatusOnCard: true));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
@@ -271,7 +291,8 @@ class _CardWalletState extends State<CardWallet> {
                                             fontFamily: "Roboto"),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 15),
+                                        padding:
+                                            const EdgeInsets.only(right: 15),
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 3),
@@ -293,25 +314,31 @@ class _CardWalletState extends State<CardWallet> {
                                 height: 20,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "Daily expense",
-                                        style: TextStyle(
-                                            color: Color(0xFF15616D),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Roboto'),
-                                      ),
-                                      Text("-0 ฿",
-                                          style: TextStyle(
-                                              color: Color(0xFFDD0000),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: 'Roboto')),
-                                    ],
+                                  BlocBuilder<TransactionBloc,
+                                      TransactionState>(
+                                    builder: (context, state) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            "Daily expense",
+                                            style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Roboto'),
+                                          ),
+                                          Text("${state.dailyExpense} ฿",
+                                              style: TextStyle(
+                                                  color: Color(0xFFDD0000),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Roboto')),
+                                        ],
+                                      );
+                                    },
                                   ),
                                   Skeleton.ignore(
                                     child: Padding(
@@ -342,23 +369,27 @@ class _CardWalletState extends State<CardWallet> {
                                       ),
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "Daily income",
-                                        style: TextStyle(
-                                            color: Color(0xFF15616D),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Roboto'),
-                                      ),
-                                      Text("0 ฿",
-                                          style: TextStyle(
-                                              color: Color(0xFF2DC653),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: 'Roboto')),
-                                    ],
+                                  BlocBuilder<TransactionBloc, TransactionState>(
+                                    builder: (context, state) {
+                                      return Column(
+                                        children: [
+                                          Text(
+                                            "Daily income",
+                                            style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Roboto'),
+                                          ),
+                                          Text("${state.dailyIncome} ฿",
+                                              style: TextStyle(
+                                                  color: Color(0xFF2DC653),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'Roboto')),
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -412,7 +443,7 @@ class _CardWalletState extends State<CardWallet> {
   createWallet() async {
     showSlideDialog(
         context: context,
-        child:  CreateWalletPopup(),
+        child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2);

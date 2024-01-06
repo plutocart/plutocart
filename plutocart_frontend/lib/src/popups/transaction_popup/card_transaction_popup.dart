@@ -17,6 +17,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/transactio
 import 'package:plutocart/src/pages/transaction/component_transaction/type_transaction_router.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/wallet_dropdown.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/custom_alert_popup.dart';
 
 class CardTransactionPopup extends StatefulWidget {
   const CardTransactionPopup({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
 
   int indexTransactionType = 0;
   int indexWallet = 0;
-  int indexTransactionCategoryTypeIncome = 0;
+  int indexTransactionCategoryType = 0;
   TextEditingController amountMoneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
@@ -73,6 +74,24 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     super.dispose();
   }
 
+  void resetData() {
+    setState(() {
+      tranDateController.clear();
+      DateTime now = DateTime.now();
+      String formattedDateTime =
+          '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+      tranDateController.text = formattedDateTime;
+      amountMoneyController.clear();
+      descriptionController.clear();
+      _image = null;
+      _imageFile = null;
+      indexTransactionCategoryType = 0;
+      idTransactionCategory = null;
+      idWallet = null;
+      indexWallet = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,22 +104,25 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
             setState(() {
               indexTransactionType = typeTransaction.listTypeTransaction
                   .indexWhere((element) => element['typeName'] == newValue);
+              resetData();
             });
           },
         ),
         BlocBuilder<TransactionCategoryBloc, TransactionCategoryState>(
           builder: (context, state) {
+            print("indexTransaction : ${indexTransactionType}");
             switch (indexTransactionType) {
               case 0:
+              case 1:
                 return Container(
                   child: TransactionCategoryDropdown(
-                    transactionCategoryList:
-                        state.transactionCategoryInComeList,
-                    indexTransactionCategoryTypeIncome:
-                        indexTransactionCategoryTypeIncome,
+                    transactionCategoryList: indexTransactionType == 0
+                        ? state.transactionCategoryInComeList
+                        : state.transactionCategoryExpenseList,
+                    indexTransactionCategoryType: indexTransactionCategoryType,
                     onCategoryChanged: (index, categoryId) {
                       setState(() {
-                        indexTransactionCategoryTypeIncome = index;
+                        indexTransactionCategoryType = index;
                         idTransactionCategory = categoryId;
                       });
                     },
@@ -111,26 +133,27 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           },
         ),
         SizedBox(
-          height: 12,
+          height: 5,
         ),
         Icon(
           Icons.arrow_downward_rounded,
           color: Color(0xFF15616D),
         ),
         SizedBox(
-          height: 12,
+          height: 5,
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: BlocBuilder<TransactionCategoryBloc, TransactionCategoryState>(
             builder: (context, state) {
+              print("indexWallet : ${indexWallet}");
               switch (indexTransactionType) {
                 case 0: // case add income
+                case 1:
                   return BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, walletState) {
                       return WalletDropdown(
                         walletList: walletState.wallets,
-                        selectedWallet:walletState.wallets[indexWallet].walletName,
                         onChanged: (newValueWallet) {
                           indexWallet = walletState.wallets.indexWhere(
                               (element) =>
@@ -149,7 +172,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           ),
         ),
         SizedBox(
-          height: 12,
+          height: 15,
         ),
         Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
@@ -157,7 +180,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               amountMoneyController: amountMoneyController,
             )),
         SizedBox(
-          height: 12,
+          height: 15,
         ),
         // Trsndate
         Padding(
@@ -166,7 +189,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               tranDateController: tranDateController,
             )),
         SizedBox(
-          height: 12,
+          height: 15,
         ),
 
         // image
@@ -208,14 +231,14 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           ),
         ),
         SizedBox(
-          height: 12,
+          height: 15,
         ),
         Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: DescriptionTextField(
                 descriptionController: descriptionController)),
         SizedBox(
-          height: 12,
+          height: 10,
         ),
         BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
@@ -226,36 +249,53 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                   Navigator.pop(context);
                 },
                 bottonSecondeNameFunction: () async {
+                  bool isDropdownDataMissing = false;
+
                   switch (indexTransactionType) {
                     case 0:
-                      int idTransactionCategoryFormat =
-                          int.parse(idTransactionCategory.toString());
-                      int idWalletFormat = int.parse(idWallet.toString());
-                      double amount = double.parse(amountMoneyController.text);
-                      String tranDateFormat =
-                          changeFormatter(tranDateController.text);
-                      showCircularLoading(context);
-                      context.read<TransactionBloc>().add(
-                          createTransactionIncome(
-                              idTransactionCategoryFormat,
-                              idWalletFormat,
-                              amount,
-                              tranDateFormat,
-                              _imageFile,
-                              descriptionController.text));
-                      context.read<TransactionBloc>().stream.listen((state) {
-                        print(
-                            "after create income status in transaction card : ${state.incomeStatus}");
-                        if (state.incomeStatus == TransactionStatus.loaded) {
-                          context.read<WalletBloc>().add(GetAllWallet());
-                          context
-                              .read<TransactionBloc>()
-                              .add(resetIncomeStatus());
-                          hideCircularLoading(context);
-                          Navigator.pop(context);
-                        }
-                      });
+                    case 1:
+                      if (idTransactionCategory == null ||
+                          idWallet == null ||
+                          amountMoneyController.text == "") {
+                        isDropdownDataMissing = true;
+                      }
                       break;
+                  }
+                  if (isDropdownDataMissing) {
+                    customAlertPopup(context, "Missing Information");
+                  } else {
+                    switch (indexTransactionType) {
+                      case 0:
+                      case 1:
+                        int idTransactionCategoryFormat =
+                            int.parse(idTransactionCategory.toString());
+                        int idWalletFormat = int.parse(idWallet.toString());
+                        double amount =
+                            double.parse(amountMoneyController.text);
+                        String tranDateFormat =
+                            changeFormatter(tranDateController.text);
+                        showCircularLoading(context);
+                        context.read<TransactionBloc>().add(CreateTransaction(
+                            indexTransactionType == 0 ? 1 : 2,
+                            idTransactionCategoryFormat,
+                            idWalletFormat,
+                            amount,
+                            tranDateFormat,
+                            _imageFile,
+                            descriptionController.text));
+
+                        context.read<TransactionBloc>().stream.listen((state) {
+                          if (state.incomeStatus == TransactionStatus.loaded) {
+                            context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetTransactionStatus());
+                            hideCircularLoading(context);
+                            Navigator.pop(context);
+                          }
+                        });
+                        break;
+                    }
                   }
                 });
           },
