@@ -412,12 +412,15 @@ LIMIT 3;
 END //
 DELIMITER ;
 
--- view daily income
+-- view today income
 DELIMITER //
 
-CREATE PROCEDURE viewTodayIncome(IN accountId INT, IN walletId INT)
+CREATE PROCEDURE viewTodayIncome(
+    IN accountId INT, 
+    IN walletId INT, 
+    OUT todayIncome DECIMAL(10, 2)
+)
 BEGIN
-    DECLARE todayIncome DECIMAL(10, 2);
     DECLARE today DATE;
     SET today = CURDATE();
 
@@ -427,35 +430,52 @@ BEGIN
     WHERE w.account_id_account = accountId
         AND w.id_wallet = walletId
         AND DATE(t.date_transaction) = today
-        AND t.statement_type = 1; -- Assuming 1 is the code for 'income'
-
-    SELECT todayIncome AS todayIncome;
+        AND t.statement_type = 1; -- Assuming 1 is the code for 'income';
 END //
 
 DELIMITER ;
 
--- view daily expense
+-- view today expense
 DELIMITER //
 
-CREATE PROCEDURE viewTodayExpense(IN accountId INT, IN walletId INT)
+CREATE PROCEDURE viewTodayExpense(
+    IN accountId INT, 
+    IN walletId INT, 
+    OUT todayExpense DECIMAL(10, 2)
+)
 BEGIN
-    DECLARE todayIncome DECIMAL(10, 2);
     DECLARE today DATE;
     SET today = CURDATE();
 
-    SELECT IFNULL(SUM(t.stm_transaction), 0) INTO todayIncome
+    SELECT IFNULL(SUM(t.stm_transaction), 0) INTO todayExpense
     FROM transaction t
     JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
     WHERE w.account_id_account = accountId
         AND w.id_wallet = walletId
         AND DATE(t.date_transaction) = today
-        AND t.statement_type = 2; -- Assuming 1 is the code for 'income'
-
-    SELECT todayIncome AS todayIncome;
+        AND t.statement_type = 2; -- Assuming 2 is the code for 'expense';
 END //
 
 DELIMITER ;
 
+-- view today income and expense
+DELIMITER //
+
+CREATE PROCEDURE viewTodayIncomeAndExpense(
+    IN accountId INT, 
+    IN walletId INT, 
+    OUT todayIncome DECIMAL(10, 2), 
+    OUT todayExpense DECIMAL(10, 2)
+)
+BEGIN
+    -- Call viewTodayIncome procedure and store the result in OUT parameter
+    CALL viewTodayIncome(accountId, walletId, todayIncome);
+
+    -- Call viewTodayExpense procedure and store the result in OUT parameter
+    CALL viewTodayExpense(accountId, walletId, todayExpense);
+END //
+
+DELIMITER ;
 
 -- account  
 -- create account guest by use imei

@@ -24,6 +24,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> viewTransactionByAccountIdLimitThree(Integer accountId);
 
     @Transactional
+    @Procedure(procedureName = "viewTransactionByAccountIdAndWalletId")
+    List<Transaction> viewTransactionByAccountIdAndWalletId(Integer accountId, Integer walletId);
+
+    @Transactional
+    @Procedure(procedureName = "viewTransactionByAccountIdAndWalletIdAndTransactionId")
+    List<Transaction> viewTransactionByAccountIdAndWalletIdAndTransactionId(Integer accountId, Integer walletId, Integer transactionId);
+
+    @Transactional
     @Query(value = "SELECT * FROM transaction where wallet_id_wallet = :walletId", nativeQuery = true)
     List<Transaction> viewTransactionByWalletId(Integer walletId);
 
@@ -37,12 +45,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     @Transactional
     @Procedure(procedureName = "viewTodayIncome")
-    List<BigDecimal> viewTodayIncome(Integer accountId, Integer walletId);
+    BigDecimal viewTodayIncome(Integer accountId, Integer walletId);
 
     @Transactional
     @Procedure(procedureName = "viewTodayExpense")
-    List<BigDecimal> viewTodayExpense(Integer accountId, Integer walletId);
+    BigDecimal viewTodayExpense(Integer accountId, Integer walletId);
 
+//    @Transactional
+//    @Procedure(name = "viewTodayIncomeAndExpense")
+//    Optional viewTodayIncomeAndExpense(Integer accountId, Integer walletId);
 
     @Transactional
     @Modifying

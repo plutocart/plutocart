@@ -3,12 +3,10 @@ package com.example.plutocart.dtos.transaction;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
-public class TResStmNowDTO {
+public class TReqGetByAcIdWalIdTranId {
+    Integer accountId;
     Integer walletId;
-    BigDecimal todayIncome;
-    BigDecimal todayExpense;
+    Integer transactionId;
 }
