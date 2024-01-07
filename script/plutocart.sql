@@ -6,6 +6,8 @@
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET time_zone = '+07:00';
+SET GLOBAL time_zone = '+07:00';
 
 -- -----------------------------------------------------
 -- Schema plutocart
@@ -16,7 +18,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `plutocart` DEFAULT CHARACTER SET utf8mb4 ;
 USE `plutocart` ;
-SET time_zone = '+07:00';
+
 -- -----------------------------------------------------
 -- Table `plutocart`.`account`
 -- -----------------------------------------------------
