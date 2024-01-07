@@ -1,5 +1,6 @@
 package com.example.plutocart.controller;
 
+import com.example.plutocart.exceptions.PlutoCartServiceApiException;
 import com.example.plutocart.services.TransactionService;
 import com.example.plutocart.utils.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,26 +22,29 @@ public class TransactionController {
     TransactionService transactionService;
 
     @GetMapping("/account/{account-id}/transaction")
-    private ResponseEntity<GenericResponse> getTransactionByAccountId(@PathVariable("account-id") Integer accountId) {
+    private ResponseEntity<GenericResponse> getTransactionByAccountId(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
         GenericResponse result = transactionService.getTransactionByAccountId(accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/account/{account-id}/transaction-limit")
-    private ResponseEntity<GenericResponse> getTransactionByAccountIdLimitThree(@PathVariable("account-id") Integer accountId) {
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdLimitThree(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
         GenericResponse result = transactionService.getTransactionByAccountIdLimitThree(accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/wallet/{wallet-id}/transaction")
-    private ResponseEntity<GenericResponse> getTransactionByWalletId(@PathVariable("wallet-id") Integer walletId) {
-        GenericResponse result = transactionService.getTransactionByWalletId(walletId);
+    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction")
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletId(@PathVariable("account-id") String accountId,
+                                                                                 @PathVariable("wallet-id") String walletId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletId(accountId, walletId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/wallet/{wallet-id}/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> getTransactionByWalletId(@PathVariable("wallet-id") Integer walletId, @PathVariable("transaction-id") Integer transactionId) {
-        GenericResponse result = transactionService.getTransactionByWalletIdAndTransactionId(walletId, transactionId);
+    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletIdAndTransactionId(@PathVariable("account-id") String accountId,
+                                                                                                 @PathVariable("wallet-id") String walletId,
+                                                                                                 @PathVariable("transaction-id") String transactionId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -59,6 +63,12 @@ public class TransactionController {
     @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-expense")
     private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
         GenericResponse result = transactionService.getTodayExpense(accountId, walletId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/account/{account-id}/wallet/transaction/daily-income-and-expense")
+    private ResponseEntity<GenericResponse> getTodayIncomeAndExpense(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTodayIncomeAndExpense(accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
