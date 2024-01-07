@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 
 class TransactionRepository {
@@ -63,12 +64,15 @@ class TransactionRepository {
     }
   }
 
-  Future<Map<String, dynamic>> getTransactionDailyIncome(
-      int accountId, int walletId) async {
+  Future<List<Map<String, dynamic>>> getTransactionDailyInEx() async {
+       final storage =  FlutterSecureStorage();
+       String? accountId = await storage.read(key: "accountId");
+         int accId = int.parse(accountId!);
     try {
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/${walletId}/transaction/daily-income');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accId}/wallet/transaction/daily-income-and-expense');
       if (response.statusCode == 200) {
+        print("retuen getTransaction dailyincome and exp : ${response}");
         return response.data;
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
@@ -81,21 +85,4 @@ class TransactionRepository {
     }
   }
 
-  Future<Map<String, dynamic>> getTransactionDailyExpense(
-      int accountId, int walletId) async {
-    try {
-      Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accountId}/wallet/${walletId}/transaction/daily-expense');
-      if (response.statusCode == 200) {
-        return response.data;
-      } else if (response.statusCode == 404) {
-        throw Exception('Resource not found');
-      } else {
-        throw Exception('Unexpected error occurred: ${response.statusCode}');
-      }
-    } catch (error, stacktrace) {
-      print("Error: $error - Stacktrace: $stacktrace");
-      throw error;
-    }
-  }
 }

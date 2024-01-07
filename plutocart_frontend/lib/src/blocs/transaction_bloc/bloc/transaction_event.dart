@@ -25,14 +25,7 @@ class CreateTransaction extends TransactionEvent {
 
 class ResetTransactionStatus extends TransactionEvent {}
 
-class GetTransactionDailyIncome extends TransactionEvent {
-  final int accountId;
-  final int walletId;
-  GetTransactionDailyIncome( this.accountId,  this.walletId);
+class GetTransactionDailyInEx extends TransactionEvent {
+
 }
 
-class GetTransactionDailyExpense extends TransactionEvent {
-  final int accountId;
-  final int walletId;
-  GetTransactionDailyExpense( this.accountId,  this.walletId);
-}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -60,11 +61,11 @@ class _CardGroupState extends State<CardGroup> {
                                   fontWeight: FontWeight.w400,
                                   fontFamily: "Roboto")),
                         ),
-                        BlocBuilder<WalletBloc, WalletState>(
+                        BlocBuilder<TransactionBloc, TransactionState>(
                           builder: (context, state) {
                             return TextButton(
                               onPressed: () {
-                                context.read<WalletBloc>().add(GetAllWallet());
+                                context.read<TransactionBloc>().add(GetTransactionDailyInEx());
                               },
                               style: TextButton.styleFrom(
                                 shape: StadiumBorder(),

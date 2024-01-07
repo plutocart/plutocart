@@ -330,7 +330,7 @@ class _CardWalletState extends State<CardWallet> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: 'Roboto'),
                                           ),
-                                          Text("${state.dailyExpense} ฿",
+                                          Text(" ฿",
                                               style: TextStyle(
                                                   color: Color(0xFFDD0000),
                                                   fontSize: 16,
@@ -381,7 +381,7 @@ class _CardWalletState extends State<CardWallet> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: 'Roboto'),
                                           ),
-                                          Text("${state.dailyIncome} ฿",
+                                          Text(" ฿",
                                               style: TextStyle(
                                                   color: Color(0xFF2DC653),
                                                   fontSize: 16,
