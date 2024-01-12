@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';
@@ -11,8 +12,7 @@ import 'package:plutocart/src/router/router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PlutocartApp extends StatefulWidget {
-  
-  const PlutocartApp({Key? key }) : super(key: key);
+  const PlutocartApp({Key? key}) : super(key: key);
 
   @override
   _PlutocartAppState createState() => _PlutocartAppState();
@@ -27,6 +27,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
     super.initState();
     context.read<LoginBloc>().add(LoginGuest());
     context.read<LoginBloc>().add(LoginMember());
+    context.read<TransactionBloc>().add(GetTransactionDailyInEx());
   }
 
   @override
@@ -37,9 +38,15 @@ class _PlutocartAppState extends State<PlutocartApp> {
         builder: (context, stateLogin) {
           return BlocBuilder<WalletBloc, WalletState>(
             builder: (context, walletState) {
-              print("check case (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) : ${(stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty))}");
-                print("check case (stateLogin.hasAccountGuest == false && stateLogin.singUpGuestSuccess == true) : ${(stateLogin.hasAccountGuest == false && stateLogin.signUpGuestSuccess == true)}");
-              if ((stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) || (stateLogin.hasAccountGuest == false && stateLogin.signUpGuestSuccess == true) ) {
+              print(
+                  "check case (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) : ${(stateLogin.imei.isNotEmpty || (stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty))}");
+              print(
+                  "check case (stateLogin.hasAccountGuest == false && stateLogin.singUpGuestSuccess == true) : ${(stateLogin.hasAccountGuest == false && stateLogin.signUpGuestSuccess == true)}");
+              if ((stateLogin.imei.isNotEmpty ||
+                      (stateLogin.email.isNotEmpty &&
+                          stateLogin.imei.isNotEmpty)) ||
+                  (stateLogin.hasAccountGuest == false &&
+                      stateLogin.signUpGuestSuccess == true)) {
                 return Skeletonizer(
                   enabled: walletState.status == WalletStatus.loading,
                   effect: ShimmerEffect(duration: Duration(microseconds: 300)),

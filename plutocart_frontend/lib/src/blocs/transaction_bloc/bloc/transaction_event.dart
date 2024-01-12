@@ -25,7 +25,7 @@ class CreateTransaction extends TransactionEvent {
 
 class ResetTransactionStatus extends TransactionEvent {}
 
-class GetTransactionDailyInEx extends TransactionEvent {
+class GetTransactionDailyInEx extends TransactionEvent {}
 
-}
+class GetTransactionLimit3 extends TransactionEvent {}
 

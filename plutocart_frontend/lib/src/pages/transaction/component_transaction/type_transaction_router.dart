@@ -3,19 +3,19 @@ class TypeTransactionType {
 
   Map<String, dynamic> transactionDataIncome = {
     'transactiontype': 1,
-    'typeName': 'Add Income',
+    'typeName': 'Transaction Income',
   };
   Map<String, dynamic> transactionDataExpense = {
     'transactiontype': 2,
-    'typeName': 'Add Expenses',
+    'typeName': 'Transaction Expenses',
   };
   Map<String, dynamic> transactionDataGoal = {
     'transactiontype': 3,
-    'typeName': 'Add Goal',
+    'typeName': 'Transaction Goal',
   };
   Map<String, dynamic> transactionDataDebt = {
     'transactiontype': 4,
-    'typeName': 'Add Debt',
+    'typeName': 'Transaction Debt',
   };
 
   // Private constructor

@@ -64,7 +64,7 @@ class TransactionRepository {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getTransactionDailyInEx() async {
+  Future<List<dynamic>> getTransactionDailyInEx() async {
        final storage =  FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
          int accId = int.parse(accountId!);
@@ -72,8 +72,31 @@ class TransactionRepository {
       Response response = await dio.get(
           'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accId}/wallet/transaction/daily-income-and-expense');
       if (response.statusCode == 200) {
-        print("retuen getTransaction dailyincome and exp : ${response}");
-        return response.data;
+        print("retuen getTransaction dailyincome and exp : ${response.data['data']}");
+         print("retuen getTransaction dailyincome and exp1 : ${response.data['data'][0]['todayIncome']}"); 
+        return response.data['data'];
+      } else if (response.statusCode == 404 || response.data['data'] == null) {
+        print("working get transaction dailyincome and exp1 : ${response.data['data']}");
+        return response.data['data'];
+      } else {
+        throw Exception('Unexpected error occurred: ${response.statusCode}');
+      }
+    } catch (error, stacktrace) {
+      print("Errorw: $error - Stacktrace: $stacktrace");
+      throw error;
+    }
+  }
+
+   Future<List<dynamic>> getTransactionlimit3() async {
+       final storage =  FlutterSecureStorage();
+       String? accountId = await storage.read(key: "accountId");
+         int accId = int.parse(accountId!);
+    try {
+      Response response = await dio.get(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accId}/transaction-limit');
+      if (response.statusCode == 200) {
+        print("retuen getTransaction limit3 : ${response.data['data']}");
+        return response.data['data'];
       } else if (response.statusCode == 404) {
         throw Exception('Resource not found');
       } else {

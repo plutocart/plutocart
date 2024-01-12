@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 
 class BottomSheetDelete extends StatefulWidget {
-  final Function()? listFunction;
   final int? numberPopUp1;
   final int? numberPopUp2;
   final Wallet wallet;
   const BottomSheetDelete(
       {Key? key,
-      this.listFunction,
       required this.wallet,
       this.numberPopUp1,
       this.numberPopUp2})
@@ -120,6 +119,11 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
             },
             bottonSecondeNameFunction: () {
               context.read<WalletBloc>().add(DeleteWallet( widget.wallet.walletId! ));
+              if(true){
+                  print('delete walletss :' );
+                  context.read<TransactionBloc>().add(GetTransactionLimit3());
+              }
+             
               for (int i = 0; i < widget.numberPopUp2!; i++) {
                 Navigator.pop(context);
               }

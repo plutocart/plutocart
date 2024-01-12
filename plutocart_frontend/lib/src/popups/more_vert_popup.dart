@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -102,11 +103,6 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
           numberPopUp1: 2,
           numberPopUp2: 2,
           wallet: wallet,
-          listFunction : (){
-            context.read<WalletBloc>().add(DeleteWallet( wallet.walletId!));
-             FocusScope.of(context).unfocus();
-             Navigator.pop(context);
-          }
         ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,

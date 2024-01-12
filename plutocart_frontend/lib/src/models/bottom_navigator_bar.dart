@@ -13,7 +13,7 @@ class BottomNavigatorBar extends StatelessWidget {
         initialActiveIndex: 0,
         height: 50,
         top: -10,
-        curveSize: 300,
+        curveSize: 0,
         style: TabStyle.react,
         activeColor: Color(0XFF15616D),
         items: [
@@ -26,8 +26,8 @@ class BottomNavigatorBar extends StatelessWidget {
                   color: Color(0XFF15616D)),
               title: 'Tx' , fontFamily: 'Roboto'),
           // TabItem(icon: ImageIcon(AssetImage('assets/icon/graph_icon.png') , color: Color(0XFF15616D)) ,title: 'Graphs'),
-          // TabItem(icon: ImageIcon(AssetImage('assets/icon/goal_icon.png') , color: Color(0XFF15616D)), title: 'Goals'),
-          // TabItem(icon: ImageIcon(AssetImage('assets/icon/debt_icon.png') , color: Color(0XFF15616D)), title: 'Debts'),
+          TabItem(icon: ImageIcon(AssetImage('assets/icon/goal_icon.png') , color: Color(0XFF15616D)), title: 'Goals'),
+          TabItem(icon: ImageIcon(AssetImage('assets/icon/debt_icon.png') , color: Color(0XFF15616D)), title: 'Debts'),
         ],
         onTap: (int index) {
           onTap(index);

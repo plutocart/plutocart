@@ -13,8 +13,8 @@ class TransactionState extends Equatable {
   final int walletId;
   final TransactionStatus incomeStatus;
   final TransactionStatus expenseStatus;
-  final double dailyIncome;
-  final double dailyExpense;
+  final List<dynamic> transactionsDailyInExList;
+  final List<dynamic> transactionLimit3;
 
   TransactionState(
       {this.id = 0,
@@ -27,8 +27,7 @@ class TransactionState extends Equatable {
       this.walletId = 0,
       this.incomeStatus = TransactionStatus.loading,
       this.expenseStatus = TransactionStatus.loading,
-      this.dailyExpense = 0.0,
-      this.dailyIncome = 0.0})
+      this.transactionsDailyInExList = const[] , this.transactionLimit3 = const[]})
       : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -42,8 +41,7 @@ class TransactionState extends Equatable {
       int? walletId,
       TransactionStatus? incomeStatus,
       TransactionStatus? expenseStatus,
-      double? dailyIncome,
-      double? dailyExpense}) {
+      List<dynamic>? transactionsDailyInExList , List<dynamic>? transactionLimit3}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -55,8 +53,8 @@ class TransactionState extends Equatable {
             tranCategoryIdCategory ?? this.tranCategoryIdCategory,
         walletId: walletId ?? this.walletId,
         incomeStatus: incomeStatus ?? this.incomeStatus,
-        expenseStatus: expenseStatus ?? this.expenseStatus,
-        dailyIncome: dailyIncome ?? this.dailyIncome , dailyExpense:  dailyExpense ?? this.dailyExpense);
+        expenseStatus: expenseStatus ?? this.expenseStatus, transactionsDailyInExList : transactionsDailyInExList ?? this.transactionsDailyInExList , transactionLimit3 : transactionLimit3 ?? this.transactionLimit3
+       );
   }
 
   @override
@@ -70,6 +68,6 @@ class TransactionState extends Equatable {
         tranCategoryIdCategory,
         walletId,
         incomeStatus,
-        expenseStatus , dailyIncome , dailyExpense
+        expenseStatus , transactionsDailyInExList , transactionLimit3
       ];
 }

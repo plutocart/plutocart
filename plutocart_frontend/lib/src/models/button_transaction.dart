@@ -43,7 +43,7 @@ class _ButtonTransactionState extends State<ButtonTransaction> {
                           createWallet();
                         }
                         else{
-                          createTransactionIncome();
+                          createTransaction();
                         }
                       },
                       icon: Icon(
@@ -61,7 +61,7 @@ class _ButtonTransactionState extends State<ButtonTransaction> {
     );
   }
 
-  createTransactionIncome() async {
+  createTransaction() async {
     showSlideDialog(
         context: context,
         child: CardTransactionPopup(),

@@ -287,6 +287,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         context.read<TransactionBloc>().stream.listen((state) {
                           if (state.incomeStatus == TransactionStatus.loaded) {
                             context.read<WalletBloc>().add(GetAllWallet());
+                            context.read<TransactionBloc>().add(GetTransactionDailyInEx());
+                            context.read<TransactionBloc>().add(GetTransactionLimit3());
                             context
                                 .read<TransactionBloc>()
                                 .add(ResetTransactionStatus());

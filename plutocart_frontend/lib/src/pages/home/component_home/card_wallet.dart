@@ -25,6 +25,7 @@ class _CardWalletState extends State<CardWallet> {
   @override
   void initState() {
     context.read<WalletBloc>().add(GetAllWallet());
+    context.read<TransactionBloc>().add(GetTransactionDailyInEx());
     super.initState();
   }
 
@@ -330,12 +331,16 @@ class _CardWalletState extends State<CardWallet> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: 'Roboto'),
                                           ),
-                                          Text(" ฿",
-                                              style: TextStyle(
-                                                  color: Color(0xFFDD0000),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: 'Roboto')),
+                                          Text(
+                                            state.transactionsDailyInExList != null && state.transactionsDailyInExList.length > index
+                                                ? "- ${state.transactionsDailyInExList[index]['todayExpense']}฿"
+                                                : "- 0.0",
+                                            style: TextStyle(
+                                                color: Color(0xFFDD0000),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Roboto'),
+                                          ),
                                         ],
                                       );
                                     },
@@ -369,8 +374,10 @@ class _CardWalletState extends State<CardWallet> {
                                       ),
                                     ),
                                   ),
-                                  BlocBuilder<TransactionBloc, TransactionState>(
+                                  BlocBuilder<TransactionBloc,
+                                      TransactionState>(
                                     builder: (context, state) {
+                                      print("index ;;; : ${index}");
                                       return Column(
                                         children: [
                                           Text(
@@ -381,12 +388,16 @@ class _CardWalletState extends State<CardWallet> {
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: 'Roboto'),
                                           ),
-                                          Text(" ฿",
-                                              style: TextStyle(
-                                                  color: Color(0xFF2DC653),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: 'Roboto')),
+                                          Text(
+                                            state.transactionsDailyInExList !=null && state.transactionsDailyInExList.length > index
+                                                ? "+ ${state.transactionsDailyInExList[index]['todayIncome']}฿"
+                                                : "+ 0.0",
+                                            style: TextStyle(
+                                                color: Color(0xFF2DC653),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Roboto'),
+                                          ),
                                         ],
                                       );
                                     },

@@ -16,9 +16,34 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
     on<GetTransactionDailyInEx>(
       (event, emit) async {
-        List<Map<String, dynamic>> response =
+        List<dynamic> response =
             await TransactionRepository().getTransactionDailyInEx();
-        print("get transaction daily in wx : ${response}");
+        print("Start get transaction daily in ex");
+        try {
+          if (response.length > 0 && response.isNotEmpty) {
+            emit(state.copyWith(transactionsDailyInExList: response));
+            print(
+                "state.transactionsDailyInExList : ${state.transactionsDailyInExList}");
+          }
+        } catch (e) {
+          print("Error state.transactionsDailyInExList");
+        }
+      },
+    );
+
+    on<GetTransactionLimit3>(
+      (event, emit) async {
+        List<dynamic> response =
+            await TransactionRepository().getTransactionlimit3();
+        print("Start get transaction limit 3");
+        try {
+          if (response.length > 0 && response.isNotEmpty) {
+            emit(state.copyWith(transactionLimit3: response));
+            print("state.transactionsLimit3 : ${state.transactionLimit3[0]}");
+          }
+        } catch (e) {
+          print("Error state.transactionsLimit3");
+        }
       },
     );
 

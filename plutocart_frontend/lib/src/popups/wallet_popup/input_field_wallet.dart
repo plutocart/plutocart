@@ -29,14 +29,14 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             decoration: InputDecoration(
               labelText: widget.lableTextField1,
               labelStyle: TextStyle(
-                color: widget.nameWalletController.text.isNotEmpty
+                color: widget.nameWalletController.text.length != 0
                     ? Color(0xFF1A9CB0)
                     : Colors.red,
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
-                  color: widget.nameWalletController.text.isNotEmpty
+                  color: widget.nameWalletController.text.length != 0
                       ? Color(0xFF15616D)
                       : Colors.red,
                 ),
@@ -45,7 +45,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 1,
-                  color: widget.nameWalletController.text.isNotEmpty
+                  color: widget.nameWalletController.text.length != 0
                       ? Color(0xFF15616D)
                       : Colors.red,
                 ),
@@ -55,11 +55,13 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             keyboardType: TextInputType.text,
             style: TextStyle(
               color: Color(0xFF15616D),
-              fontSize: 18,
+              fontSize: 16,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
-      
+            onChanged: (value){
+                setState(() {});
+            },
           ),
         ),
         Padding(

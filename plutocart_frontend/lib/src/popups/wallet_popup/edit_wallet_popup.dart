@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/input_field_wallet.dart';
 
 class EditWalletPopup extends StatefulWidget {
@@ -94,15 +95,22 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
               }
             },
             bottonSecondeNameFunction: () {
-              double balanceWallet =
-                  double.tryParse(_amountMoneyController.text) ?? 0.0;
-              context.read<WalletBloc>().add(UpdateWallet(
-                  widget.wallet?.walletId ?? 0,
-                  _nameWalletController.text,
-                  balanceWallet));
-              for (int i = 0; i < widget.numberPopUp2!; i++) {
-                FocusScope.of(context).unfocus();
-                Navigator.pop(context);
+              if (_amountMoneyController.text.length != 0 &&
+                  _nameWalletController.text.length != 0) {
+                double balanceWallet =
+                    double.tryParse(_amountMoneyController.text) ?? 0.0;
+                context.read<WalletBloc>().add(UpdateWallet(
+                    widget.wallet?.walletId ?? 0,
+                    _nameWalletController.text,
+                    balanceWallet));
+                for (int i = 0; i < widget.numberPopUp2!; i++) {
+                  FocusScope.of(context).unfocus();
+                  Navigator.pop(context);
+                }
+              } else {
+                customAlertPopup(context, "Information missing");
+                print('check first1 ${_amountMoneyController.text.length}');
+                print('check first2 ${_nameWalletController.text.length}');
               }
             },
           )

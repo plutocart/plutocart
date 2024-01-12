@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plutocart/src/app.dart';
+import 'package:plutocart/src/pages/debt/debt.dart';
+import 'package:plutocart/src/pages/goal/goal.dart';
 import 'package:plutocart/src/pages/home/home.dart';
 import 'package:plutocart/src/pages/login/home_login.dart';
 import 'package:plutocart/src/pages/login/sign_in.dart';
@@ -8,6 +10,8 @@ import 'package:plutocart/src/pages/transaction/transaction.dart';
 
 class AppRoute{
   static const home = 'home';
+   static const goal = 'goal';
+    static const debt = 'debt';
   static const login = 'login';
   static const transaction = 'transaction';
   static const signUp = 'signUp';
@@ -20,6 +24,8 @@ class AppRoute{
   login:(context) => const HomeLogin(),
   signUp:(context) => const SignUp(),
   signIn:((context) => const SignIn()),
-  app:(context) => const PlutocartApp()
+  app:(context) => const PlutocartApp(),
+  goal:(context) => const GoalPage(),
+  debt:(context) => const DebtPage(),
  };
 }
