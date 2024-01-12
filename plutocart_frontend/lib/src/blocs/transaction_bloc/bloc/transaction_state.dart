@@ -15,6 +15,7 @@ class TransactionState extends Equatable {
   final TransactionStatus expenseStatus;
   final List<dynamic> transactionsDailyInExList;
   final List<dynamic> transactionLimit3;
+  
 
   TransactionState(
       {this.id = 0,

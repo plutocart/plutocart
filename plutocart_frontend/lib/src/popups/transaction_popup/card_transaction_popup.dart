@@ -35,7 +35,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     tranDateController.text = formattedDateTime;
     super.initState();
   }
-
+  final GlobalKey<FormFieldState> globalKey = GlobalKey();
   int indexTransactionType = 0;
   int indexWallet = 0;
   int indexTransactionCategoryType = 0;
@@ -89,6 +89,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       idTransactionCategory = null;
       idWallet = null;
       indexWallet = 0;
+      globalKey.currentState?.reset();
     });
   }
 
@@ -116,6 +117,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               case 1:
                 return Container(
                   child: TransactionCategoryDropdown(
+                    selectKey: globalKey,
                     transactionCategoryList: indexTransactionType == 0
                         ? state.transactionCategoryInComeList
                         : state.transactionCategoryExpenseList,

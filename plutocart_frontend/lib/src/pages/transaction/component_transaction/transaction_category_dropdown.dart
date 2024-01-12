@@ -4,12 +4,14 @@ class TransactionCategoryDropdown extends StatefulWidget {
   final List<dynamic> transactionCategoryList;
   final int indexTransactionCategoryType;
   final Function(int, int?) onCategoryChanged;
+  final GlobalKey? selectKey;
 
   const TransactionCategoryDropdown({
     Key? key,
     required this.transactionCategoryList,
     required this.indexTransactionCategoryType,
     required this.onCategoryChanged,
+    this.selectKey
   }) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class _TransactionCategoryDropdownState
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: DropdownButtonFormField(
+        key: widget.selectKey,
         menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
         icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
         decoration: InputDecoration(

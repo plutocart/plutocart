@@ -270,10 +270,10 @@ class _CardGroupState extends State<CardGroup> {
                                   builder: (context, state) {
                                     return OutlinedButton(
                                         style: OutlinedButton.styleFrom(
-                                            foregroundColor:
-                                                Colors.transparent , shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(16)
-                                                )),
+                                            foregroundColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(16))),
                                         onPressed: () {
                                           widget.numberPopup == 1
                                               ? state.wallets.length > 0
