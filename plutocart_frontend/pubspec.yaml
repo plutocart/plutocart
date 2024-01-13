@@ -106,7 +106,7 @@ flutter:
     - "assets/icon/logo_login_icon.png"
     - "assets/icon/logo_loading_icon.png"
     - "assets/icon/icon_launch.png"
-    - "assets/icon/cancle_icon.png"
+    - "assets/icon/cancel_icon.png"
     - "assets/icon/transaction_icon.png"
     - "assets/icon/home_icon.png"
     - "assets/icon/debt_icon.png"

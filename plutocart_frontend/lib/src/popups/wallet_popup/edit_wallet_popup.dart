@@ -69,7 +69,7 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
                       },
                       icon: SizedBox(
                         child: ImageIcon(
-                          AssetImage('assets/icon/cancle_icon.png'),
+                          AssetImage('assets/icon/cancel_icon.png'),
                         ),
                       ),
                       color: Color(0xFF15616D),

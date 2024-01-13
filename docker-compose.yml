@@ -11,6 +11,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: Kim-254500
+      TZ: Asia/Bangkok
 
   backend:
     container_name: backend

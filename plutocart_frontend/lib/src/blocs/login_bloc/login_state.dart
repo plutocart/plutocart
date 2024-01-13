@@ -14,7 +14,7 @@ class LoginState extends Equatable {
   final bool signInGoogleStatus;
   const LoginState(
       {this.imei = "",
-      this.accountRole = "guest",
+      this.accountRole = "Guest",
       this.accountId = 0,
       this.email = "",
       this.hasAccountGuest = false,

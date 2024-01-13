@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/home/component_home/card_group.dart';
 import 'package:plutocart/src/pages/home/component_home/card_wallet.dart';
+import 'package:plutocart/src/popups/setting_popup/setting_popup.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,16 +59,24 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              IconButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<CircleBorder>(
-                    CircleBorder(),
-                  ),
-                ),
-                splashRadius: 20,
-                onPressed: () {},
-                icon: Icon(Icons.settings),
-                color: Color(0xFF15616D),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return IconButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<CircleBorder>(
+                                  CircleBorder(),
+                                ),
+                              ),
+                              splashRadius: 20,
+                              onPressed: () {
+                                print("check setting");
+                                print("Role : ${state.accountRole}");
+                                Setting(state.accountRole);
+                              },
+                              icon: Icon(Icons.settings),
+                              color: Color(0xFF15616D),
+                            );
+                },
               )
             ],
           ),
@@ -116,5 +127,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+ Setting(String accountRole) {
+    showSlideDialog(
+        context: context,
+        child: SettingPopup(accountRole: accountRole),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.5);
   }
 }

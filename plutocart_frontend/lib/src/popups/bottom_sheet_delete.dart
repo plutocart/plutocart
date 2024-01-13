@@ -52,7 +52,7 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
                     },
                     icon: SizedBox(
                       child: ImageIcon(
-                        AssetImage('assets/icon/cancle_icon.png'),
+                        AssetImage('assets/icon/cancel_icon.png'),
                       ),
                     ),
                     color: Color(0xFF15616D),
