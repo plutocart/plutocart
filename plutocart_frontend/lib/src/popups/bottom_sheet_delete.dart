@@ -4,16 +4,14 @@ import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart'
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class BottomSheetDelete extends StatefulWidget {
   final int? numberPopUp1;
   final int? numberPopUp2;
   final Wallet wallet;
   const BottomSheetDelete(
-      {Key? key,
-      required this.wallet,
-      this.numberPopUp1,
-      this.numberPopUp2})
+      {Key? key, required this.wallet, this.numberPopUp1, this.numberPopUp2})
       : super(key: key);
 
   @override
@@ -24,12 +22,12 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20 , right: 10),
+            padding: const EdgeInsets.only(left: 20, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -65,7 +63,7 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20 , bottom: 16 ),
+            padding: const EdgeInsets.only(left: 20, bottom: 16),
             child: Row(
               children: [
                 Text(
@@ -82,7 +80,7 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 40 , right: 20 , bottom: 16),
+            padding: const EdgeInsets.only(left: 40, right: 20, bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -118,11 +116,14 @@ class _BottomSheetDeleteState extends State<BottomSheetDelete> {
               }
             },
             bottonSecondeNameFunction: () async {
-              context.read<WalletBloc>().add(DeleteWallet( widget.wallet.walletId! ));
-                await Future.delayed(Duration(milliseconds: 200));
-                  context.read<TransactionBloc>().add(GetTransactionLimit3());
-            
-             
+              context
+                  .read<WalletBloc>()
+                  .add(DeleteWallet(widget.wallet.walletId!));
+              showLoadingPagePopUp(context);
+              await Future.delayed(Duration(milliseconds: 500));
+              Navigator.pop(context);
+              context.read<TransactionBloc>().add(GetTransactionLimit3());
+
               for (int i = 0; i < widget.numberPopUp2!; i++) {
                 Navigator.pop(context);
               }

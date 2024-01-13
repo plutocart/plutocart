@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/input_field_wallet.dart';
 
 class CreateWalletPopup extends StatefulWidget {
@@ -42,7 +44,8 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
 
   void _onAmountChanged() {
     setState(() {
-      _isAmountValid = _amountMoneyController.text.isNotEmpty || double.parse(_amountMoneyController.text) == 0.0;
+      _isAmountValid = _amountMoneyController.text.isNotEmpty ||
+          double.parse(_amountMoneyController.text) == 0.0;
     });
   }
 
@@ -80,10 +83,13 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                 padding: const EdgeInsets.only(left: 22, right: 22, bottom: 22),
                 child: ElevatedButton(
                   onPressed: _isNameValid && _isAmountValid
-                      ? () {
+                      ? () async {
                           double amount = double.parse(_amountMoneyController.text);
                           context.read<WalletBloc>().add(CreateWallet(_nameWalletController.text, amount));
+                          showLoadingPagePopUp(context);
                           FocusScope.of(context).unfocus();
+                          await Future.delayed(Duration(milliseconds: 500));
+                          Navigator.pop(context);
                           Navigator.pop(context);
                         }
                       : null,
@@ -92,11 +98,15 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
                         width: 1,
-                        color: _isNameValid && _isAmountValid ? Color(0xFF15616D) : Colors.transparent,
+                        color: _isNameValid && _isAmountValid
+                            ? Color(0xFF15616D)
+                            : Colors.transparent,
                       ),
                     ),
                     minimumSize: Size(160, 42),
-                    backgroundColor: _isNameValid && _isAmountValid ? Color(0xFF15616D) : Colors.transparent,
+                    backgroundColor: _isNameValid && _isAmountValid
+                        ? Color(0xFF15616D)
+                        : Colors.transparent,
                     foregroundColor: Colors.white,
                   ),
                   child: Container(
@@ -122,4 +132,6 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
       },
     );
   }
+
+
 }

@@ -18,6 +18,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/type_trans
 import 'package:plutocart/src/pages/transaction/component_transaction/wallet_dropdown.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class CardTransactionPopup extends StatefulWidget {
   const CardTransactionPopup({Key? key}) : super(key: key);
@@ -276,7 +277,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             double.parse(amountMoneyController.text);
                         String tranDateFormat =
                             changeFormatter(tranDateController.text);
-                        showCircularLoading(context);
+                        showLoadingPagePopUp(context);
                         context.read<TransactionBloc>().add(CreateTransaction(
                             indexTransactionType == 0 ? 1 : 2,
                             idTransactionCategoryFormat,
@@ -294,7 +295,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context
                                 .read<TransactionBloc>()
                                 .add(ResetTransactionStatus());
-                            hideCircularLoading(context);
+                            Navigator.of(context).pop();
                             Navigator.pop(context);
                           }
                         });
@@ -306,21 +307,5 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         )
       ],
     ));
-  }
-
-  void showCircularLoading(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // ไม่ให้ปิดได้โดยการแตะภายนอก Dialog
-      builder: (BuildContext context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
-
-  void hideCircularLoading(BuildContext context) {
-    Navigator.of(context).pop();
   }
 }
