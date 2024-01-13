@@ -31,4 +31,15 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query(value = "SELECT * FROM account where id_account = :accountId", nativeQuery = true)
     Account getAccountById(Integer accountId);
 
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "deleteAccount")
+    void deleteAccount(int accountId);
+
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "updateAccountToMember")
+    void updateAccountToMember(String email  , int accountId);
+
+
 }

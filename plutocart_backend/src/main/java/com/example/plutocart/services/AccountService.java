@@ -63,4 +63,39 @@ public class AccountService {
         return response;
     }
 
+    public GenericResponse UpdateAccountToMember(String email , Integer accountId){
+        GenericResponse response = new GenericResponse();
+        try {
+            accountRepository.updateAccountToMember(email , accountId);
+            response.setStatus(ResultCode.SUCCESS);
+            Account account = accountRepository.findById(accountId).get();
+            account.setAccountRole("Member");
+            account.setEmail(email);
+            response.setData(account);
+            return response;
+        }
+        catch (Exception ex){
+            response.setStatus(ResultCode.BAD_REQUEST);
+            response.setData(null);
+            return response;
+        }
+    }
+
+    public GenericResponse DeleteAccount(Integer accountId){
+        GenericResponse response = new GenericResponse();
+        try {
+            accountRepository.deleteAccount(accountId);
+            response.setStatus(ResultCode.SUCCESS);
+            return response;
+        }
+        catch (Exception ex){
+            response.setStatus(ResultCode.BAD_REQUEST);
+            response.setData(null);
+            return response;
+        }
+    }
+
+
+
+
 }

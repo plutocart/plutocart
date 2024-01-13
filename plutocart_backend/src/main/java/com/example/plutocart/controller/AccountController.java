@@ -6,13 +6,11 @@ import com.example.plutocart.entities.Account;
 import com.example.plutocart.services.AccountService;
 import com.example.plutocart.utils.GenericResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api")
 @RestController
@@ -29,5 +27,16 @@ public class AccountController {
     public ResponseEntity<GenericResponse> createAccountByGoogle(@Valid @RequestBody AccountDTO accountDTO){
         GenericResponse result = accountService.CreateAccountByGoogle(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+    @DeleteMapping("/account/{account-id}")
+    public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId){
+        GenericResponse result = accountService.DeleteAccount(accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PatchMapping("/account/{account-id}/upgrade-role-member")
+    public ResponseEntity<GenericResponse> updateAccountToMember(@Valid @PathVariable(value = "account-id") Integer accountId , @RequestParam(name = "email") String email){
+        GenericResponse result = accountService.UpdateAccountToMember(email , accountId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

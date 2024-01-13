@@ -516,3 +516,36 @@ BEGIN
     SET countAccounts = 0;
 END //
 DELIMITER ;
+
+
+-- update account from guest to member
+DELIMITER //
+CREATE  PROCEDURE `updateAccountToMember`( IN InEmail VARCHAR(50) , in InAccountId int)
+BEGIN
+    DECLARE countAccounts INT;
+
+    SELECT COUNT(*) INTO countAccounts FROM account WHERE email = InEmail AND account_role = 2;
+
+    IF countAccounts >= 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not update to account member becuase email has register';
+    ELSE
+       update account  set email = inEmail , account_role = 2  where id_account = InAccountId and account_role != 2;
+    END IF;
+    SET countAccounts = 0;
+END //
+DELIMITER ;
+
+-- delete account  
+DELIMITER //
+CREATE PROCEDURE `deleteAccount`(IN InAccountId INT)
+BEGIN
+  SET @wallet_ids = (SELECT GROUP_CONCAT(id_wallet) FROM wallet WHERE account_id_account = InAccountId);
+  
+  WHILE LENGTH(@wallet_ids) > 0 DO
+    SET @wallet_id = SUBSTRING_INDEX(@wallet_ids, ',', 1);
+    CALL deleteWalletBYWalletId(InAccountId, @wallet_id);
+    SET @wallet_ids = TRIM(BOTH ',' FROM SUBSTRING(@wallet_ids, LENGTH(@wallet_id) + 2));
+  END WHILE;
+  delete from account where id_account = InAccountId;
+END //
+DELIMITER ;
