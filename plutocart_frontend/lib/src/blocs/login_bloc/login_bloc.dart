@@ -31,7 +31,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("imei found in class login bloc function loginGuest accountId : ${response['data']['accountId']}");
       print("imei found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
       emit(newState);
-      // อย่าลืมเรียกใช้ emit(newState); เพื่ออัพเดทสถานะใน BLoC
     }
   } catch (e) {
     print("not sign in guest account in login bloc class : $e");
@@ -137,6 +136,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             email: response['data']['email']));
       }
     });
+
+     on<LogOutAccountMember>((event, emit) async {
+        LoginRepository().LogOutEmailGoolge();
+        emit(state.copyWith(email: "" ,));
+    });
+
 
    on<loginEmailGoole>((event, emit) async {
       try {

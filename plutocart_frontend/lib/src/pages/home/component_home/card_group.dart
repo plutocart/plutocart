@@ -164,8 +164,8 @@ class _CardGroupState extends State<CardGroup> {
                                                                 'tranCategoryIdCategory']
                                                             ['imageIconUrl'],
                                                         width:
-                                                            MediaQuery.sizeOf(
-                                                                        context)
+                                                            MediaQuery.of(
+                                                                        context).size
                                                                     .width *
                                                                 0.1,
                                                       ),
@@ -255,8 +255,8 @@ class _CardGroupState extends State<CardGroup> {
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: Container(
                                 height:
-                                    MediaQuery.sizeOf(context).height * 0.08,
-                                width: MediaQuery.sizeOf(context).width * 1,
+                                    MediaQuery.of(context).size.height * 0.08,
+                                width: MediaQuery.of(context).size.width * 1,
                                 decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16),

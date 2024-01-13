@@ -12,6 +12,7 @@ class LoginState extends Equatable {
   final bool signInGuestSuccess;
   final bool signInMemberSuccess;
   final bool signInGoogleStatus;
+  final bool isLogOut;
   const LoginState(
       {this.imei = "",
       this.accountRole = "Guest",
@@ -22,7 +23,7 @@ class LoginState extends Equatable {
       this.signUpMemberSuccess = false,
       this.signUpGuestSuccess = false,
       this.signInMemberSuccess = true,
-      this.signInGuestSuccess = true , this.signInGoogleStatus = true});
+      this.signInGuestSuccess = true , this.signInGoogleStatus = true , this.isLogOut = false});
 
   LoginState copyWith(
       {String? imei,
@@ -34,7 +35,7 @@ class LoginState extends Equatable {
       bool? signUpMemberSuccess,
       bool? signUpGuestSuccess,
       bool? signInMemberSuccess,
-      bool? signInGuestSuccess , bool ? signInGoogleStatus }) {
+      bool? signInGuestSuccess , bool ? signInGoogleStatus , bool ? isLogOut}) {
     return LoginState(
         imei: imei ?? this.imei,
         accountRole: accountRole ?? this.accountRole,
@@ -46,7 +47,7 @@ class LoginState extends Equatable {
         signUpMemberSuccess ?? this.signUpMemberSuccess,
         signUpGuestSuccess: signUpGuestSuccess ?? this.signUpGuestSuccess,
         signInMemberSuccess: signInMemberSuccess ?? this.signInMemberSuccess,
-        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess , signInGoogleStatus : signInGoogleStatus ?? this.signInGoogleStatus);
+        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess , signInGoogleStatus : signInGoogleStatus ?? this.signInGoogleStatus , isLogOut: isLogOut ?? this.isLogOut);
   }
 
   @override
@@ -60,6 +61,6 @@ class LoginState extends Equatable {
         signUpMemberSuccess,
         signUpGuestSuccess,
         signInMemberSuccess,
-        signInGuestSuccess , signInGoogleStatus
+        signInGuestSuccess , signInGoogleStatus , isLogOut
       ];
 }

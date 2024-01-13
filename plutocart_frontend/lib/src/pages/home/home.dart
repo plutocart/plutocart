@@ -71,7 +71,8 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () {
                                 print("check setting");
                                 print("Role : ${state.accountRole}");
-                                Setting(state.accountRole);
+                                print("email : ${state.email}");
+                                Setting(state.accountRole , state.email);
                               },
                               icon: Icon(Icons.settings),
                               color: Color(0xFF15616D),
@@ -128,12 +129,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
- Setting(String accountRole) {
+ Setting(String accountRole , String email) {
     showSlideDialog(
         context: context,
-        child: SettingPopup(accountRole: accountRole),
+        child: SettingPopup(accountRole: accountRole , email: email,),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 1.5);
+        hightCard: 1.6);
   }
 }

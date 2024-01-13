@@ -23,7 +23,7 @@ void customAlertPopup(BuildContext context, String message) {
                 children: <Widget>[
                   Icon(Icons.error_outline_rounded,
                       color: Colors.red.shade200,
-                      size: MediaQuery.sizeOf(context).width * 0.4),
+                      size: MediaQuery.of(context).size.width * 0.4),
                   Text(
                     message,
                     textAlign: TextAlign.center,

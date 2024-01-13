@@ -200,6 +200,19 @@ class LoginRepository {
     }
   }
 
+  // logout Member
+    void  LogOutEmailGoolge() async {
+       final storage = FlutterSecureStorage();
+       storage.deleteAll();
+         await _googleSignIn.signOut();
+         await _googleSignIn.disconnect();
+  }
+
+//  logOut Guest
+  void LogOutGuest() async {
+      final storage = FlutterSecureStorage();
+       storage.deleteAll();
+  }
 // Google
 
   static GoogleSignIn _googleSignIn = GoogleSignIn(

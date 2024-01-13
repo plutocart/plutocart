@@ -65,56 +65,10 @@ class _SignInState extends State<SignIn> {
             ),
           ),
           Container(
-            height: MediaQuery.sizeOf(context).height * 0.6,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                BlocListener<LoginBloc, LoginState>(
-                  listener: (context, stateLogin) {
-                    print(
-                        "check login guest success : ${stateLogin.signInGuestSuccess}");
-                    if (stateLogin.signInGuestSuccess == true) {
-                      print("case 1: check login guest == true");
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRoute.app,
-                        (route) => false,
-                      );
-                    } 
-                  },
-                  child: BlocBuilder<LoginBloc, LoginState>(
-                    builder: (context, state) { 
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF15616D),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side: BorderSide(color: Color(0xFF15616D)),
-                          ),
-                        ),
-                        onPressed: () async {
-                          context.read<LoginBloc>().add(LoginGuest());
-                          await Future.delayed(Duration(milliseconds: 500));
-                          if (context.read<LoginBloc>().state.signInGuestSuccess == false) {
-                            customAlertPopup(context, "Account guest can't registered");
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            "Sign In As Guest",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
                 BlocListener<LoginBloc, LoginState>(
                   listener: (context, stateLoginMember) {
                     if (stateLoginMember.signInGoogleStatus == true) {

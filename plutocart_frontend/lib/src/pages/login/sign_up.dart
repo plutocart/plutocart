@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
-import 'package:plutocart/src/repository/login_repository.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class SignUp extends StatefulWidget {
@@ -58,24 +58,13 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
           Container(
-            height: MediaQuery.sizeOf(context).height * 0.6,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 BlocListener<LoginBloc, LoginState>(listener: (context, state) {
-                  print(
-                      "check imei in signup class logic create account guest: ${state.imei}");
-                  print(
-                      "check account id in signup class logic create account guest: ${state.accountId}");
-                  print(
-                      "check account role signup class logic create account guest: ${state.accountRole}");
-                  print(
-                      "check logic has account guest : ${state.hasAccountGuest}");
-                  print(
-                      "check logic has account guest success : ${state.signUpGuestSuccess}");
                   if ((state.hasAccountGuest == false &&
                       state.signUpGuestSuccess == true)) {
-                    print("check logic has account guest true");
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       AppRoute.app,
@@ -86,7 +75,6 @@ class _SignUpState extends State<SignUp> {
                       (state.hasAccountMember == true &&
                           state.signUpMemberSuccess == false)) {
                   } else {
-                    print("check logic has account guest false");
                     customAlertPopup(
                         context, "Possesses a registered account");
                   }
@@ -197,11 +185,8 @@ class _SignUpState extends State<SignUp> {
                                 state.signUpGuestSuccess == false) ||
                             (state.hasAccountGuest == false &&
                                 state.signUpGuestSuccess == true)) {
-                          print("check logic has account customer else if 1");
                         } else if (state.email == null && state.email == "") {
-                          print("check logic has account customer else if 2");
                         } else if (state.email != null && state.email != "") {
-                          print("check logic has account customer dupicate");
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             AppRoute.app,
@@ -223,6 +208,7 @@ class _SignUpState extends State<SignUp> {
                             context
                                 .read<LoginBloc>()
                                 .add(CreateAccountMember());
+                                
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
