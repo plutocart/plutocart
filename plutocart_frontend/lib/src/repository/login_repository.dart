@@ -203,7 +203,7 @@ class LoginRepository {
   // logout Member
     void  LogOutEmailGoolge() async {
        final storage = FlutterSecureStorage();
-       storage.deleteAll();
+       storage.delete(key: "email");
          await _googleSignIn.signOut();
          await _googleSignIn.disconnect();
   }
@@ -211,7 +211,7 @@ class LoginRepository {
 //  logOut Guest
   void LogOutGuest() async {
       final storage = FlutterSecureStorage();
-       storage.deleteAll();
+       storage.delete(key: "imei");
   }
 // Google
 

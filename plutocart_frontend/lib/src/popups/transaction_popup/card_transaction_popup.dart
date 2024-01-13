@@ -160,10 +160,10 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         onChanged: (newValueWallet) {
                           indexWallet = walletState.wallets.indexWhere(
                               (element) =>
-                                  element.walletName == newValueWallet);
+                                  element.walletId.toString() == newValueWallet);
                           idWallet = walletState.wallets
                               .firstWhere((element) =>
-                                  element.walletName == newValueWallet)
+                                  element.walletId.toString() == newValueWallet)
                               .walletId;
                         },
                       );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/input_field_wallet.dart';
 
 class EditWalletPopup extends StatefulWidget {
@@ -94,7 +96,7 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
                 Navigator.pop(context);
               }
             },
-            bottonSecondeNameFunction: () {
+            bottonSecondeNameFunction: () async {
               if (_amountMoneyController.text.length != 0 &&
                   _nameWalletController.text.length != 0) {
                 double balanceWallet =
@@ -103,6 +105,11 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
                     widget.wallet?.walletId ?? 0,
                     _nameWalletController.text,
                     balanceWallet));
+                  showLoadingPagePopUp(context);    
+                  FocusScope.of(context).unfocus();
+                await Future.delayed(Duration(milliseconds: 500));    
+                Navigator.pop(context);
+                context.read<TransactionBloc>().add(GetTransactionLimit3());    
                 for (int i = 0; i < widget.numberPopUp2!; i++) {
                   FocusScope.of(context).unfocus();
                   Navigator.pop(context);

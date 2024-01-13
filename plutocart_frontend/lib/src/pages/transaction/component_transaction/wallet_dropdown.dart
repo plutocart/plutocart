@@ -49,7 +49,7 @@ class _WalletDropdownState extends State<WalletDropdown> {
       },
       items: widget.walletList.map((wallet) {
         return DropdownMenuItem<String>(
-          value: wallet.walletName,
+          value: wallet.walletId.toString(),
           child: Row(
             children: [
               Padding(

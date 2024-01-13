@@ -121,7 +121,8 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<GetAllWallet>((event, emit) async {
       List<dynamic> response = await walletRepository().getWalletAll();
       if (response.isEmpty) {
-        emit(state.copyWith(status: WalletStatus.loaded));
+        print("check get wallet all empty : ${response}");
+        emit(state.copyWith(status: WalletStatus.loaded , wallets: []));
         throw ArgumentError("Wallet not found");
       } else {
         if (event.enableOnlyStatusOnCard == true) {

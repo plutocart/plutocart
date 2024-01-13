@@ -33,13 +33,11 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
     on<GetTransactionLimit3>(
       (event, emit) async {
-        List<dynamic> response =
-            await TransactionRepository().getTransactionlimit3();
+        List<dynamic> response = await TransactionRepository().getTransactionlimit3();
         print("Start get transaction limit 3");
-        try {
-          
+        try {         
             emit(state.copyWith(transactionLimit3: response));
-            print("state.transactionsLimit3 : ${state.transactionLimit3[0]}");
+            print("state.transactionsLimit3 : ${state.transactionLimit3[0].walletName}");
           
         } catch (e) {
           print("Error state.transactionsLimit3");

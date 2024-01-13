@@ -83,7 +83,7 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                     children: [
                       Text(
-                        "Or sign in by google account?",
+                        "Sign in by google account?",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           color: Color(0xFF15616D),

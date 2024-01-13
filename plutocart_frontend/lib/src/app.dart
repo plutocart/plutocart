@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
@@ -32,12 +33,15 @@ class _PlutocartAppState extends State<PlutocartApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, stateLogin) {
           return BlocBuilder<WalletBloc, WalletState>(
             builder: (context, walletState) {
+              print("stateLogin.imei : ${stateLogin.imei}");
+              print("stateLogin.imei id account : ${stateLogin.accountId}");
               print(
                   "check case (stateLogin.imei.isNotEmpty || ( stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty)) : ${(stateLogin.imei.isNotEmpty || (stateLogin.email.isNotEmpty && stateLogin.imei.isNotEmpty))}");
               print(

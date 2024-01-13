@@ -139,7 +139,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
      on<LogOutAccountMember>((event, emit) async {
         LoginRepository().LogOutEmailGoolge();
-        emit(state.copyWith(email: "" ,));
+        emit(state.copyWith(email: ""));
     });
 
 

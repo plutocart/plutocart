@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 
@@ -8,9 +9,13 @@ class SettingPopup extends StatefulWidget {
   final String? email;
   const SettingPopup({Key? key, required this.accountRole, this.email})
       : super(key: key);
-
   @override
   _SettingPopupState createState() => _SettingPopupState();
+}
+
+Future<void> clearCache() async {
+  final cacheManager = DefaultCacheManager();
+  await cacheManager.emptyCache();
 }
 
 class _SettingPopupState extends State<SettingPopup> {
@@ -122,16 +127,18 @@ class _SettingPopupState extends State<SettingPopup> {
         SizedBox(
           height: 20,
         ),
-       widget.accountRole == "Member" ?  SizedBox.shrink()  :  Text(
-          "Enter your email and become our member",
-          style: TextStyle(
-            color: Color(0xFF1A9CB0),
-            fontSize: 12,
-            fontFamily: 'Manrope',
-            fontWeight: FontWeight.w500,
-            height: 0.12,
-          ),
-        ),
+        widget.accountRole == "Member"
+            ? SizedBox.shrink()
+            : Text(
+                "Enter your email and become our member",
+                style: TextStyle(
+                  color: Color(0xFF1A9CB0),
+                  fontSize: 12,
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w500,
+                  height: 0.12,
+                ),
+              ),
         SizedBox(
           height: 20,
         ),
@@ -139,17 +146,24 @@ class _SettingPopupState extends State<SettingPopup> {
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.07,
           decoration: ShapeDecoration(
-            color: widget.accountRole == "Member" ? Color(0xFF15616D) : Colors.red,
+            color: widget.accountRole == "Member"
+                ? Color(0xFF15616D)
+                : Colors.red,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              side: BorderSide(width: 1, color: widget.accountRole == "Member" ? Color(0xFF15616D) : Colors.red),
+              side: BorderSide(
+                  width: 1,
+                  color: widget.accountRole == "Member"
+                      ? Color(0xFF15616D)
+                      : Colors.red),
             ),
           ),
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               return ElevatedButton(
-                onPressed: () async {
+                onPressed: ()  {
                   if (widget.accountRole == "Member") {
+                    clearCache();
                     context.read<LoginBloc>().add(LogOutAccountMember());
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -157,7 +171,6 @@ class _SettingPopupState extends State<SettingPopup> {
                       (route) => false,
                     );
                   } else {
-              
                     // Navigator.pushAndRemoveUntil(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => MyWidget()),
@@ -169,7 +182,11 @@ class _SettingPopupState extends State<SettingPopup> {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
-                child: Center(child: widget.accountRole == "Member" ?  Text("Log out") : Text("Delete Account Guest")),
+                child: Center(
+                  child: widget.accountRole == "Member"
+                      ? Text("Log out")
+                      : Text("Delete Account Guest"),
+                ),
               );
             },
           ),
