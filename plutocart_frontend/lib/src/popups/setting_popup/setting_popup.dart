@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
-import 'package:plutocart/src/blocs/reset_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
-import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class SettingPopup extends StatefulWidget {
   final String accountRole;
@@ -74,18 +72,41 @@ class _SettingPopupState extends State<SettingPopup> {
         ),
         widget.accountRole == "Member"
             ? Padding(
-                padding: const EdgeInsets.only(right: 40),
-                child: Text(
-                  "Email Member : ${widget.email}",
-                  style: TextStyle(
-                    color: Color(0xFF15616D),
-                    fontSize: 16,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
+              padding: const EdgeInsets.only(left: 20),
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width * 1
                 ),
-              )
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Email Member",
+                      style: TextStyle(
+                        color: Color(0xFF15616D),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ) , 
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40),
+                    child: Text(
+                      "${widget.email}",
+                      style: TextStyle(
+                        color: Color(0xFF15616D),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  )
+                  ],
+                ),
+              ),
+            )
             : Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ElevatedButton(
@@ -124,7 +145,7 @@ class _SettingPopupState extends State<SettingPopup> {
                 ),
               ),
         SizedBox(
-          height: 20,
+          height: widget.accountRole == "Member" ? 5 : 20,
         ),
         widget.accountRole == "Member"
             ? SizedBox.shrink()
@@ -162,12 +183,9 @@ class _SettingPopupState extends State<SettingPopup> {
                 onPressed: () async {
                   if (widget.accountRole == "Member") {
                     context.read<LoginBloc>().add(LogOutAccountMember());
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyWidget()),
-                      (route) => false,
-                    );
                     resetAllBlocs();
+                    Navigator.pop(context);
+                    runApp(MyWidget());
                   } else {
                     // Navigator.pushAndRemoveUntil(
                     //   context,
@@ -192,7 +210,7 @@ class _SettingPopupState extends State<SettingPopup> {
       ],
     );
   }
-
+//  สำคัญต้องลบทุก Bloc
   void resetAllBlocs() {
     context.read<WalletBloc>().add(ResetWallet());
     context.read<TransactionCategoryBloc>().add(ResetTransactionCategory());

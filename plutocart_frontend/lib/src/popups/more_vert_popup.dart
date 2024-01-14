@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/bottom_sheet_delete.dart';

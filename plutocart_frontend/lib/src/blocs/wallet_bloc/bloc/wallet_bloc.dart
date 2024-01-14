@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/repository/wallet_repository.dart';
 part 'wallet_event.dart';

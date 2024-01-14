@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:plutocart/src/models/transaction_category/transaction_category.dart';
 import 'package:plutocart/src/repository/transaction_category_repository.dart';
 
 part 'transaction_category_event.dart';

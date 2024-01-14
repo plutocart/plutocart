@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:plutocart/src/models/wallet/wallet_model.dart';
 
 class TransactionRepository {
   final dio = Dio();

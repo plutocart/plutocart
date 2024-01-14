@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:plutocart/src/models/transaction_category/transaction_category.dart';
 
 class TransactionCategoryRepository{
   final Dio dio = Dio();
