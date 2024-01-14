@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -240,30 +241,34 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse createTransaction(Integer walletId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, Integer transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException {
+    public GenericResponse createTransaction(String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException, PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
-        String imageUrl = null;
+//        String imageUrl = null;
+//
+//        if (file != null && !file.isEmpty()) {
+//            imageUrl = cloudinaryService.uploadImageInTransaction(file);
+//        }
 
-        if (file != null && !file.isEmpty()) {
-            imageUrl = cloudinaryService.uploadImageInTransaction(file);
-        }
+//        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
 
-        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
+        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
 
-        transactionRepository.InsertIntoTransactionByWalletId(walletId, stmTransaction, statementType, dateTransaction, transactionCategory.getId(), description, imageUrl, debtIdDebt, goalIdGoal);
-        Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(walletId).get(transactionRepository.viewTransactionByWalletId(walletId).toArray().length - 1);
+        transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
+                tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), debtIdDebt, goalIdGoal);
+        Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).get(transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).toArray().length - 1);
 
-        if (statementType == 1) {
-            tRes.setStatementType("income");
-        } else {
-            tRes.setStatementType("expense");
-        }
+//        if (statementType == 1) {
+//            tRes.setStatementType("income");
+//        } else if (statementType == 2) {
+//            tRes.setStatementType("expense");
+//        }
 
+        tRes.setWalletId(tReqPostTran.getWalletId());
         tRes.setTransactionId(currentTransaction.getId());
-        tRes.setStmTransaction(stmTransaction);
-//        tRes.setStatementType(statementType);
-        tRes.setWId(walletId);
+        tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setStatementType(currentTransaction.getStatementType());
+        tRes.setStmTransaction(currentTransaction.getStmTransaction());
         tRes.setDescription("Create Success");
 
         response.setStatus(ResultCode.SUCCESS);
@@ -272,35 +277,102 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse updateTransaction(Integer walletId, Integer transactionId, MultipartFile file, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction, Integer transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
+    public GenericResponse updateTransaction(String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
         GenericResponse response = new GenericResponse();
+        TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;
+        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
 
-        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
-        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
-        TResPostDTO transactionResponse = modelMapper.map(transaction, TResPostDTO.class);
+        if (!HelperMethod.isInteger(transactionId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
 
-        if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
+        Integer tranId = Integer.parseInt(transactionId);
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
+        if (transaction == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not created. ");
+
+        if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tranId) {
             if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
-                cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
+                cloudinaryService.deleteImageOnCloudInTransaction(tranId);
             }
 
             if (file != null && !file.isEmpty()) {
                 imageUrl = cloudinaryService.uploadImageInTransaction(file);
             }
 
-            transactionRepository.updateTransaction(walletId, transactionId, stmTransaction, statementType, dateTransaction, transactionCategory.getId(), description, imageUrl, debtIdDebt, goalIdGoal);
+            transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tranId, tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, imageUrl, debtIdDebt, goalIdGoal);
         } else {
             throw new Exception();
         }
 
-        transactionResponse.setTransactionId(transaction.getId());
-        transactionResponse.setWId(transaction.getWalletIdWallet().getWalletId());
-        transactionResponse.setDescription("Update Success");
+//        Transaction transactionUpdate = transactionRepository.viewTransactionByTransactionId(transactionId);
+//        TResPostDTO transactionResponse = modelMapper.map(transactionUpdate, TResPostDTO.class);
+
+        tRes.setWalletId(tReqPostTran.getWalletId());
+        tRes.setTransactionId(tranId);
+        tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setStatementType(tReqPostTran.getStmTypeString());
+        tRes.setStmTransaction(tReqPostTran.getStmTransaction());
+        tRes.setDescription("Update Success");
 
         response.setStatus(ResultCode.SUCCESS);
-        response.setData(transactionResponse);
+        response.setData(tRes);
         return response;
+    }
+
+    public TReqPostTran validationCreateAndUpdateTransaction(String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId) throws PlutoCartServiceApiException, IOException {
+        String imageUrl = null;
+
+        if (!HelperMethod.isInteger(walletId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
+
+        Integer walId = Integer.parseInt(walletId);
+        Wallet wallet = walletRepository.viewWalletByWalletId(walId);
+        if (wallet == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not created. ");
+
+        if (StringUtils.isEmpty(stmTransaction.trim()) || !HelperMethod.isDecimal(stmTransaction))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be decimal. ");
+
+        BigDecimal stmTran = new BigDecimal(stmTransaction);
+
+        if (StringUtils.isEmpty(stmType.trim()) || !HelperMethod.isInteger(stmType))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 & 2. ");
+
+        Integer sType = Integer.parseInt(stmType);
+        if (sType != 1 && sType != 2)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 & 2. ");
+
+        String sTypeString = null;
+        if (sType == 1) {
+            sTypeString = "income";
+        } else if (sType == 2) {
+            sTypeString = "expense";
+        }
+
+        if (StringUtils.isEmpty(transactionCategoryId.trim()) || !HelperMethod.isInteger(transactionCategoryId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id must be number. ");
+
+        Integer tranCatId = Integer.parseInt(transactionCategoryId);
+        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(tranCatId);
+        if (transactionCategory == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id " + tranCatId + " is not created. ");
+
+        if (!transactionCategory.getTypeCategory().equals(sTypeString))
+            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "category type is not match in transaction category. ");
+
+        if (file != null && !file.isEmpty()) {
+            imageUrl = cloudinaryService.uploadImageInTransaction(file);
+        }
+
+        TReqPostTran tReqPostTran = new TReqPostTran();
+        tReqPostTran.setWalletId(walId);
+        tReqPostTran.setImageUrl(imageUrl);
+        tReqPostTran.setStmTransaction(stmTran);
+        tReqPostTran.setStmType(sType);
+        tReqPostTran.setStmTypeString(sTypeString);
+        tReqPostTran.setTransactionCategoryId(tranCatId);
+        return tReqPostTran;
     }
 
     @Transactional
@@ -318,7 +390,7 @@ public class TransactionService {
         }
 
         transactionResponse.setTransactionId(transaction.getId());
-        transactionResponse.setWId(transaction.getWalletIdWallet().getWalletId());
+        transactionResponse.setWalletId(transaction.getWalletIdWallet().getWalletId());
         transactionResponse.setDescription("Delete Success");
 
         response.setStatus(ResultCode.SUCCESS);

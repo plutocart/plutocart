@@ -25,6 +25,8 @@ public class HelperMethod {
         try {
             Double.parseDouble(str);
             return true;
+//            new BigDecimal(str); // Attempt to create a BigDecimal from the input string
+//            return true;
         } catch (NumberFormatException e) {
             return false;
         }

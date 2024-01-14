@@ -75,15 +75,15 @@ public class TransactionController {
 
     @PostMapping("/wallet/{wallet-id}/transaction")
     private ResponseEntity<GenericResponse> createTransactions(@RequestParam(name = "file", required = false) MultipartFile file,
-                                                               @RequestParam("stmTransaction") BigDecimal stmTransaction,
-                                                               @RequestParam("statementType") Integer statementType,
+                                                               @RequestParam("stmTransaction") String stmTransaction,
+                                                               @RequestParam("statementType") String statementType,
                                                                @RequestParam(name = "dateTransaction", required = false)
                                                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
-                                                               @RequestParam(name = "transactionCategoryId") Integer transactionCategoryId,
+                                                               @RequestParam(name = "transactionCategoryId") String transactionCategoryId,
                                                                @RequestParam(name = "description", required = false, defaultValue = "null") String description,
                                                                @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
                                                                @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
-                                                               @PathVariable("wallet-id") Integer walletId) throws IOException {
+                                                               @PathVariable("wallet-id") String walletId) throws IOException, PlutoCartServiceApiException {
 
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
 
@@ -95,16 +95,16 @@ public class TransactionController {
 
     @PatchMapping("wallet/{wallet-id}/transaction/{transaction-id}")
     private ResponseEntity<GenericResponse> updateTransaction(@RequestParam(name = "file", required = false) MultipartFile file,
-                                                              @RequestParam("stmTransaction") BigDecimal stmTransaction,
-                                                              @RequestParam("statementType") Integer statementType,
+                                                              @RequestParam("stmTransaction") String stmTransaction,
+                                                              @RequestParam("statementType") String statementType,
                                                               @RequestParam(name = "dateTransaction", required = false)
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
-                                                              @RequestParam(name = "transactionCategoryId") Integer transactionCategoryId,
+                                                              @RequestParam(name = "transactionCategoryId") String transactionCategoryId,
                                                               @RequestParam(name = "description", required = false, defaultValue = "null") String description,
                                                               @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
                                                               @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
-                                                              @PathVariable("wallet-id") Integer walletId,
-                                                              @PathVariable("transaction-id") Integer transactionId) throws Exception {
+                                                              @PathVariable("wallet-id") String walletId,
+                                                              @PathVariable("transaction-id") String transactionId) throws Exception {
 
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
         Integer actualDebtId = debtIdDebt.orElse(null);
