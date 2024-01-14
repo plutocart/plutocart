@@ -37,10 +37,11 @@ class LoginRepository {
           key: "accountId",
           value: response.data['data']['accountId'].toString(),
         );
-        
+
         return response.data;
       } else {
-        throw Exception('Error login guest repository data is : ${response.data['data']}');
+        throw Exception(
+            'Error login guest repository data is : ${response.data['data']}');
       }
     } catch (error) {
       print("Error login repository guest: $error");
@@ -177,18 +178,20 @@ class LoginRepository {
   Future<Map<String, dynamic>> loginEmailGoogle() async {
     String? imei = await storage.read(key: "imei");
     String? email = await storage.read(key: "email");
-     print("email login email google : ${email}");
-      print("email login imei google : ${imei}");
+    print("email login email google : ${email}");
+    print("email login imei google : ${imei}");
     try {
       print("start sign in google account");
-          Response response = await dio.get(
+      Response response = await dio.get(
         'https://capstone23.sit.kmutt.ac.th/ej1/api/login/member',
         queryParameters: {"imei": imei, "email": email},
       );
-      print("email google account and response:  ${response.data}" );
+      print("email google account and response:  ${response.data}");
 
-      if (response.statusCode == 200 ) {
-        await storage.write( key: "accountId", value: response.data['data']['accountId'].toString(),
+      if (response.statusCode == 200) {
+        await storage.write(
+          key: "accountId",
+          value: response.data['data']['accountId'].toString(),
         );
         return response.data;
       } else {
@@ -201,18 +204,43 @@ class LoginRepository {
   }
 
   // logout Member
-    void  LogOutEmailGoolge() async {
-       final storage = FlutterSecureStorage();
-       storage.delete(key: "email");
-         await _googleSignIn.signOut();
-         await _googleSignIn.disconnect();
+  void LogOutEmailGoolge() async {
+    final storage = FlutterSecureStorage();
+    storage.delete(key: "email");
+    await _googleSignIn.signOut();
+    await _googleSignIn.disconnect();
   }
 
 //  logOut Guest
-  void LogOutGuest() async {
-      final storage = FlutterSecureStorage();
-       storage.delete(key: "imei");
+  // void LogOutGuest() async {
+  //     final storage = FlutterSecureStorage();
+  //      storage.delete(key: "imei");
+  // }
+
+// Delete Account
+   Future<Map<String, dynamic>> deleteAccountById() async {
+    final storage = new FlutterSecureStorage();
+    String? accountId = await storage.read(key: "accountId");
+    int id = int.parse(accountId!);
+    print("id account in step deleteAccountById : ${id}");
+    try {
+      Response response = await dio.delete(
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/delete-account');
+      if (response.statusCode == 200) {
+        print("delete account id : ${id} : success");
+        storage.delete(key: "accountId");
+        return response.data;
+      } else if (response.statusCode == 404) {
+        throw Exception('Resource not found');
+      } else {
+        throw Exception('Unexpected error occurred: ${response.statusCode}');
+      }
+    } catch (error, stacktrace) {
+      print("Error: $error - Stacktrace: $stacktrace");
+      throw error;
+    }
   }
+
 // Google
 
   static GoogleSignIn _googleSignIn = GoogleSignIn(

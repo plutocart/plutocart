@@ -6,19 +6,19 @@ import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
-class BottomSheetDelete extends StatefulWidget {
+class BottomSheetDeleteWallet extends StatefulWidget {
   final int? numberPopUp1;
   final int? numberPopUp2;
   final Wallet wallet;
-  const BottomSheetDelete(
+  const BottomSheetDeleteWallet(
       {Key? key, required this.wallet, this.numberPopUp1, this.numberPopUp2})
       : super(key: key);
 
   @override
-  _BottomSheetDeleteState createState() => _BottomSheetDeleteState();
+  _BottomSheetDeleteWalletState createState() => _BottomSheetDeleteWalletState();
 }
 
-class _BottomSheetDeleteState extends State<BottomSheetDelete> {
+class _BottomSheetDeleteWalletState extends State<BottomSheetDeleteWallet> {
   @override
   Widget build(BuildContext context) {
     return Container(

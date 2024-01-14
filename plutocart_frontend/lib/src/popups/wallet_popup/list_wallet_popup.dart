@@ -4,7 +4,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
-import 'package:plutocart/src/popups/more_vert_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/more_vert_popup.dart';
 
 class ListWalletPopup extends StatefulWidget {
   const ListWalletPopup({Key? key}) : super(key: key);

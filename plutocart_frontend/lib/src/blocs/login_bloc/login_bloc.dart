@@ -175,6 +175,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(newState);
       }
     });
+
+    // Delete account bloc
+
+    on<DeleteAccount>((event, emit) async {
+      try {
+        print("start step delete account bloc");
+        await LoginRepository().deleteAccountById();
+      } catch (error) {
+        print("error delete account bloc: $error");
+        throw error;
+      }
+    });
     
   }
 }

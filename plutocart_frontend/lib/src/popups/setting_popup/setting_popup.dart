@@ -5,6 +5,8 @@ import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/action_popup.dart';
 
 class SettingPopup extends StatefulWidget {
   final String accountRole;
@@ -16,6 +18,27 @@ class SettingPopup extends StatefulWidget {
 }
 
 class _SettingPopupState extends State<SettingPopup> {
+  TextStyle globalTextStyleRedHeadline = TextStyle(
+    color: Colors.red,
+    fontSize: 16,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500,
+    height: 0,
+  );
+  TextStyle globalTextStyleRedDes = TextStyle(
+      color: Colors.red,
+      fontSize: 14,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w400,
+      height: 0,
+      decoration: TextDecoration.underline);
+  TextStyle globalTextStyleGreenHeadline = TextStyle(
+    color: Color(0xFF15616D),
+    fontSize: 18,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500,
+    height: 0,
+  );
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -57,56 +80,29 @@ class _SettingPopupState extends State<SettingPopup> {
                   width: MediaQuery.of(context).size.width * 0.1,
                 ),
               ),
-              Text(
-                widget.accountRole,
-                style: TextStyle(
-                  color: Color(0xFF15616D),
-                  fontSize: 16,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.accountRole,
+                    style: TextStyle(
+                      color: Color(0xFF15616D),
+                      fontSize: 16,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ),
+                  ),
+                  widget.accountRole == "Member"
+                      ? Text("${widget.email}")
+                      : SizedBox.shrink(),
+                ],
               )
             ],
           ),
         ),
         widget.accountRole == "Member"
-            ? Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                constraints: BoxConstraints(
-                  minWidth: MediaQuery.of(context).size.width * 1
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Email Member",
-                      style: TextStyle(
-                        color: Color(0xFF15616D),
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ) , 
-                  Padding(
-                    padding: const EdgeInsets.only(right: 40),
-                    child: Text(
-                      "${widget.email}",
-                      style: TextStyle(
-                        color: Color(0xFF15616D),
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  )
-                  ],
-                ),
-              ),
-            )
+            ? SizedBox.shrink()
             : Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: ElevatedButton(
@@ -187,11 +183,7 @@ class _SettingPopupState extends State<SettingPopup> {
                     Navigator.pop(context);
                     runApp(MyWidget());
                   } else {
-                    // Navigator.pushAndRemoveUntil(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => MyWidget()),
-                    //   (route) => false,
-                    // );
+                    ActionDeleteAccount();
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -210,11 +202,78 @@ class _SettingPopupState extends State<SettingPopup> {
       ],
     );
   }
+
 //  สำคัญต้องลบทุก Bloc
   void resetAllBlocs() {
     context.read<WalletBloc>().add(ResetWallet());
     context.read<TransactionCategoryBloc>().add(ResetTransactionCategory());
     context.read<TransactionBloc>().add(ResetTransaction());
     context.read<LoginBloc>().add(ResetLogin());
+  }
+
+  ActionDeleteAccount() async {
+    showSlideDialog(
+        context: context,
+        child: Container(
+          // color: Colors.green,
+          constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width * 1,
+              minHeight: MediaQuery.of(context).size.height * 0.3),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Delete Account",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 24,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image(
+                      image: AssetImage('assets/icon/icon_launch.png'),
+                      width: MediaQuery.of(context).size.width * 0.07,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "WARNING !",
+                      style: globalTextStyleRedHeadline,
+                    ),
+                    Text(
+                      "Account deletion is irreversible. Proceed with caution",
+                      style: globalTextStyleRedDes,
+                    )
+                  ],
+                ),
+                ActionPopup(
+                  bottonFirstName: "Cancel",
+                  bottonSecondeName: "Delete",
+                  bottonFirstNameFunction: () => Navigator.pop(context),
+                  bottonSecondeNameFunction: () {
+                    context.read<LoginBloc>().add(DeleteAccount());
+                    resetAllBlocs();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.5);
   }
 }

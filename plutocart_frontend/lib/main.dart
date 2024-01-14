@@ -60,12 +60,12 @@ class _MyWidgetState extends State<MyWidget> {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {
-        isConnected = false; // ปรับสถานะการเชื่อมต่อ
+        isConnected = false;
       });
     } else if (connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile) {
       setState(() {
-        isConnected = true; // ปรับสถานะการเชื่อมต่อ
+        isConnected = true;
       });
     }
   }
@@ -75,10 +75,8 @@ class _MyWidgetState extends State<MyWidget> {
   void initConnectivity() {
     subscription = Connectivity().onConnectivityChanged.listen((result) {
       if (result == ConnectivityResult.none) {
-        // No internet connection
       } else if (result == ConnectivityResult.wifi ||
           result == ConnectivityResult.mobile) {
-        // Connected to WiFi or mobile data
       }
     });
   }

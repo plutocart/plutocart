@@ -39,7 +39,7 @@ class _ActionPopupState extends State<ActionPopup> {
                   ),
                 ),
                 padding: EdgeInsets.zero, // Remove the default padding
-                minimumSize: Size(160, 42), // Set minimum button size
+                minimumSize: Size(155, 42), // Set minimum button size
                 backgroundColor: Colors.white, // Background color
                 foregroundColor: Color(0xFF15616D), // Text color
               ),
@@ -74,7 +74,7 @@ class _ActionPopupState extends State<ActionPopup> {
                   ),
                 ),
                 padding: EdgeInsets.zero, // Remove the default padding
-                minimumSize: Size(160, 42), // Set minimum button size
+                minimumSize: Size(155, 42), // Set minimum button size
                 backgroundColor: Color(0xFF15616D), // Background color
                 foregroundColor: Color(0xFF15616D), // Text color
               ),

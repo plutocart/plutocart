@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
-import 'package:plutocart/src/popups/bottom_sheet_delete.dart';
+import 'package:plutocart/src/popups/wallet_popup/bottom_sheet_delete_wallet.dart';
 import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
 
 class MoreVertPopup extends StatefulWidget {
@@ -96,7 +96,7 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
    buttomSheetDelete(Wallet wallet) {
     showSlideDialog(
         context: context,
-        child: BottomSheetDelete(
+        child: BottomSheetDeleteWallet(
           numberPopUp1: 2,
           numberPopUp2: 2,
           wallet: wallet,

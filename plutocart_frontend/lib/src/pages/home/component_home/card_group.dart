@@ -253,52 +253,54 @@ class _CardGroupState extends State<CardGroup> {
                           : Padding(
                               padding:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.08,
-                                width: MediaQuery.of(context).size.width * 1,
-                                decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                        side: BorderSide(
-                                          width: 1,
-                                          strokeAlign:
-                                              BorderSide.strokeAlignOutside,
-                                          color: Color(0xFF15616D),
-                                        ))),
-                                child: BlocBuilder<WalletBloc, WalletState>(
-                                  builder: (context, state) {
-                                    return OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                            foregroundColor: Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(16))),
-                                        onPressed: () {
-                                          widget.numberPopup == 1
-                                              ? state.wallets.length > 0
-                                                  ? createTransaction()
-                                                  : createWallet()
-                                              : print("error: number");
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              size: 30,
-                                              color: Color(0xFF15616D),
-                                            ),
-                                            Text("${widget.subjectButton}",
-                                                style: TextStyle(
-                                                    color: Color(0xFF15616D),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: "Roboto"))
-                                          ],
-                                        ));
-                                  },
+                              child: Skeleton.ignore(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  width: MediaQuery.of(context).size.width * 1,
+                                  decoration: ShapeDecoration(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                          side: BorderSide(
+                                            width: 1,
+                                            strokeAlign:
+                                                BorderSide.strokeAlignOutside,
+                                            color: Color(0xFF15616D),
+                                          ))),
+                                  child: BlocBuilder<WalletBloc, WalletState>(
+                                    builder: (context, state) {
+                                      return OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                              foregroundColor: Colors.transparent,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16))),
+                                          onPressed: () {
+                                            widget.numberPopup == 1
+                                                ? state.wallets.length > 0
+                                                    ? createTransaction()
+                                                    : createWallet()
+                                                : print("error: number");
+                                          },
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.add,
+                                                size: 30,
+                                                color: Color(0xFF15616D),
+                                              ),
+                                              Text("${widget.subjectButton}",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF15616D),
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: "Roboto"))
+                                            ],
+                                          ));
+                                    },
+                                  ),
                                 ),
                               ),
                             )
