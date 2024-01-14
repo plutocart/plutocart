@@ -54,5 +54,7 @@ class OnIndexChanged extends WalletEvent {
   OnIndexChanged(this.index);
 }
 
+class ResetWallet extends WalletEvent {}
+
 
 

@@ -91,6 +91,8 @@ class _CreateWalletPopupState extends State<CreateWalletPopup> {
                           await Future.delayed(Duration(milliseconds: 500));
                           Navigator.pop(context);
                           Navigator.pop(context);
+                          print("check data create wallet : ${_nameWalletController.text}");
+                           print("check data create wallet state : ${state.wallets}");
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

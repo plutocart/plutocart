@@ -10,6 +10,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   
   LoginBloc() : super(LoginState()) {
 
+
+   on<ResetLogin>((event, emit) {
+      emit(LoginState()); // Reset the state to the initial state
+    });
+
     // Guest
  on<LoginGuest>((event, emit) async {
   try {

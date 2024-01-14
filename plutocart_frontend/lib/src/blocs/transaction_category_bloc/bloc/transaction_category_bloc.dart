@@ -9,6 +9,10 @@ part 'transaction_category_state.dart';
 
 class TransactionCategoryBloc extends Bloc<TransactionCategoryEvent, TransactionCategoryState> {
   TransactionCategoryBloc() : super(TransactionCategoryState()) {
+
+    on<ResetTransactionCategory>((event, emit) {
+      emit(TransactionCategoryState()); // Reset the state to the initial state
+    });
    
     on<GetTransactionCategoryIncome>((event, emit) async {
       print("start get transaction category income bloc");

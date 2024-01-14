@@ -14,6 +14,10 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           incomeStatus: TransactionStatus.loading, stmTransaction: 0.0));
     });
 
+    on<ResetTransaction>((event, emit) {
+      emit(TransactionState()); // Reset the state to the initial state
+    });
+
     on<GetTransactionDailyInEx>(
       (event, emit) async {
         List<dynamic> response =

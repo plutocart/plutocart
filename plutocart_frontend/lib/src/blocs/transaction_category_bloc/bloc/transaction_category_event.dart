@@ -11,3 +11,5 @@ abstract class TransactionCategoryEvent extends Equatable {
 
  class GetTransactionCategoryExpense extends TransactionCategoryEvent{
   }
+
+  class ResetTransactionCategory extends TransactionCategoryEvent {}

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/reset_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class SettingPopup extends StatefulWidget {
   final String accountRole;
@@ -11,11 +15,6 @@ class SettingPopup extends StatefulWidget {
       : super(key: key);
   @override
   _SettingPopupState createState() => _SettingPopupState();
-}
-
-Future<void> clearCache() async {
-  final cacheManager = DefaultCacheManager();
-  await cacheManager.emptyCache();
 }
 
 class _SettingPopupState extends State<SettingPopup> {
@@ -146,9 +145,8 @@ class _SettingPopupState extends State<SettingPopup> {
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.07,
           decoration: ShapeDecoration(
-            color: widget.accountRole == "Member"
-                ? Color(0xFF15616D)
-                : Colors.red,
+            color:
+                widget.accountRole == "Member" ? Color(0xFF15616D) : Colors.red,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(
@@ -161,15 +159,15 @@ class _SettingPopupState extends State<SettingPopup> {
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               return ElevatedButton(
-                onPressed: ()  {
+                onPressed: () async {
                   if (widget.accountRole == "Member") {
-                    clearCache();
                     context.read<LoginBloc>().add(LogOutAccountMember());
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => MyWidget()),
                       (route) => false,
                     );
+                    resetAllBlocs();
                   } else {
                     // Navigator.pushAndRemoveUntil(
                     //   context,
@@ -193,5 +191,12 @@ class _SettingPopupState extends State<SettingPopup> {
         )
       ],
     );
+  }
+
+  void resetAllBlocs() {
+    context.read<WalletBloc>().add(ResetWallet());
+    context.read<TransactionCategoryBloc>().add(ResetTransactionCategory());
+    context.read<TransactionBloc>().add(ResetTransaction());
+    context.read<LoginBloc>().add(ResetLogin());
   }
 }

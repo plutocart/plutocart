@@ -23,6 +23,8 @@ class loginEmailGoole extends LoginEvent{
 
   class LogOutAccountMember extends LoginEvent{}
 
+    class ResetLogin extends LoginEvent {}
+
 
 
 
