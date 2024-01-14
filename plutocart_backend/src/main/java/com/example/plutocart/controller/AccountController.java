@@ -28,7 +28,7 @@ public class AccountController {
         GenericResponse result = accountService.CreateAccountByGoogle(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
-    @DeleteMapping("/account/{account-id}")
+    @DeleteMapping("/account/{account-id}/delete-account")
     public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId){
         GenericResponse result = accountService.DeleteAccount(accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
