@@ -69,10 +69,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                               splashRadius: 20,
                               onPressed: () {
-                                print("check setting");
-                                print("Role : ${state.accountRole}");
-                                print("email : ${state.email}");
                                 Setting(state.accountRole , state.email);
+
+                               
                               },
                               icon: Icon(Icons.settings),
                               color: Color(0xFF15616D),

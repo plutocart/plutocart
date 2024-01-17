@@ -187,6 +187,34 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         throw error;
       }
     });
+
+    // update account bloc
+     on<UpdateAccountToMember>((event, emit) async {
+      try {
+        print("start update account in bloc");
+        Map<String, dynamic> response = await LoginRepository().updateEmailToMember();
+        print("after update in bloc: $response");
+        if (response['data']['email'] == null) {
+           print(
+          "response loginCustomer after update account guest to member repository loginEmailGoole working ? : ${response['data']}");
+          emit(state.copyWith(
+           signInGoogleStatus: false ,
+          ));
+        } else {
+          print("signin customer after update account guest to member repository loginEmailGoole working ? :");
+          emit(state.copyWith(
+            email: response['data']['email'],
+            signInGoogleStatus: true , 
+          ));
+        }
+      } catch (error) {
+        print('Error loginEmailGoole during account guest to member creation: $error');
+        final newState =  state.copyWith(
+           signInGoogleStatus: false ,
+          );
+        emit(newState);
+      }
+    });
     
   }
 }

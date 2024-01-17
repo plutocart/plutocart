@@ -217,8 +217,41 @@ class LoginRepository {
   //      storage.delete(key: "imei");
   // }
 
+// update account from guest to customer
+
+  Future<Map<String, dynamic>> updateEmailToMember() async {
+    final storage =  FlutterSecureStorage();
+    String? accountId = await storage.read(key: "accountId");
+    String? email = await storage.read(key: "email");
+    int id = int.parse(accountId!);
+    print("account id in updateEmail to Member : ${accountId}");
+     print("email in updateEmail to Member : ${email}");
+
+    try {
+      print("start update guest account");
+      Response response = await dio.patch(
+        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/upgrade-role-member',
+        queryParameters: {"email": email},
+      );
+      print("update email  ${response.data}");
+
+      if (response.statusCode == 200) {
+        await storage.write(
+          key: "email",
+          value: response.data['data']['email'].toString(),
+        );
+        return response.data;
+      } else {
+        throw Exception('Error: ${'404'}');
+      }
+    } catch (error) {
+      print("Error update email to member success $error");
+      throw error;
+    }
+  }
+
 // Delete Account
-   Future<Map<String, dynamic>> deleteAccountById() async {
+  Future<Map<String, dynamic>> deleteAccountById() async {
     final storage = new FlutterSecureStorage();
     String? accountId = await storage.read(key: "accountId");
     int id = int.parse(accountId!);

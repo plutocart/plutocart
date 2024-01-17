@@ -23,7 +23,7 @@ class LoginState extends Equatable {
       this.signUpMemberSuccess = false,
       this.signUpGuestSuccess = false,
       this.signInMemberSuccess = true,
-      this.signInGuestSuccess = true , this.signInGoogleStatus = true , this.isLogOut = false});
+      this.signInGuestSuccess = true , this.signInGoogleStatus = true , this.isLogOut = false });
 
   LoginState copyWith(
       {String? imei,

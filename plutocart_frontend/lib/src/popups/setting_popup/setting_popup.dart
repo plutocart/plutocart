@@ -7,6 +7,8 @@ import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_c
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
+import 'package:plutocart/src/repository/login_repository.dart';
 
 class SettingPopup extends StatefulWidget {
   final String accountRole;
@@ -104,40 +106,46 @@ class _SettingPopupState extends State<SettingPopup> {
         widget.accountRole == "Member"
             ? SizedBox.shrink()
             : Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side:
-                              BorderSide(width: 1, color: Colors.transparent)),
-                      elevation: 3),
-                  onPressed: () async {
-                    context.read<LoginBloc>().add(CreateAccountMember());
+                padding: const EdgeInsets.only(left: 40, right: 40),
+                child: BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              side: BorderSide(
+                                  width: 1, color: Colors.transparent)),
+                          elevation: 3),
+                      onPressed: () async {
+                        await LoginRepository.handleSignIn();
+                        context.read<LoginBloc>().add(UpdateAccountToMember());
+                 
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 10, left: 10, top: 10, bottom: 10),
+                            child: Image(
+                              image: AssetImage('assets/icon/google_icon.png'),
+                              width: MediaQuery.of(context).size.width * 0.08,
+                            ),
+                          ),
+                          Text(
+                            "Sign In with Google",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 10, left: 10, top: 10, bottom: 10),
-                        child: Image(
-                          image: AssetImage('assets/icon/google_icon.png'),
-                          width: MediaQuery.of(context).size.width * 0.08,
-                        ),
-                      ),
-                      Text(
-                        "Sign In with Google",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
         SizedBox(
@@ -162,43 +170,62 @@ class _SettingPopupState extends State<SettingPopup> {
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.07,
           decoration: ShapeDecoration(
-            color:
-                widget.accountRole == "Member" ? Color(0xFF15616D) : Colors.red,
+            color: Colors.red,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              side: BorderSide(
-                  width: 1,
-                  color: widget.accountRole == "Member"
-                      ? Color(0xFF15616D)
-                      : Colors.red),
+              side: BorderSide(width: 1, color: Colors.red),
             ),
           ),
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
               return ElevatedButton(
                 onPressed: () async {
-                  if (widget.accountRole == "Member") {
-                    context.read<LoginBloc>().add(LogOutAccountMember());
-                    resetAllBlocs();
-                    Navigator.pop(context);
-                    runApp(MyWidget());
-                  } else {
-                    ActionDeleteAccount();
-                  }
+                  ActionDeleteAccount();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
                 child: Center(
-                  child: widget.accountRole == "Member"
-                      ? Text("Log out")
-                      : Text("Delete Account Guest"),
+                  child: Text("Delete Account Guest"),
                 ),
               );
             },
           ),
-        )
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        widget.accountRole == "Member"
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.07,
+                decoration: ShapeDecoration(
+                  color: Color(0xFF15616D),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(width: 1, color: Color(0xFF15616D)),
+                  ),
+                ),
+                child: BlocBuilder<LoginBloc, LoginState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      onPressed: () async {
+                        context.read<LoginBloc>().add(LogOutAccountMember());
+                        resetAllBlocs();
+                        Navigator.pop(context);
+                        runApp(MyWidget());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Center(child: Text("Log out")),
+                    );
+                  },
+                ),
+              )
+            : SizedBox.shrink()
       ],
     );
   }

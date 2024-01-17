@@ -20,3 +20,6 @@ class LogOutAccountMember extends LoginEvent {}
 class ResetLogin extends LoginEvent {}
 
 class DeleteAccount extends LoginEvent {}
+
+class UpdateAccountToMember extends LoginEvent {
+}
