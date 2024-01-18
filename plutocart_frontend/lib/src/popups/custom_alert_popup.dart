@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-void customAlertPopup(BuildContext context, String message) {
+void customAlertPopup(BuildContext context, String message , IconData icon , Color color) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -21,8 +21,8 @@ void customAlertPopup(BuildContext context, String message) {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(Icons.error_outline_rounded,
-                      color: Colors.red.shade200,
+                  Icon(icon,
+                      color: color,
                       size: MediaQuery.of(context).size.width * 0.4),
                   Text(
                     message,

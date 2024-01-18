@@ -76,7 +76,7 @@ class _SignUpState extends State<SignUp> {
                           state.signUpMemberSuccess == false)) {
                   } else {
                     customAlertPopup(
-                        context, "Possesses a registered account");
+                        context, "Possesses a registered account" , Icons.error_outline_rounded  , Colors.red.shade200);
                   }
                 }, child: BlocBuilder<LoginBloc, LoginState>(
                   builder: (context, state) {

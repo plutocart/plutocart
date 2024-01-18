@@ -23,3 +23,4 @@ class DeleteAccount extends LoginEvent {}
 
 class UpdateAccountToMember extends LoginEvent {
 }
+

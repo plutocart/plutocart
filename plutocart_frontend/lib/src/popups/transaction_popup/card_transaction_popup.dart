@@ -265,7 +265,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                       break;
                   }
                   if (isDropdownDataMissing) {
-                    customAlertPopup(context, "Missing Information");
+                    customAlertPopup(context, "Missing Information" , Icons.error_outline_rounded , Colors.red.shade200);
                   } else {
                     switch (indexTransactionType) {
                       case 0:

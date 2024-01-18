@@ -226,12 +226,12 @@ class LoginRepository {
     int id = int.parse(accountId!);
     print("account id in updateEmail to Member : ${accountId}");
      print("email in updateEmail to Member : ${email}");
-
+      
     try {
       print("start update guest account");
       Response response = await dio.patch(
         'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/upgrade-role-member',
-        queryParameters: {"email": email},
+        queryParameters: {"email": (email!.isEmpty || email == " ") ? null : email},
       );
       print("update email  ${response.data}");
 

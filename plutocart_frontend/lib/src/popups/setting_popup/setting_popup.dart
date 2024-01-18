@@ -7,6 +7,7 @@ import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_c
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/repository/login_repository.dart';
 
@@ -107,27 +108,54 @@ class _SettingPopupState extends State<SettingPopup> {
             ? SizedBox.shrink()
             : Padding(
                 padding: const EdgeInsets.only(left: 40, right: 40),
-                child: BlocBuilder<LoginBloc, LoginState>(
+                child: BlocConsumer<LoginBloc, LoginState>(
+                  buildWhen: (previous, current) =>
+                      current.isUpdateAccount != previous.isUpdateAccount,
+                  listener: (context, state) async {
+                    print("check state in setting popup.dart : $state");
+                    context.read<LoginBloc>().add(LoginMember());
+                  },
                   builder: (context, state) {
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              side: BorderSide(
-                                  width: 1, color: Colors.transparent)),
-                          elevation: 3),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          side: BorderSide(
+                            width: 1,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        elevation: 3,
+                      ),
                       onPressed: () async {
                         await LoginRepository.handleSignIn();
                         context.read<LoginBloc>().add(UpdateAccountToMember());
-                 
+                        showLoadingPagePopUp(context);
+                        await Future.delayed(Duration(milliseconds: 1500));
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        if (context.read<LoginBloc>().state.isUpdateAccount ==
+                            false) {
+                          customAlertPopup(
+                              context,
+                              "Update to account member unsuccessful",
+                              Icons.error_outline_rounded,
+                              Colors.red.shade200);
+                        }
+
+                        print("object state : ${state.email}");
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                right: 10, left: 10, top: 10, bottom: 10),
+                              right: 10,
+                              left: 10,
+                              top: 10,
+                              bottom: 10,
+                            ),
                             child: Image(
                               image: AssetImage('assets/icon/google_icon.png'),
                               width: MediaQuery.of(context).size.width * 0.08,
@@ -220,7 +248,7 @@ class _SettingPopupState extends State<SettingPopup> {
                         backgroundColor: Colors.transparent,
                         elevation: 0,
                       ),
-                      child: Center(child: Text("Log out")),
+                      child: Center(child: Text("Sign Out")),
                     );
                   },
                 ),

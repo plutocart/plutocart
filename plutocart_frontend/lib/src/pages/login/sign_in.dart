@@ -78,7 +78,7 @@ class _SignInState extends State<SignIn> {
                         AppRoute.app,
                         (route) => false,
                       );
-                    } 
+                    }
                   },
                   child: Column(
                     children: [
@@ -107,16 +107,25 @@ class _SignInState extends State<SignIn> {
                             await storage.delete(key: "email");
 
                             print("start login customer google");
-                           await LoginRepository.handleSignOut();
-                           await storage.delete(key: "email"); 
-                          await LoginRepository.handleSignIn();
-                          context.read<LoginBloc>().add(loginEmailGoole());
-                           await Future.delayed(Duration(milliseconds: 500));
-                           print("check logic customer login : ${context.read<LoginBloc>().state.signInGoogleStatus}");
-                          if (context.read<LoginBloc>().state.signInGoogleStatus == false) {
+                            await LoginRepository.handleSignOut();
+                            await storage.delete(key: "email");
+                            await LoginRepository.handleSignIn();
+                            context.read<LoginBloc>().add(loginEmailGoole());
+                            await Future.delayed(Duration(milliseconds: 500));
+                            print(
+                                "check logic customer login : ${context.read<LoginBloc>().state.signInGoogleStatus}");
+                            if (context
+                                    .read<LoginBloc>()
+                                    .state
+                                    .signInGoogleStatus ==
+                                false) {
                               print("show diaoLog login google not found");
-                            customAlertPopup(context, "Account google can't registered");
-                          }
+                              customAlertPopup(
+                                  context,
+                                  "Account google can't registered",
+                                  Icons.error_outline_rounded,
+                                  Colors.red.shade200);
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -156,5 +165,4 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-
 }

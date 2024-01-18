@@ -115,7 +115,7 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
                   Navigator.pop(context);
                 }
               } else {
-                customAlertPopup(context, "Information missing");
+                customAlertPopup(context, "Information missing" , Icons.error_outline_rounded , Colors.red.shade200);
                 print('check first1 ${_amountMoneyController.text.length}');
                 print('check first2 ${_nameWalletController.text.length}');
               }

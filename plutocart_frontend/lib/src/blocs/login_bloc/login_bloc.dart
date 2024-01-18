@@ -7,47 +7,47 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  
   LoginBloc() : super(LoginState()) {
-
-
-   on<ResetLogin>((event, emit) {
+    on<ResetLogin>((event, emit) {
       emit(LoginState()); // Reset the state to the initial state
     });
 
     // Guest
- on<LoginGuest>((event, emit) async {
-  try {
-    Map<String, dynamic> response = await LoginRepository().loginGuest();
-    print("response loginGuest repository working ? : ${response['data']}");
-    if (response['data']['imei'] == null) {
-      print("imei not found in class login bloc function loginGuest");
-      final newState = state.copyWith(signInGuestSuccess: false);
-      emit(newState);
-    } else {
-      final newState = state.copyWith(
-        imei: response['data']['imei'],
-        accountRole: response['data']['accountRole'],
-        accountId: response['data']['accountId'],
-        signInGuestSuccess: true,
-      );
-      print("imei found in class login bloc function loginGuest imei : ${response['data']['imei']}");
-      print("imei found in class login bloc function loginGuest accountRole : ${response['data']['accountRole']}");
-      print("imei found in class login bloc function loginGuest accountId : ${response['data']['accountId']}");
-      print("imei found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
-      emit(newState);
-    }
-  } catch (e) {
-    print("not sign in guest account in login bloc class : $e");
-    final newState = state.copyWith(signInGuestSuccess: false);
-    print("imei not found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
+    on<LoginGuest>((event, emit) async {
+      try {
+        Map<String, dynamic> response = await LoginRepository().loginGuest();
+        print("response loginGuest repository working ? : ${response['data']}");
+        if (response['data']['imei'] == null) {
+          print("imei not found in class login bloc function loginGuest");
+          final newState = state.copyWith(signInGuestSuccess: false);
+          emit(newState);
+        } else {
+          final newState = state.copyWith(
+            imei: response['data']['imei'],
+            accountRole: response['data']['accountRole'],
+            accountId: response['data']['accountId'],
+            signInGuestSuccess: true,
+          );
+          print(
+              "imei found in class login bloc function loginGuest imei : ${response['data']['imei']}");
+          print(
+              "imei found in class login bloc function loginGuest accountRole : ${response['data']['accountRole']}");
+          print(
+              "imei found in class login bloc function loginGuest accountId : ${response['data']['accountId']}");
+          print(
+              "imei found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
+          emit(newState);
+        }
+      } catch (e) {
+        print("not sign in guest account in login bloc class : $e");
+        final newState = state.copyWith(signInGuestSuccess: false);
+        print(
+            "imei not found in class login bloc function loginGuest signInGuestSuccess : ${newState.signInGuestSuccess}");
 
-    emit(newState);
-    // อย่าลืมเรียกใช้ emit(newState); เพื่ออัพเดทสถานะใน BLoC
-  }
-});
-
-
+        emit(newState);
+        // อย่าลืมเรียกใช้ emit(newState); เพื่ออัพเดทสถานะใน BLoC
+      }
+    });
 
     on<CreateAccountGuest>((event, emit) async {
       print("start working create account guest");
@@ -142,36 +142,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-     on<LogOutAccountMember>((event, emit) async {
-        LoginRepository().LogOutEmailGoolge();
-        emit(state.copyWith(email: ""));
+    on<LogOutAccountMember>((event, emit) async {
+      LoginRepository().LogOutEmailGoolge();
+      emit(state.copyWith(email: ""));
     });
 
-
-   on<loginEmailGoole>((event, emit) async {
+    on<loginEmailGoole>((event, emit) async {
       try {
-        Map<String, dynamic> response = await LoginRepository().loginEmailGoogle();
+        Map<String, dynamic> response =
+            await LoginRepository().loginEmailGoogle();
         print("starto1 : ${response['data']['email']}");
         print("starto1 : ${response['data']['imei']}");
         if (response['data']['email'] == null) {
-           print(
-          "response loginCustomer after create repository loginEmailGoole working ? : ${response['data']}");
-          emit(state.copyWith(
-           signInGoogleStatus: false
-          ));
+          print(
+              "response loginCustomer after create repository loginEmailGoole working ? : ${response['data']}");
+          emit(state.copyWith(signInGoogleStatus: false));
         } else {
-          print("signin customer after create repository loginEmailGoole working ? :");
+          print(
+              "signin customer after create repository loginEmailGoole working ? :");
           emit(state.copyWith(
-            accountId: response['data']['accountId'],
-            email: response['data']['email'],
-            imei: response['data']['imei'], signInGoogleStatus: true
-          ));
+              accountId: response['data']['accountId'],
+              email: response['data']['email'],
+              imei: response['data']['imei'],
+              signInGoogleStatus: true));
         }
       } catch (error) {
         print('Error loginEmailGoole during account creation: $error');
-        final newState =  state.copyWith(
-           signInGoogleStatus: false
-          );
+        final newState = state.copyWith(signInGoogleStatus: false);
         emit(newState);
       }
     });
@@ -188,33 +185,47 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
+
+
     // update account bloc
-     on<UpdateAccountToMember>((event, emit) async {
+    on<UpdateAccountToMember>((event, emit) async {
+      final storage = FlutterSecureStorage();
+      String? email = await storage.read(key: "email");
       try {
         print("start update account in bloc");
-        Map<String, dynamic> response = await LoginRepository().updateEmailToMember();
+        Map<String, dynamic> response =
+            await LoginRepository().updateEmailToMember();
         print("after update in bloc: $response");
-        if (response['data']['email'] == null) {
-           print(
-          "response loginCustomer after update account guest to member repository loginEmailGoole working ? : ${response['data']}");
+        if (response['data']['email'] == null || (email == " " || email!.isEmpty)) {
+          print(
+              "response loginCustomer after update account guest to member repository loginEmailGoole working ? : ${response['data']}");
           emit(state.copyWith(
-           signInGoogleStatus: false ,
-          ));
+              signInGoogleStatus: false,
+              accountRole: "Guest",
+              email: null,
+              isUpdateAccount: false));
         } else {
-          print("signin customer after update account guest to member repository loginEmailGoole working ? :");
+          print(
+              "signin customer after update account guest to member repository loginEmailGoole working ? :");
           emit(state.copyWith(
             email: response['data']['email'],
-            signInGoogleStatus: true , 
+            signInGoogleStatus: true,
+            isUpdateAccount: true,
+            accountRole: "Member",
           ));
         }
       } catch (error) {
-        print('Error loginEmailGoole during account guest to member creation: $error');
-        final newState =  state.copyWith(
-           signInGoogleStatus: false ,
-          );
+        print(
+            'Error loginEmailGoole during account guest to member creation: $error');
+        final newState = state.copyWith(
+          signInGoogleStatus: false,
+          isUpdateAccount: false,
+          accountRole: "Guest",
+        );
         emit(newState);
       }
     });
-    
+
+
   }
 }
