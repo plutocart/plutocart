@@ -62,20 +62,18 @@ class _HomePageState extends State<HomePage> {
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) {
                   return IconButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<CircleBorder>(
-                                  CircleBorder(),
-                                ),
-                              ),
-                              splashRadius: 20,
-                              onPressed: () {
-                                Setting(state.accountRole , state.email);
-
-                               
-                              },
-                              icon: Icon(Icons.settings),
-                              color: Color(0xFF15616D),
-                            );
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                        CircleBorder(),
+                      ),
+                    ),
+                    splashRadius: 20,
+                    onPressed: () {
+                      Setting(state.accountRole, state.email);
+                    },
+                    icon: Icon(Icons.settings),
+                    color: Color(0xFF15616D),
+                  );
                 },
               )
             ],
@@ -102,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                       nameRoute: AppRoute.transaction,
                       lengthData: state.transactionLimit3.length,
                       numberPopup: 1,
+                      indexPage: 1,
                     );
                   },
                 ),
@@ -113,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                   nameRoute: AppRoute.goal,
                   lengthData: 0,
                   numberPopup: 2,
+                  indexPage: 2,
                 ),
                 SizedBox(height: 6),
                 CardGroup(
@@ -122,16 +122,21 @@ class _HomePageState extends State<HomePage> {
                   nameRoute: AppRoute.debt,
                   lengthData: 0,
                   numberPopup: 3,
+                  indexPage: 3,
                 ),
               ],
             ),
           ),
         ));
   }
- Setting(String accountRole , String email) {
+
+  Setting(String accountRole, String email) {
     showSlideDialog(
         context: context,
-        child: SettingPopup(accountRole: accountRole , email: email,),
+        child: SettingPopup(
+          accountRole: accountRole,
+          email: email,
+        ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.6);

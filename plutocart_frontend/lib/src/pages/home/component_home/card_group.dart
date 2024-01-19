@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
-import 'package:plutocart/src/models/transaction/transaction_model.dart';
 import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -16,6 +16,7 @@ class CardGroup extends StatefulWidget {
   final Widget? widgetCard;
   final int lengthData;
   final int numberPopup;
+  final int? indexPage;
 
   const CardGroup(String s,
       {Key? key,
@@ -24,7 +25,7 @@ class CardGroup extends StatefulWidget {
       required this.subjectButton,
       required this.nameRoute,
       required this.lengthData,
-      required this.numberPopup})
+      required this.numberPopup ,  this.indexPage})
       : super(key: key);
 
   @override
@@ -92,8 +93,7 @@ class _CardGroupState extends State<CardGroup> {
                             builder: (context, state) {
                               return TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, widget.nameRoute);
+                                  context.read<PageBloc>().add(saveIndexPage(widget.indexPage!));
                                 },
                                 style: TextButton.styleFrom(
                                   shape: StadiumBorder(),
@@ -163,11 +163,11 @@ class _CardGroupState extends State<CardGroup> {
                                                         transaction[
                                                                 'tranCategoryIdCategory']
                                                             ['imageIconUrl'],
-                                                        width:
-                                                            MediaQuery.of(
-                                                                        context).size
-                                                                    .width *
-                                                                0.1,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.1,
                                                       ),
                                                       SizedBox(
                                                         width: 10,
@@ -260,7 +260,8 @@ class _CardGroupState extends State<CardGroup> {
                                   width: MediaQuery.of(context).size.width * 1,
                                   decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
                                           side: BorderSide(
                                             width: 1,
                                             strokeAlign:
@@ -271,10 +272,12 @@ class _CardGroupState extends State<CardGroup> {
                                     builder: (context, state) {
                                       return OutlinedButton(
                                           style: OutlinedButton.styleFrom(
-                                              foregroundColor: Colors.transparent,
+                                              foregroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(16))),
+                                                      BorderRadius.circular(
+                                                          16))),
                                           onPressed: () {
                                             widget.numberPopup == 1
                                                 ? state.wallets.length > 0
@@ -295,7 +298,8 @@ class _CardGroupState extends State<CardGroup> {
                                                   style: TextStyle(
                                                       color: Color(0xFF15616D),
                                                       fontSize: 14,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontFamily: "Roboto"))
                                             ],
                                           ));
@@ -312,6 +316,7 @@ class _CardGroupState extends State<CardGroup> {
       ),
     );
   }
+
 
   createTransaction() async {
     showSlideDialog(

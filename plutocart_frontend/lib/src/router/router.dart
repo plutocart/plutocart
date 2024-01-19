@@ -24,7 +24,7 @@ class AppRoute{
   login:(context) => const HomeLogin(),
   signUp:(context) => const SignUp(),
   signIn:((context) => const SignIn()),
-  app:(context) => const PlutocartApp(),
+  app:(context) =>  PlutocartApp(),
   goal:(context) => const GoalPage(),
   debt:(context) => const DebtPage(),
  };

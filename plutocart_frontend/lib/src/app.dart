@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
@@ -19,7 +20,6 @@ class PlutocartApp extends StatefulWidget {
 }
 
 class _PlutocartAppState extends State<PlutocartApp> {
-  int _selectedIndex = 0;
   List<Widget> pageRoutes = ListPage();
 
   @override
@@ -28,11 +28,13 @@ class _PlutocartAppState extends State<PlutocartApp> {
     context.read<LoginBloc>().add(LoginGuest());
     context.read<LoginBloc>().add(LoginMember());
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
+    context
+        .read<PageBloc>()
+        .add(saveIndexPage(context.read<PageBloc>().state.indexPage));
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<LoginBloc, LoginState>(
@@ -55,17 +57,21 @@ class _PlutocartAppState extends State<PlutocartApp> {
                   effect: ShimmerEffect(duration: Duration(microseconds: 300)),
                   child: Stack(
                     children: [
-                      Scaffold(
-                        resizeToAvoidBottomInset: false,
-                        body: pageRoutes[_selectedIndex],
-                        floatingActionButton: ButtonTransaction(),
-                        bottomNavigationBar: BottomNavigatorBar(
-                          onTap: (index) {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                        ),
+                      BlocBuilder<PageBloc, PageState>(
+                        builder: (context, state) {
+                          return Scaffold(
+                            resizeToAvoidBottomInset: false,
+                            body: pageRoutes[state.indexPage],
+                            floatingActionButton: ButtonTransaction(),
+                            bottomNavigationBar: BottomNavigatorBar(
+                              onTap: (index) {
+                                setState(() {
+                                  context.read<PageBloc>().add(saveIndexPage(index));
+                                });
+                              },
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

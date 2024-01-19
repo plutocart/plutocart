@@ -55,7 +55,8 @@ class _GoalPageState extends State<GoalPage> {
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(width: 1),
+                    side: BorderSide(width: 1 , color: Colors.transparent),
+                    
                   ),
                   gradient: RadialGradient(
                     center: Alignment(0.84, 0.67),

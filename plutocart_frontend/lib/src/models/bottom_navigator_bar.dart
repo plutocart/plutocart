@@ -1,5 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 
 class BottomNavigatorBar extends StatelessWidget {
   final Function(int index) onTap;
@@ -7,10 +9,11 @@ class BottomNavigatorBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("check state index page : ${context.read<PageBloc>().state.indexPage}");
     return StyleProvider(
       style: Style(),
       child: ConvexAppBar(
-        initialActiveIndex: 0,
+        initialActiveIndex: context.read<PageBloc>().state.indexPage,
         height: 50,
         top: -10,
         curveSize: 0,
