@@ -290,7 +290,7 @@ class LoginRepository {
       storage.delete(key: "email");
       await _googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      print("create and call sign in account google");
+      print("create and call sign in account google : ${googleUser}");
       if (googleUser != null) {
         final storage = FlutterSecureStorage();
         await storage.write(key: "email", value: googleUser.email);

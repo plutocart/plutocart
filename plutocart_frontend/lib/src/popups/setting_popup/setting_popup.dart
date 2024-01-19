@@ -113,7 +113,7 @@ class _SettingPopupState extends State<SettingPopup> {
                       current.isUpdateAccount != previous.isUpdateAccount,
                   listener: (context, state) async {
                     print("check state in setting popup.dart : $state");
-                    context.read<LoginBloc>().add(LoginMember());
+                    // context.read<LoginBloc>().add(LoginMember());
                   },
                   builder: (context, state) {
                     return ElevatedButton(
@@ -143,8 +143,6 @@ class _SettingPopupState extends State<SettingPopup> {
                               Icons.error_outline_rounded,
                               Colors.red.shade200);
                         }
-
-                        print("object state : ${state.email}");
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
