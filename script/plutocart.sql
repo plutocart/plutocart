@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`goal` (
   `name_goal` VARCHAR(45) NOT NULL,
   `amount_goal` DECIMAL(13,2) NOT NULL,
   `deficit` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
+  `end_date_goal` DATETIME NOT NULL,
   `account_id_account` INT NOT NULL,
   `create_goal_on` DATETIME NOT NULL,
   `update_goal_on` DATETIME NOT NULL,
