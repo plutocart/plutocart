@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
@@ -262,6 +263,7 @@ class _SettingPopupState extends State<SettingPopup> {
     context.read<TransactionCategoryBloc>().add(ResetTransactionCategory());
     context.read<TransactionBloc>().add(ResetTransaction());
     context.read<LoginBloc>().add(ResetLogin());
+    context.read<PageBloc>().add(ResetPage());
   }
 
   ActionDeleteAccount() async {

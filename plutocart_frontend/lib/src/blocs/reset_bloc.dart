@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
@@ -80,5 +81,29 @@ class BlocLogin extends Bloc<LoginEvent, LoginState> {
 
   void reset() {
     add(ResetLoginState());
+  }
+}
+
+
+
+// BlocPage
+
+class ResetPageSate extends PageEvent {}
+
+class BlocPage
+    extends Bloc<PageEvent, PageState> {
+  BlocPage() : super(PageState());
+
+  @override
+  Stream<PageState> mapEventToState(
+      PageEvent event) async* {
+    if (event is ResetPageSate) {
+      // Clear or reset data within the state
+      yield PageState(); // Replace with your actual initial state
+    }
+  }
+
+  void reset() {
+    add(ResetPageSate());
   }
 }

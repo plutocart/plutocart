@@ -50,6 +50,9 @@ class _CardWalletState extends State<CardWallet> {
                           ? Colors.white
                           : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Color(0XFF1A9CB0), // Set the border color to red
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey,
@@ -167,9 +170,8 @@ class _CardWalletState extends State<CardWallet> {
                               ElevatedButton(
                                   onPressed: () async {
                                     await showWallets();
-                                    context.read<WalletBloc>().add(
-                                        GetAllWallet(
-                                            enableOnlyStatusOnCard: true));
+                                    context.read<WalletBloc>().add(GetAllWallet(
+                                        enableOnlyStatusOnCard: true));
                                   },
                                   child: Text("Your wallets"),
                                   style: ElevatedButton.styleFrom(
@@ -199,208 +201,214 @@ class _CardWalletState extends State<CardWallet> {
                 Wallet wallet = removeStatusOff[index];
                 return TextButton(
                   onPressed: () async {
-                await showWallets();
-                context
-                    .read<WalletBloc>()
-                    .add(GetAllWallet(enableOnlyStatusOnCard: true));
+                    await showWallets();
+                    context
+                        .read<WalletBloc>()
+                        .add(GetAllWallet(enableOnlyStatusOnCard: true));
                   },
                   style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
                   ),
                   child: Container(
-                height: MediaQuery.of(context).size.height * 0.2,
-                width: MediaQuery.of(context).size.width * 1,
-               
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                      offset: Offset(2, 2),
-                      spreadRadius: 0,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                        color: Color(0XFF1A9CB0), // Set the border color to red
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 2,
+                          offset: Offset(2, 2),
+                          spreadRadius: 0,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Text(
-                            wallet.walletName.length > 12
-                                ? "${wallet.walletName.substring(0, 12)}..."
-                                : wallet.walletName,
-                            style: TextStyle(
-                                color: Color(0xFF15616D),
-                                fontSize: 14,
-                                fontFamily: "Roboto",
-                                fontWeight: FontWeight.w500),
-                          )),
-                      Material(
-                        shape: CircleBorder(),
-                        clipBehavior: Clip.hardEdge,
-                        color: Colors.transparent,
-                        child: Ink(
-                          child: IconButton(
-                            onPressed: () => editWallet(wallet),
-                            icon: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: ImageIcon(
-                                AssetImage('assets/icon/edit_icon.png'),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                wallet.walletName.length > 12
+                                    ? "${wallet.walletName.substring(0, 12)}..."
+                                    : wallet.walletName,
+                                style: TextStyle(
+                                    color: Color(0xFF15616D),
+                                    fontSize: 14,
+                                    fontFamily: "Roboto",
+                                    fontWeight: FontWeight.w500),
+                              )),
+                          Material(
+                            shape: CircleBorder(),
+                            clipBehavior: Clip.hardEdge,
+                            color: Colors.transparent,
+                            child: Ink(
+                              child: IconButton(
+                                onPressed: () => editWallet(wallet),
+                                icon: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: ImageIcon(
+                                    AssetImage('assets/icon/edit_icon.png'),
+                                  ),
+                                ),
+                                color: Color(0XFF15616D), // ตั้งค่าสีไอคอน
+                                iconSize: 20, // ตั้งค่าขนาดไอคอน
                               ),
                             ),
-                            color: Color(0XFF15616D), // ตั้งค่าสีไอคอน
-                            iconSize: 20, // ตั้งค่าขนาดไอคอน
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BlocBuilder<WalletBloc, WalletState>(
-                          builder: (context, state) {
-                            return Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(width: 32),
-                                Text(
-                                  wallet.walletBalance.toString(),
-                                  style: TextStyle(
-                                      color: Color(0xFF15616D),
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Roboto"),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 15),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 3),
-                                    child: Text(
-                                      "฿",
+                      SizedBox(height: 5),
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BlocBuilder<WalletBloc, WalletState>(
+                              builder: (context, state) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(width: 32),
+                                    Text(
+                                      wallet.walletBalance.toString(),
                                       style: TextStyle(
                                           color: Color(0xFF15616D),
                                           fontSize: 25,
                                           fontWeight: FontWeight.w500,
                                           fontFamily: "Roboto"),
                                     ),
-                                  ),
-                                )
-                              ],
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                          children: [
-                            BlocBuilder<TransactionBloc,
-                                TransactionState>(
-                              builder: (context, state) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Daily expense",
-                                      style: TextStyle(
-                                          color: Color(0xFF15616D),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Roboto'),
-                                    ),
-                                    Text(
-                                      state.transactionsDailyInExList != null && state.transactionsDailyInExList.length > index
-                                          ? "- ${state.transactionsDailyInExList[index]['todayExpense']}฿"
-                                          : "- 0.0",
-                                      style: TextStyle(
-                                          color: Color(0xFFDD0000),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Roboto'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                            Skeleton.ignore(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 25),
-                                child: Container(
-                                  height: 40,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 1.5,
-                                        color: Color(0xFF15616D),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 3),
+                                        child: Text(
+                                          "฿",
+                                          style: TextStyle(
+                                              color: Color(0xFF15616D),
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "Roboto"),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius
-                                          .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 0,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  right: BorderSide(
-                                    color: Color(0xFF15616D),
-                                    width: 3.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            BlocBuilder<TransactionBloc,
-                                TransactionState>(
-                              builder: (context, state) {
-                                print("index ;;; : ${index}");
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "Daily income",
-                                      style: TextStyle(
-                                          color: Color(0xFF15616D),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Roboto'),
-                                    ),
-                                    Text(
-                                      state.transactionsDailyInExList !=null && state.transactionsDailyInExList.length > index
-                                          ? "+ ${state.transactionsDailyInExList[index]['todayIncome']}฿"
-                                          : "+ 0.0",
-                                      style: TextStyle(
-                                          color: Color(0xFF2DC653),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Roboto'),
-                                    ),
+                                    )
                                   ],
                                 );
                               },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                BlocBuilder<TransactionBloc, TransactionState>(
+                                  builder: (context, state) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          "Daily expense",
+                                          style: TextStyle(
+                                              color: Color(0xFF15616D),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Roboto'),
+                                        ),
+                                        Text(
+                                          state.transactionsDailyInExList !=
+                                                      null &&
+                                                  state.transactionsDailyInExList
+                                                          .length >
+                                                      index
+                                              ? "- ${state.transactionsDailyInExList[index]['todayExpense']}฿"
+                                              : "- 0.0",
+                                          style: TextStyle(
+                                              color: Color(0xFFDD0000),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                Skeleton.ignore(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 25),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: ShapeDecoration(
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            width: 1.5,
+                                            color: Color(0xFF15616D),
+                                          ),
+                                          borderRadius: BorderRadius
+                                              .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 0,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color: Color(0xFF15616D),
+                                        width: 3.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                BlocBuilder<TransactionBloc, TransactionState>(
+                                  builder: (context, state) {
+                                    print("index ;;; : ${index}");
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          "Daily income",
+                                          style: TextStyle(
+                                              color: Color(0xFF15616D),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Roboto'),
+                                        ),
+                                        Text(
+                                          state.transactionsDailyInExList !=
+                                                      null &&
+                                                  state.transactionsDailyInExList
+                                                          .length >
+                                                      index
+                                              ? "+ ${state.transactionsDailyInExList[index]['todayIncome']}฿"
+                                              : "+ 0.0",
+                                          style: TextStyle(
+                                              color: Color(0xFF2DC653),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Roboto'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ]),
+                      ),
+                    ]),
                   ),
                 );
               }
@@ -416,7 +424,7 @@ class _CardWalletState extends State<CardWallet> {
                 color: Colors.grey.shade300,
                 activeColor: Color(0XFF15616D),
               ),
-              margin: EdgeInsets.all(5.0),
+              margin: EdgeInsets.only(left: 5 , right: 5 , top: 5 , bottom: 2),
             ),
           ),
         );

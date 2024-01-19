@@ -13,6 +13,10 @@ class PageBloc extends Bloc<PageEvent, PageState> {
           indexPage: event.indexPage));
     });
 
+      on<ResetPage>((event, emit) async {
+      emit(state.copyWith(indexPage: 0));
+    });
+
   }
 }
 

@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     "Plutocart",
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height *
-                      0.27, // constrain height
+                      0.25, // constrain height
                   width: MediaQuery.of(context).size.width * 1,
                   child: CardWallet(),
                 ),

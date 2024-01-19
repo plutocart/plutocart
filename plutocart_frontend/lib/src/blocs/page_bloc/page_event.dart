@@ -1,6 +1,6 @@
 part of 'page_bloc.dart';
 
-sealed class PageEvent extends Equatable {
+abstract class PageEvent extends Equatable {
   @override
   List<Object> get props => [];
   
@@ -11,3 +11,4 @@ sealed class PageEvent extends Equatable {
   saveIndexPage(this.indexPage);
   }
 
+  class ResetPage extends PageEvent {}
