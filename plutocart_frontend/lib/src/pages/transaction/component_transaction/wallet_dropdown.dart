@@ -4,12 +4,13 @@ import 'package:plutocart/src/models/wallet/wallet_model.dart';
 class WalletDropdown extends StatefulWidget {
   final List<Wallet> walletList;
   final Function(String?) onChanged;
+  final GlobalKey? selectKey;
 
-  const WalletDropdown({
-    Key? key,
-    required this.walletList,
-    required this.onChanged,
-  }) : super(key: key);
+  const WalletDropdown(
+      {Key? key,
+      required this.walletList,
+      required this.onChanged,  this.selectKey})
+      : super(key: key);
 
   @override
   _WalletDropdownState createState() => _WalletDropdownState();
@@ -21,6 +22,7 @@ class _WalletDropdownState extends State<WalletDropdown> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      key: widget.selectKey,
       menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
       icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
       decoration: InputDecoration(

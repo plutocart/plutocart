@@ -36,7 +36,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     tranDateController.text = formattedDateTime;
     super.initState();
   }
-  final GlobalKey<FormFieldState> globalKey = GlobalKey();
+  final GlobalKey<FormFieldState> globalKeyTransaction = GlobalKey();
+   final GlobalKey<FormFieldState> globalKeyWallet = GlobalKey();
   int indexTransactionType = 0;
   int indexWallet = 0;
   int indexTransactionCategoryType = 0;
@@ -90,7 +91,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       idTransactionCategory = null;
       idWallet = null;
       indexWallet = 0;
-      globalKey.currentState?.reset();
+      globalKeyTransaction.currentState?.reset();
+      globalKeyWallet.currentState?.reset();
     });
   }
 
@@ -118,7 +120,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               case 1:
                 return Container(
                   child: TransactionCategoryDropdown(
-                    selectKey: globalKey,
+                    selectKey: globalKeyTransaction,
                     transactionCategoryList: indexTransactionType == 0
                         ? state.transactionCategoryInComeList
                         : state.transactionCategoryExpenseList,
@@ -156,6 +158,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                   return BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, walletState) {
                       return WalletDropdown(
+                        selectKey: globalKeyWallet,
                         walletList: walletState.wallets,
                         onChanged: (newValueWallet) {
                           indexWallet = walletState.wallets.indexWhere(
@@ -180,7 +183,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: AmountTextField(
-              amountMoneyController: amountMoneyController,
+              amountMoneyController: amountMoneyController, nameField: "Amount of money",
             )),
         SizedBox(
           height: 15,

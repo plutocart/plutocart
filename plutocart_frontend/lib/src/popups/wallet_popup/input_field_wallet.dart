@@ -66,7 +66,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-          child: AmountTextField(amountMoneyController: widget.amountMoneyController,)
+          child: AmountTextField(amountMoneyController: widget.amountMoneyController, nameField: "Amount of money",)
         ),
       ],
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/add_goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
 
 class GoalPage extends StatefulWidget {
@@ -94,7 +96,9 @@ class _GoalPageState extends State<GoalPage> {
                           borderRadius: BorderRadius.circular(16)
                         )
                       ),
-                        onPressed: () {},
+                        onPressed: () {
+                          createGoal();
+                        },
                         child: Text(
                           'Click add your new Goal !',
                           style: TextStyle(
@@ -113,5 +117,13 @@ class _GoalPageState extends State<GoalPage> {
         ),
       ),
     );
+  }
+    createGoal() async {
+    showSlideDialog(
+        context: context,
+        child: AddGoalPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2.5);
   }
 }

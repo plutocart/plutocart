@@ -14,7 +14,6 @@ import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
 void main() {
-
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([
@@ -39,12 +38,20 @@ class _MyWidgetState extends State<MyWidget> {
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
-    final transactionCategoryBloc = BlocProvider(create: (context) => TransactionCategoryBloc());
-    final transactionBloc = BlocProvider(create: (context) => TransactionBloc());
-        final pageBloc = BlocProvider(create: (context) => PageBloc());
+    final transactionCategoryBloc =
+        BlocProvider(create: (context) => TransactionCategoryBloc());
+    final transactionBloc =
+        BlocProvider(create: (context) => TransactionBloc());
+    final pageBloc = BlocProvider(create: (context) => PageBloc());
 
     return MultiBlocProvider(
-        providers: [walletBloc , loginBloc , transactionCategoryBloc , transactionBloc , pageBloc],
+        providers: [
+          walletBloc,
+          loginBloc,
+          transactionCategoryBloc,
+          transactionBloc,
+          pageBloc
+        ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
@@ -78,8 +85,7 @@ class _MyWidgetState extends State<MyWidget> {
     subscription = Connectivity().onConnectivityChanged.listen((result) {
       if (result == ConnectivityResult.none) {
       } else if (result == ConnectivityResult.wifi ||
-          result == ConnectivityResult.mobile) {
-      }
+          result == ConnectivityResult.mobile) {}
     });
   }
 
