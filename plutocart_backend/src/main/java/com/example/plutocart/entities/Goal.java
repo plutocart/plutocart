@@ -1,6 +1,7 @@
 package com.example.plutocart.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,5 +41,9 @@ public class Goal {
 
     @OneToMany(mappedBy = "goalIdGoal")
     private Set<Transaction> transactions = new LinkedHashSet<>();
+
+    @NotNull
+    @Column(name = "end_date_goal", nullable = false)
+    private Instant endDateGoal;
 
 }

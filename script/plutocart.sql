@@ -518,6 +518,17 @@ BEGIN
 END //
 DELIMITER ;
 
+-- create goal by account id 
+DELIMITER //
+CREATE  PROCEDURE `createGoalByAccountId`( in InNameGoal VARCHAR(15) , in InAmountGoal  decimal(10 , 2) 
+, in InDeficit decimal(10,2)  , in InEndDateGoal dateTime , in InAccountId int)
+BEGIN
+ insert into goal 
+ (name_goal , amount_goal , deficit , end_date_goal  , account_id_account , create_goal_on , update_goal_on) 
+ values(InNameGoal , InAmountGoal , InDeficit , InEndDateGoal , InAccountId , now() , now());
+END //
+DELIMITER ;
+
 
 -- update account from guest to member
 DELIMITER //
