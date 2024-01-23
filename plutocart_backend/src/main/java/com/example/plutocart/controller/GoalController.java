@@ -1,6 +1,7 @@
 package com.example.plutocart.controller;
 
 import com.example.plutocart.dtos.account.AccountDTO;
+import com.example.plutocart.exceptions.PlutoCartServiceApiException;
 import com.example.plutocart.services.GoalService;
 import com.example.plutocart.utils.GenericResponse;
 import jakarta.validation.Valid;
@@ -18,6 +19,14 @@ import java.time.LocalDateTime;
 public class GoalController {
     @Autowired
     GoalService goalService;
+
+    @GetMapping("account/{account-id}/goal")
+    public ResponseEntity<GenericResponse> getGoalByAccountId(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+
+        GenericResponse result = goalService.getGoalByAccountId(accountId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     @PostMapping("account/{account-id}/goal")
     public ResponseEntity<GenericResponse> createGoalByAccountId(@Valid @PathVariable(value = "account-id") int accountId ,

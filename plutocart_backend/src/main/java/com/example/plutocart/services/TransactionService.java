@@ -380,7 +380,8 @@ public class TransactionService {
         GenericResponse response = new GenericResponse();
 
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
-        TResPostDTO transactionResponse = modelMapper.map(transaction, TResPostDTO.class);
+        TResDelDTO transactionResponse = new TResDelDTO();
+//        TResDelDTO transactionResponse = modelMapper.map(transaction, TResDelDTO.class);
 
         if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
             cloudinaryService.deleteImageOnCloudInTransaction(transactionId);

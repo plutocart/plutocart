@@ -10,12 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Integer> {
 
+
+    @Transactional
+    @Query(value = "SELECT * FROM goal where account_id_account = :accountId", nativeQuery = true)
+    List<Goal> viewGoalByAccountId(Integer accountId);
+
     @Modifying
     @Transactional
     @Procedure(name = "createGoalByAccountId")
-    void insertGoalByAccountId(String nameGoal , BigDecimal amountGoal , BigDecimal deficit , LocalDateTime endDateGoal , Integer accountId  );
+    void insertGoalByAccountId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer accountId);
 }

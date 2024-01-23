@@ -3,10 +3,12 @@ package com.example.plutocart.services;
 import com.example.plutocart.constants.ErrorMessage;
 import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.dtos.wallet.WalletPostDTO;
+import com.example.plutocart.entities.Transaction;
 import com.example.plutocart.entities.Wallet;
-import com.example.plutocart.utils.HelperMethod;
 import com.example.plutocart.repositories.AccountRepository;
+import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
+import com.example.plutocart.utils.HelperMethod;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,10 @@ public class WalletService {
     @Autowired
     WalletRepository walletRepository;
     @Autowired
+    TransactionRepository transactionRepository;
+    @Autowired
+    TransactionService transactionService;
+    @Autowired
     ModelMapper modelMapper;
     @Autowired
     WalletDTO walletDto;
@@ -42,7 +48,6 @@ public class WalletService {
         List<Wallet> walletList = walletRepository.viewWalletByAccountIdStatusOn(accountRepository.findById(accountId).orElseThrow().getAccountId());
         return ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
     }
-
 
 
     public ResponseEntity<?> getWalletByIdAccountAndByWalletId(String accountId, String walletId) {
@@ -70,11 +75,11 @@ public class WalletService {
     }
 
     //    Update
-    public void updateWallet(String walletName , BigDecimal balanceWallet, String accountId, String walletId) {
+    public void updateWallet(String walletName, BigDecimal balanceWallet, String accountId, String walletId) {
         try {
             int acId = Integer.parseInt(accountId);
             int wId = Integer.parseInt(walletId);
-            walletRepository.updateWallet(walletName, balanceWallet , acId, wId);
+            walletRepository.updateWallet(walletName, balanceWallet, acId, wId);
         } catch (Exception ex) {
             handleAccountIdAndWalletIdExceptions(accountId, walletId);
         }
@@ -96,6 +101,12 @@ public class WalletService {
         try {
             int acId = Integer.parseInt(accountId);
             int wId = Integer.parseInt(walletId);
+
+            List<Transaction> transactionList = transactionRepository.viewTransactionByWalletId(wId);
+            if (transactionList != null && !transactionList.isEmpty())
+                for (Transaction transaction : transactionList) {
+                    transactionService.deleteTransaction(wId, transaction.getId());
+                }
             walletRepository.deleteWalletByAccountIdAndWalletId(acId, wId);
         } catch (Exception ex) {
             handleAccountIdAndWalletIdExceptions(accountId, walletId);

@@ -220,7 +220,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE deleteWalletBYWalletId( in accountId int , in walletId int)
 BEGIN
-   DELETE FROM transaction WHERE wallet_id_wallet = walletId;
+   -- DELETE FROM transaction WHERE wallet_id_wallet = walletId;
 	DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
 END //
 DELIMITER ;
