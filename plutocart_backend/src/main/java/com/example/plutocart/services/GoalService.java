@@ -2,13 +2,13 @@ package com.example.plutocart.services;
 
 
 import com.example.plutocart.constants.ResultCode;
-import com.example.plutocart.dtos.goal.GoalDTO;
 import com.example.plutocart.entities.Goal;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
 import com.example.plutocart.repositories.GoalRepository;
 import com.example.plutocart.utils.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,25 +35,30 @@ public class GoalService {
         return response;
     }
 
-    public GenericResponse insertGoalByAccountId(String nameGoal , BigDecimal amountGoal , BigDecimal deficit , LocalDateTime endDateGoal , Integer accountId){
-            GenericResponse response = new GenericResponse();
-            try {
-                goalRepository.insertGoalByAccountId(nameGoal, amountGoal, deficit, endDateGoal, accountId);
-                response.setStatus(ResultCode.SUCCESS);
-                GoalDTO goalDTO = new GoalDTO();
-                goalDTO.setNameGoal(nameGoal);
-                goalDTO.setAmountGoal(amountGoal);
-                goalDTO.setDeficit(deficit);
-                goalDTO.setEndDateGoal(endDateGoal);
-                goalDTO.setAccountId(accountId);
-                response.setData(goalDTO);
-                return  response;
-            }
-            catch (Exception exception){
-                response.setStatus(ResultCode.BAD_REQUEST);
-                response.setData(null);
-                return response;
-            }
+    @Transactional
+    public GenericResponse insertGoalByAccountId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer accountId) {
+        GenericResponse response = new GenericResponse();
+
+        goalRepository.insertGoalByAccountId(nameGoal, amountGoal, deficit, endDateGoal, accountId);
+//            try {
+//                goalRepository.insertGoalByAccountId(nameGoal, amountGoal, deficit, endDateGoal, accountId);
+//                response.setStatus(ResultCode.SUCCESS);
+//                GoalDTO goalDTO = new GoalDTO();
+//                goalDTO.setNameGoal(nameGoal);
+//                goalDTO.setAmountGoal(amountGoal);
+//                goalDTO.setDeficit(deficit);
+//                goalDTO.setEndDateGoal(endDateGoal);
+//                goalDTO.setAccountId(accountId);
+//                response.setData(goalDTO);
+//                return  response;
+//            }
+//            catch (Exception exception){
+//                response.setStatus(ResultCode.BAD_REQUEST);
+//                response.setData(null);
+//                return response;
+//            }
+        response.setStatus(ResultCode.SUCCESS);
+        return response;
     }
 
 }

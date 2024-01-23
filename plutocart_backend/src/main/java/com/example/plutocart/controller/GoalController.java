@@ -29,7 +29,7 @@ public class GoalController {
     }
 
     @PostMapping("account/{account-id}/goal")
-    public ResponseEntity<GenericResponse> createGoalByAccountId(@Valid @PathVariable(value = "account-id") int accountId ,
+    public ResponseEntity<GenericResponse> createGoalByAccountId(@Valid @PathVariable(value = "account-id") Integer accountId ,
                                                                  @RequestParam(name = "nameGoal") String nameGoal ,
                                                                  @RequestParam(name = "amountGoal") BigDecimal amountGoal ,
                                                                  @RequestParam(name = "deficit") BigDecimal deficit ,
@@ -37,12 +37,12 @@ public class GoalController {
                                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDateGoal
     ){
         LocalDateTime actualEndDateGoal = (endDateGoal != null) ? endDateGoal : LocalDateTime.now();
-        System.out.println(actualEndDateGoal);
-        System.out.println("account id : " + accountId);
-        System.out.println("nameGoal: " + nameGoal);
-        System.out.println("amountGoal : " + amountGoal);
-        System.out.println("deficit : " + deficit);
-        System.out.println("endDateGoal: " + endDateGoal);
+//        System.out.println(actualEndDateGoal);
+////        System.out.println("account id : " + accountId);
+////        System.out.println("nameGoal: " + nameGoal);
+////        System.out.println("amountGoal : " + amountGoal);
+////        System.out.println("deficit : " + deficit);
+////        System.out.println("endDateGoal: " + endDateGoal);
         GenericResponse result = goalService.insertGoalByAccountId(nameGoal, amountGoal, deficit, actualEndDateGoal, accountId);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
