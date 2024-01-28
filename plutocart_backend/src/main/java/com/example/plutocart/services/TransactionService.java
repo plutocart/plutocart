@@ -1,7 +1,6 @@
 package com.example.plutocart.services;
 
 import com.cloudinary.Cloudinary;
-import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.transaction.*;
 import com.example.plutocart.entities.Account;
@@ -50,45 +49,29 @@ public class TransactionService {
 
 
     @Transactional
-    public GenericResponse getTransactionByAccountId(String accountId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTransactionByAccountId(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
         Integer acId = validationAccountId(accountId);
-        if(userId.equals(accountId)){
-            List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(acId).orElseThrow().getAccountId());
-            List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else{
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(acId).orElseThrow().getAccountId());
+        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
     @Transactional
-    public GenericResponse getTransactionByAccountIdLimitThree(String accountId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTransactionByAccountIdLimitThree(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         Integer acId = validationAccountId(accountId);
-        String userId = JwtUtil.extractUsername(token);
-        if(userId.equals(accountId)){
-            List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountRepository.findById(acId).orElseThrow().getAccountId());
-            List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountRepository.findById(acId).orElseThrow().getAccountId());
+        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
     public Integer validationAccountId(String accountId) throws PlutoCartServiceApiException {
@@ -104,29 +87,19 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse getTransactionByAccountIdAndWalletId(String accountId, String walletId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTransactionByAccountIdAndWalletId(String accountId, String walletId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
+        TReqGetByAcIdWalId id = validationAccountIdAndWalletId(accountId, walletId);
 
-        if(userId.equals(accountId)){
-            TReqGetByAcIdWalId id = validationAccountIdAndWalletId(accountId, walletId);
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdAndWalletId(
+                accountRepository.findById(id.getAccountId()).orElseThrow().getAccountId(),
+                walletRepository.findById(id.getWalletId()).orElseThrow().getWalletId());
+        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction ->
+                modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-            List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdAndWalletId(
-                    accountRepository.findById(id.getAccountId()).orElseThrow().getAccountId(),
-                    walletRepository.findById(id.getWalletId()).orElseThrow().getWalletId());
-            List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction ->
-                    modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
-
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
-
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
     public TReqGetByAcIdWalId validationAccountIdAndWalletId(String accountId, String walletId) throws PlutoCartServiceApiException {
@@ -153,30 +126,22 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse getTransactionByAccountIdAndWalletIdAndTransactionId(String accountId, String walletId, String transactionId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTransactionByAccountIdAndWalletIdAndTransactionId(String accountId, String walletId, String transactionId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
-        if(userId.equals(accountId)){
-            TReqGetByAcIdWalIdTranId id = validationAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
+        TReqGetByAcIdWalIdTranId id = validationAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
 //        List<Transaction> transactionList = transactionRepository.viewTransactionByWalletIdAndTransactionId(walletId,transactionId);
 //        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-            List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdAndWalletIdAndTransactionId(
-                    accountRepository.findById(id.getAccountId()).orElseThrow().getAccountId(),
-                    walletRepository.findById(id.getWalletId()).orElseThrow().getWalletId(),
-                    transactionRepository.findById(id.getTransactionId()).orElseThrow().getId());
-            List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction ->
-                    modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
+        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdAndWalletIdAndTransactionId(
+                accountRepository.findById(id.getAccountId()).orElseThrow().getAccountId(),
+                walletRepository.findById(id.getWalletId()).orElseThrow().getWalletId(),
+                transactionRepository.findById(id.getTransactionId()).orElseThrow().getId());
+        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction ->
+                modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
     public TReqGetByAcIdWalIdTranId validationAccountIdAndWalletIdAndTransactionId(String accountId, String walletId, String transactionId) throws PlutoCartServiceApiException {
@@ -211,105 +176,72 @@ public class TransactionService {
         return id;
     }
 
-    public GenericResponse getTransactionByTransactionId(String accountId , Integer transactionId , String token) {
+    public GenericResponse getTransactionByTransactionId(Integer transactionId) {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
-        if(accountId.equals(userId)){
-            Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionRepository.findById(transactionId).orElseThrow().getId());
-            TransactionResponseGetDTO transactionResponse = modelMapper.map(transaction, TransactionResponseGetDTO.class);
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionRepository.findById(transactionId).orElseThrow().getId());
+        TransactionResponseGetDTO transactionResponse = modelMapper.map(transaction, TransactionResponseGetDTO.class);
+
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
     @Transactional
-    public GenericResponse getTodayIncome(Integer accountId, Integer walletId , String token) {
+    public GenericResponse getTodayIncome(Integer accountId, Integer walletId) {
         GenericResponse response = new GenericResponse();
         TResStmNowDTO tRes = new TResStmNowDTO();
-        String userId = JwtUtil.extractUsername(token);
-        if(Integer.parseInt(userId) == accountId){
-            BigDecimal todayIncome = transactionRepository.viewTodayIncome(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
-            tRes.setTodayIncome(todayIncome);
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(tRes);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        BigDecimal todayIncome = transactionRepository.viewTodayIncome(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
-
+        tRes.setTodayIncome(todayIncome);
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
     }
 
     @Transactional
-    public GenericResponse getTodayExpense(Integer accountId, Integer walletId , String token) {
+    public GenericResponse getTodayExpense(Integer accountId, Integer walletId) {
         GenericResponse response = new GenericResponse();
         TResStmNowDTO tRes = new TResStmNowDTO();
-        String userId = JwtUtil.extractUsername(token);
-        if(Integer.parseInt(userId) == accountId){
-            BigDecimal todayExpense = transactionRepository.viewTodayExpense(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
-            tRes.setTodayExpense(todayExpense);
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(tRes);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
+        BigDecimal todayExpense = transactionRepository.viewTodayExpense(accountRepository.findById(accountId).orElseThrow().getAccountId(), walletRepository.findById(walletId).orElseThrow().getWalletId());
 
+        tRes.setTodayExpense(todayExpense);
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
     }
 
     @Transactional
-    public GenericResponse getTodayIncomeAndExpense(String accountId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTodayIncomeAndExpense(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         List<TResStmNowDTO> tResList = new ArrayList<>();
-        String userId = JwtUtil.extractUsername(token);
-        if(accountId.equals(userId)){
-            Integer acId = validationAccountId(accountId);
+        Integer acId = validationAccountId(accountId);
 
-            List<Wallet> walletList = walletRepository.viewWalletByAccountId(acId);
-            if (walletList.isEmpty())
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "No wallet has been created for this account.");
+        List<Wallet> walletList = walletRepository.viewWalletByAccountId(acId);
+        if (walletList.isEmpty())
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "No wallet has been created for this account.");
 
-            for (Wallet wallet : walletList) {
-                TResStmNowDTO tRes = new TResStmNowDTO();
+        for (Wallet wallet : walletList) {
+            TResStmNowDTO tRes = new TResStmNowDTO();
 
-                BigDecimal todayIncome = transactionRepository.viewTodayIncome(acId, wallet.getWalletId());
-                BigDecimal todayExpense = transactionRepository.viewTodayExpense(acId, wallet.getWalletId());
-                tRes.setWalletId(wallet.getWalletId());
-                tRes.setTodayIncome(todayIncome);
-                tRes.setTodayExpense(todayExpense);
+            BigDecimal todayIncome = transactionRepository.viewTodayIncome(acId, wallet.getWalletId());
+            BigDecimal todayExpense = transactionRepository.viewTodayExpense(acId, wallet.getWalletId());
+            tRes.setWalletId(wallet.getWalletId());
+            tRes.setTodayIncome(todayIncome);
+            tRes.setTodayExpense(todayExpense);
 
-                tResList.add(tRes);
-            }
-
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(tResList);
-            return response;
-        }
-        else {
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
+            tResList.add(tRes);
         }
 
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tResList);
+        return response;
     }
 
     @Transactional
-    public GenericResponse createTransaction(String accountId , String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal , String token) throws IOException, PlutoCartServiceApiException {
+    public GenericResponse createTransaction(String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException, PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
 //        String imageUrl = null;
@@ -320,13 +252,11 @@ public class TransactionService {
 
 //        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
 
-        String userId = JwtUtil.extractUsername(token);
-        if(userId != null && userId.equals(accountId)){
-            TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
+        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
 
-            transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
-                    tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), debtIdDebt, goalIdGoal);
-            Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).get(transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).toArray().length - 1);
+        transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
+                tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), debtIdDebt, goalIdGoal);
+        Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).get(transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).toArray().length - 1);
 
 //        if (statementType == 1) {
 //            tRes.setStatementType("income");
@@ -334,77 +264,60 @@ public class TransactionService {
 //            tRes.setStatementType("expense");
 //        }
 
-            tRes.setWalletId(tReqPostTran.getWalletId());
-            tRes.setTransactionId(currentTransaction.getId());
-            tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
-            tRes.setStatementType(currentTransaction.getStatementType());
-            tRes.setStmTransaction(currentTransaction.getStmTransaction());
-            tRes.setDescription("Create Success");
+        tRes.setWalletId(tReqPostTran.getWalletId());
+        tRes.setTransactionId(currentTransaction.getId());
+        tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setStatementType(currentTransaction.getStatementType());
+        tRes.setStmTransaction(currentTransaction.getStmTransaction());
+        tRes.setDescription("Create Success");
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(tRes);
-            return response;
-        }
-        else{
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
-
-
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
     }
 
     @Transactional
-    public GenericResponse updateTransaction(String accountId , String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal , String token) throws Exception {
+    public GenericResponse updateTransaction(String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
         String imageUrl = null;
-        String userId = JwtUtil.extractUsername(token);
-        if(accountId.equals(userId)){
-            TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
+        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
 
-            if (!HelperMethod.isInteger(transactionId))
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
+        if (!HelperMethod.isInteger(transactionId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
 
-            Integer tranId = Integer.parseInt(transactionId);
-            Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
-            if (transaction == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not created. ");
+        Integer tranId = Integer.parseInt(transactionId);
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
+        if (transaction == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not created. ");
 
-            if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tranId) {
-                if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
-                    cloudinaryService.deleteImageOnCloudInTransaction(tranId);
-                }
-
-                if (file != null && !file.isEmpty()) {
-                    imageUrl = cloudinaryService.uploadImageInTransaction(file);
-                }
-
-                transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tranId, tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, imageUrl, debtIdDebt, goalIdGoal);
-            } else {
-                throw new Exception();
+        if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tranId) {
+            if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
+                cloudinaryService.deleteImageOnCloudInTransaction(tranId);
             }
+
+            if (file != null && !file.isEmpty()) {
+                imageUrl = cloudinaryService.uploadImageInTransaction(file);
+            }
+
+            transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tranId, tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, imageUrl, debtIdDebt, goalIdGoal);
+        } else {
+            throw new Exception();
+        }
 
 //        Transaction transactionUpdate = transactionRepository.viewTransactionByTransactionId(transactionId);
 //        TResPostDTO transactionResponse = modelMapper.map(transactionUpdate, TResPostDTO.class);
 
-            tRes.setWalletId(tReqPostTran.getWalletId());
-            tRes.setTransactionId(tranId);
-            tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
-            tRes.setStatementType(tReqPostTran.getStmTypeString());
-            tRes.setStmTransaction(tReqPostTran.getStmTransaction());
-            tRes.setDescription("Update Success");
+        tRes.setWalletId(tReqPostTran.getWalletId());
+        tRes.setTransactionId(tranId);
+        tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setStatementType(tReqPostTran.getStmTypeString());
+        tRes.setStmTransaction(tReqPostTran.getStmTransaction());
+        tRes.setDescription("Update Success");
 
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(tRes);
-            return response;
-        }
-        else{
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
-        }
-
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(tRes);
+        return response;
     }
 
     public TReqPostTran validationCreateAndUpdateTransaction(String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId) throws PlutoCartServiceApiException, IOException {
@@ -463,35 +376,27 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse deleteTransaction(String accountId , Integer walletId, Integer transactionId , String token) throws Exception {
+    public GenericResponse deleteTransaction(Integer walletId, Integer transactionId) throws Exception {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
-        if(userId.equals(accountId)){
-            Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
-            TResDelDTO transactionResponse = new TResDelDTO();
+
+        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+        TResDelDTO transactionResponse = new TResDelDTO();
 //        TResDelDTO transactionResponse = modelMapper.map(transaction, TResDelDTO.class);
 
-            if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
-                cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
-                transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId());
-            } else {
-                throw new Exception();
-            }
-
-            transactionResponse.setTransactionId(transaction.getId());
-            transactionResponse.setWalletId(transaction.getWalletIdWallet().getWalletId());
-            transactionResponse.setDescription("Delete Success");
-
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(transactionResponse);
-            return response;
-        }
-        else{
-            response.setStatus(ResultCode.FORBIDDEN);
-            response.setData(null);
-            return response;
+        if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
+            cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
+            transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId());
+        } else {
+            throw new Exception();
         }
 
+        transactionResponse.setTransactionId(transaction.getId());
+        transactionResponse.setWalletId(transaction.getWalletIdWallet().getWalletId());
+        transactionResponse.setDescription("Delete Success");
+
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(transactionResponse);
+        return response;
     }
 
 //    public List<Transaction> getTransactionByAccountId(int accountId) {

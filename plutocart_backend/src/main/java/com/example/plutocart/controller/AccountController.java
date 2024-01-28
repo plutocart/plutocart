@@ -19,7 +19,7 @@ public class AccountController {
     AccountService accountService;
 
     @PostMapping("/account/register/guest")
-    public ResponseEntity<GenericResponse> createAccountByImei(@Valid @RequestBody AccountDTO accountDTO  ){
+    public ResponseEntity<GenericResponse> createAccountByImei(@Valid @RequestBody AccountDTO accountDTO){
         GenericResponse result = accountService.CreateAccountByImei(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -29,15 +29,14 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
     @DeleteMapping("/account/{account-id}/delete-account")
-    public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId , @RequestHeader("Authorization") String token){
-        System.out.println(token);
-        GenericResponse result = accountService.DeleteAccount(accountId , token);
+    public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId){
+        GenericResponse result = accountService.DeleteAccount(accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/account/{account-id}/upgrade-role-member")
-    public ResponseEntity<GenericResponse> updateAccountToMember(@Valid @PathVariable(value = "account-id") Integer accountId , @RequestParam(name = "email") String email , @RequestHeader("Authorization") String token){
-        GenericResponse result = accountService.UpdateAccountToMember(email , accountId , token);
+    public ResponseEntity<GenericResponse> updateAccountToMember(@Valid @PathVariable(value = "account-id") Integer accountId , @RequestParam(name = "email") String email){
+        GenericResponse result = accountService.UpdateAccountToMember(email , accountId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

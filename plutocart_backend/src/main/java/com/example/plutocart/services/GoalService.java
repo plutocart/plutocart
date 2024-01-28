@@ -1,7 +1,6 @@
 package com.example.plutocart.services;
 
 
-import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.goal.GReqPostDTO;
 import com.example.plutocart.dtos.goal.GoalDTO;
@@ -38,49 +37,34 @@ public class GoalService {
     @Autowired
     ModelMapper modelMapper;
 
-    public GenericResponse getGoalByAccountId(String accountId , String token) throws PlutoCartServiceApiException {
+    public GenericResponse getGoalByAccountId(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
-        if(userId.equals(accountId)){
-            Integer acId = validationIdService.validationAccountId(accountId);
-            List<Goal> goalList = goalRepository.viewGoalByAccountId(acId);
-            List<GoalDTO> goalResponse = goalList.stream().map(goal -> modelMapper.map(goal, GoalDTO.class)).collect(Collectors.toList());
-            response.setData(goalResponse);
-            response.setStatus(ResultCode.SUCCESS);
-            return response;
-        }
-        else {
-            response.setData(null);
-            response.setStatus(ResultCode.FORBIDDEN);
-            return response;
-        }
+        Integer acId = validationIdService.validationAccountId(accountId);
 
+        List<Goal> goalList = goalRepository.viewGoalByAccountId(acId);
+        List<GoalDTO> goalResponse = goalList.stream().map(goal -> modelMapper.map(goal, GoalDTO.class)).collect(Collectors.toList());
+
+        response.setData(goalResponse);
+        response.setStatus(ResultCode.SUCCESS);
+        return response;
     }
 
     @Transactional
-    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal , String token) throws PlutoCartServiceApiException {
+    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        String userId = JwtUtil.extractUsername(token);
-        if(userId.equals(accountId)){
-            GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
-            GReqPostDTO gReqPostDTO = validationCreateGoal(accountId, nameGoal, amountGoal, deficit);
+        GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
+        GReqPostDTO gReqPostDTO = validationCreateGoal(accountId, nameGoal, amountGoal, deficit);
 
-            goalRepository.insertGoalByAccountId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getAccountId());
+        goalRepository.insertGoalByAccountId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getAccountId());
 
-            goalResPostDTO.setAcId(gReqPostDTO.getAccountId());
-            goalResPostDTO.setNameGoal(gReqPostDTO.getNameGoal());
-            goalResPostDTO.setAmountGoal(gReqPostDTO.getAmountGoal());
-            goalResPostDTO.setDeficit(gReqPostDTO.getDeficit());
-            goalResPostDTO.setEndDateGoal(endDateGoal);
-            response.setStatus(ResultCode.SUCCESS);
-            response.setData(goalResPostDTO);
-            return response;
-        }
-        else {
-            response.setData(null);
-            response.setStatus(ResultCode.FORBIDDEN);
-            return response;
-        }
+        goalResPostDTO.setAcId(gReqPostDTO.getAccountId());
+        goalResPostDTO.setNameGoal(gReqPostDTO.getNameGoal());
+        goalResPostDTO.setAmountGoal(gReqPostDTO.getAmountGoal());
+        goalResPostDTO.setDeficit(gReqPostDTO.getDeficit());
+        goalResPostDTO.setEndDateGoal(endDateGoal);
+        response.setStatus(ResultCode.SUCCESS);
+        response.setData(goalResPostDTO);
+        return response;
     }
 
     public GReqPostDTO validationCreateGoal(String accountId, String nameGoal, String amountGoal, String deficit) throws PlutoCartServiceApiException {
