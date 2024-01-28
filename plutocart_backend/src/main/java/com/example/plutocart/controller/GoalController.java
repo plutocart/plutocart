@@ -19,15 +19,16 @@ public class GoalController {
     GoalService goalService;
 
     @GetMapping("account/{account-id}/goal")
-    public ResponseEntity<GenericResponse> getGoalByAccountId(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+    public ResponseEntity<GenericResponse> getGoalByAccountId(@PathVariable("account-id") String accountId , @RequestHeader("Authorization") String token) throws PlutoCartServiceApiException {
 
-        GenericResponse result = goalService.getGoalByAccountId(accountId);
+        GenericResponse result = goalService.getGoalByAccountId(accountId , token);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("account/{account-id}/goal")
     public ResponseEntity<GenericResponse> createGoalByAccountId(@Valid @PathVariable(value = "account-id") String accountId,
+                                                                 @RequestHeader("Authorization") String token,
                                                                  @RequestParam(name = "nameGoal") String nameGoal,
                                                                  @RequestParam(name = "amountGoal") String amountGoal,
                                                                  @RequestParam(name = "deficit") String deficit,
@@ -41,7 +42,7 @@ public class GoalController {
 ////        System.out.println("amountGoal : " + amountGoal);
 ////        System.out.println("deficit : " + deficit);
 ////        System.out.println("endDateGoal: " + endDateGoal);
-        GenericResponse result = goalService.insertGoalByAccountId(accountId, nameGoal, amountGoal, deficit, actualEndDateGoal);
+        GenericResponse result = goalService.insertGoalByAccountId(accountId, nameGoal, amountGoal, deficit, actualEndDateGoal , token);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

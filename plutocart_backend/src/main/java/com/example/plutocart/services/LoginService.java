@@ -1,5 +1,6 @@
 package com.example.plutocart.services;
 
+import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.account.AccountDTO;
 import com.example.plutocart.entities.Account;
@@ -25,6 +26,9 @@ public class LoginService {
             Account account = accountRepository.getAccountByImeiAndRole(imeiEncryption.encryptIMEI(imei) , accountRole);
             response.setData( modelMapper.map(account , AccountDTO.class));
             response.setStatus(ResultCode.SUCCESS);
+            String acId = String.valueOf(account.getAccountId());
+            String token = JwtUtil.generateToken(acId);
+            response.setAuthentication(token);
             return response;
         }
         catch (Exception ex){
@@ -39,6 +43,9 @@ public class LoginService {
             Account account = accountRepository.getAccountByGoogleAndRole(email , accountRole);
             response.setData( modelMapper.map(account , AccountDTO.class));
             response.setStatus(ResultCode.SUCCESS);
+            String acId = String.valueOf(account.getAccountId());
+            String token = JwtUtil.generateToken(acId);
+            response.setAuthentication(token);
             return response;
         }
         catch (Exception ex){
