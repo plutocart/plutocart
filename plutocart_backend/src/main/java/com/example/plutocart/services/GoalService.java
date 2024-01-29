@@ -33,13 +33,13 @@ public class GoalService {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    ValidationIdService validationIdService;
+    GlobalValidationService globalValidationService;
     @Autowired
     ModelMapper modelMapper;
 
     public GenericResponse getGoalByAccountId(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        Integer acId = validationIdService.validationAccountId(accountId);
+        Integer acId = globalValidationService.validationAccountId(accountId);
 
         List<Goal> goalList = goalRepository.viewGoalByAccountId(acId);
         List<GoalDTO> goalResponse = goalList.stream().map(goal -> modelMapper.map(goal, GoalDTO.class)).collect(Collectors.toList());
