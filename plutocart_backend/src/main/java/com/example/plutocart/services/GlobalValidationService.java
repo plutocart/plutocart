@@ -1,11 +1,13 @@
 package com.example.plutocart.services;
 
+import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.transaction.TReqGetByAcIdWalId;
 import com.example.plutocart.entities.Account;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.exceptions.PlutoCartServiceApiDataNotFound;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
+import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
 import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.TransactionRepository;
@@ -15,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ValidationIdService {
+public class GlobalValidationService {
 
     @Autowired
     AccountRepository accountRepository;
@@ -63,4 +65,9 @@ public class ValidationIdService {
         return id;
     }
 
+    public void validationToken(String accountId, String token) throws PlutoCartServiceApiForbidden {
+        String userId = JwtUtil.extractUsername(token);
+        if (userId == null || !userId.equals(accountId.trim()))
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+    }
 }
