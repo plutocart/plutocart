@@ -9,9 +9,12 @@ import java.math.BigDecimal;
 @Setter
 public class TReqPostTran {
     private Integer walletId;
+    private Integer transactionId;
     private String imageUrl;
     private BigDecimal stmTransaction;
     private Integer stmType;
     private String stmTypeString;
     private Integer transactionCategoryId;
+    private Integer goalId;
+    private Integer debtId;
 }
