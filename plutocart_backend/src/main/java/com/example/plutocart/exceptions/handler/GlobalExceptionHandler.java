@@ -2,6 +2,7 @@ package com.example.plutocart.exceptions.handler;
 
 import com.example.plutocart.exceptions.PlutoCartServiceApiDataNotFound;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
+import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
 import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.utils.GenericResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -37,5 +38,13 @@ public class GlobalExceptionHandler {
         GenericResponse response = new GenericResponse();
         response.setStatus(e.getStatus());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PlutoCartServiceApiForbidden.class)
+    public ResponseEntity<GenericResponse> handlerApiForbidden(PlutoCartServiceApiForbidden e) {
+        log.error("PlutoCart ServiceApi Exception : [{}]" + e.getStatus().getRemark());
+        GenericResponse response = new GenericResponse();
+        response.setStatus(e.getStatus());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 }
