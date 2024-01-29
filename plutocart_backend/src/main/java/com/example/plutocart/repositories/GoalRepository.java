@@ -21,6 +21,10 @@ public interface GoalRepository extends JpaRepository<Goal, Integer> {
     List<Goal> viewGoalByAccountId(Integer accountId);
 
     @Transactional
+    @Query(value = "SELECT * FROM goal where id_goal = :goalId", nativeQuery = true)
+    Goal viewGoalByGoalId(Integer goalId);
+
+    @Transactional
     @Modifying
     @Procedure(procedureName = "createGoalByAccountId")
     void insertGoalByAccountId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer accountId);
