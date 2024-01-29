@@ -33,6 +33,8 @@ class LoginRepository {
       print(
           "respone data in process login guest in class repository: ${response.data}");
       if (response.statusCode == 200 && response.data['data'] != null) {
+        await storage.delete(key: "token");
+        await storage.write(key: "token", value: response.data['authentication']);
         await storage.write(
           key: "accountId",
           value: response.data['data']['accountId'].toString(),
@@ -64,6 +66,9 @@ class LoginRepository {
           "respone data in process create guest in class repository: ${response.data}");
 
       if (response.statusCode == 201 && response.data['data'] != null) {
+        await storage.delete(key: "token");
+        await storage.write(key: "token", value: response.data['authentication']);
+        print("show token : ${response.data['authentication']}");
         await storage.write(
           key: "accountId",
           value: response.data['data']['accountId'].toString(),
@@ -98,6 +103,8 @@ class LoginRepository {
       print(
           "check status code of create account customer classs repository login : ${response.statusCode}");
       if (response.data['data'] != null) {
+        await storage.delete(key: "token");
+        await storage.write(key: "token", value: response.data['authentication']);
         await storage.delete(key: "email");
         await storage.write(
           key: "accountId",
@@ -156,6 +163,8 @@ class LoginRepository {
       print(
           "respone data in process login customer after create in class repository: ${response.data}");
       if (response.statusCode == 200 && response.data['data'] != null) {
+        await storage.delete(key: "token");
+        await storage.write(key: "token", value: response.data['authentication']);
         await storage.write(
           key: "accountId",
           value: response.data['data']['accountId'].toString(),
@@ -189,6 +198,8 @@ class LoginRepository {
       print("email google account and response:  ${response.data}");
 
       if (response.statusCode == 200) {
+        await storage.delete(key: "token");
+        await storage.write(key: "token", value: response.data['authentication']);
         await storage.write(
           key: "accountId",
           value: response.data['data']['accountId'].toString(),
@@ -223,19 +234,25 @@ class LoginRepository {
     final storage =  FlutterSecureStorage();
     String? accountId = await storage.read(key: "accountId");
     String? email = await storage.read(key: "email");
+    String? token = await storage.read(key: "token");
     int id = int.parse(accountId!);
     print("account id in updateEmail to Member : ${accountId}");
      print("email in updateEmail to Member : ${email}");
-      
+     print("token :${token}");
     try {
       print("start update guest account");
       Response response = await dio.patch(
         'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/upgrade-role-member',
         queryParameters: {"email": (email!.isEmpty || email == " ") ? null : email},
+        options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ) , 
       );
       print("update email  ${response.data}");
 
       if (response.statusCode == 200) {
+
         await storage.write(
           key: "email",
           value: response.data['data']['email'].toString(),
@@ -255,12 +272,17 @@ class LoginRepository {
     final storage = new FlutterSecureStorage();
     String? accountId = await storage.read(key: "accountId");
     int id = int.parse(accountId!);
+    String ? token = await storage.read(key: "token");
     print("id account in step deleteAccountById : ${id}");
     try {
       Response response = await dio.delete(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/delete-account');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/delete-account' , options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
         print("delete account id : ${id} : success");
+        storage.delete(key: "token");
         storage.delete(key: "accountId");
         return response.data;
       } else if (response.statusCode == 404) {
@@ -307,6 +329,7 @@ class LoginRepository {
       final storage = FlutterSecureStorage();
       await _googleSignIn.signOut();
       await storage.delete(key: "email");
+            await storage.delete(key: "token");
     } catch (error) {
       print(error);
     }

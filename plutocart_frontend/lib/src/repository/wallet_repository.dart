@@ -10,6 +10,7 @@ class walletRepository {
   Future createWallet(String walletName , double walletBalance) async {
       final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String ? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
          print("iddd : ${id}");
     try {
@@ -18,7 +19,10 @@ class walletRepository {
       "walletBalance": walletBalance,
     };
 
-      Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet' , data: requestBody);
+      Response response = await dio.post('https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet' , data: requestBody  ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 201) {
           print("create successfully");
           return response.data;
@@ -36,10 +40,15 @@ class walletRepository {
   Future deleteWalletById(int walletId) async {
        final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
     try {
       Response response = await dio.delete(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/${walletId}');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/${walletId}'  
+          ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
            log(1);
       } else if (response.statusCode == 404) {
@@ -56,14 +65,19 @@ class walletRepository {
  Future<dynamic> updateWallet(int walletId, String walletName, double balanceWallet) async {
    final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String ? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
   try {
     Response response = await dio.patch(
       'https://capstone23.sit.kmutt.ac.th/ej1/api/account/$id/wallet/$walletId/wallet-name',
+      
       queryParameters: {
         'wallet-name': walletName,
         'balance-wallet': balanceWallet,
-      },
+      } ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          )
     );
     if (response.statusCode == 200) {
       Wallet wallet = Wallet(walletId: walletId, walletName: walletName, walletBalance: balanceWallet);
@@ -82,10 +96,14 @@ class walletRepository {
   Future<Wallet> updateStatusWallet( int walletId) async {
      final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String ? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
     try {
       Response response = await dio.patch(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/$id/wallet/$walletId/wallet-status');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/$id/wallet/$walletId/wallet-status'  ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
         Wallet wallet = Wallet(walletId: walletId  , walletName: "" , walletBalance: 0.0);
         return wallet;
@@ -104,10 +122,16 @@ class walletRepository {
   Future<dynamic> getWalletAll() async {
      final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+           String? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
     try {
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet' 
+          ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          )
+           );
       if (response.statusCode == 200) {
         List<dynamic> wallets = response.data!;
         return wallets;
@@ -125,10 +149,14 @@ class walletRepository {
   Future<dynamic> getWalletAllStatusOn() async {
      final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
     try {
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/status-on');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/status-on' ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
         List<dynamic> wallets = response.data!;
         return wallets;
@@ -146,10 +174,14 @@ class walletRepository {
   Future<Wallet> getWalletById( int walletId) async {
      final storage = new FlutterSecureStorage();
        String? accountId = await storage.read(key: "accountId");
+       String ? token = await storage.read(key: "token");
          int id = int.parse(accountId!);
     try {
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/${walletId}');
+          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/wallet/${walletId}' ,  options: 
+          Options(
+            headers: { "Authorization": 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
         Wallet responseData = Wallet.fromJson(response.data);
         return responseData;

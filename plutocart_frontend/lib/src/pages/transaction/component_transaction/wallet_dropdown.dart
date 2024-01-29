@@ -58,7 +58,7 @@ class _WalletDropdownState extends State<WalletDropdown> {
                 padding: const EdgeInsets.only(right: 20),
                 child: Image(
                   image: AssetImage('assets/icon/wallet_icon.png'),
-                  width: MediaQuery.of(context).size.width * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.1,   
                 ),
               ),
               Text(

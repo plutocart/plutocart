@@ -120,7 +120,7 @@ class _BottomSheetDeleteWalletState extends State<BottomSheetDeleteWallet> {
                   .read<WalletBloc>()
                   .add(DeleteWallet(widget.wallet.walletId!));
               showLoadingPagePopUp(context);
-              await Future.delayed(Duration(seconds: 2));
+              await Future.delayed(Duration(seconds: 1));
                             context.read<TransactionBloc>().add(GetTransactionLimit3());
                 await Future.delayed(Duration(milliseconds: 500));              
                Navigator.pop(context);
