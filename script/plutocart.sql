@@ -194,8 +194,9 @@ insert into transaction_category (id_transaction_category , name_transaction_cat
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(29, 'Lottery' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1700930017/test/Icon-Lottery.png"); 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(30, 'Home Internet' , 2 , "https://res.cloudinary.com/dtczkwnwt/image/upload/v1704136130/category_images/Icon-Home-internet_f3529089-88e2-481b-9d0a-394e62c2ce3a.png"); 
 insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(31, 'Education' , 2 ,"https://res.cloudinary.com/dtczkwnwt/image/upload/v1704136306/category_images/Icon-Education_75061b18-9f27-48a6-9cd9-22d249638bef.png"); 
-
-
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(32, 'Goals' , 2 ,"https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441684/category_images/Goals_76349a46-07b8-4024-97f5-9eb118aa533d.png"); 
+insert into transaction_category (id_transaction_category , name_transaction_category , type_category , image_icon_url) values(33, 'Debts' , 2 ,"https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441750/category_images/Debts_89cb0a76-a6c2-49c6-8ff3-e4a70555330d.png");
+ 
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(1 , 'admin wallet' , 100000.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(3 , 'admin 🥲🐇' , 1111111.00 , default , 1 , now() , now());
@@ -231,6 +232,29 @@ CREATE PROCEDURE viewTransactionByAccountId(in accountId int)
 BEGIN
 	select t.* from transaction t join wallet w on
     t.wallet_id_wallet = w.id_wallet where w.account_id_account = accountId;
+END //
+DELIMITER ;
+
+-- view transaction by account id & wallet id
+DELIMITER //
+CREATE PROCEDURE viewTransactionByAccountIdAndWalletId(
+	in accountId int,
+	in walletId int  )
+BEGIN
+	select t.* from transaction t join wallet w on
+    t.wallet_id_wallet = w.id_wallet where t.wallet_id_wallet = walletId and w.account_id_account = accountId;
+END //
+DELIMITER ;
+
+-- view transaction by account id & wallet id & transaction id
+DELIMITER //
+CREATE PROCEDURE viewTransactionByAccountIdAndWalletIdAndTransactionId(
+	in accountId int,
+	in walletId int,
+    in transactionId int)
+BEGIN
+	select t.* from transaction t join wallet w on
+    t.wallet_id_wallet = w.id_wallet where t.id_transaction = transactionId and t.wallet_id_wallet = walletId and w.account_id_account = accountId;
 END //
 DELIMITER ;
 
@@ -296,6 +320,14 @@ BEGIN
     UPDATE wallet
     SET balance_wallet = balance_wallet + balanceAdjustment
     WHERE id_wallet = walletId;
+    
+    -- goal check goal or debt id if it have update deficit + balanceAdjustment
+    IF goalIdGoal IS NOT NULL THEN
+        UPDATE goal
+		SET deficit = deficit + stmTransaction
+		WHERE id_goal = goalIdGoal;
+	END IF;
+    
 END //
 DELIMITER ;
 
@@ -304,7 +336,9 @@ CREATE PROCEDURE DeleteTransactionByTransactionId(
     IN transactionId INT,
     IN stmTransaction DECIMAL(10, 2),
     IN stmType VARCHAR(10),
-    IN walletId INT
+    IN walletId INT,
+    IN goalIdGoal INT,
+    IN debtIdDebt INT
 )
 BEGIN
     DECLARE balanceAdjustment DECIMAL(10, 2);
@@ -326,6 +360,13 @@ BEGIN
     UPDATE wallet
     SET balance_wallet = balance_wallet + balanceAdjustment
     WHERE id_wallet = walletId;
+    
+	IF goalIdGoal IS NOT NULL THEN
+        UPDATE goal
+		SET deficit = deficit - stmTransaction
+		WHERE id_goal = goalIdGoal;
+	END IF;
+    
 END //
 DELIMITER ;
 
@@ -373,7 +414,13 @@ BEGIN
         SET balance_wallet = balance_wallet + oldStmTransaction
         WHERE id_wallet = walletId;
     END IF;
-
+    
+	IF goalIdGoal IS NOT NULL THEN
+        UPDATE goal
+		SET deficit = deficit - oldStmTransaction
+		WHERE id_goal = goalIdGoal;
+	END IF;
+    
     -- Update the transaction table
     UPDATE transaction
     SET
@@ -399,6 +446,13 @@ BEGIN
     UPDATE wallet
     SET balance_wallet = balance_wallet + newBalance
     WHERE id_wallet = walletId;
+    
+	IF goalIdGoal IS NOT NULL THEN
+        UPDATE goal
+		SET deficit = deficit + stmTransaction
+		WHERE id_goal = goalIdGoal;
+	END IF;
+    
 END //
 DELIMITER ;
 
@@ -518,10 +572,15 @@ BEGIN
 END //
 DELIMITER ;
 
--- create goal by account id 
+-- create goal
 DELIMITER //
-CREATE  PROCEDURE `createGoalByAccountId`( in InNameGoal VARCHAR(15) , in InAmountGoal  decimal(10 , 2) 
-, in InDeficit decimal(10,2)  , in InEndDateGoal dateTime , in InAccountId int)
+CREATE  PROCEDURE `createGoalByAccountId`( 
+in InNameGoal VARCHAR(15) ,
+in InAmountGoal  decimal(10 , 2) ,
+in InDeficit decimal(10,2)  ,
+in InEndDateGoal dateTime ,
+in InAccountId int 
+)
 BEGIN
  insert into goal 
  (name_goal , amount_goal , deficit , end_date_goal  , account_id_account , create_goal_on , update_goal_on) 
@@ -529,6 +588,28 @@ BEGIN
 END //
 DELIMITER ;
 
+-- update goal
+DELIMITER //
+CREATE  PROCEDURE `updateGoalByGoalId`( 
+in InNameGoal VARCHAR(15) ,
+in InAmountGoal  decimal(10 , 2) ,
+in InDeficit decimal(10,2)  ,
+in InEndDateGoal dateTime ,
+in InGoalId int,
+in amountOfTransaction decimal(10,2) 
+)
+BEGIN
+
+ UPDATE goal
+		SET 
+			name_goal = InNameGoal,
+			amount_goal = InAmountGoal,
+            deficit = InDeficit + amountOfTransaction,
+            end_date_goal = InEndDateGoal,
+            update_goal_on = now()
+		WHERE id_goal = InGoalId;
+END //
+DELIMITER ;
 
 -- update account from guest to member
 DELIMITER //

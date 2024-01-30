@@ -70,7 +70,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Transactional
     @Modifying
     @Procedure(procedureName = "DeleteTransactionByTransactionId")
-    void deleteTransactionByTransactionId(Integer transactionId, BigDecimal stmTransaction, String stmType, Integer walletId);
+    void deleteTransactionByTransactionId(Integer transactionId, BigDecimal stmTransaction, String stmType, Integer walletId, Integer goalId, Integer debtId);
 
     @Transactional
     @Modifying

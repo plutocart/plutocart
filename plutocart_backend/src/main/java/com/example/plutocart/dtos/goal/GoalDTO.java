@@ -1,7 +1,6 @@
 package com.example.plutocart.dtos.goal;
 
 import com.example.plutocart.dtos.account.AccountDTO;
-import com.example.plutocart.entities.Account;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +11,10 @@ import java.time.LocalDateTime;
 @Getter
 public class GoalDTO {
 
-    private AccountDTO accountIdAccount;
+    private Integer id;
     private String nameGoal;
     private BigDecimal amountGoal;
     private BigDecimal deficit;
     private LocalDateTime endDateGoal;
+    private AccountDTO accountIdAccount;
 }

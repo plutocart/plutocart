@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class TResDelDTO {
     private Integer transactionId;
-    private Integer walletId;
+    private Integer walId;
     private String description;
 }

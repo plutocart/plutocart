@@ -142,7 +142,8 @@ public class WalletService {
                 List<Transaction> transactionList = transactionRepository.viewTransactionByWalletId(wId);
                 if (transactionList != null && !transactionList.isEmpty())
                     for (Transaction transaction : transactionList) {
-                        transactionService.deleteTransaction(wId, transaction.getId());
+                        String tranId = String.valueOf(transaction.getId());
+                        transactionService.deleteTransaction(accountId, walletId, tranId);
 //                        transactionService.deleteTransaction(accountId , wId, transaction.getId() , token);
                     }
                 walletRepository.deleteWalletByAccountIdAndWalletId(acId, wId);

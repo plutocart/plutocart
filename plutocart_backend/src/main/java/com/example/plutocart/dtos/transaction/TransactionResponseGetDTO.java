@@ -1,9 +1,9 @@
 package com.example.plutocart.dtos.transaction;
 
+import com.example.plutocart.dtos.goal.GoalDTO;
 import com.example.plutocart.dtos.transaction_category.TSCResGetDTO;
 import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.entities.Debt;
-import com.example.plutocart.entities.Goal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +21,6 @@ public class TransactionResponseGetDTO {
     private String imageUrl;
     private TSCResGetDTO tranCategoryIdCategory;
     private Debt debtIdDebt;
-    private Goal goalIdGoal;
+    private GoalDTO goalIdGoal;
     private WalletDTO walletIdWallet;
 }
