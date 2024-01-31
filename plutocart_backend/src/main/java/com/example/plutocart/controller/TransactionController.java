@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -48,23 +46,23 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> getTransactionByTransactionId(@PathVariable("transaction-id") Integer transactionId) {
-        GenericResponse result = transactionService.getTransactionByTransactionId(transactionId);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-income")
-    private ResponseEntity<GenericResponse> getTodayIncome(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
-        GenericResponse result = transactionService.getTodayIncome(accountId, walletId);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-expense")
-    private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
-        GenericResponse result = transactionService.getTodayExpense(accountId, walletId);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
+//    @GetMapping("/transaction/{transaction-id}")
+//    private ResponseEntity<GenericResponse> getTransactionByTransactionId(@PathVariable("transaction-id") Integer transactionId) {
+//        GenericResponse result = transactionService.getTransactionByTransactionId(transactionId);
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
+//
+//    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-income")
+//    private ResponseEntity<GenericResponse> getTodayIncome(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
+//        GenericResponse result = transactionService.getTodayIncome(accountId, walletId);
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
+//
+//    @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/daily-expense")
+//    private ResponseEntity<GenericResponse> getTodayExpense(@PathVariable("account-id") Integer accountId, @PathVariable("wallet-id") Integer walletId) {
+//        GenericResponse result = transactionService.getTodayExpense(accountId, walletId);
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
 
     @GetMapping("/account/{account-id}/wallet/transaction/daily-income-and-expense")
     private ResponseEntity<GenericResponse> getTodayIncomeAndExpense(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
@@ -72,28 +70,32 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
-    @PostMapping("/wallet/{wallet-id}/transaction")
-    private ResponseEntity<GenericResponse> createTransactions(@RequestParam(name = "file", required = false) MultipartFile file,
-                                                               @RequestParam("stmTransaction") String stmTransaction,
-                                                               @RequestParam("statementType") String statementType,
-                                                               @RequestParam(name = "dateTransaction", required = false)
-                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
-                                                               @RequestParam(name = "transactionCategoryId") String transactionCategoryId,
-                                                               @RequestParam(name = "description", required = false, defaultValue = "null") String description,
-                                                               @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
-                                                               @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
-                                                               @PathVariable("wallet-id") String walletId) throws IOException, PlutoCartServiceApiException {
+    @PostMapping("/account/{account-id}/wallet/{wallet-id}/transaction")
+    private ResponseEntity<GenericResponse> createTransaction(
+//            @RequestHeader("Authorization") String token,
+            @RequestParam(name = "file", required = false) MultipartFile file,
+            @RequestParam("stmTransaction") String stmTransaction,
+            @RequestParam("statementType") String statementType,
+            @RequestParam(name = "dateTransaction", required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
+            @RequestParam(name = "transactionCategoryId") String transactionCategoryId,
+            @RequestParam(name = "description", required = false, defaultValue = "null") String description,
+            @RequestParam(name = "debtIdDebt", required = false) String debtIdDebt,
+            @RequestParam(name = "goalIdGoal", required = false) String goalIdGoal,
+            @PathVariable("account-id") String accountId,
+            @PathVariable("wallet-id") String walletId) throws IOException, PlutoCartServiceApiException {
 
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
 
-        Integer actualDebtId = debtIdDebt.orElse(null);
-        Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.createTransaction(walletId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, actualDebtId, actualGoalId);
+//        Integer actualDebtId = debtIdDebt.orElse(null);
+//        Integer actualGoalId = goalIdGoal.orElse(null);
+        GenericResponse result = transactionService.createTransaction(accountId, walletId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt
+//                , token
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @PatchMapping("wallet/{wallet-id}/transaction/{transaction-id}")
+    @PatchMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
     private ResponseEntity<GenericResponse> updateTransaction(@RequestParam(name = "file", required = false) MultipartFile file,
                                                               @RequestParam("stmTransaction") String stmTransaction,
                                                               @RequestParam("statementType") String statementType,
@@ -101,21 +103,24 @@ public class TransactionController {
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTransaction,
                                                               @RequestParam(name = "transactionCategoryId") String transactionCategoryId,
                                                               @RequestParam(name = "description", required = false, defaultValue = "null") String description,
-                                                              @RequestParam(name = "debtIdDebt", required = false) Optional<Integer> debtIdDebt,
-                                                              @RequestParam(name = "goalIdGoal", required = false) Optional<Integer> goalIdGoal,
+                                                              @RequestParam(name = "debtIdDebt", required = false) String debtIdDebt,
+                                                              @RequestParam(name = "goalIdGoal", required = false) String goalIdGoal,
+                                                              @PathVariable("account-id") String accountId,
                                                               @PathVariable("wallet-id") String walletId,
                                                               @PathVariable("transaction-id") String transactionId) throws Exception {
 
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
-        Integer actualDebtId = debtIdDebt.orElse(null);
-        Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.updateTransaction(walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, actualDebtId, actualGoalId);
+//        Integer actualDebtId = debtIdDebt.orElse(null);
+//        Integer actualGoalId = goalIdGoal.orElse(null);
+        GenericResponse result = transactionService.updateTransaction(accountId, walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("wallet/{wallet-id}/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> deleteTransactions(@PathVariable("wallet-id") Integer walletId, @PathVariable("transaction-id") Integer transactionId) throws Exception {
-        GenericResponse result = transactionService.deleteTransaction(walletId, transactionId);
+    @DeleteMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
+    private ResponseEntity<GenericResponse> deleteTransaction(@PathVariable("account-id") String accountId,
+                                                              @PathVariable("wallet-id") String walletId,
+                                                              @PathVariable("transaction-id") String transactionId) throws Exception {
+        GenericResponse result = transactionService.deleteTransaction(accountId, walletId, transactionId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

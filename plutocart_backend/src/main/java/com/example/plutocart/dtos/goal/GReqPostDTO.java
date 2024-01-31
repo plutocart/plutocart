@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 @Setter
 public class GReqPostDTO {
     private Integer accountId;
+    private Integer goalId;
     private String nameGoal;
     private BigDecimal amountGoal;
     private BigDecimal deficit;
+    private BigDecimal totalDefOfTransactionInGoal;
 }

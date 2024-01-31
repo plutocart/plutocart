@@ -3,24 +3,19 @@ package com.example.plutocart.services;
 import com.cloudinary.Cloudinary;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.transaction.*;
-import com.example.plutocart.entities.Account;
 import com.example.plutocart.entities.Transaction;
-import com.example.plutocart.entities.TransactionCategory;
 import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.exceptions.PlutoCartServiceApiDataNotFound;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
-import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.TransactionCategoryRepository;
 import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
 import com.example.plutocart.utils.GenericResponse;
-import com.example.plutocart.utils.HelperMethod;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -46,12 +41,16 @@ public class TransactionService {
     TransactionCategoryRepository transactionCategoryRepository;
     @Autowired
     CloudinaryService cloudinaryService;
+    @Autowired
+    TransactionValidationService transactionValidationService;
+    @Autowired
+    GlobalValidationService globalValidationService;
 
 
     @Transactional
     public GenericResponse getTransactionByAccountId(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        Integer acId = validationAccountId(accountId);
+        Integer acId = globalValidationService.validationAccountId(accountId);
 
         List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(acId).orElseThrow().getAccountId());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
@@ -64,7 +63,7 @@ public class TransactionService {
     @Transactional
     public GenericResponse getTransactionByAccountIdLimitThree(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        Integer acId = validationAccountId(accountId);
+        Integer acId = globalValidationService.validationAccountId(accountId);
 
         List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdLimitThree(accountRepository.findById(acId).orElseThrow().getAccountId());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
@@ -74,22 +73,10 @@ public class TransactionService {
         return response;
     }
 
-    public Integer validationAccountId(String accountId) throws PlutoCartServiceApiException {
-        if (!HelperMethod.isInteger(accountId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
-
-        int acId = Integer.parseInt(accountId);
-        Account account = accountRepository.getAccountById(acId);
-        if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not created. ");
-
-        return acId;
-    }
-
     @Transactional
     public GenericResponse getTransactionByAccountIdAndWalletId(String accountId, String walletId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        TReqGetByAcIdWalId id = validationAccountIdAndWalletId(accountId, walletId);
+        TReqGetByAcIdWalId id = globalValidationService.validationAccountIdAndWalletId(accountId, walletId);
 
         List<Transaction> transactionList = transactionRepository.viewTransactionByAccountIdAndWalletId(
                 accountRepository.findById(id.getAccountId()).orElseThrow().getAccountId(),
@@ -102,33 +89,10 @@ public class TransactionService {
         return response;
     }
 
-    public TReqGetByAcIdWalId validationAccountIdAndWalletId(String accountId, String walletId) throws PlutoCartServiceApiException {
-        if (!HelperMethod.isInteger(accountId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
-
-        Integer acId = Integer.parseInt(accountId);
-        Account account = accountRepository.getAccountById(acId);
-        if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not created. ");
-
-        if (!HelperMethod.isInteger(walletId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
-
-        Integer walId = Integer.parseInt(walletId);
-        Wallet wallet = walletRepository.viewWalletByWalletId(walId);
-        if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not created. ");
-
-        TReqGetByAcIdWalId id = new TReqGetByAcIdWalId();
-        id.setAccountId(acId);
-        id.setWalletId(walId);
-        return id;
-    }
-
     @Transactional
     public GenericResponse getTransactionByAccountIdAndWalletIdAndTransactionId(String accountId, String walletId, String transactionId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
-        TReqGetByAcIdWalIdTranId id = validationAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
+        TReqGetByAcIdWalIdTranId id = globalValidationService.validationAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
 //        List<Transaction> transactionList = transactionRepository.viewTransactionByWalletIdAndTransactionId(walletId,transactionId);
 //        List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
@@ -142,38 +106,6 @@ public class TransactionService {
         response.setStatus(ResultCode.SUCCESS);
         response.setData(transactionResponse);
         return response;
-    }
-
-    public TReqGetByAcIdWalIdTranId validationAccountIdAndWalletIdAndTransactionId(String accountId, String walletId, String transactionId) throws PlutoCartServiceApiException {
-        if (!HelperMethod.isInteger(accountId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
-
-        Integer acId = Integer.parseInt(accountId);
-        Account account = accountRepository.getAccountById(acId);
-        if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not created. ");
-
-        if (!HelperMethod.isInteger(walletId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
-
-        Integer walId = Integer.parseInt(walletId);
-        Wallet wallet = walletRepository.viewWalletByWalletId(walId);
-        if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not created. ");
-
-        if (!HelperMethod.isInteger(transactionId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
-
-        Integer tranId = Integer.parseInt(transactionId);
-        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
-        if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not created. ");
-
-        TReqGetByAcIdWalIdTranId id = new TReqGetByAcIdWalIdTranId();
-        id.setAccountId(acId);
-        id.setWalletId(walId);
-        id.setTransactionId(tranId);
-        return id;
     }
 
     public GenericResponse getTransactionByTransactionId(Integer transactionId) {
@@ -217,7 +149,7 @@ public class TransactionService {
     public GenericResponse getTodayIncomeAndExpense(String accountId) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         List<TResStmNowDTO> tResList = new ArrayList<>();
-        Integer acId = validationAccountId(accountId);
+        Integer acId = globalValidationService.validationAccountId(accountId);
 
         List<Wallet> walletList = walletRepository.viewWalletByAccountId(acId);
         if (walletList.isEmpty())
@@ -241,32 +173,27 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse createTransaction(String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws IOException, PlutoCartServiceApiException {
+    public GenericResponse createTransaction(String accountId, String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, String goalIdGoal, String debtIdDebt
+//            ,String token
+    ) throws IOException, PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
-//        String imageUrl = null;
-//
-//        if (file != null && !file.isEmpty()) {
-//            imageUrl = cloudinaryService.uploadImageInTransaction(file);
-//        }
 
-//        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(transactionCategoryRepository.findById(transactionCategoryId).orElseThrow().getId());
+//        String userId = JwtUtil.extractUsername(token);
+//        if (userId == null || !userId.equals(accountId))
+//            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
 
-        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
+        TReqPostTran tReqPostTran = transactionValidationService.validationCreateTransaction(accountId, walletId, file, stmTransaction, statementType, transactionCategoryId, goalIdGoal, debtIdDebt);
 
         transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
-                tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), debtIdDebt, goalIdGoal);
+                tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), tReqPostTran.getDebtId(), tReqPostTran.getGoalId());
         Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).get(transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).toArray().length - 1);
-
-//        if (statementType == 1) {
-//            tRes.setStatementType("income");
-//        } else if (statementType == 2) {
-//            tRes.setStatementType("expense");
-//        }
 
         tRes.setWalletId(tReqPostTran.getWalletId());
         tRes.setTransactionId(currentTransaction.getId());
         tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setGoalId(tReqPostTran.getGoalId());
+        tRes.setDebtId(tReqPostTran.getDebtId());
         tRes.setStatementType(currentTransaction.getStatementType());
         tRes.setStmTransaction(currentTransaction.getStmTransaction());
         tRes.setDescription("Create Success");
@@ -277,40 +204,18 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse updateTransaction(String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, Integer debtIdDebt, Integer goalIdGoal) throws Exception {
+    public GenericResponse updateTransaction(String accountId, String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, String goalIdGoal, String debtIdDebt) throws Exception {
         GenericResponse response = new GenericResponse();
         TResPostDTO tRes = new TResPostDTO();
-        String imageUrl = null;
-        TReqPostTran tReqPostTran = validationCreateAndUpdateTransaction(walletId, file, stmTransaction, statementType, transactionCategoryId);
+        TReqPostTran tReqPostTran = transactionValidationService.validationUpdateTransaction(accountId, walletId, transactionId, file, stmTransaction, statementType, transactionCategoryId, goalIdGoal, debtIdDebt);
 
-        if (!HelperMethod.isInteger(transactionId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
-
-        Integer tranId = Integer.parseInt(transactionId);
-        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
-        if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not created. ");
-
-        if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tranId) {
-            if (transaction.getImageUrl() != null && !transaction.getImageUrl().isEmpty()) {
-                cloudinaryService.deleteImageOnCloudInTransaction(tranId);
-            }
-
-            if (file != null && !file.isEmpty()) {
-                imageUrl = cloudinaryService.uploadImageInTransaction(file);
-            }
-
-            transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tranId, tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, imageUrl, debtIdDebt, goalIdGoal);
-        } else {
-            throw new Exception();
-        }
-
-//        Transaction transactionUpdate = transactionRepository.viewTransactionByTransactionId(transactionId);
-//        TResPostDTO transactionResponse = modelMapper.map(transactionUpdate, TResPostDTO.class);
+        transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tReqPostTran.getTransactionId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), tReqPostTran.getDebtId(), tReqPostTran.getGoalId());
 
         tRes.setWalletId(tReqPostTran.getWalletId());
-        tRes.setTransactionId(tranId);
+        tRes.setTransactionId(tReqPostTran.getTransactionId());
         tRes.setTransactionCategoryId(tReqPostTran.getTransactionCategoryId());
+        tRes.setGoalId(tReqPostTran.getGoalId());
+        tRes.setDebtId(tReqPostTran.getDebtId());
         tRes.setStatementType(tReqPostTran.getStmTypeString());
         tRes.setStmTransaction(tReqPostTran.getStmTransaction());
         tRes.setDescription("Update Success");
@@ -320,78 +225,25 @@ public class TransactionService {
         return response;
     }
 
-    public TReqPostTran validationCreateAndUpdateTransaction(String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId) throws PlutoCartServiceApiException, IOException {
-        String imageUrl = null;
-
-        if (!HelperMethod.isInteger(walletId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
-
-        Integer walId = Integer.parseInt(walletId);
-        Wallet wallet = walletRepository.viewWalletByWalletId(walId);
-        if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not created. ");
-
-        if (StringUtils.isEmpty(stmTransaction.trim()) || !HelperMethod.isDecimal(stmTransaction))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be decimal. ");
-
-        BigDecimal stmTran = new BigDecimal(stmTransaction);
-
-        if (StringUtils.isEmpty(stmType.trim()) || !HelperMethod.isInteger(stmType))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 & 2. ");
-
-        Integer sType = Integer.parseInt(stmType);
-        if (sType != 1 && sType != 2)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 & 2. ");
-
-        String sTypeString = null;
-        if (sType == 1) {
-            sTypeString = "income";
-        } else if (sType == 2) {
-            sTypeString = "expense";
-        }
-
-        if (StringUtils.isEmpty(transactionCategoryId.trim()) || !HelperMethod.isInteger(transactionCategoryId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id must be number. ");
-
-        Integer tranCatId = Integer.parseInt(transactionCategoryId);
-        TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(tranCatId);
-        if (transactionCategory == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id " + tranCatId + " is not created. ");
-
-        if (!transactionCategory.getTypeCategory().equals(sTypeString))
-            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "category type is not match in transaction category. ");
-
-        if (file != null && !file.isEmpty()) {
-            imageUrl = cloudinaryService.uploadImageInTransaction(file);
-        }
-
-        TReqPostTran tReqPostTran = new TReqPostTran();
-        tReqPostTran.setWalletId(walId);
-        tReqPostTran.setImageUrl(imageUrl);
-        tReqPostTran.setStmTransaction(stmTran);
-        tReqPostTran.setStmType(sType);
-        tReqPostTran.setStmTypeString(sTypeString);
-        tReqPostTran.setTransactionCategoryId(tranCatId);
-        return tReqPostTran;
-    }
-
     @Transactional
-    public GenericResponse deleteTransaction(Integer walletId, Integer transactionId) throws Exception {
+    public GenericResponse deleteTransaction(String accountId, String walletId, String transactionId) throws Exception {
         GenericResponse response = new GenericResponse();
 
-        Transaction transaction = transactionRepository.viewTransactionByTransactionId(transactionId);
+        TReqDelTran tReqDelTran = transactionValidationService.validationDeleteTransaction(accountId, walletId, transactionId);
+
+//        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tReqDelTran.getTransactionId());
         TResDelDTO transactionResponse = new TResDelDTO();
 //        TResDelDTO transactionResponse = modelMapper.map(transaction, TResDelDTO.class);
 
-        if (transaction.getWalletIdWallet().getWalletId() == walletId && transaction.getId() == transactionId) {
-            cloudinaryService.deleteImageOnCloudInTransaction(transactionId);
-            transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId());
-        } else {
-            throw new Exception();
-        }
+//        if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tReqPostTran.getTransactionId()) {
+//            cloudinaryService.deleteImageOnCloudInTransaction(transactionResponse.getTransactionId());
+        transactionRepository.deleteTransactionByTransactionId(tReqDelTran.getTransactionId(), tReqDelTran.getStmTransaction(), tReqDelTran.getStmType(), tReqDelTran.getWalletId(), tReqDelTran.getGoalId(), tReqDelTran.getDebtId());
+//        } else {
+//            throw new Exception();
+//        }
 
-        transactionResponse.setTransactionId(transaction.getId());
-        transactionResponse.setWalletId(transaction.getWalletIdWallet().getWalletId());
+        transactionResponse.setTransactionId(tReqDelTran.getTransactionId());
+        transactionResponse.setWalId(tReqDelTran.getWalletId());
         transactionResponse.setDescription("Delete Success");
 
         response.setStatus(ResultCode.SUCCESS);

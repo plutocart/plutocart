@@ -7,13 +7,12 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class TResPostDTO {
+public class TReqDelTran {
+    private Integer accountId;
     private Integer walletId;
     private Integer transactionId;
-    private Integer transactionCategoryId;
+    private BigDecimal stmTransaction;
+    private String stmType;
     private Integer goalId;
     private Integer debtId;
-    private String statementType;
-    private BigDecimal stmTransaction;
-    private String description;
 }
