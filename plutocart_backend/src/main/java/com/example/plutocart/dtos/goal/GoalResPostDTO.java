@@ -15,4 +15,5 @@ public class GoalResPostDTO {
     private BigDecimal amountGoal;
     private BigDecimal deficit;
     private LocalDateTime endDateGoal;
+    private String description;
 }

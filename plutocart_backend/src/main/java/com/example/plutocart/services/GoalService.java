@@ -2,9 +2,7 @@ package com.example.plutocart.services;
 
 
 import com.example.plutocart.constants.ResultCode;
-import com.example.plutocart.dtos.goal.GReqPostDTO;
-import com.example.plutocart.dtos.goal.GoalDTO;
-import com.example.plutocart.dtos.goal.GoalResPostDTO;
+import com.example.plutocart.dtos.goal.*;
 import com.example.plutocart.entities.Account;
 import com.example.plutocart.entities.Goal;
 import com.example.plutocart.entities.Transaction;
@@ -107,14 +105,19 @@ public class GoalService {
     }
 
     @Transactional
-    public GenericResponse updateGoalByAccountId(String accountId, String goalId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal) throws PlutoCartServiceApiException {
+    public GenericResponse updateGoalByGoalId(String accountId, String goalId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal) throws PlutoCartServiceApiException {
         GenericResponse response = new GenericResponse();
         GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
         GReqPostDTO gReqPostDTO = validationUpdateGoal(accountId, goalId, nameGoal, amountGoal, deficit);
 
         goalRepository.updateGoalByGoalId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getGoalId(), gReqPostDTO.getTotalDefOfTransactionInGoal());
 
-        //store response.
+        goalResPostDTO.setAcId(gReqPostDTO.getAccountId());
+        goalResPostDTO.setNameGoal(gReqPostDTO.getNameGoal());
+        goalResPostDTO.setAmountGoal(gReqPostDTO.getAmountGoal());
+        goalResPostDTO.setDeficit(gReqPostDTO.getDeficit());
+        goalResPostDTO.setEndDateGoal(endDateGoal);
+        goalResPostDTO.setDescription("Update Success");
 
         response.setData(goalResPostDTO);
         response.setStatus(ResultCode.SUCCESS);
@@ -173,6 +176,56 @@ public class GoalService {
         gReqPostDTO.setDeficit(def);
         gReqPostDTO.setTotalDefOfTransactionInGoal(totalDeficit);
         return gReqPostDTO;
+    }
+
+
+    @Transactional
+    public GenericResponse deleteGoalByGoalId(String accountId, String goalId) throws PlutoCartServiceApiException {
+        GenericResponse response = new GenericResponse();
+        GResDelDTO gResDelDTO = new GResDelDTO();
+
+        GReqDelDTO gReqDelDTO = validationDeleteGoal(accountId, goalId);
+        goalRepository.deleteGoalByGoalId(gReqDelDTO.getGoalId());
+
+        gResDelDTO.setAccountId(gResDelDTO.getAccountId());
+        gResDelDTO.setGoalId(gReqDelDTO.getGoalId());
+        gResDelDTO.setDescription("Delete Success");
+
+        response.setData(gResDelDTO);
+        response.setStatus(ResultCode.SUCCESS);
+        return response;
+    }
+
+    public GReqDelDTO validationDeleteGoal(String accountId, String goalId) throws PlutoCartServiceApiException {
+
+        if (!HelperMethod.isInteger(accountId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
+
+        Integer acId = Integer.parseInt(accountId);
+        Account account = accountRepository.getAccountById(acId);
+        if (account == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+
+        if (!HelperMethod.isInteger(goalId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
+
+        Integer goId = Integer.parseInt(goalId);
+        Goal goal = goalRepository.viewGoalByGoalId(goId);
+        if (goal == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal Id " + goId + " is not create. ");
+
+        List<Transaction> transactionList = transactionRepository.viewTransactionByGoalId(goId);
+        if (!transactionList.isEmpty()) {
+            for (Transaction transaction : transactionList) {
+//                if (transaction.getGoalIdGoal() != null)
+                transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId(), transaction.getGoalIdGoal().getId(), null);
+            }
+        }
+
+        GReqDelDTO gReqDelDTO = new GReqDelDTO();
+        gReqDelDTO.setAccountId(acId);
+        gReqDelDTO.setGoalId(goId);
+        return gReqDelDTO;
     }
 
 

@@ -40,17 +40,24 @@ public class GoalController {
     }
 
     @PatchMapping("account/{account-id}/goal/{goal-id}")
-    public ResponseEntity<GenericResponse> updateGoalByAccountId(@Valid @PathVariable(value = "account-id") String accountId,
-                                                                 @Valid @PathVariable(value = "goal-id") String goalId,
-                                                                 @RequestParam(name = "nameGoal") String nameGoal,
-                                                                 @RequestParam(name = "amountGoal") String amountGoal,
-                                                                 @RequestParam(name = "deficit") String deficit,
-                                                                 @RequestParam(name = "endDateGoal")
-                                                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDateGoal
+    public ResponseEntity<GenericResponse> updateGoalByGoalId(@Valid @PathVariable(value = "account-id") String accountId,
+                                                              @Valid @PathVariable(value = "goal-id") String goalId,
+                                                              @RequestParam(name = "nameGoal") String nameGoal,
+                                                              @RequestParam(name = "amountGoal") String amountGoal,
+                                                              @RequestParam(name = "deficit") String deficit,
+                                                              @RequestParam(name = "endDateGoal")
+                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDateGoal
     ) throws PlutoCartServiceApiException {
 //        LocalDateTime actualEndDateGoal = (endDateGoal != null) ? endDateGoal : LocalDateTime.now();
-        GenericResponse result = goalService.updateGoalByAccountId(accountId, goalId, nameGoal, amountGoal, deficit, endDateGoal);
+        GenericResponse result = goalService.updateGoalByGoalId(accountId, goalId, nameGoal, amountGoal, deficit, endDateGoal);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @DeleteMapping("account/{account-id}/goal/{goal-id}")
+    public ResponseEntity<GenericResponse> deleteGoalByGoalId(@PathVariable("account-id") String accountId, @PathVariable("goal-id") String goalId) throws PlutoCartServiceApiException {
+        GenericResponse result = goalService.deleteGoalByGoalId(accountId, goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 
 }
