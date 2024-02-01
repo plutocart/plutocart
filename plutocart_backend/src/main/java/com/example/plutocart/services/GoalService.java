@@ -1,6 +1,7 @@
 package com.example.plutocart.services;
 
 
+import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.goal.*;
 import com.example.plutocart.entities.Account;
@@ -8,6 +9,7 @@ import com.example.plutocart.entities.Goal;
 import com.example.plutocart.entities.Transaction;
 import com.example.plutocart.exceptions.PlutoCartServiceApiDataNotFound;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
+import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
 import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.GoalRepository;
@@ -39,7 +41,11 @@ public class GoalService {
     @Autowired
     ModelMapper modelMapper;
 
-    public GenericResponse getGoalByAccountId(String accountId) throws PlutoCartServiceApiException {
+    public GenericResponse getGoalByAccountId(String accountId, String token) throws PlutoCartServiceApiException {
+        String userId = JwtUtil.extractUsername(token);
+        if (userId == null || !userId.equals(accountId))
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+
         GenericResponse response = new GenericResponse();
         Integer acId = globalValidationService.validationAccountId(accountId);
 
@@ -52,9 +58,14 @@ public class GoalService {
     }
 
     @Transactional
-    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal) throws PlutoCartServiceApiException {
+    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
+        String userId = JwtUtil.extractUsername(token);
+        if (userId == null || !userId.equals(accountId))
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+
         GenericResponse response = new GenericResponse();
         GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
+
         GReqPostDTO gReqPostDTO = validationCreateGoal(accountId, nameGoal, amountGoal, deficit);
 
         goalRepository.insertGoalByAccountId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getAccountId());
@@ -105,7 +116,11 @@ public class GoalService {
     }
 
     @Transactional
-    public GenericResponse updateGoalByGoalId(String accountId, String goalId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal) throws PlutoCartServiceApiException {
+    public GenericResponse updateGoalByGoalId(String accountId, String goalId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
+        String userId = JwtUtil.extractUsername(token);
+        if (userId == null || !userId.equals(accountId))
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+
         GenericResponse response = new GenericResponse();
         GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
         GReqPostDTO gReqPostDTO = validationUpdateGoal(accountId, goalId, nameGoal, amountGoal, deficit);
@@ -180,7 +195,11 @@ public class GoalService {
 
 
     @Transactional
-    public GenericResponse deleteGoalByGoalId(String accountId, String goalId) throws PlutoCartServiceApiException {
+    public GenericResponse deleteGoalByGoalId(String accountId, String goalId, String token) throws PlutoCartServiceApiException {
+        String userId = JwtUtil.extractUsername(token);
+        if (userId == null || !userId.equals(accountId))
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+
         GenericResponse response = new GenericResponse();
         GResDelDTO gResDelDTO = new GResDelDTO();
 
