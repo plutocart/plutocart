@@ -20,29 +20,33 @@ public class TransactionController {
     TransactionService transactionService;
 
     @GetMapping("/account/{account-id}/transaction")
-    private ResponseEntity<GenericResponse> getTransactionByAccountId(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTransactionByAccountId(accountId);
+    private ResponseEntity<GenericResponse> getTransactionByAccountId(@RequestHeader("Authorization") String token,
+                                                                      @PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTransactionByAccountId(accountId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/account/{account-id}/transaction-limit")
-    private ResponseEntity<GenericResponse> getTransactionByAccountIdLimitThree(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTransactionByAccountIdLimitThree(accountId);
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdLimitThree(@RequestHeader("Authorization") String token,
+                                                                                @PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTransactionByAccountIdLimitThree(accountId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction")
-    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletId(@PathVariable("account-id") String accountId,
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletId(@RequestHeader("Authorization") String token,
+                                                                                 @PathVariable("account-id") String accountId,
                                                                                  @PathVariable("wallet-id") String walletId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletId(accountId, walletId);
+        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletId(accountId, walletId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletIdAndTransactionId(@PathVariable("account-id") String accountId,
+    private ResponseEntity<GenericResponse> getTransactionByAccountIdAndWalletIdAndTransactionId(@RequestHeader("Authorization") String token,
+                                                                                                 @PathVariable("account-id") String accountId,
                                                                                                  @PathVariable("wallet-id") String walletId,
                                                                                                  @PathVariable("transaction-id") String transactionId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId);
+        GenericResponse result = transactionService.getTransactionByAccountIdAndWalletIdAndTransactionId(accountId, walletId, transactionId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -65,14 +69,15 @@ public class TransactionController {
 //    }
 
     @GetMapping("/account/{account-id}/wallet/transaction/daily-income-and-expense")
-    private ResponseEntity<GenericResponse> getTodayIncomeAndExpense(@PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTodayIncomeAndExpense(accountId);
+    private ResponseEntity<GenericResponse> getTodayIncomeAndExpense(@RequestHeader("Authorization") String token,
+                                                                     @PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTodayIncomeAndExpense(accountId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("/account/{account-id}/wallet/{wallet-id}/transaction")
     private ResponseEntity<GenericResponse> createTransaction(
-//            @RequestHeader("Authorization") String token,
+            @RequestHeader("Authorization") String token,
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam("stmTransaction") String stmTransaction,
             @RequestParam("statementType") String statementType,
@@ -89,14 +94,13 @@ public class TransactionController {
 
 //        Integer actualDebtId = debtIdDebt.orElse(null);
 //        Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.createTransaction(accountId, walletId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt
-//                , token
-        );
+        GenericResponse result = transactionService.createTransaction(accountId, walletId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt, token);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> updateTransaction(@RequestParam(name = "file", required = false) MultipartFile file,
+    private ResponseEntity<GenericResponse> updateTransaction(@RequestHeader("Authorization") String token,
+                                                              @RequestParam(name = "file", required = false) MultipartFile file,
                                                               @RequestParam("stmTransaction") String stmTransaction,
                                                               @RequestParam("statementType") String statementType,
                                                               @RequestParam(name = "dateTransaction", required = false)
@@ -112,15 +116,16 @@ public class TransactionController {
         LocalDateTime actualDateTransaction = (dateTransaction != null) ? dateTransaction : LocalDateTime.now();
 //        Integer actualDebtId = debtIdDebt.orElse(null);
 //        Integer actualGoalId = goalIdGoal.orElse(null);
-        GenericResponse result = transactionService.updateTransaction(accountId, walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt);
+        GenericResponse result = transactionService.updateTransaction(accountId, walletId, transactionId, file, stmTransaction, statementType, actualDateTransaction, transactionCategoryId, description, goalIdGoal, debtIdDebt, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @DeleteMapping("/account/{account-id}/wallet/{wallet-id}/transaction/{transaction-id}")
-    private ResponseEntity<GenericResponse> deleteTransaction(@PathVariable("account-id") String accountId,
+    private ResponseEntity<GenericResponse> deleteTransaction(@RequestHeader("Authorization") String token,
+                                                              @PathVariable("account-id") String accountId,
                                                               @PathVariable("wallet-id") String walletId,
                                                               @PathVariable("transaction-id") String transactionId) throws Exception {
-        GenericResponse result = transactionService.deleteTransaction(accountId, walletId, transactionId);
+        GenericResponse result = transactionService.deleteTransaction(accountId, walletId, transactionId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
