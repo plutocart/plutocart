@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
+import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class AddGoalPopup extends StatefulWidget {
   const AddGoalPopup({Key? key}) : super(key: key);
@@ -109,7 +113,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
             ),
             AmountTextField(
               amountMoneyController: yourSaveMoneyController,
-              nameField: "You've saved money",
+              nameField: "Collect money",
             ),
             DatePickerField(
               tranDateController: tranDateController,
@@ -120,7 +124,23 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
               bottonFirstNameFunction: () {
                 Navigator.pop(context);
               },
-              bottonSecondeNameFunction: () {},
+              bottonSecondeNameFunction: () {
+                double amountGoal = double.parse(budgetGoalController.text);
+                double dificitGoal = double.parse(yourSaveMoneyController.text);
+                String tranDateFormat =
+                    changeFormatter(tranDateController.text);
+                     showLoadingPagePopUp(context);
+                context.read<GoalBloc>().add(CreateGoal(nameGoalController.text,
+                    amountGoal, dificitGoal, tranDateFormat));
+                  context.read<GoalBloc>().stream.listen((state) {
+                    if(state.createGoalStatus == GoalStatus.loaded){
+                      context.read<GoalBloc>().add(ResetGoal());
+                      context.read<GoalBloc>().add(getGoalByAccountId());
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  }); 
+              },
             )
           ],
         ),

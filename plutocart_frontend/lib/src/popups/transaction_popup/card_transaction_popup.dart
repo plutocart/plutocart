@@ -295,9 +295,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context.read<WalletBloc>().add(GetAllWallet());
                             context.read<TransactionBloc>().add(GetTransactionDailyInEx());
                             context.read<TransactionBloc>().add(GetTransactionLimit3());
-                            context
-                                .read<TransactionBloc>()
-                                .add(ResetTransactionStatus());
+                            context.read<TransactionBloc>().add(ResetTransactionStatus());
                             Navigator.of(context).pop();
                             Navigator.pop(context);
                           }

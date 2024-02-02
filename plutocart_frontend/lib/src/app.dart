@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -28,6 +29,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
     context.read<LoginBloc>().add(LoginGuest());
     context.read<LoginBloc>().add(LoginMember());
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
+     context.read<GoalBloc>().add(getGoalByAccountId());
     context
         .read<PageBloc>()
         .add(saveIndexPage(context.read<PageBloc>().state.indexPage));

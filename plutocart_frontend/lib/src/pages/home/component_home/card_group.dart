@@ -4,6 +4,7 @@ import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/add_goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -25,7 +26,8 @@ class CardGroup extends StatefulWidget {
       required this.subjectButton,
       required this.nameRoute,
       required this.lengthData,
-      required this.numberPopup ,  this.indexPage})
+      required this.numberPopup,
+      this.indexPage})
       : super(key: key);
 
   @override
@@ -93,7 +95,9 @@ class _CardGroupState extends State<CardGroup> {
                             builder: (context, state) {
                               return TextButton(
                                 onPressed: () {
-                                  context.read<PageBloc>().add(saveIndexPage(widget.indexPage!));
+                                  context
+                                      .read<PageBloc>()
+                                      .add(saveIndexPage(widget.indexPage!));
                                 },
                                 style: TextButton.styleFrom(
                                   shape: StadiumBorder(),
@@ -279,11 +283,21 @@ class _CardGroupState extends State<CardGroup> {
                                                       BorderRadius.circular(
                                                           16))),
                                           onPressed: () {
-                                            widget.numberPopup == 1
-                                                ? state.wallets.length > 0
-                                                    ? createTransaction()
-                                                    : createWallet()
-                                                : print("error: number");
+                                            if (state.wallets.length == 0) {
+                                              createWallet();
+                                            } else if (widget.numberPopup ==
+                                                1) {
+                                              createTransaction();
+                                            } else if (widget.numberPopup ==
+                                                2) {
+                                              print("graph");
+                                            } else if (widget.numberPopup ==
+                                                3) {
+                                              createGoal();
+                                            } else if (widget.numberPopup ==
+                                                4) {
+                                              print("Debt");
+                                            }
                                           },
                                           child: Column(
                                             mainAxisAlignment:
@@ -317,6 +331,14 @@ class _CardGroupState extends State<CardGroup> {
     );
   }
 
+  createGoal() async {
+    showSlideDialog(
+        context: context,
+        child: AddGoalPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2.5);
+  }
 
   createTransaction() async {
     showSlideDialog(

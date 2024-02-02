@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -43,6 +44,7 @@ class _MyWidgetState extends State<MyWidget> {
     final transactionBloc =
         BlocProvider(create: (context) => TransactionBloc());
     final pageBloc = BlocProvider(create: (context) => PageBloc());
+        final goalBloc = BlocProvider(create: (context) => GoalBloc());
 
     return MultiBlocProvider(
         providers: [
@@ -50,7 +52,8 @@ class _MyWidgetState extends State<MyWidget> {
           loginBloc,
           transactionCategoryBloc,
           transactionBloc,
-          pageBloc
+          pageBloc , 
+          goalBloc
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
