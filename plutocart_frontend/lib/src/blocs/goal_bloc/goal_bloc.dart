@@ -16,6 +16,13 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
           createGoalStatus: GoalStatus.loading, amountGoal: 0.0 , dificit: 0.0 , nameGoal: ""));
     });
 
+      on<ResetGoalStatusDelete>((event, emit) async {
+      emit(state.copyWith(
+           deleteGoalStatus: GoalStatus.loading));
+    });
+
+
+
    on<CreateGoal>((event, emit) async {
       print("start working create transaction income");
       try {
@@ -50,7 +57,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
 
 
 
-    on<getGoalByAccountId>(
+    on<GetGoalByAccountId>(
   (event, emit) async {
     print("Start get goal in goal bloc");
     try {
@@ -67,6 +74,18 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
     }
   },
 );
+
+ on<DeleteGoalByGoalId>((event, emit) async {
+      try {
+        print("start step delete account bloc");
+        await GoalRepository().deleteGoal(event.goalId);
+        emit(state.copyWith(deleteGoalStatus: GoalStatus.loaded));
+       
+      } catch (error) {
+        print("error delete account bloc: $error");
+        throw error;
+      }
+    });
 
 
   }

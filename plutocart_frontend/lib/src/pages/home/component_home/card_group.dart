@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
-import 'package:plutocart/src/popups/add_goal_popup/add_goal_popup.dart';
+import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -49,7 +50,9 @@ class _CardGroupState extends State<CardGroup> {
                         : widget.lengthData == 2
                             ? MediaQuery.of(context).size.height * 0.24
                             : MediaQuery.of(context).size.height * 0.33
-                    : MediaQuery.of(context).size.height * 0.17,
+                    : widget.numberPopup == 3 && widget.lengthData > 0
+                        ? MediaQuery.of(context).size.height * 0.27
+                        : MediaQuery.of(context).size.height * 0.17,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -254,74 +257,253 @@ class _CardGroupState extends State<CardGroup> {
                                 ),
                               ],
                             )
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Skeleton.ignore(
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.08,
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  decoration: ShapeDecoration(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          side: BorderSide(
-                                            width: 1,
-                                            strokeAlign:
-                                                BorderSide.strokeAlignOutside,
-                                            color: Color(0xFF15616D),
-                                          ))),
-                                  child: BlocBuilder<WalletBloc, WalletState>(
-                                    builder: (context, state) {
-                                      return OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                              foregroundColor:
-                                                  Colors.transparent,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          16))),
-                                          onPressed: () {
-                                            if (state.wallets.length == 0) {
-                                              createWallet();
-                                            } else if (widget.numberPopup ==
-                                                1) {
-                                              createTransaction();
-                                            } else if (widget.numberPopup ==
-                                                2) {
-                                              print("graph");
-                                            } else if (widget.numberPopup ==
-                                                3) {
-                                              createGoal();
-                                            } else if (widget.numberPopup ==
-                                                4) {
-                                              print("Debt");
-                                            }
-                                          },
-                                          child: Column(
+                          : widget.lengthData > 0 && widget.numberPopup == 3
+                              ? BlocBuilder<GoalBloc, GoalState>(
+                                  builder: (context, state) {
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.2,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      child: Column(
+                                        children: [
+                                          Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                MainAxisAlignment.start,
                                             children: [
-                                              Icon(
-                                                Icons.add,
-                                                size: 30,
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 20),
+                                                child: Text(
+                                                    "${state.goalList![state.goalList!.length - 1]['nameGoal']}",
+                                                    style: TextStyle(
+                                                        color: Color(0xFF15616D),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: "Roboto")),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  1,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05,
+                                              decoration: ShapeDecoration(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  side: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                ),
+                                              ),
+                                              child: Stack(
+                                                children: [
+                                                  Positioned(
+                                                    left: 0,
+                                                    top: 0,
+                                                    child: Container(
+                                                      width: state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] >=
+                                                              1
+                                                          ? MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.84
+                                                          : state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] <
+                                                                  0.1
+                                                              ? MediaQuery.of(context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.1
+                                                              : state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] >
+                                                                      0.8
+                                                                  ? MediaQuery.of(context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.8
+                                                                  : MediaQuery.of(context)
+                                                                          .size
+                                                                          .width *
+                                                                      state.goalList![state.goalList!.length - 1]
+                                                                          ['deficit'] /
+                                                                      state.goalList![state.goalList!.length - 1]['amountGoal'],
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.05,
+                                                      decoration:
+                                                          ShapeDecoration(
+                                                        color:
+                                                            Color(0XFF1A9CB0),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          side: BorderSide(
+                                                              width: 1,
+                                                              color: Color(
+                                                                  0XFF1A9CB0)), // Change color if needed
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 20 , right: 20 , bottom: 15),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                              Text("0 ฿" ,  style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "Roboto")) , 
+                                              Text("${state.goalList![state.goalList!.length - 1]['amountGoal']} ฿" ,  style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "Roboto"))
+                                            ],),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text("Saving money" ,     style: TextStyle(
+                                                    color: Color(0xFF15616D),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "Roboto")) , 
+                                                  Text("${state.goalList![state.goalList!.length - 1]['deficit']}" ,   style: TextStyle(
+                                                    color: Color(0xFF2DC653),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "Roboto"))
+                                                ],
+                                              ) , 
+                                                Container(
+                                          height: 40,
+                                          decoration: ShapeDecoration(
+                                            shape: RoundedRectangleBorder(
+                                              side: BorderSide(
+                                                width: 1.5,
                                                 color: Color(0xFF15616D),
                                               ),
-                                              Text("${widget.subjectButton}",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF15616D),
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: "Roboto"))
+                                              borderRadius: BorderRadius
+                                                  .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                            ),
+                                          ),
+                                        ),
+                                          Column(
+                                                children: [
+                                                  Text("Lack of money" , style: TextStyle(
+                                                    color: Color(0xFF15616D),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "Roboto"),) , 
+                                                  Text("${state.goalList![state.goalList!.length - 1]['deficit']}" , style:  TextStyle(
+                                                    color: Color(0xFFDD0000),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "Roboto"),)
+                                                ],
+                                              )
                                             ],
-                                          ));
-                                    },
+                                          ) , 
+                 
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: Skeleton.ignore(
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.08,
+                                      width:
+                                          MediaQuery.of(context).size.width * 1,
+                                      decoration: ShapeDecoration(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              side: BorderSide(
+                                                width: 1,
+                                                strokeAlign: BorderSide
+                                                    .strokeAlignOutside,
+                                                color: Color(0xFF15616D),
+                                              ))),
+                                      child:
+                                          BlocBuilder<WalletBloc, WalletState>(
+                                        builder: (context, state) {
+                                          return OutlinedButton(
+                                              style: OutlinedButton.styleFrom(
+                                                  foregroundColor:
+                                                      Colors.transparent,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16))),
+                                              onPressed: () {
+                                                if (state.wallets.length == 0) {
+                                                  createWallet();
+                                                } else if (widget.numberPopup ==
+                                                    1) {
+                                                  createTransaction();
+                                                } else if (widget.numberPopup ==
+                                                    2) {
+                                                  print("graph");
+                                                } else if (widget.numberPopup ==
+                                                    3) {
+                                                  createGoal();
+                                                } else if (widget.numberPopup ==
+                                                    4) {
+                                                  print("Debt");
+                                                }
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    size: 30,
+                                                    color: Color(0xFF15616D),
+                                                  ),
+                                                  Text(
+                                                      "${widget.subjectButton}",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Color(0xFF15616D),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: "Roboto"))
+                                                ],
+                                              ));
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
+                                )
                     ]),
                   ),
                 ));

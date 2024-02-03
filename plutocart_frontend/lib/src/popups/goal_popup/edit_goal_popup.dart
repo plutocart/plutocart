@@ -7,14 +7,15 @@ import 'package:plutocart/src/pages/transaction/component_transaction/date_picke
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
-class AddGoalPopup extends StatefulWidget {
-  const AddGoalPopup({Key? key}) : super(key: key);
+class EditGoalPopup extends StatefulWidget {
+  final Map<String , dynamic>? goal;
+  const EditGoalPopup({Key? key , this.goal}) : super(key: key);
 
   @override
-  _AddGoalPopupState createState() => _AddGoalPopupState();
+  _EditGoalPopupState createState() => _EditGoalPopupState();
 }
 
-class _AddGoalPopupState extends State<AddGoalPopup> {
+class _EditGoalPopupState extends State<EditGoalPopup> {
   TextEditingController budgetGoalController = TextEditingController();
   TextEditingController yourSaveMoneyController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
@@ -22,23 +23,18 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
 
   @override
   void initState() {
-    DateTime now = DateTime.now();
-    String formattedDateTime =
-        '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
-    tranDateController.text = formattedDateTime;
+    print("eiei :${widget.goal!}");
+    nameGoalController.text = widget.goal!['nameGoal'];
+    budgetGoalController.text = widget.goal!['amountGoal'].toString();
+    yourSaveMoneyController.text = widget.goal!['deficit'].toString();
+    tranDateController.text = widget.goal!['endDateGoal'].toString();
     super.initState();
   }
 
-  void dispose() {
-    budgetGoalController.dispose();
-    yourSaveMoneyController.dispose();
-    tranDateController.dispose();
-    nameGoalController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+     double amountGoal = double.tryParse(budgetGoalController.text) ?? 0.0;
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: Container(
@@ -48,7 +44,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Add Goals",
+              "Edit Goals",
               style: TextStyle(
                 color: Color(0xFF15616D),
                 fontSize: 24,
@@ -135,9 +131,11 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                   context.read<GoalBloc>().stream.listen((state) {
                     if(state.createGoalStatus == GoalStatus.loaded){
                       context.read<GoalBloc>().add(ResetGoal());
-                      context.read<GoalBloc>().add(getGoalByAccountId());
+                      context.read<GoalBloc>().add(GetGoalByAccountId());
+                      print("check statetus : ${state.deleteGoalStatus}");
                       Navigator.pop(context);
                       Navigator.pop(context);
+                      
                     }
                   }); 
               },

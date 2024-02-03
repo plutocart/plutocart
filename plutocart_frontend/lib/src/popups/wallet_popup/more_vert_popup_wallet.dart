@@ -4,16 +4,16 @@ import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/wallet_popup/bottom_sheet_delete_wallet.dart';
 import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
 
-class MoreVertPopup extends StatefulWidget {
+class MoreVertPopupWallet extends StatefulWidget {
   final Function()? listFunction;
   final Wallet? wallet;
-  const MoreVertPopup({Key? key, this.listFunction , this.wallet}) : super(key: key);
+  const MoreVertPopupWallet({Key? key, this.listFunction , this.wallet}) : super(key: key);
 
   @override
-  _MoreVertPopupState createState() => _MoreVertPopupState();
+  _MoreVertPopupWalletState createState() => _MoreVertPopupWalletState();
 }
 
-class _MoreVertPopupState extends State<MoreVertPopup> {
+class _MoreVertPopupWalletState extends State<MoreVertPopupWallet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +40,7 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
                 ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
                         color: Color(0XFF15616D), // Border color
                       ),
@@ -66,9 +66,9 @@ class _MoreVertPopupState extends State<MoreVertPopup> {
                     ),
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: Color(0XFF15616D), // Border color
+                            color: Color(0XFFDD0000), // Border color
                           ),
                         ),
                         backgroundColor: Color(0XFFDD0000)),

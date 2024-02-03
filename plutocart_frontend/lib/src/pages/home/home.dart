@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
@@ -106,14 +107,18 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 SizedBox(height: 6),
-                CardGroup(
-                  "Goals",
-                  subject: 'Goals',
-                  subjectButton: 'Add A Goal',
-                  nameRoute: AppRoute.goal,
-                  lengthData: 0,
-                  numberPopup: 3,
-                  indexPage: 2,
+                BlocBuilder<GoalBloc, GoalState>(
+                  builder: (context, state) {
+                    return CardGroup(
+                      "Goals",
+                      subject: 'Goals',
+                      subjectButton: 'Add A Goal',
+                      nameRoute: AppRoute.goal,
+                      lengthData: state.goalList!.length,
+                      numberPopup: 3,
+                      indexPage: 2,
+                    );
+                  },
                 ),
                 SizedBox(height: 6),
                 CardGroup(

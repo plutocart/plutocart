@@ -7,6 +7,7 @@ class GoalState extends Equatable {
   final double amountGoal;
   final double dificit;
   final GoalStatus createGoalStatus;
+  final GoalStatus deleteGoalStatus;
   final DateTime? endDateGoal;
   final List<dynamic> ? goalList;
 
@@ -15,7 +16,7 @@ class GoalState extends Equatable {
       this.amountGoal = 0,
       this.dificit = 0,
       DateTime? endDateGoal,
-      this.createGoalStatus = GoalStatus.loading , this.goalList = const[]})
+      this.createGoalStatus = GoalStatus.loading , this.goalList = const[] , this.deleteGoalStatus = GoalStatus.loading})
       : endDateGoal = endDateGoal ?? DateTime.now();
 
   GoalState copyWith(
@@ -23,15 +24,15 @@ class GoalState extends Equatable {
       double? amountGoal,
       double? dificit,
       GoalStatus? createGoalStatus,
-      DateTime? endDateGoal , List<dynamic>? goalList}) {
+      DateTime? endDateGoal , List<dynamic>? goalList , GoalStatus? deleteGoalStatus}) {
     return GoalState(
         nameGoal: nameGoal ?? this.nameGoal,
         dificit: dificit ?? this.dificit,
         createGoalStatus: createGoalStatus ?? this.createGoalStatus,
-        endDateGoal: endDateGoal ?? this.endDateGoal , goalList: goalList?? this.goalList);
+        endDateGoal: endDateGoal ?? this.endDateGoal , goalList: goalList?? this.goalList , deleteGoalStatus: deleteGoalStatus ?? this.deleteGoalStatus);
   }
 
   @override
   List<Object> get props =>
-      [nameGoal, amountGoal, dificit, createGoalStatus, endDateGoal! , goalList!];
+      [nameGoal, amountGoal, dificit, createGoalStatus, endDateGoal! , goalList! , deleteGoalStatus];
 }

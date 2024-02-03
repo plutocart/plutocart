@@ -29,7 +29,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
     context.read<LoginBloc>().add(LoginGuest());
     context.read<LoginBloc>().add(LoginMember());
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
-     context.read<GoalBloc>().add(getGoalByAccountId());
+     context.read<GoalBloc>().add(GetGoalByAccountId());
     context
         .read<PageBloc>()
         .add(saveIndexPage(context.read<PageBloc>().state.indexPage));

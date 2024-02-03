@@ -14,5 +14,11 @@ class CreateGoal extends GoalEvent {
 class ResetGoal extends GoalEvent {}
 
 class ResetGoalStatus extends GoalEvent{}
+class ResetGoalStatusDelete extends GoalEvent{}
 
-class getGoalByAccountId extends GoalEvent{}
+class GetGoalByAccountId extends GoalEvent{}
+
+class DeleteGoalByGoalId extends GoalEvent{
+  final int goalId;
+  DeleteGoalByGoalId(this.goalId);
+}

@@ -4,8 +4,11 @@ import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/goal/goal.dart';
-import 'package:plutocart/src/popups/add_goal_popup/add_goal_popup.dart';
+import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
+import 'package:plutocart/src/popups/goal_popup/bottom_sheet_goal.dart';
+import 'package:plutocart/src/popups/goal_popup/more_vert_goal.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/more_vert_popup_wallet.dart';
 
 class GoalPage extends StatefulWidget {
   const GoalPage({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class GoalPage extends StatefulWidget {
 class _GoalPageState extends State<GoalPage> {
   @override
   void initState() {
-    context.read<GoalBloc>().add(getGoalByAccountId());
+    context.read<GoalBloc>().add(GetGoalByAccountId());
     super.initState();
   }
 
@@ -122,14 +125,13 @@ class _GoalPageState extends State<GoalPage> {
               ),
               BlocBuilder<GoalBloc, GoalState>(
                 builder: (context, state) {
-                  print("count goal : ${state.goalList!.length}");
                   return Column(
                     children: List.generate(state.goalList!.length, (index) {
                       final Map<String, dynamic> goal = state.goalList![index];
                       return Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.25,
+                          height: MediaQuery.of(context).size.height * 0.32,
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
@@ -162,8 +164,7 @@ class _GoalPageState extends State<GoalPage> {
                                           0XFF15616D), // Set the color here
                                     ),
                                     onPressed: () async {
-                                      print("check progress : ${goal['deficit'] / goal['amountGoal']}");
-                                      print("check progresss :${ goal['deficit'] / goal['amountGoal'] > 1 }");
+                                    more_vert(goal['id'], goal);
                                     },
                                   )
                                 ],
@@ -209,9 +210,9 @@ class _GoalPageState extends State<GoalPage> {
                                             left: 0,
                                             top: 0,
                                             child: Container(
-                                              width:  goal['deficit'] / goal['amountGoal'] > 1 
+                                              width:  goal['deficit'] / goal['amountGoal'] >= 1 
                                               ? MediaQuery.of(context).size.width * 0.836 
-                                              : goal['deficit'] / goal['amountGoal'] < 0.1 ? MediaQuery.of(context).size.width* 0.1 : MediaQuery.of(context).size.width * goal['deficit'] / goal['amountGoal'] ,
+                                              : goal['deficit'] / goal['amountGoal'] < 0.1 ? MediaQuery.of(context).size.width* 0.1 :  goal['deficit'] / goal['amountGoal'] > 0.8 ? MediaQuery.of(context).size.width * 0.8 :  MediaQuery.of(context).size.width *  goal['deficit'] / goal['amountGoal'] ,
                                               height: MediaQuery.of(context) .size.height * 0.05,
                                               decoration: ShapeDecoration(
                                                 color: Color(0XFF1A9CB0),
@@ -237,13 +238,13 @@ class _GoalPageState extends State<GoalPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("0฿",
+                                        Text("0 ฿",
                                             style: TextStyle(
                                                 color: Color(0xFF15616D),
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
                                                 fontFamily: "Roboto")),
-                                        Text("${goal['amountGoal']}฿",
+                                        Text("${goal['amountGoal']} ฿",
                                             style: TextStyle(
                                                 color: Color(0xFF15616D),
                                                 fontSize: 16,
@@ -266,7 +267,7 @@ class _GoalPageState extends State<GoalPage> {
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: "Roboto")),
-                                            Text("${goal['deficit']}฿",
+                                            Text("${goal['deficit']} ฿",
                                                 style: TextStyle(
                                                     color: Color(0xFF2DC653),
                                                     fontSize: 16,
@@ -296,7 +297,7 @@ class _GoalPageState extends State<GoalPage> {
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: "Roboto")),
                                             Text(
-                                                "${goal['amountGoal'] - goal['deficit'] < 0 ? 0 : goal['amountGoal'] - goal['deficit'] }฿",
+                                                "${goal['amountGoal'] - goal['deficit'] < 0 ? 0 : goal['amountGoal'] - goal['deficit'] } ฿",
                                                 style: TextStyle(
                                                     color: Color(0xFFDD0000),
                                                     fontSize: 16,
@@ -307,6 +308,25 @@ class _GoalPageState extends State<GoalPage> {
                                       ],
                                     ),
                                   ),
+                                ],
+                              )  , 
+                              SizedBox(height: 10,),
+                              Text("D-day of your goal!" ,    style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Roboto")) , 
+                                                      SizedBox(height: 5,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("🎉",) , 
+                                  Text("31 Jan 2024" ,    style: TextStyle(
+                                                color: Color(0xFF15616D),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "Roboto")),
+                                   Text("🎉") , 
                                 ],
                               )
                             ],
@@ -324,6 +344,15 @@ class _GoalPageState extends State<GoalPage> {
     );
   }
 
+  more_vert(int goalId,  Map<String, dynamic> goal) {
+    showSlideDialog(
+        context: context,
+        child: MoreVertGoal(goal: goal , goalId:  goalId),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.3);
+  }
+
   createGoal() async {
     showSlideDialog(
         context: context,
@@ -332,4 +361,5 @@ class _GoalPageState extends State<GoalPage> {
         backgroundColor: Colors.white,
         hightCard: 2.5);
   }
+
 }
