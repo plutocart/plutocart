@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -44,6 +45,10 @@ public class Goal {
 
     @NotNull
     @Column(name = "end_date_goal", nullable = false)
-    private Instant endDateGoal;
+    private LocalDateTime endDateGoal;
+
+    @NotNull
+    @Column(name = "status_goal", nullable = false)
+    private Integer statusGoal;
 
 }
