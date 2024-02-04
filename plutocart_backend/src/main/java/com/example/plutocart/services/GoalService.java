@@ -39,6 +39,8 @@ public class GoalService {
     @Autowired
     GlobalValidationService globalValidationService;
     @Autowired
+    TransactionService transactionService;
+    @Autowired
     ModelMapper modelMapper;
 
     public GenericResponse getGoalByAccountId(String accountId, String token) throws PlutoCartServiceApiException {
@@ -195,7 +197,7 @@ public class GoalService {
 
 
     @Transactional
-    public GenericResponse deleteGoalByGoalId(String accountId, String goalId, String token) throws PlutoCartServiceApiException {
+    public GenericResponse deleteGoalByGoalId(String accountId, String goalId, String token) throws Exception {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
@@ -203,10 +205,10 @@ public class GoalService {
         GenericResponse response = new GenericResponse();
         GResDelDTO gResDelDTO = new GResDelDTO();
 
-        GReqDelDTO gReqDelDTO = validationDeleteGoal(accountId, goalId);
+        GReqDelDTO gReqDelDTO = validationDeleteGoal(accountId, goalId, token);
         goalRepository.deleteGoalByGoalId(gReqDelDTO.getGoalId());
 
-        gResDelDTO.setAccountId(gResDelDTO.getAccountId());
+        gResDelDTO.setAccountId(gReqDelDTO.getAccountId());
         gResDelDTO.setGoalId(gReqDelDTO.getGoalId());
         gResDelDTO.setDescription("Delete Success");
 
@@ -215,7 +217,10 @@ public class GoalService {
         return response;
     }
 
-    public GReqDelDTO validationDeleteGoal(String accountId, String goalId) throws PlutoCartServiceApiException {
+    public GReqDelDTO validationDeleteGoal(String accountId, String goalId, String token) throws Exception {
+        String transactionId = null;
+        String walletId = null;
+
 
         if (!HelperMethod.isInteger(accountId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
@@ -237,7 +242,10 @@ public class GoalService {
         if (!transactionList.isEmpty()) {
             for (Transaction transaction : transactionList) {
 //                if (transaction.getGoalIdGoal() != null)
-                transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId(), transaction.getGoalIdGoal().getId(), null);
+                transactionId = String.valueOf(transaction.getId());
+                walletId = String.valueOf(transaction.getWalletIdWallet().getWalletId());
+                transactionService.deleteTransaction(accountId, walletId, transactionId, token);
+//                transactionRepository.deleteTransactionByTransactionId(transaction.getId(), transaction.getStmTransaction(), transaction.getStatementType(), transaction.getWalletIdWallet().getWalletId(), transaction.getGoalIdGoal().getId(), null);
             }
         }
 

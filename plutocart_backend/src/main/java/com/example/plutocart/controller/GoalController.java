@@ -59,7 +59,7 @@ public class GoalController {
     public ResponseEntity<GenericResponse> deleteGoalByGoalId(@RequestHeader("Authorization") String token,
                                                               @PathVariable("account-id") String accountId,
                                                               @PathVariable("goal-id") String goalId
-    ) throws PlutoCartServiceApiException {
+    ) throws Exception {
         GenericResponse result = goalService.deleteGoalByGoalId(accountId, goalId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
