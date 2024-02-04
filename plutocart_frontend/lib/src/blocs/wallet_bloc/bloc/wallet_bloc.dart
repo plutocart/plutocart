@@ -50,8 +50,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       try {
         await walletRepository().deleteWalletById(event.walletId);
         final List<Wallet> newListWallet = [...state.wallets];
-        newListWallet
-            .removeWhere((element) => element.walletId == event.walletId);
+        newListWallet.removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
           wallets: newListWallet,
         ));

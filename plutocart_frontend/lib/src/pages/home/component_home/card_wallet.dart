@@ -51,7 +51,7 @@ class _CardWalletState extends State<CardWallet> {
                           : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Color(0XFF1A9CB0), // Set the border color to red
+                        color: state.status == WalletStatus.loading ? Colors.white : Color(0XFF1A9CB0), // Set the border color to red
                       ),
                       boxShadow: [
                         BoxShadow(

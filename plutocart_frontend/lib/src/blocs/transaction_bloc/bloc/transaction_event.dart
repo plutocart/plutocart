@@ -22,8 +22,25 @@ class CreateTransaction extends TransactionEvent {
       this.imageUrl,
       this.desctiption);
 }
+class CreateTransactionGoal extends TransactionEvent {
+  final int walletId;
+  final int goalIdGoal;
+  final double stmTransaction;
+  final String dateTimeTransaction;
+  final File? imageUrl;
+  final String? desctiption;
+  CreateTransactionGoal(
+      this.walletId,
+      this.goalIdGoal,
+      this.stmTransaction,
+      this.dateTimeTransaction,
+      this.imageUrl,
+      this.desctiption);
+}
 
 class ResetTransactionStatus extends TransactionEvent {}
+
+class ResetTransactionGoalStatus extends TransactionEvent {}
 
 class GetTransactionDailyInEx extends TransactionEvent {}
 

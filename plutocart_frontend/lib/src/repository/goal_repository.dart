@@ -92,7 +92,6 @@ class GoalRepository{
    Future<Map<String, dynamic>> updateGoal(int goalId , String nameGoal , double amountGoal , double deficit , String endDateGoal) async {
     final storage =  FlutterSecureStorage();
     String? accountId = await storage.read(key: "accountId");
-    String? email = await storage.read(key: "email");
     String? token = await storage.read(key: "token");
     int id = int.parse(accountId!);
     try {

@@ -14,6 +14,12 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           incomeStatus: TransactionStatus.loading, stmTransaction: 0.0));
     });
 
+        on<ResetTransactionGoalStatus>((event, emit) async {
+      emit(state.copyWith(
+          goalStatus: TransactionStatus.loading, stmTransaction: 0.0));
+    });
+
+
     on<ResetTransaction>((event, emit) {
       emit(TransactionState()); // Reset the state to the initial state
     });
@@ -37,12 +43,13 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
     on<GetTransactionLimit3>(
       (event, emit) async {
-        List<dynamic> response = await TransactionRepository().getTransactionlimit3();
+        List<dynamic> response =
+            await TransactionRepository().getTransactionlimit3();
         print("Start get transaction limit 3");
-        try {         
-            emit(state.copyWith(transactionLimit3: response));
-            print("state.transactionsLimit3 : ${state.transactionLimit3[0].walletName}");
-          
+        try {
+          emit(state.copyWith(transactionLimit3: response));
+          print(
+              "state.transactionsLimit3 : ${state.transactionLimit3[0].walletName}");
         } catch (e) {
           print("Error state.transactionsLimit3");
         }
@@ -53,7 +60,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       print("start working create transaction income");
       try {
         Map<String, dynamic> response = await TransactionRepository()
-            .createTransactionInCome(
+            .createTransaction(
                 event.statementType,
                 event.walletId,
                 event.imageUrl,
@@ -73,6 +80,39 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
               description: response['data']['description'],
               walletId: response['data']['wid'],
               incomeStatus: TransactionStatus.loaded));
+          print("after create income status is : ${state.incomeStatus}");
+        }
+      } catch (e) {
+        emit(state.copyWith(incomeStatus: TransactionStatus.loading));
+        print("Error creating transacton income in transaction bloc");
+      }
+    });
+
+    on<CreateTransactionGoal>((event, emit) async {
+      print("start working create transaction goal");
+      try {
+        Map<String, dynamic> response =
+            await TransactionRepository().createTransactionGoal(
+          event.walletId,
+          event.imageUrl,
+          event.stmTransaction,
+          event.dateTimeTransaction,
+          event.desctiption,
+          event.goalIdGoal,
+        );
+        if (response['data'] == null) {
+          print(
+              "not created transacton goal in transaction bloc : ${response['data']}");
+        } else {
+          print("create transacton goal in transaction bloc success");
+          emit(state.copyWith(
+              id: response['data']['id'],
+
+              stmTransaction: response['data']['stmTransaction'],
+              description: response['data']['description'],
+              walletId: response['data']['wid'],
+              goalId: response['data']['goalId'],
+              goalStatus: TransactionStatus.loaded));
           print("after create income status is : ${state.incomeStatus}");
         }
       } catch (e) {

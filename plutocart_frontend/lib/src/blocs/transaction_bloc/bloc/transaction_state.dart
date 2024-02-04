@@ -10,12 +10,13 @@ class TransactionState extends Equatable {
   final DateTime? dateTransaction;
   final String description;
   final int tranCategoryIdCategory;
+  final int goalId;
   final int walletId;
   final TransactionStatus incomeStatus;
   final TransactionStatus expenseStatus;
+  final TransactionStatus goalStatus;
   final List<dynamic> transactionsDailyInExList;
   final List<dynamic> transactionLimit3;
-  
 
   TransactionState(
       {this.id = 0,
@@ -28,7 +29,10 @@ class TransactionState extends Equatable {
       this.walletId = 0,
       this.incomeStatus = TransactionStatus.loading,
       this.expenseStatus = TransactionStatus.loading,
-      this.transactionsDailyInExList = const[] , this.transactionLimit3 = const[]})
+      this.transactionsDailyInExList = const [],
+      this.transactionLimit3 = const [],
+      this.goalId = 0,
+      this.goalStatus = TransactionStatus.loading})
       : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -42,7 +46,10 @@ class TransactionState extends Equatable {
       int? walletId,
       TransactionStatus? incomeStatus,
       TransactionStatus? expenseStatus,
-      List<dynamic>? transactionsDailyInExList , List<dynamic>? transactionLimit3}) {
+      List<dynamic>? transactionsDailyInExList,
+      List<dynamic>? transactionLimit3,
+      int? goalId,
+      TransactionStatus? goalStatus}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -54,8 +61,12 @@ class TransactionState extends Equatable {
             tranCategoryIdCategory ?? this.tranCategoryIdCategory,
         walletId: walletId ?? this.walletId,
         incomeStatus: incomeStatus ?? this.incomeStatus,
-        expenseStatus: expenseStatus ?? this.expenseStatus, transactionsDailyInExList : transactionsDailyInExList ?? this.transactionsDailyInExList , transactionLimit3 : transactionLimit3 ?? this.transactionLimit3
-       );
+        expenseStatus: expenseStatus ?? this.expenseStatus,
+        transactionsDailyInExList:
+            transactionsDailyInExList ?? this.transactionsDailyInExList,
+        transactionLimit3: transactionLimit3 ?? this.transactionLimit3,
+        goalId: goalId ?? this.goalId,
+        goalStatus: goalStatus ?? this.goalStatus);
   }
 
   @override
@@ -69,6 +80,8 @@ class TransactionState extends Equatable {
         tranCategoryIdCategory,
         walletId,
         incomeStatus,
-        expenseStatus , transactionsDailyInExList , transactionLimit3
+        expenseStatus,
+        transactionsDailyInExList,
+        transactionLimit3 , goalId , goalStatus,
       ];
 }

@@ -23,11 +23,12 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
 
   @override
   void initState() {
-    print("eiei :${widget.goal!}");
     nameGoalController.text = widget.goal!['nameGoal'];
     budgetGoalController.text = widget.goal!['amountGoal'].toString();
     yourSaveMoneyController.text = widget.goal!['deficit'].toString();
-    tranDateController.text = widget.goal!['endDateGoal'].toString();
+       DateTime now = DateTime.now();
+    String formattedDateTime ='${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+    tranDateController.text = formattedDateTime;
     super.initState();
   }
 
@@ -116,23 +117,25 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
             ),
             ActionPopup(
               bottonFirstName: "Cancle",
-              bottonSecondeName: "Add",
+              bottonSecondeName: "Confirm",
               bottonFirstNameFunction: () {
                 Navigator.pop(context);
               },
               bottonSecondeNameFunction: () {
                 double amountGoal = double.parse(budgetGoalController.text);
                 double dificitGoal = double.parse(yourSaveMoneyController.text);
-                String tranDateFormat =
-                    changeFormatter(tranDateController.text);
-                     showLoadingPagePopUp(context);
-                context.read<GoalBloc>().add(CreateGoal(nameGoalController.text,
-                    amountGoal, dificitGoal, tranDateFormat));
+                String tranDateFormat =changeFormatter(tranDateController.text);
+                print("amountGoal : ${amountGoal}");
+                print("dificitGoal : ${dificitGoal}");
+                print("tranStringToDateGoal : ${tranDateFormat}" );
+                showLoadingPagePopUp(context);
+                context.read<GoalBloc>().add(UpdateGoalbyGoalId(widget.goal!['id'], nameGoalController.text, amountGoal, dificitGoal, tranDateFormat));
                   context.read<GoalBloc>().stream.listen((state) {
-                    if(state.createGoalStatus == GoalStatus.loaded){
+                    if(state.updateGoalStatus == GoalStatus.loaded){
                       context.read<GoalBloc>().add(ResetGoal());
                       context.read<GoalBloc>().add(GetGoalByAccountId());
-                      print("check statetus : ${state.deleteGoalStatus}");
+                      print("check statetus : ${state.updateGoalStatus}");
+                      Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.pop(context);
                       

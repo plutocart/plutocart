@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/goal/goal.dart';
 import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/bottom_sheet_goal.dart';
 import 'package:plutocart/src/popups/goal_popup/more_vert_goal.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/more_vert_popup_wallet.dart';
+import 'dart:math' as math;
 
 class GoalPage extends StatefulWidget {
   const GoalPage({Key? key}) : super(key: key);
@@ -101,24 +105,34 @@ class _GoalPageState extends State<GoalPage> {
                       SizedBox(
                         height: 5,
                       ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16))),
-                          onPressed: () {
-                            createGoal();
-                          },
-                          child: Text(
-                            'Click add your new Goal !',
-                            style: TextStyle(
-                              color: Color(0xFF15616D),
-                              fontSize: 14,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ),
-                          ))
+                      BlocBuilder<WalletBloc, WalletState>(
+                        builder: (context, state) {
+                          return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16))),
+                              onPressed: () {
+                                if(state.wallets.length > 0) {
+                                  createGoal();
+                                }
+                                else{
+                                  createWallet();
+                                }
+                              
+                              },
+                              child: Text(
+                                'Click add your new Goal !',
+                                style: TextStyle(
+                                  color: Color(0xFF15616D),
+                                  fontSize: 14,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ));
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -128,10 +142,14 @@ class _GoalPageState extends State<GoalPage> {
                   return Column(
                     children: List.generate(state.goalList!.length, (index) {
                       final Map<String, dynamic> goal = state.goalList![index];
+                      final DateTime inputDate =
+                          DateTime.parse(goal['endDateGoal']);
+                      final String formattedDate =
+                          DateFormat('dd MMM yyyy').format(inputDate);
                       return Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.32,
+                          height: MediaQuery.of(context).size.height * 0.33,
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: ShapeDecoration(
                               shape: RoundedRectangleBorder(
@@ -164,7 +182,7 @@ class _GoalPageState extends State<GoalPage> {
                                           0XFF15616D), // Set the color here
                                     ),
                                     onPressed: () async {
-                                    more_vert(goal['id'], goal);
+                                      more_vert(goal['id'], goal);
                                     },
                                   )
                                 ],
@@ -210,10 +228,41 @@ class _GoalPageState extends State<GoalPage> {
                                             left: 0,
                                             top: 0,
                                             child: Container(
-                                              width:  goal['deficit'] / goal['amountGoal'] >= 1 
-                                              ? MediaQuery.of(context).size.width * 0.836 
-                                              : goal['deficit'] / goal['amountGoal'] < 0.1 ? MediaQuery.of(context).size.width* 0.1 :  goal['deficit'] / goal['amountGoal'] > 0.8 ? MediaQuery.of(context).size.width * 0.8 :  MediaQuery.of(context).size.width *  goal['deficit'] / goal['amountGoal'] ,
-                                              height: MediaQuery.of(context) .size.height * 0.05,
+                                              width: goal['deficit'] /
+                                                          goal['amountGoal'] >=
+                                                      1
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.836
+                                                  : goal['deficit'] /
+                                                              goal[
+                                                                  'amountGoal'] <
+                                                          0.1
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.1
+                                                      : goal['deficit'] /
+                                                                  goal[
+                                                                      'amountGoal'] >
+                                                              0.8
+                                                          ? MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8
+                                                          : MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              goal['deficit'] /
+                                                              goal[
+                                                                  'amountGoal'],
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05,
                                               decoration: ShapeDecoration(
                                                 color: Color(0XFF1A9CB0),
                                                 shape: RoundedRectangleBorder(
@@ -297,7 +346,7 @@ class _GoalPageState extends State<GoalPage> {
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: "Roboto")),
                                             Text(
-                                                "${goal['amountGoal'] - goal['deficit'] < 0 ? 0 : goal['amountGoal'] - goal['deficit'] } ฿",
+                                                "${goal['amountGoal'] - goal['deficit'] < 0 ? 0 : goal['amountGoal'] - goal['deficit']} ฿",
                                                 style: TextStyle(
                                                     color: Color(0xFFDD0000),
                                                     fontSize: 16,
@@ -309,24 +358,46 @@ class _GoalPageState extends State<GoalPage> {
                                     ),
                                   ),
                                 ],
-                              )  , 
-                              SizedBox(height: 10,),
-                              Text("D-day of your goal!" ,    style: TextStyle(
-                                                color: Color(0xFF15616D),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: "Roboto")) , 
-                                                      SizedBox(height: 5,),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("D-day of your goal!",
+                                  style: TextStyle(
+                                      color: Color(0xFF15616D),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto")),
+                              SizedBox(
+                                height: 5,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("🎉",) , 
-                                  Text("31 Jan 2024" ,    style: TextStyle(
-                                                color: Color(0xFF15616D),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: "Roboto")),
-                                   Text("🎉") , 
+                                  Image(
+                                    image: AssetImage(
+                                        'assets/icon/party-popper.png'),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
+                                  Text("${formattedDate}",
+                                      style: TextStyle(
+                                          color: Color(0xFF15616D),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Roboto")),
+                                  Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.rotationY(math
+                                        .pi), // Rotate 180 degrees around the X-axis
+                                    child: Image(
+                                      image: AssetImage(
+                                          'assets/icon/party-popper.png'),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.03,
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
@@ -344,10 +415,10 @@ class _GoalPageState extends State<GoalPage> {
     );
   }
 
-  more_vert(int goalId,  Map<String, dynamic> goal) {
+  more_vert(int goalId, Map<String, dynamic> goal) {
     showSlideDialog(
         context: context,
-        child: MoreVertGoal(goal: goal , goalId:  goalId),
+        child: MoreVertGoal(goal: goal, goalId: goalId),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.3);
@@ -362,4 +433,12 @@ class _GoalPageState extends State<GoalPage> {
         hightCard: 2.5);
   }
 
+   createWallet() async {
+    showSlideDialog(
+        context: context,
+        child: CreateWalletPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2);
+  }
 }

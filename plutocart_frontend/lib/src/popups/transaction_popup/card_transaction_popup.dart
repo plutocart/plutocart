@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/amount_tex
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/description_text_field.dart';
+import 'package:plutocart/src/pages/transaction/component_transaction/goal_dropdown.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/image_selection_screen.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/transaction_category_dropdown.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/transaction_type_dropdown.dart';
@@ -36,10 +38,12 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     tranDateController.text = formattedDateTime;
     super.initState();
   }
+
   final GlobalKey<FormFieldState> globalKeyTransaction = GlobalKey();
-   final GlobalKey<FormFieldState> globalKeyWallet = GlobalKey();
+  final GlobalKey<FormFieldState> globalKeyWallet = GlobalKey();
   int indexTransactionType = 0;
   int indexWallet = 0;
+  int indexGoal = 0;
   int indexTransactionCategoryType = 0;
   TextEditingController amountMoneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -48,6 +52,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
   // form
   int? idTransactionCategory;
   int? idWallet;
+  int? idGoal;
   // image
   XFile? _image;
   File? _imageFile;
@@ -90,6 +95,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       indexTransactionCategoryType = 0;
       idTransactionCategory = null;
       idWallet = null;
+      idGoal = null;
+      indexGoal = 0;
       indexWallet = 0;
       globalKeyTransaction.currentState?.reset();
       globalKeyWallet.currentState?.reset();
@@ -140,10 +147,14 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         SizedBox(
           height: 5,
         ),
-        Icon(
-          Icons.arrow_downward_rounded,
-          color: Color(0xFF15616D),
-        ),
+
+        (indexTransactionType == 0 || indexTransactionType == 1)
+            ? Icon(
+                Icons.arrow_downward_rounded,
+                color: Color(0xFF15616D),
+              )
+            : SizedBox.shrink(),
+
         SizedBox(
           height: 5,
         ),
@@ -155,6 +166,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               switch (indexTransactionType) {
                 case 0: // case add income
                 case 1:
+                case 2:
                   return BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, walletState) {
                       return WalletDropdown(
@@ -163,7 +175,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         onChanged: (newValueWallet) {
                           indexWallet = walletState.wallets.indexWhere(
                               (element) =>
-                                  element.walletId.toString() == newValueWallet);
+                                  element.walletId.toString() ==
+                                  newValueWallet);
                           idWallet = walletState.wallets
                               .firstWhere((element) =>
                                   element.walletId.toString() == newValueWallet)
@@ -177,13 +190,36 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
             },
           ),
         ),
+
+        indexTransactionType == 2
+            ? Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                child: BlocBuilder<GoalBloc, GoalState>(
+                  builder: (context, goalState) {
+                    print("indexGoal : ${indexGoal}");
+                    print("idGoal : ${idGoal}");
+                    return GoalDropdown(
+                      goalList: goalState.goalList!,
+                      onChanged: (newValueGoal) {
+                        indexGoal = goalState.goalList!.indexWhere((element) =>
+                            element['id'].toString() == newValueGoal);
+                        idGoal = goalState.goalList!.firstWhere((element) =>
+                            element['id'].toString() == newValueGoal)['id'];
+                      },
+                    );
+                  },
+                ))
+            : SizedBox.shrink(),
+
         SizedBox(
           height: 15,
         ),
+
         Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: AmountTextField(
-              amountMoneyController: amountMoneyController, nameField: "Amount of money",
+              amountMoneyController: amountMoneyController,
+              nameField: "Amount of money",
             )),
         SizedBox(
           height: 15,
@@ -268,7 +304,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                       break;
                   }
                   if (isDropdownDataMissing) {
-                    customAlertPopup(context, "Missing Information" , Icons.error_outline_rounded , Colors.red.shade200);
+                    customAlertPopup(context, "Missing Information",
+                        Icons.error_outline_rounded, Colors.red.shade200);
                   } else {
                     switch (indexTransactionType) {
                       case 0:
@@ -293,9 +330,49 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         context.read<TransactionBloc>().stream.listen((state) {
                           if (state.incomeStatus == TransactionStatus.loaded) {
                             context.read<WalletBloc>().add(GetAllWallet());
-                            context.read<TransactionBloc>().add(GetTransactionDailyInEx());
-                            context.read<TransactionBloc>().add(GetTransactionLimit3());
-                            context.read<TransactionBloc>().add(ResetTransactionStatus());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionDailyInEx());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionLimit3());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetTransactionStatus());
+                            Navigator.of(context).pop();
+                            Navigator.pop(context);
+                          }
+                        });
+                      case 2:
+                        int idWalletFormat = int.parse(idWallet.toString());
+                        int idGoalFormat = int.parse(idGoal.toString());
+                        double amount =
+                            double.parse(amountMoneyController.text);
+                        String tranDateFormat =
+                            changeFormatter(tranDateController.text);
+                        showLoadingPagePopUp(context);
+                        context.read<TransactionBloc>().add(
+                            CreateTransactionGoal(
+                                idWalletFormat,
+                                idGoalFormat,
+                                amount,
+                                tranDateFormat,
+                                _imageFile,
+                                descriptionController.text));
+
+                        context.read<TransactionBloc>().stream.listen((state) {
+                          if (state.goalStatus == TransactionStatus.loaded) {
+                            context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionDailyInEx());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionLimit3());
+                            context.read<GoalBloc>().add(GetGoalByAccountId());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetTransactionGoalStatus());
                             Navigator.of(context).pop();
                             Navigator.pop(context);
                           }
