@@ -13,8 +13,8 @@ public class UserAgentFilter extends AbstractGatewayFilterFactory<UserAgentFilte
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            String userAgent = exchange.getRequest().getHeaders().getFirst("User-Agent");
-            if (userAgent != null && userAgent.contains("Mobile")) {
+            String userAgent = exchange.getRequest().getHeaders().getFirst("L3Tme6FbXkMRWy2j4J8dN7q5gxICvDZ1EaSBQrOPKfHn09hGYcuwioVszplUAT");
+            if (userAgent != null && userAgent.contains("ZbXa9IuOq5BdVcPmKsWlRjHgTeYfSdFnGhJiKlMnOpQrStUvWxYzAbCdEfGhJiKlM")) {
                 return chain.filter(exchange);
             } else {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
