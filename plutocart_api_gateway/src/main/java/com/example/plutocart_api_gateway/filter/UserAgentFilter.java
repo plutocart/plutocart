@@ -1,6 +1,4 @@
 package com.example.plutocart_api_gateway.filter;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -8,19 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserAgentFilter extends AbstractGatewayFilterFactory<UserAgentFilter.Config> {
-
-    @Value("${head.key}")
-    private String headerKey;
-    @Value("${head.value}")
-    private String headerValue;
     public UserAgentFilter() {
         super(Config.class);
     }
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            String userAgent = exchange.getRequest().getHeaders().getFirst(headerKey);
-            if (userAgent != null && userAgent.contains(headerValue)) {
+            String userAgent = exchange.getRequest().getHeaders().getFirst("L3Tme6FbXkMRWy2j4J8dN7q5gxICvDZ1EaSBQrOPKfHn09hGYcuwioVszplUAT");
+            if (userAgent != null && userAgent.contains("ZbXa9IuOq5BdVcPmKsWlRjHgTeYfSdFnGhJiKlMnOpQrStUvWxYzAbCdEfGhJiKlM")) {
                 return chain.filter(exchange);
             } else {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
