@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserAgentFilter extends AbstractGatewayFilterFactory<UserAgentFilter.Config> {
 
-    @Value("${HEADER_KEY}")
+    @Value("${head.key}")
     private String headerKey;
-    @Value("${VALUE_HEADER}")
+    @Value("${head.value}")
     private String headerValue;
     public UserAgentFilter() {
         super(Config.class);
