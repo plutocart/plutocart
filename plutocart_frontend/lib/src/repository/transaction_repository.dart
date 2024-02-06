@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TransactionRepository {
@@ -49,10 +50,10 @@ class TransactionRepository {
       print("check token : ${token}");
       print("wallet id : ${WalletId}");
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${acId}/wallet/${WalletId}/transaction',
+        '${dotenv.env['API']}/api/account/${acId}/wallet/${WalletId}/transaction',
         data: formData, 
           options: Options(
-        headers: {"Authorization": 'Bearer $token'},
+                 headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
       ),
       );
       print(
@@ -80,9 +81,9 @@ class TransactionRepository {
     try {
       String? token = await storage.read(key: "token");
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accId}/wallet/transaction/daily-income-and-expense' ,  
+          '${dotenv.env['API']}/api/account/${accId}/wallet/transaction/daily-income-and-expense' ,  
            options:   Options(
-            headers: { "Authorization": 'Bearer $token'},
+                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ));
       if (response.statusCode == 200) {
         print("retuen getTransaction dailyincome and exp : ${response.data['data']}");
@@ -108,9 +109,9 @@ class TransactionRepository {
       final storage = new FlutterSecureStorage();
       String? token = await storage.read(key: "token");
       Response response = await dio.get(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${accId}/transaction-limit' ,  
+          '${dotenv.env['API']}/api/account/${accId}/transaction-limit' ,  
            options:   Options(
-            headers: { "Authorization": 'Bearer $token'},
+               headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ));
       if (response.statusCode == 200) {
         print("retuen getTransaction limit3 : ${response.data['data']}");
@@ -169,10 +170,10 @@ class TransactionRepository {
       print("check token : ${token}");
       print("wallet id : ${WalletId}");
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${acId}/wallet/${WalletId}/transaction',
+        '${dotenv.env['API']}/api/account/${acId}/wallet/${WalletId}/transaction',
         data: formData, 
           options: Options(
-        headers: {"Authorization": 'Bearer $token'},
+                 headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
       ),
       );
       print(

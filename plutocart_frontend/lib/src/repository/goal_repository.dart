@@ -1,18 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class GoalRepository{
   final Dio dio = Dio();
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
+
   Future<Map<String, dynamic>> createGoalByAccountId(String nameGoal , double amountGoal , double deficit , String endDateGoal) async {
+      await dotenv.load();
       String? accountId = await storage.read(key: "accountId");
           int acId = int.parse(accountId!);
     try {
       String? token = await storage.read(key: "token");
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${acId}/goal',
+        '${dotenv.env['API']}/api/account/${acId}/goal',
         options: Options(
-           headers: { "Authorization": 'Bearer $token'},
+                   headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
         ),
           queryParameters: {"nameGoal": nameGoal, "amountGoal": amountGoal , "deficit" : deficit ,  "endDateGoal" : endDateGoal},
       );
@@ -35,14 +39,15 @@ class GoalRepository{
 
 
  Future<List<dynamic>> getGoalByAccountId() async {
+  await dotenv.load();
       String? accountId = await storage.read(key: "accountId");
           int acId = int.parse(accountId!);
     try {
       String? token = await storage.read(key: "token");
       Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${acId}/goal',
+        '${dotenv.env['API']}/api/account/${acId}/goal',
         options: Options(
-           headers: { "Authorization": 'Bearer $token'},
+                    headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
         ),
       );
       print(
@@ -70,9 +75,9 @@ class GoalRepository{
     print("id account in step deleteAccountById : ${id}");
     try {
       Response response = await dio.delete(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/goal/${goalId}' , options: 
+          '${dotenv.env['API']}/api/account/${id}/goal/${goalId}' , options: 
           Options(
-            headers: { "Authorization": 'Bearer $token'},
+                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ));
       if (response.statusCode == 200) {
         print("delete goal id : ${goalId} : success");
@@ -97,11 +102,11 @@ class GoalRepository{
     try {
       print("start update goal");
       Response response = await dio.patch(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/goal/${goalId}',
+        '${dotenv.env['API']}/api/account/${id}/goal/${goalId}',
         queryParameters: {"nameGoal": nameGoal,  "amountGoal" : amountGoal , "deficit" : deficit , "endDateGoal" : endDateGoal},
         options: 
           Options(
-            headers: { "Authorization": 'Bearer $token'},
+                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ) , 
       );
       print("update email  ${response.data}");

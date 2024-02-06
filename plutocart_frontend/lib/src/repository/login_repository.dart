@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -25,7 +26,10 @@ class LoginRepository {
     print("imei in process login guest in class repository: ${imei}");
     try {
       Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/guest',
+        '${dotenv.env['API']}/api/login/guest',
+        options: Options(
+          headers: {"${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+        ),
         queryParameters: {"imei": imei},
       );
       print(
@@ -57,8 +61,10 @@ class LoginRepository {
     print("check imei from create account guest repository login : $imei");
     try {
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/guest',
-        data: {"imei": imei},
+        '${dotenv.env['API']}/api/account/register/guest',
+        data: {"imei": imei},  options: Options(
+        headers: {"${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+        )
       );
       print(
           "respone code in process create guest in class repository: ${response.statusCode}");
@@ -87,6 +93,8 @@ class LoginRepository {
   // Customer
 
   Future<Map<String, dynamic>> createAccountMember() async {
+    print("check env : ${dotenv.env['HEADER_KEY']}");
+     print("check env2 : ${dotenv.env['VALUE_HEADER']}");
     initPlatformState();
     await handleSignIn();
     String? imei = await storage.read(key: "imei");
@@ -94,11 +102,14 @@ class LoginRepository {
     print(
         "check imei create Account customer classs repository login : ${imei}");
     print(
-        "check email create Account customer classs repository login : ${email}");
+        "check email create Account customer classs repository login : ${email}");  
     try {
       Response response = await dio.post(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/register/member',
+        '${dotenv.env['API']}/api/account/register/member', 
         data: {"imei": imei, "email": email},
+        options: Options(
+        headers: {"${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+        )
       );
       print(
           "check status code of create account customer classs repository login : ${response.statusCode}");
@@ -155,8 +166,11 @@ class LoginRepository {
         "email in process login customer after create in class repository: ${email}");
     try {
       Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/member',
+        '${dotenv.env['API']}/api/login/member',
         queryParameters: {"imei": imei, "email": email},
+        options: Options(
+          headers: {"${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+        )
       );
       print(
           "respone code in process login customer after create in class repository: ${response.statusCode}");
@@ -192,8 +206,11 @@ class LoginRepository {
     try {
       print("start sign in google account");
       Response response = await dio.get(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/login/member',
-        queryParameters: {"imei": imei, "email": email},
+        '${dotenv.env['API']}/api/login/member',
+        queryParameters: {"imei": imei, "email": email}, 
+        options: Options(
+          headers: {"${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+        )
       );
       print("email google account and response:  ${response.data}");
 
@@ -242,11 +259,11 @@ class LoginRepository {
     try {
       print("start update guest account");
       Response response = await dio.patch(
-        'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/upgrade-role-member',
+        '${dotenv.env['API']}/api/account/${id}/upgrade-role-member',
         queryParameters: {"email": (email!.isEmpty || email == " ") ? null : email},
         options: 
           Options(
-            headers: { "Authorization": 'Bearer $token'},
+            headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ) , 
       );
       print("update email  ${response.data}");
@@ -276,9 +293,9 @@ class LoginRepository {
     print("id account in step deleteAccountById : ${id}");
     try {
       Response response = await dio.delete(
-          'https://capstone23.sit.kmutt.ac.th/ej1/api/account/${id}/delete-account' , options: 
+          '${dotenv.env['API']}/api/account/${id}/delete-account' , options: 
           Options(
-            headers: { "Authorization": 'Bearer $token'},
+                    headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ));
       if (response.statusCode == 200) {
         print("delete account id : ${id} : success");
