@@ -1,6 +1,7 @@
 package com.example.plutocart.repositories;
 
 import com.example.plutocart.entities.Goal;
+import com.example.plutocart.entities.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,12 @@ import java.util.List;
 public interface GoalRepository extends JpaRepository<Goal, Integer> {
 
 
+//    @Transactional
+//    @Query(value = "SELECT * FROM goal where account_id_account = :accountId", nativeQuery = true)
+//    List<Goal> viewGoalByAccountId(Integer accountId);
+
     @Transactional
-    @Query(value = "SELECT * FROM goal where account_id_account = :accountId", nativeQuery = true)
+    @Procedure(procedureName = "viewGoalByAccountId")
     List<Goal> viewGoalByAccountId(Integer accountId);
 
     @Transactional
@@ -32,7 +37,7 @@ public interface GoalRepository extends JpaRepository<Goal, Integer> {
     @Transactional
     @Modifying
     @Procedure(procedureName = "updateGoalByGoalId")
-    void updateGoalByGoalId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer goalId, BigDecimal totalDeficitInTransaction);
+    void updateGoalByGoalId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer goalId);
 
     @Transactional
     @Modifying

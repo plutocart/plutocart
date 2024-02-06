@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`goal` (
   `amount_goal` DECIMAL(13,2) NOT NULL,
   `deficit` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
   `end_date_goal` DATETIME NOT NULL,
-  `status_goal` TINYINT NOT NULL DEFAULT 0,
+  `status_goal` ENUM('1','2','3') NOT NULL DEFAULT 1,
   `account_id_account` INT NOT NULL,
   `create_goal_on` DATETIME NOT NULL,
   `update_goal_on` DATETIME NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`debt` (
   `installment_debt` INT NOT NULL DEFAULT 1,
   `num_of_installment_pay` INT NOT NULL DEFAULT 0,
   `description` VARCHAR(100) NULL DEFAULT NULL,
-  `status_debt` TINYINT NOT NULL DEFAULT 0,
+  `status_debt` ENUM('1','2','3') NOT NULL DEFAULT 1,
   `create_debt_on` DATETIME NOT NULL,
   `update_debt_on` DATETIME NOT NULL,
   `account_id_account` INT NOT NULL,
@@ -328,11 +328,20 @@ BEGIN
         UPDATE goal
 		SET deficit = deficit + stmTransaction
 		WHERE id_goal = goalIdGoal;
+        
+        	UPDATE goal
+		SET status_goal = 1
+		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+    
+		UPDATE goal
+		SET status_goal = 2
+		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
 	END IF;
     
 END //
 DELIMITER ;
 
+-- delete transaction
 DELIMITER //
 CREATE PROCEDURE DeleteTransactionByTransactionId(
     IN transactionId INT,
@@ -367,11 +376,20 @@ BEGIN
         UPDATE goal
 		SET deficit = deficit - stmTransaction
 		WHERE id_goal = goalIdGoal;
+        
+		UPDATE goal
+		SET status_goal = 1
+		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+    
+		UPDATE goal
+		SET status_goal = 2
+		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
 	END IF;
     
 END //
 DELIMITER ;
 
+-- update transaction
 DELIMITER //
 CREATE PROCEDURE UpdateTransaction(
     IN walletId INT,
@@ -453,6 +471,14 @@ BEGIN
         UPDATE goal
 		SET deficit = deficit + stmTransaction
 		WHERE id_goal = goalIdGoal;
+        
+		UPDATE goal
+		SET status_goal = 1
+		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+        
+		UPDATE goal
+		SET status_goal = 2
+		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
 	END IF;
     
 END //
@@ -574,20 +600,51 @@ BEGIN
 END //
 DELIMITER ;
 
--- create goal
+-- view goal
 DELIMITER //
-CREATE  PROCEDURE `createGoalByAccountId`( 
-in InNameGoal VARCHAR(15) ,
-in InAmountGoal  decimal(10 , 2) ,
-in InDeficit decimal(10,2)  ,
-in InEndDateGoal dateTime ,
-in InAccountId int 
+CREATE PROCEDURE `viewGoalByAccountId`( 
+    IN InAccountId INT 
 )
 BEGIN
- insert into goal 
- (name_goal , amount_goal , deficit , end_date_goal  , account_id_account , create_goal_on , update_goal_on) 
- values(InNameGoal , InAmountGoal , InDeficit , InEndDateGoal , InAccountId , now() , now());
+    DECLARE currentDate DATE;
+    SET currentDate = CURDATE();
+
+    UPDATE goal
+    SET status_goal = 3
+    WHERE account_id_account = InAccountId 
+    AND status_goal != 2
+    AND end_date_goal < currentDate;
+
+    SELECT * FROM goal WHERE account_id_account = InAccountId;
 END //
+DELIMITER ;
+
+-- create goal
+DELIMITER //
+CREATE PROCEDURE `createGoalByAccountId`(
+    IN InNameGoal VARCHAR(45),
+    IN InAmountGoal DECIMAL(13,2),
+    IN InDeficit DECIMAL(13,2),
+    IN InEndDateGoal DATETIME,
+    IN InAccountId INT
+)
+BEGIN
+    DECLARE new_goal_id INT;
+
+    -- Step 1: Insert new goal
+    INSERT INTO `plutocart`.`goal` (`name_goal`, `amount_goal`, `deficit`, `end_date_goal`, `account_id_account`, `create_goal_on`, `update_goal_on`)
+    VALUES (InNameGoal, InAmountGoal, InDeficit, InEndDateGoal, InAccountId, NOW(), NOW());
+
+    -- Step 2: Get the ID of the newly inserted goal
+    SET new_goal_id = LAST_INSERT_ID();
+
+    -- Step 3: Update the status_goal based on the condition
+    UPDATE `plutocart`.`goal`
+    SET `status_goal` = 2
+    WHERE `id_goal` = new_goal_id AND `deficit` >= `amount_goal`;
+
+END //
+
 DELIMITER ;
 
 -- update goal
@@ -597,8 +654,8 @@ in InNameGoal VARCHAR(15) ,
 in InAmountGoal  decimal(10 , 2) ,
 in InDeficit decimal(10,2)  ,
 in InEndDateGoal dateTime ,
-in InGoalId int,
-in amountOfTransaction decimal(10,2) 
+in InGoalId int
+-- in amountOfTransaction decimal(10,2) 
 )
 BEGIN
 
@@ -606,10 +663,19 @@ BEGIN
 		SET 
 			name_goal = InNameGoal,
 			amount_goal = InAmountGoal,
-            deficit = InDeficit + amountOfTransaction,
+--             deficit = InDeficit + amountOfTransaction,
+            deficit = InDeficit,
             end_date_goal = InEndDateGoal,
             update_goal_on = now()
 		WHERE id_goal = InGoalId;
+        
+	UPDATE goal
+    SET status_goal = 1
+    WHERE id_goal = InGoalId AND deficit < amount_goal;
+    UPDATE goal
+    SET status_goal = 2
+    WHERE id_goal = InGoalId AND deficit >= amount_goal;
+        
 END //
 DELIMITER ;
 
