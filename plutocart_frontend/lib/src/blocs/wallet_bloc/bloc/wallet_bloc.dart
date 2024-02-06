@@ -53,6 +53,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         newListWallet.removeWhere((element) => element.walletId == event.walletId);
         emit(state.copyWith(
           wallets: newListWallet,
+          deleteStatus: WalletStatus.loaded
         ));
         swiperController.move(newListWallet.length - 1);
       } catch (error) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
@@ -116,7 +117,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
               amountMoneyController: yourSaveMoneyController,
               nameField: "Collect money",
             ),
-            DatePickerField(
+            DatePickerFieldOnlyDay(
               tranDateController: tranDateController,
             ),
             ActionPopup(

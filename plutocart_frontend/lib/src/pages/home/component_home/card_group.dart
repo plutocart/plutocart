@@ -549,7 +549,7 @@ class _CardGroupState extends State<CardGroup> {
                                                           BorderRadius.circular(
                                                               16))),
                                               onPressed: () {
-                                                if (state.wallets.length == 0) {
+                                                if (widget.numberPopup == 1 && state.wallets.length == 0) {
                                                   createWallet();
                                                 } else if (widget.numberPopup ==
                                                     1) {

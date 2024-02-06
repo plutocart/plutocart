@@ -107,11 +107,6 @@ class GoalRepository{
       print("update email  ${response.data}");
 
       if (response.statusCode == 200) {
-
-        await storage.write(
-          key: "email",
-          value: response.data['data']['email'].toString(),
-        );
         return response.data;
       } else {
         throw Exception('Error: ${'404'}');

@@ -15,12 +15,16 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
 
     on<ResetGoalStatus>((event, emit) async {
       emit(state.copyWith(
-          createGoalStatus: GoalStatus.loading, amountGoal: 0.0 , dificit: 0.0 , nameGoal: ""));
+          createGoalStatus: GoalStatus.loading, amountGoal: 0.0 , deficit: 0.0 , nameGoal: ""));
     });
 
       on<ResetGoalStatusDelete>((event, emit) async {
       emit(state.copyWith(
            deleteGoalStatus: GoalStatus.loading));
+    });
+ on<ResetGoalCompleteStatus>((event, emit) async {
+      emit(state.copyWith(
+           goalComplete: false));
     });
 
 
@@ -45,7 +49,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
           emit(state.copyWith(
               nameGoal: response['data']['nameGoal'],
               amountGoal: response['data']['amountGoal'],
-              dificit: response['data']['deficit'],
+              deficit: response['data']['deficit'],
               endDateGoal: dateTime,
               createGoalStatus: GoalStatus.loaded));
           print("after create goal status is : ${state.createGoalStatus}");
@@ -75,6 +79,37 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   },
 );
 
+  on<CheckGoalComplete>(
+  (event, emit) async {
+    print("Start check goal in goal bloc");
+    try {
+      List<dynamic> response = await GoalRepository().getGoalByAccountId();
+        int indexGoal = response.indexWhere((element) => element['id'] == event.goalId);
+       print("show respinse goal : ${response[indexGoal]}");
+       print("element  ${event.goalId}");
+       print("defecit : ${response[indexGoal]['deficit']}");
+         print("amount : ${response[indexGoal]['amountGoal']}");
+       print("response[0]['deficit'] >= response[0]['amountGoal'] : ${response[indexGoal]['deficit'] >= response[indexGoal]['amountGoal']}");
+        if(response[indexGoal]['deficit'] >= response[indexGoal]['amountGoal']){
+          print("response goal complete true");
+           emit( state.copyWith(
+              goalComplete: true
+            ));
+
+            print("check state = : ${state.goalComplete}");
+        } 
+        else{
+           print("response goal complete false");
+            emit( state.copyWith(
+              goalComplete: false
+            ));
+        }
+    } catch (e) {
+      print("Error: $e");
+    }
+  },
+);
+
  on<DeleteGoalByGoalId>((event, emit) async {
       try {
         print("start step delete account bloc");
@@ -93,28 +128,40 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
     });
 
 
-        on<UpdateGoalbyGoalId>((event, emit) async {
-      try {
-        print("start update account in bloc");
-        Map<String, dynamic> response = await GoalRepository().updateGoal(event.goalId , event.nameGoal, event.amountGoal , event.deficit , event.endDateString);
-        print("after update in bloc: $response");
-        if (response['data'] == null) {
-          print("response update goal: ${response['data']}");     
-        } else {
-          print(
-              "signin customer after update account guest to member repository loginEmailGoole working ? :");
-           emit(state.copyWith(
-              updateGoalStatus: GoalStatus.loaded,
-              nameGoal: event.nameGoal,
-              amountGoal: event.amountGoal,
-              dificit: event.deficit, 
-              endDateGoalString: event.endDateString));
-        }
-      } catch (error) {
-        print('Error update goal : $error');
+     on<UpdateGoalbyGoalId>((event, emit) async {
+  try {
+    print("start update account in bloc");
+    Map<String, dynamic> response = await GoalRepository().updateGoal(
+      event.goalId,
+      event.nameGoal,
+      event.amountGoal,
+      event.deficit,
+      event.endDateString,
+    );
+    print("after update in bloc: $response");
 
+    if (response['data'] == null) {
+      print("Error updating goal: ${response['error']}");
+    } else {
+      print("Update successful. Response data: ${response['data']}");
+
+      if (response['data'] is Map<String, dynamic>) {
+        emit(state.copyWith(
+          updateGoalStatus: GoalStatus.loaded,
+          nameGoal: response['data']['nameGoal'],
+          amountGoal: response['data']['amountGoal'],
+          deficit: response['data']['deficit'],
+          endDateGoalString: response['data']['endDateGoal'],
+        ));
+      } else {
+        print("Invalid response data structure.");
       }
-    });
+    }
+  } catch (error) {
+    print('Error updating goal: $error');
+  }
+});
+
 
 
   }

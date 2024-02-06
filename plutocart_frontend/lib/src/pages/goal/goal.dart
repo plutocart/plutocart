@@ -35,10 +35,28 @@ class _GoalPageState extends State<GoalPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Goals",
-              style: TextStyle(color: Color(0xFF15616D)),
-            ),
+            Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "Goal",
+                    style: TextStyle(
+                      color: Color(0xFF15616D),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Roboto",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Image.asset(
+                      "assets/icon/icon_launch.png",
+                      width: 25,
+                      height: 25,
+                    ),
+                  ),
+                ],
+              ),
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
                 return IconButton(
@@ -113,13 +131,7 @@ class _GoalPageState extends State<GoalPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16))),
                               onPressed: () {
-                                if(state.wallets.length > 0) {
-                                  createGoal();
-                                }
-                                else{
-                                  createWallet();
-                                }
-                              
+                                  createGoal();                              
                               },
                               child: Text(
                                 'Click add your new Goal !',

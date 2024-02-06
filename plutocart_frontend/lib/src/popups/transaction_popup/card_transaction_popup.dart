@@ -21,6 +21,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/wallet_dro
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
+import 'package:plutocart/src/popups/transaction_popup/alert_goal_complete_popup.dart';
 
 class CardTransactionPopup extends StatefulWidget {
   const CardTransactionPopup({Key? key}) : super(key: key);
@@ -38,6 +39,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     tranDateController.text = formattedDateTime;
     super.initState();
   }
+
+  BuildContext? contextAlert;
 
   final GlobalKey<FormFieldState> globalKeyTransaction = GlobalKey();
   final GlobalKey<FormFieldState> globalKeyWallet = GlobalKey();
@@ -373,10 +376,30 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context
                                 .read<TransactionBloc>()
                                 .add(ResetTransactionGoalStatus());
-                            Navigator.of(context).pop();
+                            context
+                                .read<GoalBloc>()
+                                .add(CheckGoalComplete(idGoalFormat));
+                            Navigator.pop(context);
                             Navigator.pop(context);
                           }
                         });
+                        // print("Before stream listen");
+                        // context.read<GoalBloc>().stream.listen((state) {
+                        //   print("state in listen : ${state.goalComplete}");
+                        //   if (state.goalComplete == true) {
+                        //     print("come to condition if state goal complete");
+                        //     alertGoalCompletePopup(
+                        //         context,
+                        //         "Congratulation!",
+                        //         "Goal come to",
+                        //         "assets/icon/congranturation.png");
+                        //   }
+                        //   context
+                        //       .read<GoalBloc>()
+                        //       .add(ResetGoalCompleteStatus());
+                        // });
+                        // print("After stream listen");
+
                         break;
                     }
                   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
@@ -15,7 +16,8 @@ class BottomSheetDeleteWallet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BottomSheetDeleteWalletState createState() => _BottomSheetDeleteWalletState();
+  _BottomSheetDeleteWalletState createState() =>
+      _BottomSheetDeleteWalletState();
 }
 
 class _BottomSheetDeleteWalletState extends State<BottomSheetDeleteWallet> {
@@ -120,14 +122,18 @@ class _BottomSheetDeleteWalletState extends State<BottomSheetDeleteWallet> {
                   .read<WalletBloc>()
                   .add(DeleteWallet(widget.wallet.walletId!));
               showLoadingPagePopUp(context);
-              await Future.delayed(Duration(seconds: 1));
-                            context.read<TransactionBloc>().add(GetTransactionLimit3());
-                await Future.delayed(Duration(milliseconds: 500));              
-               Navigator.pop(context);
+              context.read<WalletBloc>().stream.listen((state) async {
+                if (state.deleteStatus == WalletStatus.loaded) {
+                  context.read<TransactionBloc>().add(GetTransactionLimit3());
+                  context.read<GoalBloc>().add(GetGoalByAccountId());
+                  await Future.delayed(Duration(milliseconds: 500));
+                  Navigator.pop(context);
 
-              for (int i = 0; i < widget.numberPopUp2!; i++) {
-                Navigator.pop(context);
-              }
+                  for (int i = 0; i < widget.numberPopUp2!; i++) {
+                    Navigator.pop(context);
+                  }
+                }
+              });
             },
           )
         ],

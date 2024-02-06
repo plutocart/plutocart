@@ -9,6 +9,7 @@ class WalletState extends Equatable {
   final double dailyIncome;
   final double walletBalance;
   final int walletStatus;
+  final WalletStatus deleteStatus;
   final List<Wallet> wallets;
   final int walletId;
   final int currentColossalIndex;
@@ -21,7 +22,7 @@ class WalletState extends Equatable {
     this.walletStatus = 1,
     this.wallets = const [],
     this.walletId = 1,
-    this.currentColossalIndex = 0,
+    this.currentColossalIndex = 0, this.deleteStatus= WalletStatus.loading
   });
 
   WalletState copyWith({
@@ -34,7 +35,7 @@ class WalletState extends Equatable {
     bool? hightPopupActive,
     List<Wallet>? wallets,
     int? walletId,
-    int? currentColossalIndex,
+    int? currentColossalIndex, WalletStatus? deleteStatus
   }) {
     return WalletState(
         status: status ?? this.status,
@@ -45,7 +46,7 @@ class WalletState extends Equatable {
         walletStatus: walletStatus ?? this.walletStatus,
         wallets: wallets ?? this.wallets,
         walletId: walletId ?? this.walletId,
-        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex);
+        currentColossalIndex: currentColossalIndex ?? this.currentColossalIndex , deleteStatus: deleteStatus ?? this.deleteStatus,);
   }
 
   @override
@@ -58,6 +59,6 @@ class WalletState extends Equatable {
         walletStatus,
         wallets,
         walletId,
-        currentColossalIndex
+        currentColossalIndex , deleteStatus
       ];
 }

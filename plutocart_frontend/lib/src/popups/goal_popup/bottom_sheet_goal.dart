@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
@@ -144,17 +146,22 @@ class _BottomSheetGoalState extends State<BottomSheetGoal> {
                   }
                 },
                 bottonSecondeNameFunction: () async {
-                  context.read<GoalBloc>().add(DeleteGoalByGoalId(widget.goal!['id']));
+                  context
+                      .read<GoalBloc>()
+                      .add(DeleteGoalByGoalId(widget.goal!['id']));
                   showLoadingPagePopUp(context);
-                  await Future.delayed(Duration(seconds: 1));
-                  print("check delete goal state : ${context.read<GoalBloc>().state.deleteGoalStatus}");
-                  if (context.read<GoalBloc>().state.deleteGoalStatus == GoalStatus.loaded) {  
-                    context.read<GoalBloc>().add(GetGoalByAccountId()); 
-                    print("check delete goal state : ${context.read<GoalBloc>().state.goalList!.length}");   
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }
+                  context.read<GoalBloc>().stream.listen((state) {
+                    if (state.deleteGoalStatus == GoalStatus.loaded) {
+                      context.read<WalletBloc>().add(GetAllWallet());
+                      context.read<GoalBloc>().add(GetGoalByAccountId());
+                       context.read<TransactionBloc>().add(GetTransactionLimit3());
+                      print(
+                          "check delete goal state : ${context.read<GoalBloc>().state.goalList!.length}");
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  });
                 },
               );
             },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
@@ -26,8 +27,9 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
     nameGoalController.text = widget.goal!['nameGoal'];
     budgetGoalController.text = widget.goal!['amountGoal'].toString();
     yourSaveMoneyController.text = widget.goal!['deficit'].toString();
-       DateTime now = DateTime.now();
-    String formattedDateTime ='${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+   String date = widget.goal!['endDateGoal'].toString();
+   String formattedDateTime ='${date.substring(8,10)}/${date.substring(5 , 7)}/${date.substring(0 , 4)} ${date.substring(11 , 13)}:${date.substring(14, 16)}';
+
     tranDateController.text = formattedDateTime;
     super.initState();
   }
@@ -35,7 +37,6 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
 
   @override
   Widget build(BuildContext context) {
-     double amountGoal = double.tryParse(budgetGoalController.text) ?? 0.0;
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: Container(
@@ -112,7 +113,7 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
               amountMoneyController: yourSaveMoneyController,
               nameField: "Collect money",
             ),
-            DatePickerField(
+            DatePickerFieldOnlyDay(
               tranDateController: tranDateController,
             ),
             ActionPopup(
@@ -123,13 +124,14 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
               },
               bottonSecondeNameFunction: () {
                 double amountGoal = double.parse(budgetGoalController.text);
-                double dificitGoal = double.parse(yourSaveMoneyController.text);
+                double deficitGoal = double.parse(yourSaveMoneyController.text);
                 String tranDateFormat =changeFormatter(tranDateController.text);
                 print("amountGoal : ${amountGoal}");
-                print("dificitGoal : ${dificitGoal}");
+                print("dificitGoal : ${deficitGoal}");
                 print("tranStringToDateGoal : ${tranDateFormat}" );
                 showLoadingPagePopUp(context);
-                context.read<GoalBloc>().add(UpdateGoalbyGoalId(widget.goal!['id'], nameGoalController.text, amountGoal, dificitGoal, tranDateFormat));
+                context.read<GoalBloc>().add(UpdateGoalbyGoalId(widget.goal!['id'], nameGoalController.text, amountGoal, deficitGoal, tranDateFormat));
+                  print("dificitGoal! : ${deficitGoal}");
                   context.read<GoalBloc>().stream.listen((state) {
                     if(state.updateGoalStatus == GoalStatus.loaded){
                       context.read<GoalBloc>().add(ResetGoal());
