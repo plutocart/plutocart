@@ -339,6 +339,21 @@ BEGIN
 		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
 	END IF;
     
+    IF debtIdDebt IS NOT NULL THEN
+        UPDATE debt
+		SET total_paid_debt = total_paid_debt + stmTransaction,
+			num_of_installment_pay = num_of_installment_pay + 1
+		WHERE id_debt = debtIdDebt;
+        
+		UPDATE debt
+		SET status_debt = 1
+		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+    
+		UPDATE debt
+		SET status_debt = 2
+		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
+	END IF;
+    
 END //
 DELIMITER ;
 
@@ -385,6 +400,20 @@ BEGIN
 		UPDATE goal
 		SET status_goal = 2
 		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
+	END IF;
+    
+	IF debtIdDebt IS NOT NULL THEN
+        UPDATE debt
+		SET total_paid_debt = total_paid_debt - stmTransaction
+		WHERE id_debt = debtIdDebt;
+        
+		UPDATE debt
+		SET status_debt = 1
+		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+    
+		UPDATE debt
+		SET status_debt = 2
+		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
 	END IF;
     
 END //
@@ -442,6 +471,12 @@ BEGIN
 		WHERE id_goal = goalIdGoal;
 	END IF;
     
+	IF debtIdDebt IS NOT NULL THEN
+        UPDATE debt
+		SET total_paid_debt = total_paid_debt - oldStmTransaction
+		WHERE id_debt = debtIdDebt;
+	END IF;
+    
     -- Update the transaction table
     UPDATE transaction
     SET
@@ -480,6 +515,20 @@ BEGIN
 		UPDATE goal
 		SET status_goal = 2
 		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
+	END IF;
+    
+	IF debtIdDebt IS NOT NULL THEN
+        UPDATE debt
+		SET total_paid_debt = total_paid_debt + stmTransaction
+		WHERE id_debt = debtIdDebt;
+        
+		UPDATE debt
+		SET status_debt = 1
+		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+    
+		UPDATE debt
+		SET status_debt = 2
+		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
 	END IF;
     
 END //

@@ -62,7 +62,6 @@ public class DebtValidationService {
         if (description.length() > 100)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "description is over of limit character. ");
 
-
         DReqPostDTO dReqPostDTO = new DReqPostDTO();
         dReqPostDTO.setAccountId(acId);
         dReqPostDTO.setNameDebt(nameDebt);

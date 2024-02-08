@@ -130,10 +130,10 @@ public class TransactionValidationService {
                 throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement of transaction in debt is not match. ");
 
             deId = Integer.parseInt(debtId);
-//            Debt debt = debtRepository.viewDebtByDebtId(deId);
+            Debt debt = debtRepository.viewDebtByDebtId(deId);
 
-//            if (debt == null)
-//                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+            if (debt == null)
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
         }
 
 //        if (transactionCategory.getId() != tranCatId)
@@ -274,10 +274,10 @@ public class TransactionValidationService {
             if (deId != transaction.getDebtIdDebt().getId())
                 throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id is not match .");
 
-//            Debt debt = debtRepository.viewDebtByDebtId(deId);
-//
-//            if (debt == null)
-//                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+            Debt debt = debtRepository.viewDebtByDebtId(deId);
+
+            if (debt == null)
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
         }
 
 //        if (transactionCategory.getId() != tranCatId)
@@ -349,10 +349,10 @@ public class TransactionValidationService {
 
         if (transaction.getDebtIdDebt() != null) {
             deId = transaction.getDebtIdDebt().getId();
-//            Debt debt = debtRepository.viewDebtByDebtId(deId);
+            Debt debt = debtRepository.viewDebtByDebtId(deId);
 
-//            if (debt == null)
-//                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+            if (debt == null)
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
         }
 
         cloudinaryService.deleteImageOnCloudInTransaction(tranId);
