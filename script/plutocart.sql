@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`debt` (
   `amount_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
   `installment_debt` INT NOT NULL DEFAULT 1,
   `num_of_installment_pay` INT NOT NULL DEFAULT 0,
+  `total_paid_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
   `description` VARCHAR(100) NULL DEFAULT NULL,
   `status_debt` ENUM('1','2','3') NOT NULL DEFAULT 1,
   `create_debt_on` DATETIME NOT NULL,
@@ -677,6 +678,36 @@ BEGIN
     WHERE id_goal = InGoalId AND deficit >= amount_goal;
         
 END //
+DELIMITER ;
+
+-- create debt
+DELIMITER //
+CREATE PROCEDURE createDebtByAccountId(
+    IN InNameDebt VARCHAR(45),
+    IN InAmountDebt DECIMAL(13,2),
+    IN InInstallmentDebt INT,
+    IN InNumOfInstallmentPay INT,
+    IN InTotalPaidDebt DECIMAL(13,2),
+    IN InDescription VARCHAR(200),
+    IN InAccountId INT
+)
+BEGIN
+    DECLARE new_debt_id INT;
+
+    -- Step 1: Insert new debt
+    INSERT INTO plutocart.debt (name_debt, amount_debt, installment_debt, num_of_installment_pay, total_paid_debt, description, create_debt_on, update_debt_on,account_id_account)
+    VALUES (InNameDebt, InAmountDebt, InInstallmentDebt, InNumOfInstallmentPay, InTotalPaidDebt, InDescription, NOW(), NOW(), InAccountId);
+
+    -- Step 2: Get the ID of the newly inserted goal
+    SET new_debt_id = LAST_INSERT_ID();
+
+    -- Step 3: Update the status_goal based on the condition
+    UPDATE debt
+    SET status_debt = 2
+    WHERE id_debt = new_debt_id AND total_paid_debt >= amount_debt;
+
+END //
+
 DELIMITER ;
 
 -- update account from guest to member
