@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,14 +26,26 @@ public class Debt {
     @Column(name = "amount_debt", nullable = false, precision = 13, scale = 2)
     private BigDecimal amountDebt;
 
-    @Column(name = "installment_debt", nullable = false)
-    private Integer installmentDebt;
+    @Column(name = "pay_period", nullable = false)
+    private Integer payPeriod;
 
-    @Column(name = "num_of_installment_pay", nullable = false)
-    private Integer numOfInstallmentPay;
+    @Column(name = "num_of_paid_period", nullable = false)
+    private Integer numOfPaidPeriod;
 
-    @Column(name = "description", length = 100)
-    private String description;
+    @Column(name = "paid_debt_per_period", nullable = false, precision = 13, scale = 2)
+    private BigDecimal paidDebtPerPeriod;
+
+    @Column(name = "total_paid_debt", nullable = false, precision = 13, scale = 2)
+    private BigDecimal totalPaidDebt;
+
+    @Column(name = "money_lender", length = 100)
+    private String moneyLender;
+
+    @Column(name = "status_debt", nullable = false)
+    private Integer statusDebt;
+
+    @Column(name = "latest_pay_date", nullable = false)
+    private LocalDateTime latestPayDate;
 
     @Column(name = "create_debt_on", nullable = false)
     private Instant createDebtOn;

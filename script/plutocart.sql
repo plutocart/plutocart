@@ -96,11 +96,13 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`debt` (
   `id_debt` INT NOT NULL AUTO_INCREMENT,
   `name_debt` VARCHAR(45) NOT NULL,
   `amount_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
-  `installment_debt` INT NOT NULL DEFAULT 1,
-  `num_of_installment_pay` INT NOT NULL DEFAULT 0,
+  `pay_period` INT NOT NULL DEFAULT 1,
+  `num_of_paid_period` INT NOT NULL DEFAULT 0,
+  `paid_debt_per_period`INT NOT NULL,
   `total_paid_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
-  `description` VARCHAR(100) NULL DEFAULT NULL,
+  `money_lender` VARCHAR(15) NOT NULL,
   `status_debt` ENUM('1','2','3') NOT NULL DEFAULT 1,
+  `latest_pay_date` DATETIME DEFAULT NULL,
   `create_debt_on` DATETIME NOT NULL,
   `update_debt_on` DATETIME NOT NULL,
   `account_id_account` INT NOT NULL,
@@ -342,7 +344,8 @@ BEGIN
     IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
 		SET total_paid_debt = total_paid_debt + stmTransaction,
-			num_of_installment_pay = num_of_installment_pay + 1
+			num_of_paid_period = num_of_paid_period + 1,
+            latest_pay_date = dateTransaction
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
@@ -404,7 +407,9 @@ BEGIN
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt - stmTransaction
+		SET total_paid_debt = total_paid_debt - stmTransaction,
+			num_of_paid_period = num_of_paid_period - 1
+--             latest_pay_date = dateTransaction
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
@@ -519,7 +524,8 @@ BEGIN
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt + stmTransaction
+		SET total_paid_debt = total_paid_debt + stmTransaction,
+			latest_pay_date = dateTransaction
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
@@ -734,18 +740,20 @@ DELIMITER //
 CREATE PROCEDURE createDebtByAccountId(
     IN InNameDebt VARCHAR(45),
     IN InAmountDebt DECIMAL(13,2),
-    IN InInstallmentDebt INT,
-    IN InNumOfInstallmentPay INT,
+    IN InPayPeriod INT,
+    IN InNumOfPaidPeriod INT,
+    IN InPaidDebtPerPeriod DECIMAL(13,2),
     IN InTotalPaidDebt DECIMAL(13,2),
-    IN InDescription VARCHAR(200),
+    IN InMoneyLender VARCHAR(15),
+    IN InLatestPayDate DATETIME,
     IN InAccountId INT
 )
 BEGIN
     DECLARE new_debt_id INT;
 
     -- Step 1: Insert new debt
-    INSERT INTO plutocart.debt (name_debt, amount_debt, installment_debt, num_of_installment_pay, total_paid_debt, description, create_debt_on, update_debt_on,account_id_account)
-    VALUES (InNameDebt, InAmountDebt, InInstallmentDebt, InNumOfInstallmentPay, InTotalPaidDebt, InDescription, NOW(), NOW(), InAccountId);
+    INSERT INTO plutocart.debt (name_debt, amount_debt, pay_period, num_of_paid_period, paid_debt_per_period, total_paid_debt, money_lender, latest_pay_date, create_debt_on, update_debt_on,account_id_account)
+    VALUES (InNameDebt, InAmountDebt, InPayPeriod, InNumOfPaidPeriod, InPaidDebtPerPeriod, InTotalPaidDebt, InMoneyLender, InLatestPayDate, NOW(), NOW(), InAccountId);
 
     -- Step 2: Get the ID of the newly inserted goal
     SET new_debt_id = LAST_INSERT_ID();

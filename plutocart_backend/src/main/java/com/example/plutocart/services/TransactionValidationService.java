@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class TransactionValidationService {
@@ -353,6 +354,16 @@ public class TransactionValidationService {
 
             if (debt == null)
                 throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+
+//            List<Transaction> transactionList = transactionRepository.viewTransactionByDebtId(deId);
+//            if (transactionList.size() > 1) {
+//                for (Transaction transactionInList : transactionList) {
+//                    transactionId = String.valueOf(transactionInList.getId());
+//                    walletId = String.valueOf(transactionInList.getWalletIdWallet().getWalletId());
+//                    transactionService.deleteTransaction(accountId, walletId, transactionId, token);
+//                }
+//            }
+
         }
 
         cloudinaryService.deleteImageOnCloudInTransaction(tranId);

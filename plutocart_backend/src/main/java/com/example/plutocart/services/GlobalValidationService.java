@@ -59,7 +59,7 @@ public class GlobalValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this wallet id is not found. ");
 
         TReqGetByAcIdWalId id = new TReqGetByAcIdWalId();
         id.setAccountId(acId);
@@ -82,7 +82,7 @@ public class GlobalValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this wallet id is not found. ");
 
         if (!HelperMethod.isInteger(transactionId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
@@ -90,7 +90,7 @@ public class GlobalValidationService {
         Integer tranId = Integer.parseInt(transactionId);
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
         if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + transactionId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this transaction id is not found. ");
 
         TReqGetByAcIdWalIdTranId id = new TReqGetByAcIdWalIdTranId();
         id.setAccountId(acId);
@@ -103,6 +103,6 @@ public class GlobalValidationService {
     public void validationToken(String accountId, String token) throws PlutoCartServiceApiForbidden {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId.trim()))
-            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key. ");
     }
 }

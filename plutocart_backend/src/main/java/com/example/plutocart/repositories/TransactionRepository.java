@@ -40,6 +40,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> viewTransactionByGoalId(Integer goalId);
 
     @Transactional
+    @Query(value = "SELECT * FROM transaction where debt_id_debt = :debtId", nativeQuery = true)
+    List<Transaction> viewTransactionByDebtId(Integer debtId);
+
+    @Transactional
     @Query(value = "SELECT * FROM transaction where wallet_id_wallet = :walletId and id_transaction = :transactionId", nativeQuery = true)
     Transaction viewTransactionByWalletIdAndTransactionId(Integer walletId, Integer transactionId);
 
