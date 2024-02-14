@@ -10,18 +10,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Integer> {
+    @Transactional
+    @Query(value = "SELECT * FROM debt where account_id_account = :accountId", nativeQuery = true)
+    List<Debt> viewDebtByAccountId(Integer accountId);
 
     @Transactional
     @Query(value = "SELECT * FROM debt where id_debt = :debtId", nativeQuery = true)
     Debt viewDebtByDebtId(Integer debtId);
 
+
     @Transactional
     @Modifying
     @Procedure(procedureName = "createDebtByAccountId")
     void insertDebtByAccountId(String nameDebt, BigDecimal amountDebt, Integer payPeriod, Integer numOfPaidPeriod, BigDecimal paidDebtPerPeriod, BigDecimal totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, Integer accountId);
+
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "updateDebtByAccountId")
+    void updateDebtByAccountId(String nameDebt, BigDecimal amountDebt, Integer payPeriod, Integer numOfPaidPeriod, BigDecimal paidDebtPerPeriod, BigDecimal totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, Integer debtId);
+
 
     @Transactional
     @Modifying

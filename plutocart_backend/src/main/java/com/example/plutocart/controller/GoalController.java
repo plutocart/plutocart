@@ -55,6 +55,15 @@ public class GoalController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PatchMapping("account/{account-id}/goal/{goal-id}/complete-now")
+    public ResponseEntity<GenericResponse> updateGoalToComplete(@RequestHeader("Authorization") String token,
+                                                                @Valid @PathVariable(value = "account-id") String accountId,
+                                                                @Valid @PathVariable(value = "goal-id") String goalId
+    ) throws PlutoCartServiceApiException {
+        GenericResponse result = goalService.updateGoalToComplete(accountId, goalId, token);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @DeleteMapping("account/{account-id}/goal/{goal-id}")
     public ResponseEntity<GenericResponse> deleteGoalByGoalId(@RequestHeader("Authorization") String token,
                                                               @PathVariable("account-id") String accountId,

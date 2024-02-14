@@ -122,6 +122,30 @@ public class GoalValidationService {
         return gReqPostDTO;
     }
 
+    public GReqPostDTO validationUpdateGoalToComplete(String accountId, String goalId) throws PlutoCartServiceApiException {
+
+        if (!HelperMethod.isInteger(accountId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
+
+        Integer acId = Integer.parseInt(accountId);
+        Account account = accountRepository.getAccountById(acId);
+        if (account == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+
+        if (!HelperMethod.isInteger(goalId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
+
+        Integer goId = Integer.parseInt(goalId);
+        Goal goal = goalRepository.viewGoalByGoalId(goId);
+        if (goal == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal Id " + goId + " is not create. ");
+
+        GReqPostDTO gReqPostDTO = new GReqPostDTO();
+        gReqPostDTO.setAccountId(acId);
+        gReqPostDTO.setGoalId(goId);
+        return gReqPostDTO;
+    }
+
     public GReqDelDTO validationDeleteGoal(String accountId, String goalId, String token) throws Exception {
         String transactionId = null;
         String walletId = null;

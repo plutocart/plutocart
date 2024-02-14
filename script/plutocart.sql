@@ -345,7 +345,7 @@ BEGIN
         UPDATE debt
 		SET total_paid_debt = total_paid_debt + stmTransaction,
 			num_of_paid_period = num_of_paid_period + 1,
-            latest_pay_date = dateTransaction
+            latest_pay_date = createTransactionOn
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
@@ -525,7 +525,7 @@ BEGIN
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
 		SET total_paid_debt = total_paid_debt + stmTransaction,
-			latest_pay_date = dateTransaction
+			latest_pay_date = updateTransactionOn
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
@@ -735,6 +735,21 @@ BEGIN
 END //
 DELIMITER ;
 
+-- update goal to complete 
+DELIMITER //
+CREATE  PROCEDURE `updateGoalToComplete`( 
+in InAccountId int,
+in InGoalId int
+)
+BEGIN
+
+ UPDATE goal
+		SET status_goal = 2
+		WHERE id_goal = InGoalId AND account_id_account = InAccountId;
+        
+END //
+DELIMITER ;
+
 -- create debt
 DELIMITER //
 CREATE PROCEDURE createDebtByAccountId(
@@ -762,6 +777,44 @@ BEGIN
     UPDATE debt
     SET status_debt = 2
     WHERE id_debt = new_debt_id AND total_paid_debt >= amount_debt;
+
+END //
+
+DELIMITER ;
+
+-- update debt
+DELIMITER //
+CREATE PROCEDURE updateDebtByAccountId(
+    IN InNameDebt VARCHAR(45),
+    IN InAmountDebt DECIMAL(13,2),
+    IN InPayPeriod INT,
+    IN InNumOfPaidPeriod INT,
+    IN InPaidDebtPerPeriod DECIMAL(13,2),
+    IN InTotalPaidDebt DECIMAL(13,2),
+    IN InMoneyLender VARCHAR(15),
+    IN InLatestPayDate DATETIME,
+    IN InDebtId INT
+)
+BEGIN
+	
+    UPDATE debt
+    SET name_debt = InNameDebt,
+		amount_debt = InAmountDebt,
+        pay_period = InPayPeriod,
+        num_of_paid_period = InNumOfPaidPeriod,
+        paid_debt_per_period = InPaidDebtPerPeriod,
+        total_paid_debt = InTotalPaidDebt,
+        money_lender = InMoneyLender,
+        latest_pay_date = InLatestPayDate
+    WHERE id_debt = InDebtId;
+    
+    UPDATE debt
+    SET status_debt = 1
+    WHERE id_debt = InDebtId AND total_paid_debt < amount_debt;
+    
+    UPDATE debt
+    SET status_debt = 2
+    WHERE id_debt = InDebtId AND total_paid_debt >= amount_debt;
 
 END //
 

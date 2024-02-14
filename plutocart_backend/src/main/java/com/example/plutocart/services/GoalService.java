@@ -104,6 +104,26 @@ public class GoalService {
         return response;
     }
 
+    @Transactional
+    public GenericResponse updateGoalToComplete(String accountId, String goalId, String token) throws PlutoCartServiceApiException {
+        globalValidationService.validationToken(accountId, token);
+        GReqPostDTO gReqPostDTO = goalValidationService.validationUpdateGoalToComplete(accountId, goalId);
+
+        GoalResPutDTO goalResPutDTO = new GoalResPutDTO();
+        goalRepository.updateGoalToComplete(gReqPostDTO.getAccountId(), gReqPostDTO.getGoalId());
+
+        GenericResponse response = new GenericResponse();
+
+        goalResPutDTO.setAcId(gReqPostDTO.getAccountId());
+        goalResPutDTO.setGoalId(gReqPostDTO.getAccountId());
+        goalResPutDTO.setDescription("Update Success");
+
+        response.setData(goalResPutDTO);
+        response.setStatus(ResultCode.SUCCESS);
+
+        return response;
+    }
+
 
     @Transactional
     public GenericResponse deleteGoalByGoalId(String accountId, String goalId, String token) throws Exception {

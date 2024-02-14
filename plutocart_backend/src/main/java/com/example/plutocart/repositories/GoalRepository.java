@@ -44,4 +44,8 @@ public interface GoalRepository extends JpaRepository<Goal, Integer> {
     @Query(value = "DELETE FROM goal where id_goal = :goalId", nativeQuery = true)
     void deleteGoalByGoalId(Integer goalId);
 
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "updateGoalToComplete")
+    void updateGoalToComplete(Integer accountId,Integer goalId);
 }
