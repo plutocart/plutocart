@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
 
 class DebtPage extends StatefulWidget {
@@ -112,7 +114,9 @@ class _DebtPageState extends State<DebtPage> {
                                 backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16))),
-                            onPressed: () {},
+                            onPressed: () {
+                                createDebt();
+                            },
                             child: Text(
                               'Click add your Debt !',
                               style: TextStyle(
@@ -133,5 +137,14 @@ class _DebtPageState extends State<DebtPage> {
         ),
       ),
     );
+  }
+
+  createDebt() async {
+    showSlideDialog(
+        context: context,
+        child: AddDebtPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 3);
   }
 }

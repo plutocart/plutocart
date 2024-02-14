@@ -383,22 +383,6 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             Navigator.pop(context);
                           }
                         });
-                        // print("Before stream listen");
-                        // context.read<GoalBloc>().stream.listen((state) {
-                        //   print("state in listen : ${state.goalComplete}");
-                        //   if (state.goalComplete == true) {
-                        //     print("come to condition if state goal complete");
-                        //     alertGoalCompletePopup(
-                        //         context,
-                        //         "Congratulation!",
-                        //         "Goal come to",
-                        //         "assets/icon/congranturation.png");
-                        //   }
-                        //   context
-                        //       .read<GoalBloc>()
-                        //       .add(ResetGoalCompleteStatus());
-                        // });
-                        // print("After stream listen");
 
                         break;
                     }

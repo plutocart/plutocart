@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,10 @@ import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
 Future<void> main() async {
-      await dotenv.load();    
+  await dotenv.load();    
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  HttpOverrides.global = new MyHttpOverrides();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -26,6 +28,13 @@ Future<void> main() async {
     FlutterNativeSplash.remove();
     runApp(MyWidget());
   });
+}
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyWidget extends StatefulWidget {
@@ -37,18 +46,14 @@ class MyWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<MyWidget> {
   bool isConnected = true;
-  
   @override
   Widget build(BuildContext context) {
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
-    final transactionCategoryBloc =
-        BlocProvider(create: (context) => TransactionCategoryBloc());
-    final transactionBloc =
-        BlocProvider(create: (context) => TransactionBloc());
+    final transactionCategoryBloc = BlocProvider(create: (context) => TransactionCategoryBloc());
+    final transactionBloc = BlocProvider(create: (context) => TransactionBloc());
     final pageBloc = BlocProvider(create: (context) => PageBloc());
-        final goalBloc = BlocProvider(create: (context) => GoalBloc());
-
+    final goalBloc = BlocProvider(create: (context) => GoalBloc());
     return MultiBlocProvider(
         providers: [
           walletBloc,
@@ -95,6 +100,8 @@ class _MyWidgetState extends State<MyWidget> {
     });
   }
 
+  
+
   @override
   void initState() {
     super.initState();
@@ -107,4 +114,6 @@ class _MyWidgetState extends State<MyWidget> {
     super.dispose();
     subscription.cancel();
   }
+  
 }
+

@@ -27,6 +27,10 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
            goalComplete: false));
     });
 
+  on<StatusCardGoal>((event, emit) {
+      emit(state.copyWith(
+           statusCardGoal: event.statusCardGoal));
+  },);
 
 
    on<CreateGoal>((event, emit) async {

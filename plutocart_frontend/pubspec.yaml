@@ -49,6 +49,7 @@ dependencies:
   image_picker: ^1.0.5
   intl: 0.18.1
   loading_animation_widget: ^1.2.0+4
+  numberpicker: ^2.1.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -120,6 +121,7 @@ flutter:
     - "assets/icon/party-popper.png"
     - "assets/icon/Goals-icon.png"
     - "assets/icon/congranturation.png"
+    - "assets/icon/calendar_icon.png"
     - .env
     # - images/a_dot_ham.jpeg
 

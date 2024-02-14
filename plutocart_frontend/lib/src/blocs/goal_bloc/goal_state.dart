@@ -10,17 +10,26 @@ class GoalState extends Equatable {
   final GoalStatus deleteGoalStatus;
   final GoalStatus updateGoalStatus;
   final DateTime? endDateGoal;
-  final bool  statusGoal;
-  final List<dynamic> ? goalList;
+  final bool statusGoal;
+  final List<dynamic>? goalList;
   final String endDateGoalString;
   final bool goalComplete;
+  final List<bool> statusCardGoal;
+  
 
   GoalState(
       {this.nameGoal = "",
       this.amountGoal = 0,
       this.deficit = 0,
       DateTime? endDateGoal,
-      this.createGoalStatus = GoalStatus.loading , this.goalList = const[] , this.deleteGoalStatus = GoalStatus.loading , this.statusGoal = false , this.updateGoalStatus = GoalStatus.loading , this.endDateGoalString = "" , this.goalComplete = false})
+      this.createGoalStatus = GoalStatus.loading,
+      this.goalList = const [],
+      this.deleteGoalStatus = GoalStatus.loading,
+      this.statusGoal = false,
+      this.updateGoalStatus = GoalStatus.loading,
+      this.endDateGoalString = "",
+      this.goalComplete = false,
+      this.statusCardGoal = const []})
       : endDateGoal = endDateGoal ?? DateTime.now();
 
   GoalState copyWith(
@@ -28,17 +37,40 @@ class GoalState extends Equatable {
       double? amountGoal,
       double? deficit,
       GoalStatus? createGoalStatus,
-      DateTime? endDateGoal , List<dynamic>? goalList , GoalStatus? deleteGoalStatus , bool ? statusGoal , GoalStatus? updateGoalStatus , String? endDateGoalString , bool? goalComplete}) {
+      DateTime? endDateGoal,
+      List<dynamic>? goalList,
+      GoalStatus? deleteGoalStatus,
+      bool? statusGoal,
+      GoalStatus? updateGoalStatus,
+      String? endDateGoalString,
+      bool? goalComplete , List<bool> ? statusCardGoal}) {
     return GoalState(
-      amountGoal: amountGoal ?? this.amountGoal,
+        amountGoal: amountGoal ?? this.amountGoal,
         nameGoal: nameGoal ?? this.nameGoal,
         deficit: deficit ?? this.deficit,
         createGoalStatus: createGoalStatus ?? this.createGoalStatus,
-        endDateGoal: endDateGoal ?? this.endDateGoal , goalList: goalList?? this.goalList , deleteGoalStatus: deleteGoalStatus ?? this.deleteGoalStatus , statusGoal: statusGoal ?? this.statusGoal , updateGoalStatus: updateGoalStatus ?? this.updateGoalStatus , 
-        endDateGoalString: endDateGoalString ?? this.endDateGoalString , goalComplete: goalComplete ?? this.goalComplete );
+        endDateGoal: endDateGoal ?? this.endDateGoal,
+        goalList: goalList ?? this.goalList,
+        deleteGoalStatus: deleteGoalStatus ?? this.deleteGoalStatus,
+        statusGoal: statusGoal ?? this.statusGoal,
+        updateGoalStatus: updateGoalStatus ?? this.updateGoalStatus,
+        endDateGoalString: endDateGoalString ?? this.endDateGoalString,
+        goalComplete: goalComplete ?? this.goalComplete , statusCardGoal : statusCardGoal ?? this.statusCardGoal);
   }
 
   @override
-  List<Object> get props =>
-      [nameGoal, amountGoal, deficit, createGoalStatus, endDateGoal! , goalList! , deleteGoalStatus , statusGoal , updateGoalStatus , endDateGoalString , goalComplete];
+  List<Object> get props => [
+        nameGoal,
+        amountGoal,
+        deficit,
+        createGoalStatus,
+        endDateGoal!,
+        goalList!,
+        deleteGoalStatus,
+        statusGoal,
+        updateGoalStatus,
+        endDateGoalString,
+        goalComplete , 
+        statusCardGoal
+      ];
 }

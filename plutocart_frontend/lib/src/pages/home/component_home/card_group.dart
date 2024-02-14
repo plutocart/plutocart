@@ -52,7 +52,7 @@ class _CardGroupState extends State<CardGroup> {
                             ? MediaQuery.of(context).size.height * 0.24
                             : MediaQuery.of(context).size.height * 0.33
                     : widget.numberPopup == 3 && widget.lengthData > 0
-                        ? MediaQuery.of(context).size.height * 0.3
+                        ? MediaQuery.of(context).size.height * 0.27
                         : MediaQuery.of(context).size.height * 0.17,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -270,30 +270,42 @@ class _CardGroupState extends State<CardGroup> {
                                     return Container(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.23,
+                                              0.19,
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
                                       child: Column(
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 20),
-                                                child: Text(
-                                                    "${state.goalList![state.goalList!.length - 1]['nameGoal']}",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto")),
-                                              ),
-                                            ],
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 10),
+                                                  child: Row(
+                                                    children: [
+                                                      Image(image: AssetImage('assets/icon/Goals-icon.png') , height: MediaQuery.of(context).size.height * 0.04,),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 5 ,),
+                                                        child: Text(
+                                                            "${state.goalList![state.goalList!.length - 1]['nameGoal']}",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Color(0xFF15616D),
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight.w500,
+                                                                fontFamily: "Roboto")),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
+
                                           Skeleton.ignore(
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -310,7 +322,8 @@ class _CardGroupState extends State<CardGroup> {
                                                 decoration: ShapeDecoration(
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(20),
+                                                        BorderRadius.circular(
+                                                            20),
                                                     side: BorderSide(
                                                         width: 1,
                                                         color: Colors.grey),
@@ -347,20 +360,21 @@ class _CardGroupState extends State<CardGroup> {
                                                                           state.goalList![state.goalList!.length - 1]
                                                                               ['deficit'] /
                                                                           state.goalList![state.goalList!.length - 1]['amountGoal'],
-                                                          height:
-                                                              MediaQuery.of(context)
-                                                                      .size
-                                                                      .height *
-                                                                  0.05,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.05,
                                                           decoration:
                                                               ShapeDecoration(
-                                                            color:
-                                                                Color(0XFF1A9CB0),
+                                                            color: Color(
+                                                                0XFF1A9CB0),
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
-                                                                      .circular(20),
+                                                                      .circular(
+                                                                          20),
                                                               side: BorderSide(
                                                                   width: 1,
                                                                   color: Color(
@@ -375,35 +389,61 @@ class _CardGroupState extends State<CardGroup> {
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                bottom: 15),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text("0 ฿",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto")),
-                                                Text(
-                                                    "${state.goalList![state.goalList!.length - 1]['amountGoal']} ฿",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto"))
-                                              ],
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        right: 5 , left:  20),
+                                                    child: Text(
+                                                        "${state.goalList![state.goalList!.length - 1]['deficit']} ฿",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color(0xFF15616D),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: "Roboto")),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        right: 5),
+                                                    child: Text("/",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color(0xFF15616D),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: "Roboto")),
+                                                  ),
+                                                  Text("${state.goalList![state.goalList!.length - 1]['amountGoal']} ฿",
+                                                      style: TextStyle(
+                                                          color: Color(0xFF1A9CB0),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: "Roboto")),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 20),
+                                                child: Row(
+                                                  children: [
+                                                    Text("${formattedDate}",
+                                                        style: TextStyle(
+                                                            color: Color(0XFF707070),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: "Roboto")),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
                                           ),
                                           Row(
                                             mainAxisAlignment:
@@ -415,17 +455,17 @@ class _CardGroupState extends State<CardGroup> {
                                                       style: TextStyle(
                                                           color:
                                                               Color(0xFF15616D),
-                                                          fontSize: 16,
+                                                          fontSize: 15,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w400,
                                                           fontFamily:
                                                               "Roboto")),
                                                   Text(
-                                                      "${state.goalList![state.goalList!.length - 1]['deficit']}",
+                                                      "${state.goalList![state.goalList!.length - 1]['deficit']} ฿",
                                                       style: TextStyle(
                                                           color:
                                                               Color(0xFF2DC653),
-                                                          fontSize: 16,
+                                                          fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontFamily: "Roboto"))
@@ -435,10 +475,12 @@ class _CardGroupState extends State<CardGroup> {
                                                 child: Container(
                                                   height: 40,
                                                   decoration: ShapeDecoration(
-                                                    shape: RoundedRectangleBorder(
+                                                    shape:
+                                                        RoundedRectangleBorder(
                                                       side: BorderSide(
-                                                        width: 1.5,
-                                                        color: Color(0xFF15616D),
+                                                        width: 0.5,
+                                                        color:
+                                                            Color(0xFF15616D),
                                                       ),
                                                       borderRadius: BorderRadius
                                                           .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
@@ -449,21 +491,21 @@ class _CardGroupState extends State<CardGroup> {
                                               Column(
                                                 children: [
                                                   Text(
-                                                    "Lack of money",
+                                                    "Remainder",
                                                     style: TextStyle(
                                                         color:
                                                             Color(0xFF15616D),
-                                                        fontSize: 16,
+                                                        fontSize: 15,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w400,
                                                         fontFamily: "Roboto"),
                                                   ),
                                                   Text(
-                                                      "${state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit'] < 0 ? 0 : state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit']} ฿",
+                                                      "${(state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit']) < 0 ? 0 : (state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit']).toStringAsFixed(2)} ฿",
                                                       style: TextStyle(
                                                           color:
-                                                              Color(0xFFDD0000),
-                                                          fontSize: 16,
+                                                              Color(0XFF1A9CB0),
+                                                          fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontFamily:
@@ -472,46 +514,7 @@ class _CardGroupState extends State<CardGroup> {
                                               )
                                             ],
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Image(
-                                                  image: AssetImage(
-                                                      'assets/icon/party-popper.png'),
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.03,
-                                                ),
-                                                Text("${formattedDate}",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto")),
-                                                Transform(
-                                                  alignment: Alignment.center,
-                                                  transform: Matrix4.rotationY(math
-                                                      .pi), // Rotate 180 degrees around the X-axis
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                        'assets/icon/party-popper.png'),
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.03,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
+                                       
                                         ],
                                       ),
                                     );
@@ -549,7 +552,8 @@ class _CardGroupState extends State<CardGroup> {
                                                           BorderRadius.circular(
                                                               16))),
                                               onPressed: () {
-                                                if (widget.numberPopup == 1 && state.wallets.length == 0) {
+                                                if (widget.numberPopup == 1 &&
+                                                    state.wallets.length == 0) {
                                                   createWallet();
                                                 } else if (widget.numberPopup ==
                                                     1) {

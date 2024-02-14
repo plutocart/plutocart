@@ -35,6 +35,11 @@ class CheckGoalComplete extends GoalEvent {
   CheckGoalComplete(this.goalId);
 }
 
+class StatusCardGoal extends GoalEvent {
+  final List<bool> statusCardGoal;
+  StatusCardGoal(this.statusCardGoal);
+}
+
 class UpdateGoalbyGoalId extends GoalEvent {
   final int goalId;
   final String nameGoal;

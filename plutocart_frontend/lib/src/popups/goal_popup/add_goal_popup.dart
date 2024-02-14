@@ -21,13 +21,13 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
   TextEditingController yourSaveMoneyController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
   TextEditingController nameGoalController = TextEditingController();
-
   @override
   void initState() {
     DateTime now = DateTime.now();
     String formattedDateTime =
         '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
     tranDateController.text = formattedDateTime;
+    context.read<GoalBloc>().add(GetGoalByAccountId());
     super.initState();
   }
 
@@ -111,11 +111,11 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
             ),
             AmountTextField(
               amountMoneyController: budgetGoalController,
-              nameField: "Budget of Goals",
+              nameField: "Goal amount",
             ),
             AmountTextField(
               amountMoneyController: yourSaveMoneyController,
-              nameField: "Collect money",
+              nameField: "Collected money",
             ),
             DatePickerFieldOnlyDay(
               tranDateController: tranDateController,
@@ -151,6 +151,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                       context.read<GoalBloc>().add(GetGoalByAccountId());
                       Navigator.pop(context);
                       Navigator.pop(context);
+                     
                     }
                   });
                 }
