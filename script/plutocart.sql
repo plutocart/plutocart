@@ -206,6 +206,12 @@ insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , a
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(3 , 'admin 🥲🐇' , 1111111.00 , default , 1 , now() , now());
 
+insert into transaction values(1,1000,1,now(),1,"this is first transaction. ", null,null,null,now(),now(),1);
+
+insert into goal values(1,"goal 1",10000.00,2000.00,"2024-08-01 00:00:00",1,1,now(),now());
+
+insert into debt values(1,"debt 1",20000.00,10,1,2000.00, 2000.00,"test debt 01",1,now(),now(),now(),1);
+
 DELIMITER //
 
 CREATE PROCEDURE InsertIntoWallet( in walletName varchar(15) , in balanceWallet decimal(13 ,2) ,  in accountId int)
@@ -236,7 +242,18 @@ DELIMITER //
 CREATE PROCEDURE viewTransactionByAccountId(in accountId int)
 BEGIN
 	select t.* from transaction t join wallet w on
-    t.wallet_id_wallet = w.id_wallet where w.account_id_account = accountId;
+    t.wallet_id_wallet = w.id_wallet where w.account_id_account = accountId
+    order by t.date_transaction desc;
+END //
+DELIMITER ;
+
+-- view transaction by debt id order by update date desc
+DELIMITER //
+CREATE PROCEDURE viewTransactionByDebtIdDesc(in debtId int)
+BEGIN
+	select t.* from transaction t
+    where t.debt_id_debt = debtId 
+    order by t.update_transaction_on desc;
 END //
 DELIMITER ;
 
@@ -362,13 +379,14 @@ DELIMITER ;
 
 -- delete transaction
 DELIMITER //
-CREATE PROCEDURE DeleteTransactionByTransactionId(
+CREATE PROCEDURE deleteTransactionByTransactionId(
     IN transactionId INT,
     IN stmTransaction DECIMAL(10, 2),
     IN stmType VARCHAR(10),
     IN walletId INT,
     IN goalIdGoal INT,
-    IN debtIdDebt INT
+    IN debtIdDebt INT,
+	IN transactionDate DATETIME
 )
 BEGIN
     DECLARE balanceAdjustment DECIMAL(10, 2);
@@ -409,8 +427,13 @@ BEGIN
         UPDATE debt
 		SET total_paid_debt = total_paid_debt - stmTransaction,
 			num_of_paid_period = num_of_paid_period - 1
---             latest_pay_date = dateTransaction
 		WHERE id_debt = debtIdDebt;
+        
+        IF transactionDate IS NOT NULL THEN
+			UPDATE debt
+			SET latest_pay_date = transactionDate
+			WHERE id_debt = debtIdDebt;
+        END IF;
         
 		UPDATE debt
 		SET status_debt = 1
@@ -617,6 +640,19 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- view transaction category by transaction category
+DELIMITER //
+CREATE PROCEDURE `viewTransactionCategoryByTranCat`( 
+    IN tranCatType INT 
+)
+BEGIN
+  SELECT * FROM transaction_category
+  WHERE type_category = tranCatType 
+  AND id_transaction_category NOT IN (32, 33);
+END //
+DELIMITER ;
+
 
 -- account  
 -- create account guest by use imei

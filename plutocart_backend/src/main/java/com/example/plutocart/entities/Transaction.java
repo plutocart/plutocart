@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -37,10 +38,10 @@ public class Transaction {
     private String imageUrl;
 
     @Column(name = "create_transaction_on", nullable = false)
-    private Instant createTransactionOn;
+    private LocalDateTime createTransactionOn;
 
     @Column(name = "update_transaction_on", nullable = false)
-    private Instant updateTransactionOn;
+    private LocalDateTime updateTransactionOn;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

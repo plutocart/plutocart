@@ -263,16 +263,8 @@ public class TransactionService {
 
         TReqDelTran tReqDelTran = transactionValidationService.validationDeleteTransaction(accountId, walletId, transactionId);
 
-//        Transaction transaction = transactionRepository.viewTransactionByTransactionId(tReqDelTran.getTransactionId());
-
-//        TResDelDTO transactionResponse = modelMapper.map(transaction, TResDelDTO.class);
-
-//        if (transaction.getWalletIdWallet().getWalletId() == tReqPostTran.getWalletId() && transaction.getId() == tReqPostTran.getTransactionId()) {
-//            cloudinaryService.deleteImageOnCloudInTransaction(transactionResponse.getTransactionId());
-        transactionRepository.deleteTransactionByTransactionId(tReqDelTran.getTransactionId(), tReqDelTran.getStmTransaction(), tReqDelTran.getStmType(), tReqDelTran.getWalletId(), tReqDelTran.getGoalId(), tReqDelTran.getDebtId());
-//        } else {
-//            throw new Exception();
-//        }
+        transactionRepository.deleteTransactionByTransactionId(tReqDelTran.getTransactionId(), tReqDelTran.getStmTransaction(),
+                tReqDelTran.getStmType(), tReqDelTran.getWalletId(), tReqDelTran.getGoalId(), tReqDelTran.getDebtId(), tReqDelTran.getTransactionDate());
 
         transactionResponse.setTransactionId(tReqDelTran.getTransactionId());
         transactionResponse.setWalId(tReqDelTran.getWalletId());
@@ -283,13 +275,4 @@ public class TransactionService {
         return response;
     }
 
-//    public List<Transaction> getTransactionByAccountId(int accountId) {
-//        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(accountId).orElseThrow().getAccountId());
-////        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountId);
-////        Object response = transactionList.stream().map(e -> modelMapper.map(e, Transaction.class)).collect(Collectors.toList());
-////        Transformation transformation = new Transformation().width(300).height(200).crop("fill");
-////        cloudinary.url().transformation(new Transformation()).generate(imageRepository.getImageById(id));
-//        System.out.println(transactionList);
-//        return transactionList;
-//    }
 }

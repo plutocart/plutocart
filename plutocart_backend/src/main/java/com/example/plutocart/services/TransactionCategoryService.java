@@ -7,6 +7,7 @@ import com.example.plutocart.utils.GenericResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,10 +19,11 @@ public class TransactionCategoryService {
     @Autowired
     TransactionCategoryRepository transactionCategoryRepository;
 
+    @Transactional
     public GenericResponse getAllTransactionCategoryType(Integer tranCaType) {
         GenericResponse response = new GenericResponse();
         try {
-            List<TransactionCategory> transactionCategoryList = transactionCategoryRepository.getAllTransactionCategory(tranCaType);
+            List<TransactionCategory> transactionCategoryList = transactionCategoryRepository.getTransactionCategoryByTranCat(tranCaType);
             response.setStatus(ResultCode.SUCCESS);
             response.setData(transactionCategoryList);
             return response;

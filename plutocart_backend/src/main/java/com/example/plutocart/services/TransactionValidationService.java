@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -308,6 +309,7 @@ public class TransactionValidationService {
     public TReqDelTran validationDeleteTransaction(String accountId, String walletId, String transactionId) throws Exception {
         Integer goId = null;
         Integer deId = null;
+        LocalDateTime transactionDate = null;
 
         if (!HelperMethod.isInteger(accountId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
@@ -355,6 +357,10 @@ public class TransactionValidationService {
             if (debt == null)
                 throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
 
+            List<Transaction> transactionList = transactionRepository.viewTransactionByDebtIdDesc(deId);
+            if (transactionList.get(0).getId() == tranId)
+                transactionDate = transactionList.get(1).getUpdateTransactionOn();
+
 //            List<Transaction> transactionList = transactionRepository.viewTransactionByDebtId(deId);
 //            if (transactionList.size() > 1) {
 //                for (Transaction transactionInList : transactionList) {
@@ -375,6 +381,7 @@ public class TransactionValidationService {
         tReqDelTran.setStmType(transaction.getStatementType());
         tReqDelTran.setGoalId(goId);
         tReqDelTran.setDebtId(deId);
+        tReqDelTran.setTransactionDate(transactionDate);
         return tReqDelTran;
     }
 
