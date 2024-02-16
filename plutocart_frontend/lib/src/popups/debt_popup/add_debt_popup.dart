@@ -132,16 +132,11 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
           ),
           AmountTextField(
               amountMoneyController: amountDebtController,
-              nameField: "Amount of debt"),
+              nameField: "Total debt"),
           SizedBox(
             height: 15,
           ),
-          AmountTextField(
-              amountMoneyController: payDatePMonthController,
-              nameField: "Pay debt per month"),
-          SizedBox(
-            height: 15,
-          ),
+         
           TextField(
             readOnly: true,
             controller: payPeriodController,
@@ -149,7 +144,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               color: Color(0xFF15616D),
             ),
             decoration: InputDecoration(
-              labelText: "Pay period",
+              labelText: "Total period",
               labelStyle: TextStyle(color: payPeriodController.text.length != 0 ?  Color(0xFF1A9CB0) : Colors.red),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 2, color: payPeriodController.text.length != 0 ?  Color(0xFF15616D) : Colors.red),
@@ -181,7 +176,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               color: Color(0xFF15616D),
             ),
             decoration: InputDecoration(
-              labelText: "How mant months have you paid",
+              labelText: "Paid period(s)",
               labelStyle: TextStyle(color: monthHToPayController.text.length != 0 ? Color(0xFF1A9CB0) : Colors.red),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 2, color: monthHToPayController.text.length != 0 ?  Color(0xFF15616D) : Colors.red),
@@ -211,7 +206,14 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               ),
             ),
           ) , 
+          
            SizedBox(
+            height: 15,
+          ),
+           AmountTextField(
+              amountMoneyController: payDatePMonthController,
+              nameField: "Monthly payment"),
+          SizedBox(
             height: 15,
           ),
           AmountTextField(

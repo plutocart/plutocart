@@ -232,8 +232,8 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE deleteWalletBYWalletId( in accountId int , in walletId int)
 BEGIN
-   -- DELETE FROM transaction WHERE wallet_id_wallet = walletId;
-	DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
+   DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
+
 END //
 DELIMITER ;
 
@@ -878,12 +878,23 @@ DELIMITER //
 CREATE PROCEDURE `deleteAccount`(IN InAccountId INT)
 BEGIN
   SET @wallet_ids = (SELECT GROUP_CONCAT(id_wallet) FROM wallet WHERE account_id_account = InAccountId);
-  
+  DECLARE debt_count INT;
+ DECLARE goal_count INT;
+    SELECT COUNT(*) into debt_count  FROM debt WHERE account_id_account = accountId;
+    SELECT COUNT(*) into goal_count  FROM goal WHERE account_id_account = accountId;
+    if debt_count > 0 THEN 
+        DELETE FROM debt WHERE account_id_account = accountId;
+        END IF;
+    if goal_count > 0 THEN
+         DELETE FROM goal WHERE account_id_account = accountId;
+         END IF;
   WHILE LENGTH(@wallet_ids) > 0 DO
     SET @wallet_id = SUBSTRING_INDEX(@wallet_ids, ',', 1);
     CALL deleteWalletBYWalletId(InAccountId, @wallet_id);
+    DELETE FROM transaction WHERE wallet_id_wallet =  @wallet_id;
     SET @wallet_ids = TRIM(BOTH ',' FROM SUBSTRING(@wallet_ids, LENGTH(@wallet_id) + 2));
   END WHILE;
+
   delete from account where id_account = InAccountId;
 END //
 DELIMITER ;
