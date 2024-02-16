@@ -39,7 +39,7 @@ class _GoalPageState extends State<GoalPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Goalssssss",
+                  "Goal",
                   style: TextStyle(
                     color: Color(0xFF15616D),
                     fontSize: 24,

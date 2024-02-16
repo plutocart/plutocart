@@ -1,7 +1,6 @@
 package com.example.plutocart.configuration;
 
 import com.example.plutocart.dtos.wallet.WalletDTO;
-import com.example.plutocart.security.IMEIEncryption;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 
