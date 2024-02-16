@@ -42,7 +42,7 @@ class _GoalPageState extends State<GoalPage> {
                   "Goal",
                   style: TextStyle(
                     color: Color(0xFF15616D),
-                    fontSize: 20,
+                    fontSize: 24,
                     fontWeight: FontWeight.w500,
                     fontFamily: "Roboto",
                   ),
@@ -59,18 +59,53 @@ class _GoalPageState extends State<GoalPage> {
             ),
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                return IconButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<CircleBorder>(
-                      CircleBorder(),
+                return Row(
+                  children: [
+                    IconButton(
+                        alignment: Alignment.centerRight,
+                        splashRadius: 5,
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<CircleBorder>(
+                            CircleBorder(),
+                          ),
+                        ),
+                        onPressed: () async {
+                          await createGoal();
+                          setState(() {
+                            context.read<GoalBloc>().stream.listen((event) {
+                              statusCard = []; // Clear the list
+
+                              context
+                                  .read<GoalBloc>()
+                                  .add(GetGoalByAccountId());
+                              BlocProvider.of<GoalBloc>(context)
+                                  .state
+                                  .goalList!
+                                  .forEach((_) {
+                                statusCard.add(
+                                    false); // Populate the list again if needed
+                              });
+                            });
+                          });
+                        },
+                        icon: Image.asset(
+                          'assets/icon/plus_icon.png',
+                          width: 20,
+                        )),
+                    IconButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<CircleBorder>(
+                          CircleBorder(),
+                        ),
+                      ),
+                      splashRadius: 5,
+                      onPressed: () {
+                        SettingPopUp(state.accountRole, state.email, context);
+                      },
+                      icon: Icon(Icons.settings),
+                      color: Color(0xFF15616D),
                     ),
-                  ),
-                  splashRadius: 20,
-                  onPressed: () {
-                    SettingPopUp(state.accountRole, state.email, context);
-                  },
-                  icon: Icon(Icons.settings),
-                  color: Color(0xFF15616D),
+                  ],
                 );
               },
             )
@@ -84,385 +119,373 @@ class _GoalPageState extends State<GoalPage> {
           padding: const EdgeInsets.only(top: 16),
           child: Column(
             children: [
-              Center(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(width: 1, color: Color(0xB215616D)),
-                    ),
-                    gradient: RadialGradient(
-                      radius: 1,
-                      colors: [Color(0x7AD9ED92), Color(0xB215616D)],
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Image(
-                              image: AssetImage('assets/icon/icon_launch.png'),
-                              width: MediaQuery.of(context).size.width * 0.15,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 30),
-                            child: Image(
-                              image: AssetImage('assets/icon/plus_icon.png'),
-                              width: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      BlocBuilder<WalletBloc, WalletState>(
-                        builder: (context, state) {
-                          return ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16))),
-                              onPressed: () async {
-                                await createGoal();
-                                setState(() {
-                                  context
-                                      .read<GoalBloc>()
-                                      .stream
-                                      .listen((event) {
-                                        
-                                  statusCard = []; // Clear the list
-
-                                    context
-                                        .read<GoalBloc>()
-                                        .add(GetGoalByAccountId());
-                                    BlocProvider.of<GoalBloc>(context)
-                                        .state
-                                        .goalList!
-                                        .forEach((_) {
-                                      statusCard.add(
-                                          false); // Populate the list again if needed
-                                    });
-                                  });
-                                });
-                                print("status card : ${statusCard}");
-                              },
-                              child: Text(
-                                'Click add your new Goal !',
-                                style: TextStyle(
-                                  color: Color(0xFF15616D),
-                                  fontSize: 14,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ));
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ),
               BlocBuilder<GoalBloc, GoalState>(
                 builder: (context, state) {
-                  return Column(
-                    children: List.generate(state.goalList!.length, (index) {
-                      final Map<String, dynamic> goal = state.goalList![index];
-                      final DateTime inputDate =
-                          DateTime.parse(goal['endDateGoal']);
-                      final String formattedDate =
-                          DateFormat('dd MMM yyyy').format(inputDate);
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          height: statusCard[index] == true
-                              ? MediaQuery.of(context).size.height * 0.31
-                              : MediaQuery.of(context).size.height * 0.17,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  side: BorderSide(
-                                    width: 1,
-                                    color: Color(0XFF15616D),
-                                  ))),
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
+                  return Center(
+                    child: Column(
+                      children: List.generate(state.goalList!.length, (index) {
+                        final Map<String, dynamic> goal =
+                            state.goalList![index];
+                        final DateTime inputDate =
+                            DateTime.parse(goal['endDateGoal']);
+                        final String formattedDate =
+                            DateFormat('dd MMM yyyy').format(inputDate);
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Container(
+                            height: statusCard[index] == true
+                                ? MediaQuery.of(context).size.height * 0.33
+                                : MediaQuery.of(context).size.height * 0.2,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: ShapeDecoration(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                foregroundColor: Color(0XFF1A9CB0)),
-                            onPressed: () {
-                              statusCard[index] = !statusCard[index];
-                              setState(() {});
-                            },
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, bottom: 10),
-                                      child: Row(
-                                        children: [
-                                          Image(
-                                            image: AssetImage(
-                                                'assets/icon/Goals-icon.png'),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.04,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 5),
-                                            child: Text("${goal['nameGoal']}",
-                                                style: TextStyle(
-                                                    color: Color(0xFF15616D),
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontFamily: "Roboto")),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.09,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.more_vert_outlined,
-                                          color: Color(
-                                              0XFF707070), // Set the color here
+                                    borderRadius: BorderRadius.circular(20),
+                                    side: BorderSide(
+                                      width: 1,
+                                      color: Color(0XFF15616D),
+                                    ))),
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  foregroundColor: Color(0XFF1A9CB0)),
+                              onPressed: () {
+                                statusCard[index] = !statusCard[index];
+                                setState(() {});
+                              },
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: Row(
+                                          children: [
+                                            Image(
+                                              image: AssetImage(
+                                                  'assets/icon/Goals-icon.png'),
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.04,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5),
+                                              child: Text("${goal['nameGoal']}",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF15616D),
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontFamily: "Roboto")),
+                                            ),
+                                          ],
                                         ),
-                                        onPressed: () async {
-                                          more_vert(goal['id'], goal);
-                                        },
                                       ),
-                                    )
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
-                                      child: Container(
+                                      Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                1,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.05,
-                                        decoration: ShapeDecoration(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            side: BorderSide(
-                                                width: 1, color: Colors.grey),
+                                                0.08,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.more_vert_outlined,
+                                            color: Color(
+                                                0XFF707070), // Set the color here
                                           ),
+                                          onPressed: () async {
+                                            more_vert(goal['id'], goal);
+                                          },
                                         ),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              left: 0,
-                                              top: 0,
-                                              child: Container(
-                                                width: goal['deficit'] / goal[ 'amountGoal'] >= 1 ? MediaQuery.of( context).size .width * 0.8
-                                                    : goal[ 'deficit'] / goal[ 'amountGoal'] <0.1 ? MediaQuery.of( context).size.width * 0.1
-                                                    : goal[ 'deficit'] / goal[ 'amountGoal'] == 0.8 ? MediaQuery.of( context).size.width * 0.733
-                                                    : goal['deficit'] /goal[ 'amountGoal'] > 0.8 ? MediaQuery.of(context).size.width * 0.777
-                                                    : MediaQuery.of( context).size.width * goal['deficit'] / goal['amountGoal'],
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.05,
-                                                decoration: ShapeDecoration(
-                                                  color: Color(0XFF1A9CB0),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    side: BorderSide(
-                                                        width: 1,
-                                                        color: Color(
-                                                            0XFF1A9CB0)), // Change color if needed
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              1,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.05,
+                                          decoration: ShapeDecoration(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              side: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                left: 0,
+                                                top: 0,
+                                                child: Container(
+                                                  width: goal['deficit'] /
+                                                              goal[
+                                                                  'amountGoal'] >=
+                                                          1
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.8
+                                                      : goal['deficit'] / goal['amountGoal'] <
+                                                              0.1
+                                                          ? MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.1
+                                                          : goal['deficit'] /
+                                                                      goal[
+                                                                          'amountGoal'] ==
+                                                                  0.8
+                                                              ? MediaQuery.of(context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.733
+                                                              : goal['deficit'] / goal['amountGoal'] >
+                                                                      0.8
+                                                                  ? MediaQuery.of(context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.777
+                                                                  : MediaQuery.of(context)
+                                                                          .size
+                                                                          .width *
+                                                                      goal['deficit'] /
+                                                                      goal['amountGoal'],
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.05,
+                                                  decoration: ShapeDecoration(
+                                                    color: Color(0XFF1A9CB0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      side: BorderSide(
+                                                          width: 1,
+                                                          color: Color(
+                                                              0XFF1A9CB0)),
+                                                    ),
                                                   ),
                                                 ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              "${((goal['deficit'] / goal['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                              style: TextStyle(
+                                                color: Color(0XFF707070),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "Roboto",
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5),
-                                                child: Text(
-                                                    "${goal['deficit']} ฿",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto")),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 5),
-                                                child: Text("/",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: "Roboto")),
-                                              ),
-                                              Text("${goal['amountGoal']} ฿",
-                                                  style: TextStyle(
-                                                      color: Color(0xFF1A9CB0),
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: "Roboto")),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text("${formattedDate}",
-                                                  style: TextStyle(
-                                                      color: Color(0XFF707070),
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: "Roboto")),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    statusCard[index] == true
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
                                               children: [
-                                                Column(
-                                                  children: [
-                                                    Text("Saving money",
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF15616D),
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontFamily:
-                                                                "Roboto")),
-                                                    Text("${goal['deficit']} ฿",
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF2DC653),
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                "Roboto")),
-                                                  ],
-                                                ),
-                                                Container(
-                                                  height: 40,
-                                                  decoration: ShapeDecoration(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                        width: 0.8,
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                      ),
-                                                      borderRadius: BorderRadius
-                                                          .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                                    ),
-                                                  ),
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text("Remainder",
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF15616D),
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontFamily:
-                                                                "Roboto")),
-                                                    Text(
-                                                      "${(goal['amountGoal'] - goal['deficit']).toStringAsFixed(2)} ฿",
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 2),
+                                                  child: Text(
+                                                      "${goal['deficit']}",
                                                       style: TextStyle(
+                                                          color:
+                                                              Color(0xFF15616D),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily:
+                                                              "Roboto")),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 2),
+                                                  child: Text("/",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Color(0xFF15616D),
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily:
+                                                              "Roboto")),
+                                                ),
+                                                Text("${goal['amountGoal']}",
+                                                    style: TextStyle(
                                                         color:
-                                                            Color(0XFF1A9CB0),
-                                                        fontSize: 15,
+                                                            Color(0xFF1A9CB0),
+                                                        fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        fontFamily: "Roboto",
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                        fontFamily: "Roboto")),
                                               ],
                                             ),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                statusCard[index] == true
-                                    ? Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.055,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Color(0XFF15616D),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16))),
-                                            onPressed: () {},
-                                            child: Text("Complete")),
-                                      )
-                                    : SizedBox.shrink()
-                              ],
+                                            Row(
+                                              children: [
+                                                Text("${formattedDate}",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0XFF707070),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: "Roboto")),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      statusCard[index] == true
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      Text("Saving money",
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto")),
+                                                      Text(
+                                                          "${goal['deficit']} ฿",
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF2DC653),
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  "Roboto")),
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 15),
+                                                    child: Container(
+                                                      height: 40,
+                                                      decoration:
+                                                          ShapeDecoration(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          borderRadius: BorderRadius
+                                                              .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text("Remainder",
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto")),
+                                                      Text(
+                                                        "${(goal['amountGoal'] - goal['deficit']).abs().toStringAsFixed(2)} ฿",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0XFF1A9CB0),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: "Roboto",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox.shrink(),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  statusCard[index] == true
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.055,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Color(0XFF15616D),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16))),
+                                              onPressed: () {
+                                                context.read<GoalBloc>().add(
+                                                    CompleteGoal(goal['id']));
+                                              },
+                                              child: Text("Complete")),
+                                        )
+                                      : SizedBox.shrink()
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
+                    ),
                   );
                 },
               )

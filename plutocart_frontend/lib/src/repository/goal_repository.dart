@@ -122,5 +122,32 @@ class GoalRepository{
     }
   }
 
+    Future<Map<String, dynamic>> completeGoal(int goalId ) async {
+    final storage =  FlutterSecureStorage();
+    String? accountId = await storage.read(key: "accountId");
+    String? token = await storage.read(key: "token");
+    int id = int.parse(accountId!);
+    try {
+      print("start update goal");
+      Response response = await dio.patch(
+        '${dotenv.env['API']}/api/account/${id}/goal/${goalId}/complete-now',
+        options: 
+          Options(
+                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+          ) , 
+      );
+      print("update email  ${response.data}");
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('Error: ${'404'}');
+      }
+    } catch (error) {
+      print("Error update email to member success $error");
+      throw error;
+    }
+  }
+
   
 }

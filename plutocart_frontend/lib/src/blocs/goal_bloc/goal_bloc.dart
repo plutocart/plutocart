@@ -166,6 +166,34 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   }
 });
 
+     on<CompleteGoal>((event, emit) async {
+  try {
+    print("start complete goal in bloc");
+    Map<String, dynamic> response = await GoalRepository().completeGoal(event.goalId);
+    print("after complete goal  in bloc: $response");
+
+    if (response['data'] == null) {
+      print("Error updating goal: ${response['error']}");
+    } else {
+      print("Update successful. Response data: ${response['data']}");
+
+      if (response['data'] is Map<String, dynamic>) {
+        emit(state.copyWith(
+          updateGoalStatus: GoalStatus.loaded,
+          nameGoal: response['data']['nameGoal'],
+          amountGoal: response['data']['amountGoal'],
+          deficit: response['data']['deficit'],
+          endDateGoalString: response['data']['endDateGoal'],
+        ));
+      } else {
+        print("Invalid response data structure.");
+      }
+    }
+  } catch (error) {
+    print('Error updating goal: $error');
+  }
+});
+
 
 
   }

@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                     "Plutocart",
                     style: TextStyle(
                       color: Color(0xFF15616D),
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.w500,
                       fontFamily: "Roboto",
                     ),

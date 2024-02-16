@@ -220,7 +220,7 @@ class _CardWalletState extends State<CardWallet> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                        color: Color(0XFF1A9CB0), // Set the border color to red
+                        color: Color(0xFF15616D), // Set the border color to red
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -243,7 +243,7 @@ class _CardWalletState extends State<CardWallet> {
                                     : wallet.walletName,
                                 style: TextStyle(
                                     color: Color(0xFF15616D),
-                                    fontSize: 14,
+                                    fontSize: 20,
                                     fontFamily: "Roboto",
                                     fontWeight: FontWeight.w500),
                               )),
@@ -351,7 +351,7 @@ class _CardWalletState extends State<CardWallet> {
                                       decoration: ShapeDecoration(
                                         shape: RoundedRectangleBorder(
                                           side: BorderSide(
-                                            width: 1.5,
+                                            width: 1,
                                             color: Color(0xFF15616D),
                                           ),
                                           borderRadius: BorderRadius
@@ -374,7 +374,6 @@ class _CardWalletState extends State<CardWallet> {
                                 ),
                                 BlocBuilder<TransactionBloc, TransactionState>(
                                   builder: (context, state) {
-                                    print("index ;;; : ${index}");
                                     return Column(
                                       children: [
                                         Text(

@@ -166,7 +166,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                 ), // ตัวอย่าง icon button เป็น calendar_today
                 onPressed: () {
                   addPayPeriod(context, integerValuePayPeriod!,
-                      payPeriodController, 1, 360);
+                      payPeriodController, 1, 36);
                 },
               ),
             ),

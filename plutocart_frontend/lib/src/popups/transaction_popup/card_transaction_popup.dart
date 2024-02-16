@@ -34,6 +34,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
   @override
   void initState() {
     DateTime now = DateTime.now();
+    context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
+       context.read<TransactionCategoryBloc>().add(GetTransactionCategoryExpense());
     String formattedDateTime =
         '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
     tranDateController.text = formattedDateTime;

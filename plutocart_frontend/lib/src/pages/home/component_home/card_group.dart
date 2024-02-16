@@ -10,7 +10,7 @@ import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.da
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:intl/intl.dart';
-import 'dart:math' as math;
+
 
 class CardGroup extends StatefulWidget {
   final String subject;
@@ -52,7 +52,7 @@ class _CardGroupState extends State<CardGroup> {
                             ? MediaQuery.of(context).size.height * 0.24
                             : MediaQuery.of(context).size.height * 0.33
                     : widget.numberPopup == 3 && widget.lengthData > 0
-                        ? MediaQuery.of(context).size.height * 0.27
+                        ? MediaQuery.of(context).size.height * 0.26
                         : MediaQuery.of(context).size.height * 0.17,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -76,7 +76,7 @@ class _CardGroupState extends State<CardGroup> {
                         strokeAlign: BorderSide.strokeAlignInside,
                         color: state.status == WalletStatus.loading
                             ? Colors.white
-                            : Color(0xFF1A9CB0),
+                            : Color(0xFF15616D),
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -294,7 +294,7 @@ class _CardGroupState extends State<CardGroup> {
                                                             style: TextStyle(
                                                                 color:
                                                                     Color(0xFF15616D),
-                                                                fontSize: 16,
+                                                                fontSize: 20,
                                                                 fontWeight:
                                                                     FontWeight.w500,
                                                                 fontFamily: "Roboto")),
@@ -389,130 +389,81 @@ class _CardGroupState extends State<CardGroup> {
                                               ),
                                             ),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(
-                                                        right: 5 , left:  20),
-                                                    child: Text(
-                                                        "${state.goalList![state.goalList!.length - 1]['deficit']} ฿",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Color(0xFF15616D),
-                                                            fontSize: 13,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily: "Roboto")),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(
-                                                        right: 5),
-                                                    child: Text("/",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Color(0xFF15616D),
-                                                            fontSize: 13,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily: "Roboto")),
-                                                  ),
-                                                  Text("${state.goalList![state.goalList!.length - 1]['amountGoal']} ฿",
-                                                      style: TextStyle(
-                                                          color: Color(0xFF1A9CB0),
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily: "Roboto")),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(right: 20),
-                                                child: Row(
+                                           Padding(
+                                             padding: const EdgeInsets.only(right: 10 , top: 10),
+                                             child: Row(
+                                               mainAxisAlignment: MainAxisAlignment.end,
+                                               children: [
+                                                 Text(
+                                                   "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                                   style: TextStyle(
+                                                     color: Color(0XFF707070),
+                                                     fontSize: 14,
+                                                     fontWeight: FontWeight.w500,
+                                                     fontFamily: "Roboto",
+                                                   ),
+                                                 ),
+                                               ],
+                                             ),
+                                           ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
                                                   children: [
-                                                    Text("${formattedDate}",
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          right: 2 , left:  20),
+                                                      child: Text(
+                                                          "${state.goalList![state.goalList!.length - 1]['deficit']}",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Color(0xFF15616D),
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              fontFamily: "Roboto")),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          right: 2),
+                                                      child: Text("/",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Color(0xFF15616D),
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              fontFamily: "Roboto")),
+                                                    ),
+                                                    Text("${state.goalList![state.goalList!.length - 1]['amountGoal']}",
                                                         style: TextStyle(
-                                                            color: Color(0XFF707070),
+                                                            color: Color(0xFF1A9CB0),
                                                             fontSize: 13,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontFamily: "Roboto")),
                                                   ],
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Text("Saving money",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xFF15616D),
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontFamily:
-                                                              "Roboto")),
-                                                  Text(
-                                                      "${state.goalList![state.goalList!.length - 1]['deficit']} ฿",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xFF2DC653),
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily: "Roboto"))
-                                                ],
-                                              ),
-                                              Skeleton.ignore(
-                                                child: Container(
-                                                  height: 40,
-                                                  decoration: ShapeDecoration(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                        width: 0.5,
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                      ),
-                                                      borderRadius: BorderRadius
-                                                          .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                                    ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 10),
+                                                  child: Row(
+                                                    children: [
+                                                      Text("${formattedDate}",
+                                                          style: TextStyle(
+                                                              color: Color(0XFF707070),
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              fontFamily: "Roboto")),
+                                                    ],
                                                   ),
-                                                ),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Text(
-                                                    "Remainder",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF15616D),
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontFamily: "Roboto"),
-                                                  ),
-                                                  Text(
-                                                      "${(state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit']) < 0 ? 0 : (state.goalList![state.goalList!.length - 1]['amountGoal'] - state.goalList![state.goalList!.length - 1]['deficit']).toStringAsFixed(2)} ฿",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0XFF1A9CB0),
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily:
-                                                              "Roboto")),
-                                                ],
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                        
                                         ],
