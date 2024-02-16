@@ -39,7 +39,7 @@ class _GoalPageState extends State<GoalPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Goal",
+                  "Goalssssss",
                   style: TextStyle(
                     color: Color(0xFF15616D),
                     fontSize: 24,
@@ -115,14 +115,14 @@ class _GoalPageState extends State<GoalPage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Padding(
+        child:   Padding(
           padding: const EdgeInsets.only(top: 16),
           child: Column(
             children: [
               BlocBuilder<GoalBloc, GoalState>(
                 builder: (context, state) {
-                  return Center(
-                    child: Column(
+                  return   Center(
+                    child: state.goalList!.length == 0 ? Text("Empty Goal") : Column(
                       children: List.generate(state.goalList!.length, (index) {
                         final Map<String, dynamic> goal =
                             state.goalList![index];
@@ -130,7 +130,7 @@ class _GoalPageState extends State<GoalPage> {
                             DateTime.parse(goal['endDateGoal']);
                         final String formattedDate =
                             DateFormat('dd MMM yyyy').format(inputDate);
-                        return Padding(
+                        return   Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Container(
                             height: statusCard[index] == true
@@ -293,7 +293,7 @@ class _GoalPageState extends State<GoalPage> {
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             Text(
-                                              "${((goal['deficit'] / goal['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                              "${((goal['deficit'] / goal['amountGoal']) * 100).abs().toStringAsFixed(2)}%",
                                               style: TextStyle(
                                                 color: Color(0XFF707070),
                                                 fontSize: 14,

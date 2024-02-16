@@ -395,7 +395,7 @@ class _CardGroupState extends State<CardGroup> {
                                                mainAxisAlignment: MainAxisAlignment.end,
                                                children: [
                                                  Text(
-                                                   "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                                   "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(2)}%",
                                                    style: TextStyle(
                                                      color: Color(0XFF707070),
                                                      fontSize: 14,
