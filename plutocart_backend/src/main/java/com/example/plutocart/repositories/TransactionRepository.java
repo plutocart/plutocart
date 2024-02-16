@@ -20,6 +20,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> viewTransactionByAccountId(Integer accountId);
 
     @Transactional
+    @Procedure(procedureName = "viewTransactionByDebtIdDesc")
+    List<Transaction> viewTransactionByDebtIdDesc(Integer debtId);
+
+    @Transactional
     @Procedure(procedureName = "viewTransactionByAccountIdLimitThree")
     List<Transaction> viewTransactionByAccountIdLimitThree(Integer accountId);
 
@@ -69,7 +73,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     void InsertIntoTransactionByWalletId(Integer walletId, BigDecimal stmTransaction, Integer statementType, LocalDateTime dateTransaction,
                                          Integer transactionCategoryId, String description, String imageUrl, Integer debtIdDebt, Integer goalIdGoal);
 
-
 //    @Transactional
 //    @Modifying
 //    @Query(value = "UPDATE transaction SET image_url = :imageUrl WHERE id_transaction = :transactionId", nativeQuery = true)
@@ -77,8 +80,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     @Transactional
     @Modifying
-    @Procedure(procedureName = "DeleteTransactionByTransactionId")
-    void deleteTransactionByTransactionId(Integer transactionId, BigDecimal stmTransaction, String stmType, Integer walletId, Integer goalId, Integer debtId);
+    @Procedure(procedureName = "deleteTransactionByTransactionId")
+    void deleteTransactionByTransactionId(Integer transactionId, BigDecimal stmTransaction, String stmType, Integer walletId, Integer goalId, Integer debtId, LocalDateTime transactionDate);
 
     @Transactional
     @Modifying

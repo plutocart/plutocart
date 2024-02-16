@@ -5,6 +5,7 @@ import com.example.plutocart.entities.TransactionCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,12 @@ public interface TransactionCategoryRepository extends JpaRepository<Transaction
     TransactionCategory viewTransactionCategoryById(Integer transactionCategoryId);
 
     @Transactional
-    @Query(value = "select * from transaction_category  where type_category = :tranCaType " , nativeQuery = true)
+    @Query(value = "select * from transaction_category  where type_category = :tranCaType" , nativeQuery = true)
     List<TransactionCategory> getAllTransactionCategory(Integer tranCaType);
+
+    @Transactional
+    @Procedure(procedureName = "viewTransactionCategoryByTranCat")
+    List<TransactionCategory> getTransactionCategoryByTranCat(Integer tranCaType);
 
 
 }
