@@ -17,6 +17,7 @@ class TransactionState extends Equatable {
   final TransactionStatus goalStatus;
   final List<dynamic> transactionsDailyInExList;
   final List<dynamic> transactionLimit3;
+  final List<dynamic> transactionList;
 
   TransactionState(
       {this.id = 0,
@@ -31,6 +32,7 @@ class TransactionState extends Equatable {
       this.expenseStatus = TransactionStatus.loading,
       this.transactionsDailyInExList = const [],
       this.transactionLimit3 = const [],
+      this.transactionList = const [],  
       this.goalId = 0,
       this.goalStatus = TransactionStatus.loading})
       : dateTransaction = dateTransaction ?? DateTime.now();
@@ -48,6 +50,7 @@ class TransactionState extends Equatable {
       TransactionStatus? expenseStatus,
       List<dynamic>? transactionsDailyInExList,
       List<dynamic>? transactionLimit3,
+      List<dynamic>? transactionList,
       int? goalId,
       TransactionStatus? goalStatus}) {
     return TransactionState(
@@ -65,6 +68,7 @@ class TransactionState extends Equatable {
         transactionsDailyInExList:
             transactionsDailyInExList ?? this.transactionsDailyInExList,
         transactionLimit3: transactionLimit3 ?? this.transactionLimit3,
+        transactionList: transactionList ?? this.transactionList,
         goalId: goalId ?? this.goalId,
         goalStatus: goalStatus ?? this.goalStatus);
   }
@@ -82,6 +86,7 @@ class TransactionState extends Equatable {
         incomeStatus,
         expenseStatus,
         transactionsDailyInExList,
+        transactionList,
         transactionLimit3 , goalId , goalStatus,
       ];
 }

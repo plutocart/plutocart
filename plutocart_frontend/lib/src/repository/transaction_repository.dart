@@ -149,7 +149,7 @@ class TransactionRepository {
         return response.data['data'];
       } else {
         throw Exception(
-            'Error get Goal from goal repository: ${response.statusCode}');
+            'Error get Transaction from trasaction repository: ${response.statusCode}');
       }
     } catch (error) {
       print("Error: $error");

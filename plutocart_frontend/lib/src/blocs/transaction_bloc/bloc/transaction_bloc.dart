@@ -56,6 +56,22 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       },
     );
 
+        on<GetTransactionList>(
+      (event, emit) async {
+        List<dynamic> response =
+            await TransactionRepository().getTransactionByAccountId();
+        print("Start get transaction by account id");
+        try {
+          emit(state.copyWith(transactionList: response));
+          print(
+              "state.transactionsList : ${state.transactionList[0]}");
+        } catch (e) {
+          print("Error state.transactionList");
+        }
+      },
+    );
+
+
     on<CreateTransaction>((event, emit) async {
       print("start working create transaction income");
       try {

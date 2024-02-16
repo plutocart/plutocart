@@ -46,5 +46,7 @@ class GetTransactionDailyInEx extends TransactionEvent {}
 
 class GetTransactionLimit3 extends TransactionEvent {}
 
-  class ResetTransaction extends TransactionEvent {}
+class ResetTransaction extends TransactionEvent {}
+
+class GetTransactionList extends TransactionEvent {}
 
