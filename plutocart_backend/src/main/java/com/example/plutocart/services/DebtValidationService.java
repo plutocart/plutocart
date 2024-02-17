@@ -54,7 +54,7 @@ public class DebtValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount of debt must be number. ");
 
         BigDecimal amountD = new BigDecimal(amountDebt);
-        Double amountDebtDouble = Double.valueOf(amountDebt);
+//        Double amountDebtDouble = Double.valueOf(amountDebt);
 
         if (StringUtils.isEmpty(payPeriod) || !HelperMethod.isInteger(payPeriod) || Integer.parseInt(payPeriod) <= 0 || Integer.parseInt(payPeriod) > 360)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "pay period of debt must be number and minimum is 1 maximum is 360. ");
@@ -76,10 +76,10 @@ public class DebtValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "paid debt per period must be number. ");
 
         BigDecimal paidDebtPerP = new BigDecimal(paidDebtPerPeriod);
-        Double paidDebtPerPeriodDouble = Double.valueOf(paidDebtPerPeriod);
+//        Double paidDebtPerPeriodDouble = Double.valueOf(paidDebtPerPeriod);
 
-        if ((amountDebtDouble / payP) != paidDebtPerPeriodDouble)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid paid debt per period for this debt. ");
+//        if ((amountDebtDouble / payP) != paidDebtPerPeriodDouble)
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid paid debt per period for this debt. ");
 
         if (StringUtils.isEmpty(totalPaidDebt) || !HelperMethod.isDecimal(totalPaidDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "total paid of debt must be number. ");
@@ -130,7 +130,7 @@ public class DebtValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount of debt must be number. ");
 
         BigDecimal amountD = new BigDecimal(amountDebt);
-        Double amountDebtDouble = Double.valueOf(amountDebt);
+//        Double amountDebtDouble = Double.valueOf(amountDebt);
 
         if (StringUtils.isEmpty(payPeriod) || !HelperMethod.isInteger(payPeriod) || Integer.parseInt(payPeriod) <= 0 || Integer.parseInt(payPeriod) > 360)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "pay period of debt must be number and minimum is 1 maximum is 360. ");
@@ -152,10 +152,10 @@ public class DebtValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "paid debt per period must be number. ");
 
         BigDecimal paidDebtPerP = new BigDecimal(paidDebtPerPeriod);
-        Double paidDebtPerPeriodDouble = Double.valueOf(paidDebtPerPeriod);
+//        Double paidDebtPerPeriodDouble = Double.valueOf(paidDebtPerPeriod);
 
-        if ((amountDebtDouble / payP) != paidDebtPerPeriodDouble)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid paid debt per period for this debt. ");
+//        if ((amountDebtDouble / payP) != paidDebtPerPeriodDouble)
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid paid debt per period for this debt. ");
 
         if (StringUtils.isEmpty(totalPaidDebt) || !HelperMethod.isDecimal(totalPaidDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "total paid of debt must be number. ");
