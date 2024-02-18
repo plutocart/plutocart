@@ -37,7 +37,7 @@ public class TransactionValidationService {
     @Autowired
     DebtRepository debtRepository;
 
-    public TReqPostTran validationCreateTransaction(String accountId, String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId, String goalId, String debtId) throws PlutoCartServiceApiException, IOException {
+    public TReqPostTran validationCreateTransaction(String accountId, String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId, String description, String goalId, String debtId) throws PlutoCartServiceApiException, IOException {
         String imageUrl = null;
         String stmTranTrim = stmTransaction.trim();
         String stmTyTrim = stmType.trim();
@@ -95,6 +95,9 @@ public class TransactionValidationService {
 
         if (!transactionCategory.getTypeCategory().equals(sTypeString))
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
+
+        if (description.length() > 100)
+            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description is over max length. ");
 
         if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
@@ -157,7 +160,7 @@ public class TransactionValidationService {
         return tReqPostTran;
     }
 
-    public TReqPostTran validationUpdateTransaction(String accountId, String walletId, String transactionId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId, String goalId, String debtId) throws Exception {
+    public TReqPostTran validationUpdateTransaction(String accountId, String walletId, String transactionId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId, String description, String goalId, String debtId) throws Exception {
         String imageUrl = null;
         String stmTranTrim = stmTransaction.trim();
         String stmTyTrim = stmType.trim();
@@ -227,6 +230,9 @@ public class TransactionValidationService {
 
         if (!transactionCategory.getTypeCategory().equals(sTypeString))
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
+
+        if (description.length() > 100)
+            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description is over max length. ");
 
         if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
