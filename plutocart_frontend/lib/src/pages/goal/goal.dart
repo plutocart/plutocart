@@ -124,17 +124,17 @@ class _GoalPageState extends State<GoalPage> {
                   return Center(
                     child: state.goalList!.length == 0
                         ? Container(
-                          constraints: 
-                          BoxConstraints(
-                             minHeight: MediaQuery.of(context).size.height * 0.8
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            constraints: BoxConstraints(
+                                minHeight:
+                                    MediaQuery.of(context).size.height * 0.7),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image(
                                   image:
                                       AssetImage('assets/icon/icon_launch.png'),
-                                  width: MediaQuery.of(context).size.width * 0.3,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                 ),
                                 Text("No record",
                                     style: TextStyle(
@@ -144,7 +144,7 @@ class _GoalPageState extends State<GoalPage> {
                                         fontFamily: "Roboto")),
                               ],
                             ),
-                        )
+                          )
                         : Column(
                             children:
                                 List.generate(state.goalList!.length, (index) {
@@ -159,19 +159,30 @@ class _GoalPageState extends State<GoalPage> {
                                 child: Container(
                                   height: statusCard[index] == true
                                       ? MediaQuery.of(context).size.height *
-                                          0.33
+                                          0.35
                                       : MediaQuery.of(context).size.height *
-                                          0.2,
+                                          0.21,
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
-                                  decoration: ShapeDecoration(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          side: BorderSide(
-                                            width: 1,
-                                            color: Color(0XFF15616D),
-                                          ))),
+                                 decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      width: 1.5,
+                                      color: Color(0XFF15616D),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(
+                                            0.2), 
+                                        spreadRadius: 0, 
+                                        blurRadius: 2, 
+                                        offset: Offset(2,
+                                            2), 
+                                      ),
+                                    ],
+                                    color: Colors.white, // Background color
+                                  ),
                                   child: OutlinedButton(
                                     style: OutlinedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
@@ -193,15 +204,7 @@ class _GoalPageState extends State<GoalPage> {
                                                   top: 10, bottom: 10),
                                               child: Row(
                                                 children: [
-                                                  Image(
-                                                    image: AssetImage(
-                                                        'assets/icon/Goals-icon.png'),
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.04,
-                                                  ),
+                                                  Image.network('https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441684/category_images/Goals_76349a46-07b8-4024-97f5-9eb118aa533d.png' , width: MediaQuery.of(context).size.width * 0.1,),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -327,7 +330,7 @@ class _GoalPageState extends State<GoalPage> {
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  bottom: 10),
+                                                  bottom: 8),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -338,7 +341,7 @@ class _GoalPageState extends State<GoalPage> {
                                                       color: Color(0XFF707070),
                                                       fontSize: 14,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                          FontWeight.w400,
                                                       fontFamily: "Roboto",
                                                     ),
                                                   ),
@@ -360,43 +363,38 @@ class _GoalPageState extends State<GoalPage> {
                                                             const EdgeInsets
                                                                 .only(right: 2),
                                                         child: Text(
-                                                            "${goal['deficit']}",
+                                                            "${goal['deficit'].toStringAsFixed(2)}฿",
                                                             style: TextStyle(
                                                                 color: Color(
                                                                     0xFF15616D),
-                                                                fontSize: 14,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
                                                                 fontFamily:
                                                                     "Roboto")),
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 2),
-                                                        child: Text("/",
-                                                            style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF15616D),
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                fontFamily:
-                                                                    "Roboto")),
-                                                      ),
-                                                      Text(
-                                                          "${goal['amountGoal']}",
+                                                          Text("/",
                                                           style: TextStyle(
                                                               color: Color(
-                                                                  0xFF1A9CB0),
+                                                                  0xFF15616D),
                                                               fontSize: 14,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w500,
+                                                                      .w400,
                                                               fontFamily:
-                                                                  "Roboto")),
+                                                                  "Roboto")) , 
+                                                      Text(  "${goal['amountGoal'].toStringAsFixed(2)}฿",
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto")) , 
+                                                                 
                                                     ],
                                                   ),
                                                   Row(
@@ -408,7 +406,7 @@ class _GoalPageState extends State<GoalPage> {
                                                               fontSize: 14,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w500,
+                                                                      .w400,
                                                               fontFamily:
                                                                   "Roboto")),
                                                     ],
@@ -441,7 +439,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                     fontFamily:
                                                                         "Roboto")),
                                                             Text(
-                                                                "${goal['deficit']} ฿",
+                                                                "${goal['deficit'].toStringAsFixed(2)} ฿",
                                                                 style: TextStyle(
                                                                     color: Color(
                                                                         0xFF2DC653),

@@ -122,6 +122,7 @@ flutter:
     - "assets/icon/Goals-icon.png"
     - "assets/icon/congranturation.png"
     - "assets/icon/calendar_icon.png"
+    - "assets/icon/debt-icon.png"
     - .env
     # - images/a_dot_ham.jpeg
 

@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/pages/debt/companent_debt/DebtDropdown.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
@@ -31,17 +33,6 @@ class CardTransactionPopup extends StatefulWidget {
 }
 
 class _CardTransactionPopupState extends State<CardTransactionPopup> {
-  @override
-  void initState() {
-    DateTime now = DateTime.now();
-    context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
-       context.read<TransactionCategoryBloc>().add(GetTransactionCategoryExpense());
-    String formattedDateTime =
-        '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
-    tranDateController.text = formattedDateTime;
-    super.initState();
-  }
-
   BuildContext? contextAlert;
 
   final GlobalKey<FormFieldState> globalKeyTransaction = GlobalKey();
@@ -49,7 +40,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
   int indexTransactionType = 0;
   int indexWallet = 0;
   int indexGoal = 0;
+  int indexDebt = 0;
   int indexTransactionCategoryType = 0;
+  TextEditingController debtMonthLyPaymentController = TextEditingController();
   TextEditingController amountMoneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
@@ -58,6 +51,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
   int? idTransactionCategory;
   int? idWallet;
   int? idGoal;
+  int? idDebt;
   // image
   XFile? _image;
   File? _imageFile;
@@ -101,11 +95,34 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       idTransactionCategory = null;
       idWallet = null;
       idGoal = null;
+      idDebt = null;
       indexGoal = 0;
+      indexDebt = 0;
       indexWallet = 0;
       globalKeyTransaction.currentState?.reset();
       globalKeyWallet.currentState?.reset();
     });
+  }
+
+  @override
+  void initState() {
+    DateTime now = DateTime.now();
+    context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
+    context
+        .read<TransactionCategoryBloc>()
+        .add(GetTransactionCategoryExpense());
+    String formattedDateTime =
+        '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+    tranDateController.text = formattedDateTime;
+
+    debtMonthLyPaymentController.addListener(() {
+      print("check set state debtId : ${debtMonthLyPaymentController.text}");
+      setState(() {
+        amountMoneyController.text = debtMonthLyPaymentController.text;
+      });
+    });
+
+    super.initState();
   }
 
   @override
@@ -172,6 +189,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                 case 0: // case add income
                 case 1:
                 case 2:
+                case 3:
                   return BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, walletState) {
                       return WalletDropdown(
@@ -216,6 +234,33 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                 ))
             : SizedBox.shrink(),
 
+        indexTransactionType == 3
+            ? Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                child: BlocBuilder<DebtBloc, DebtState>(
+                  builder: (context, debtState) {
+                    print("indexDebt : ${indexDebt}");
+                    print("idDebtsss : ${idDebt}");
+
+                    return DebtDropdown(
+                      debtList: debtState.debtList,
+                      onChanged: (newValueDebt) {
+                        indexDebt = debtState.debtList.indexWhere((element) =>
+                            element['id'].toString() == newValueDebt);
+                        idDebt = debtState.debtList.firstWhere((element) =>
+                            element['id'].toString() == newValueDebt)['id'];
+
+                        debtMonthLyPaymentController.text = debtState.debtList
+                            .firstWhere((element) =>
+                                element['id'].toString() ==
+                                newValueDebt)['paidDebtPerPeriod']
+                            .toString();
+                      },
+                    );
+                  },
+                ))
+            : SizedBox.shrink(),
+
         SizedBox(
           height: 15,
         ),
@@ -234,6 +279,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: DatePickerField(
               tranDateController: tranDateController,
+              nameField: 'Selected date',
             )),
         SizedBox(
           height: 15,
@@ -385,7 +431,44 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             Navigator.pop(context);
                           }
                         });
-
+                      case 3:
+                        int idWalletFormat = int.parse(idWallet.toString());
+                        int idDebtFormat = int.parse(idDebt.toString());
+                        double amount =
+                            double.parse(amountMoneyController.text);
+                        String tranDateFormat =
+                            changeFormatter(tranDateController.text);
+                        showLoadingPagePopUp(context);
+                        context.read<TransactionBloc>().add(
+                            CreateTransactionDebt(
+                                idWalletFormat,
+                                idDebtFormat,
+                                amount,
+                                tranDateFormat,
+                                _imageFile,
+                                descriptionController.text));
+                        context.read<TransactionBloc>().stream.listen((state) {
+                          if (state.debtStatus == TransactionStatus.loaded) {
+                            print("Check t");
+                            context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionDailyInEx());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionLimit3());
+                            context.read<DebtBloc>().add(GetDebtByAccountId());
+                            context.read<DebtBloc>().add(GetDebtByAccountId());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetTransactionDebtStatus());
+                            // context
+                            //     .read<GoalBloc>()
+                            //     .add(CheckGoalComplete(idGoalFormat));
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
                         break;
                     }
                   }

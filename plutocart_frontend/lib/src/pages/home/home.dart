@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     context.read<GoalBloc>().add(GetGoalByAccountId());
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
     context.read<TransactionBloc>().add(GetTransactionLimit3());
+    context.read<DebtBloc>().add(GetDebtByAccountId());
     super.initState();
   }
 
@@ -122,14 +124,18 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 SizedBox(height: 6),
-                CardGroup(
-                  "Debts",
-                  subject: 'Debts',
-                  subjectButton: 'Add A Debt',
-                  nameRoute: AppRoute.debt,
-                  lengthData: 0,
-                  numberPopup: 4,
-                  indexPage: 3,
+                BlocBuilder<DebtBloc, DebtState>(
+                  builder: (context, state) {
+                    return CardGroup(
+                      "Debts",
+                      subject: 'Debts',
+                      subjectButton: 'Add A Debt',
+                      nameRoute: AppRoute.debt,
+                      lengthData: state.debtList.length,
+                      numberPopup: 4,
+                      indexPage: 3,
+                    );
+                  },
                 ),
               ],
             ),

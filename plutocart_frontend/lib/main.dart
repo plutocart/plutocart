@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
@@ -54,6 +55,7 @@ class _MyWidgetState extends State<MyWidget> {
     final transactionBloc = BlocProvider(create: (context) => TransactionBloc());
     final pageBloc = BlocProvider(create: (context) => PageBloc());
     final goalBloc = BlocProvider(create: (context) => GoalBloc());
+    final debtBloc = BlocProvider(create: (context) =>DebtBloc());
     return MultiBlocProvider(
         providers: [
           walletBloc,
@@ -61,11 +63,13 @@ class _MyWidgetState extends State<MyWidget> {
           transactionCategoryBloc,
           transactionBloc,
           pageBloc , 
-          goalBloc
+          goalBloc , 
+          debtBloc
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              colorScheme: ColorScheme.fromSwatch().copyWith(primary: Color(0XFF15616D)),
                 textTheme: TextTheme(
               displayLarge: TextStyle(
                   fontFamily: 'Roboto', fontSize: 16, color: Color(0xFF15616D)),

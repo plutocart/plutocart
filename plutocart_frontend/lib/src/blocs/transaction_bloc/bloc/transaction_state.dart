@@ -15,6 +15,7 @@ class TransactionState extends Equatable {
   final TransactionStatus incomeStatus;
   final TransactionStatus expenseStatus;
   final TransactionStatus goalStatus;
+    final TransactionStatus debtStatus;
   final List<dynamic> transactionsDailyInExList;
   final List<dynamic> transactionLimit3;
   final List<dynamic> transactionList;
@@ -34,7 +35,7 @@ class TransactionState extends Equatable {
       this.transactionLimit3 = const [],
       this.transactionList = const [],  
       this.goalId = 0,
-      this.goalStatus = TransactionStatus.loading})
+      this.goalStatus = TransactionStatus.loading , this.debtStatus = TransactionStatus.loading})
       : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -52,7 +53,7 @@ class TransactionState extends Equatable {
       List<dynamic>? transactionLimit3,
       List<dynamic>? transactionList,
       int? goalId,
-      TransactionStatus? goalStatus}) {
+      TransactionStatus? goalStatus , TransactionStatus? debtStatus,}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -70,7 +71,7 @@ class TransactionState extends Equatable {
         transactionLimit3: transactionLimit3 ?? this.transactionLimit3,
         transactionList: transactionList ?? this.transactionList,
         goalId: goalId ?? this.goalId,
-        goalStatus: goalStatus ?? this.goalStatus);
+        goalStatus: goalStatus ?? this.goalStatus , debtStatus:  debtStatus ?? this.debtStatus);
   }
 
   @override
@@ -87,6 +88,6 @@ class TransactionState extends Equatable {
         expenseStatus,
         transactionsDailyInExList,
         transactionList,
-        transactionLimit3 , goalId , goalStatus,
+        transactionLimit3 , goalId , goalStatus, debtStatus
       ];
 }

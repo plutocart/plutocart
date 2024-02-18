@@ -119,6 +119,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
             ),
             DatePickerFieldOnlyDay(
               tranDateController: tranDateController,
+              nameField: "Selected Date",
             ),
             ActionPopup(
               bottonFirstName: "Cancle",

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/repository/transaction_repository.dart';
 
 part 'transaction_event.dart';
@@ -16,9 +17,13 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
         on<ResetTransactionGoalStatus>((event, emit) async {
       emit(state.copyWith(
-          goalStatus: TransactionStatus.loading, stmTransaction: 0.0));
+          goalStatus: TransactionStatus.loading, stmTransaction: 0.0 , debtStatus: TransactionStatus.loading));
     });
 
+  on<ResetTransactionDebtStatus>((event, emit) async {
+      emit(state.copyWith(
+          debtStatus: TransactionStatus.loading));
+    });
 
     on<ResetTransaction>((event, emit) {
       emit(TransactionState()); // Reset the state to the initial state
@@ -133,6 +138,33 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         }
       } catch (e) {
         emit(state.copyWith(incomeStatus: TransactionStatus.loading));
+        print("Error creating transacton income in transaction bloc");
+      }
+    });
+
+
+    on<CreateTransactionDebt>((event, emit) async {
+      print("start working create transaction goal");
+      try {
+        Map<String, dynamic> response =
+            await TransactionRepository().createTransactionDebt(
+          event.walletId,
+          event.imageUrl,
+          event.stmTransaction,
+          event.dateTimeTransaction,
+          event.desctiption,
+          event.debtIdDebt,
+        );
+        if (response['data'] == null) {
+          print(
+              "not created transacton goal in transaction bloc : ${response['data']}");
+        } else {
+          print("create transacton debt in transaction bloc success");
+          emit(state.copyWith(
+              debtStatus: TransactionStatus.loaded));
+        }
+      } catch (e) {
+         emit(state.copyWith(debtStatus: TransactionStatus.loading));
         print("Error creating transacton income in transaction bloc");
       }
     });

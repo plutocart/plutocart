@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DatePickerField extends StatefulWidget {
+  final String nameField;
 final TextEditingController tranDateController;
-  const DatePickerField({Key? key , required this.tranDateController})
+  const DatePickerField({Key? key , required this.tranDateController , required this.nameField})
       : super(key: key);
 
   @override
@@ -53,7 +54,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
             style: TextStyle(color: Color(0xFF15616D)),
             readOnly: true,
             decoration: InputDecoration(
-              labelText: 'Selected Date',
+              labelText: '${widget.nameField}',
               labelStyle: TextStyle(
                 color: Color(0xFF1A9CB0),
               ),

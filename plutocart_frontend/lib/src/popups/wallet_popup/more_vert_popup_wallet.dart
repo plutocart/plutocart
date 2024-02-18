@@ -58,7 +58,7 @@ class _MoreVertPopupWalletState extends State<MoreVertPopupWallet> {
                     child: Text(
                       'Delete',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Color(0XFF15616D),
                         fontSize: 16,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w700,
@@ -68,10 +68,10 @@ class _MoreVertPopupWalletState extends State<MoreVertPopupWallet> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: Color(0XFFDD0000), // Border color
+                            color: Color(0XFF15616D), // Border color
                           ),
                         ),
-                        backgroundColor: Color(0XFFDD0000)),
+                        backgroundColor: Colors.white),
                   )),
             ),
           ],

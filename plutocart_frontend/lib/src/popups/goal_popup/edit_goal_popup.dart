@@ -114,7 +114,7 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
               nameField: "Collect money",
             ),
             DatePickerFieldOnlyDay(
-              tranDateController: tranDateController,
+              tranDateController: tranDateController, nameField: 'Selected Date',
             ),
             ActionPopup(
               bottonFirstName: "Cancle",

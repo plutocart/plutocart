@@ -14,7 +14,6 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   @override
   void initState() {
-          context.read<TransactionBloc>().add(GetTransactionList());
     super.initState();
   }
   @override
@@ -73,9 +72,7 @@ class _TransactionPageState extends State<TransactionPage> {
           builder: (context, state) {
             return Column(
               children: [
-                ElevatedButton(onPressed: () {
-                }, child: Text("Test")),
-                Text("${state.transactionList[0]['stmTransaction']}")
+             
               ],
             );
           },

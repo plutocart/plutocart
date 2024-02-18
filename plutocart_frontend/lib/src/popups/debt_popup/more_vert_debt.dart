@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/debt_popup/bottom_sheet_debt.dart';
 import 'package:plutocart/src/popups/debt_popup/edit_debt_popup.dart';
-import 'package:plutocart/src/popups/goal_popup/bottom_sheet_goal.dart';
-import 'package:plutocart/src/popups/goal_popup/edit_goal_popup.dart';
 
-class MoreVertGoal extends StatelessWidget {
-  final Map<String, dynamic>? goal;
-  final int? goalId;
+class MoreVertDebt extends StatelessWidget {
+  final Map<String, dynamic>? debt;
+  final int? debtId;
 
-  const MoreVertGoal({Key? key, this.goal = null, this.goalId = 0})
+  const MoreVertDebt({Key? key, this.debt = null, this.debtId = 0})
       : super(key: key);
 
   @override
@@ -31,7 +28,7 @@ class MoreVertGoal extends StatelessWidget {
                         color: Color(0xFF15616D),
                       ))),
               onPressed: () {
-                editGoal(goal! , context);
+                  editDebt(debt! , context);
               },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -55,8 +52,7 @@ class MoreVertGoal extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(color: Color(0xFF15616D)))),
               onPressed: ()   {
-                 buttomSheetDelete(goal! , context);
-                 print("check state goal : ${context.read<GoalBloc>().state.goalList!.length}");
+                buttomSheetDelete(debt! , context);
               },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -77,26 +73,28 @@ class MoreVertGoal extends StatelessWidget {
       ),
     );
   }
-     buttomSheetDelete(Map<String , dynamic> goal , BuildContext context) {
+     buttomSheetDelete(Map<String , dynamic> debt , BuildContext context) {
     showSlideDialog(
         context: context,
-        child: BottomSheetGoal(
+        child: BottomSheetDebt(
           numberPopUp1: 2,
           numberPopUp2: 2,
-          goal: goal,
+          debt: debt,
         ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 1.6);
   }
 
-  editGoal(Map<String , dynamic> goal , BuildContext context) {
+
+  editDebt(Map<String , dynamic> debt , BuildContext context) {
     showSlideDialog(
         context: context,
         child:
-            EditGoalPopup(goal: goal),
+            EditDebtPopup(debt: debt),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 1.9);
+        hightCard: 3);
   }
+
 }

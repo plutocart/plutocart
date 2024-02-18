@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/pages/home/component_home/cardDebtHome.dart';
+import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/transaction_popup/card_transaction_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:intl/intl.dart';
-
 
 class CardGroup extends StatefulWidget {
   final String subject;
@@ -53,7 +55,9 @@ class _CardGroupState extends State<CardGroup> {
                             : MediaQuery.of(context).size.height * 0.33
                     : widget.numberPopup == 3 && widget.lengthData > 0
                         ? MediaQuery.of(context).size.height * 0.26
-                        : MediaQuery.of(context).size.height * 0.17,
+                        : widget.numberPopup == 4 && widget.lengthData > 0
+                            ? MediaQuery.of(context).size.height * 0.19
+                            : MediaQuery.of(context).size.height * 0.17,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -223,8 +227,8 @@ class _CardGroupState extends State<CardGroup> {
                                                       Text(
                                                         transaction['statementType'] ==
                                                                 "expense"
-                                                            ? "-${transaction['stmTransaction'].toString()}"
-                                                            : "+${transaction['stmTransaction'].toString()}",
+                                                            ? "-${transaction['stmTransaction'].toStringAsFixed(2)}"
+                                                            : "+${transaction['stmTransaction'].toStringAsFixed(2)}",
                                                         style: TextStyle(
                                                           color: transaction[
                                                                       'statementType'] ==
@@ -276,28 +280,44 @@ class _CardGroupState extends State<CardGroup> {
                                       child: Column(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(bottom: 10),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 10),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
                                                   child: Row(
                                                     children: [
-                                                      Image(image: AssetImage('assets/icon/Goals-icon.png') , height: MediaQuery.of(context).size.height * 0.04,),
+                                                      Image(
+                                                        image: AssetImage(
+                                                            'assets/icon/Goals-icon.png'),
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                      ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(left: 5 ,),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          left: 5,
+                                                        ),
                                                         child: Text(
                                                             "${state.goalList![state.goalList!.length - 1]['nameGoal']}",
                                                             style: TextStyle(
-                                                                color:
-                                                                    Color(0xFF15616D),
+                                                                color: Color(
+                                                                    0xFF15616D),
                                                                 fontSize: 20,
                                                                 fontWeight:
-                                                                    FontWeight.w500,
-                                                                fontFamily: "Roboto")),
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontFamily:
+                                                                    "Roboto")),
                                                       ),
                                                     ],
                                                   ),
@@ -305,7 +325,6 @@ class _CardGroupState extends State<CardGroup> {
                                               ],
                                             ),
                                           ),
-
                                           Skeleton.ignore(
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -389,162 +408,197 @@ class _CardGroupState extends State<CardGroup> {
                                               ),
                                             ),
                                           ),
-                                           Padding(
-                                             padding: const EdgeInsets.only(right: 10 , top: 10),
-                                             child: Row(
-                                               mainAxisAlignment: MainAxisAlignment.end,
-                                               children: [
-                                                 Text(
-                                                   "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
-                                                   style: TextStyle(
-                                                     color: Color(0XFF707070),
-                                                     fontSize: 14,
-                                                     fontWeight: FontWeight.w500,
-                                                     fontFamily: "Roboto",
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 10),
+                                            padding: const EdgeInsets.only(
+                                                right: 10, top: 10),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                                  style: TextStyle(
+                                                    color: Color(0XFF707070),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: "Roboto",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          right: 2 , left:  20),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 2,
+                                                              left: 20),
                                                       child: Text(
-                                                          "${state.goalList![state.goalList!.length - 1]['deficit']}",
+                                                          "${state.goalList![state.goalList!.length - 1]['deficit'].toStringAsFixed(2)}฿",
                                                           style: TextStyle(
-                                                              color:
-                                                                  Color(0xFF15616D),
-                                                              fontSize: 13,
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily: "Roboto")),
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  "Roboto")),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          right: 2),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 2),
                                                       child: Text("/",
                                                           style: TextStyle(
-                                                              color:
-                                                                  Color(0xFF15616D),
-                                                              fontSize: 13,
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily: "Roboto")),
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto")),
                                                     ),
-                                                    Text("${state.goalList![state.goalList!.length - 1]['amountGoal']}",
+                                                    Text(
+                                                        "${state.goalList![state.goalList!.length - 1]['amountGoal'].toStringAsFixed(2)}฿",
                                                         style: TextStyle(
-                                                            color: Color(0xFF1A9CB0),
-                                                            fontSize: 13,
+                                                            color: Color(
+                                                                0xFF1A9CB0),
+                                                            fontSize: 14,
                                                             fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily: "Roboto")),
+                                                                FontWeight.w400,
+                                                            fontFamily:
+                                                                "Roboto")),
                                                   ],
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(right: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10),
                                                   child: Row(
                                                     children: [
                                                       Text("${formattedDate}",
                                                           style: TextStyle(
-                                                              color: Color(0XFF707070),
-                                                              fontSize: 13,
+                                                              color: Color(
+                                                                  0XFF707070),
+                                                              fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily: "Roboto")),
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto")),
                                                     ],
                                                   ),
                                                 )
                                               ],
                                             ),
                                           ),
-                                       
                                         ],
                                       ),
                                     );
                                   },
                                 )
-                              : Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: Skeleton.ignore(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
+                              : widget.lengthData > 0 && widget.numberPopup == 4
+                                  ? CardDebtHome()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Skeleton.ignore(
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
                                               0.08,
-                                      width:
-                                          MediaQuery.of(context).size.width * 1,
-                                      decoration: ShapeDecoration(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              side: BorderSide(
-                                                width: 1,
-                                                strokeAlign: BorderSide
-                                                    .strokeAlignOutside,
-                                                color: Color(0xFF15616D),
-                                              ))),
-                                      child:
-                                          BlocBuilder<WalletBloc, WalletState>(
-                                        builder: (context, state) {
-                                          return OutlinedButton(
-                                              style: OutlinedButton.styleFrom(
-                                                  foregroundColor:
-                                                      Colors.transparent,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16))),
-                                              onPressed: () {
-                                                if (widget.numberPopup == 1 &&
-                                                    state.wallets.length == 0) {
-                                                  createWallet();
-                                                } else if (widget.numberPopup ==
-                                                    1) {
-                                                  createTransaction();
-                                                } else if (widget.numberPopup ==
-                                                    2) {
-                                                  print("graph");
-                                                } else if (widget.numberPopup ==
-                                                    3) {
-                                                  createGoal();
-                                                } else if (widget.numberPopup ==
-                                                    4) {
-                                                  print("Debt");
-                                                }
-                                              },
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    size: 30,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              1,
+                                          decoration: ShapeDecoration(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  side: BorderSide(
+                                                    width: 1,
+                                                    strokeAlign: BorderSide
+                                                        .strokeAlignOutside,
                                                     color: Color(0xFF15616D),
-                                                  ),
-                                                  Text(
-                                                      "${widget.subjectButton}",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xFF15616D),
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily: "Roboto"))
-                                                ],
-                                              ));
-                                        },
+                                                  ))),
+                                          child: BlocBuilder<WalletBloc,
+                                              WalletState>(
+                                            builder: (context, state) {
+                                              return OutlinedButton(
+                                                  style: OutlinedButton.styleFrom(
+                                                      foregroundColor:
+                                                          Colors.transparent,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16))),
+                                                  onPressed: () {
+                                                    if (widget.numberPopup ==
+                                                            1 &&
+                                                        state.wallets.length ==
+                                                            0) {
+                                                      createWallet();
+                                                    } else if (widget
+                                                            .numberPopup ==
+                                                        1) {
+                                                      createTransaction();
+                                                    } else if (widget
+                                                            .numberPopup ==
+                                                        2) {
+                                                      print("graph");
+                                                    } else if (widget
+                                                            .numberPopup ==
+                                                        3) {
+                                                      createGoal();
+                                                    } else if (widget
+                                                            .numberPopup ==
+                                                        4) {
+                                                      createDebt();
+                                                    }
+                                                  },
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.add,
+                                                        size: 30,
+                                                        color:
+                                                            Color(0xFF15616D),
+                                                      ),
+                                                      Text(
+                                                          "${widget.subjectButton}",
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF15616D),
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  "Roboto"))
+                                                    ],
+                                                  ));
+                                            },
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                )
+                                    )
                     ]),
                   ),
                 ));
@@ -558,6 +612,15 @@ class _CardGroupState extends State<CardGroup> {
     showSlideDialog(
         context: context,
         child: AddGoalPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2.5);
+  }
+
+   createDebt() async {
+    showSlideDialog(
+        context: context,
+        child: AddDebtPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2.5);

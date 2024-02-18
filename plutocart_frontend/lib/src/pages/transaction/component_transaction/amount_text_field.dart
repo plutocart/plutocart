@@ -5,7 +5,7 @@ class AmountTextField extends StatefulWidget {
   final String  nameField;
   final TextEditingController amountMoneyController;
 
-  const AmountTextField({Key? key, required this.amountMoneyController , required this.nameField})
+  const AmountTextField({Key? key, required this.amountMoneyController , required this.nameField })
       : super(key: key);
 
   @override

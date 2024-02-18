@@ -239,19 +239,24 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE deleteAccountAllF( in accountId int , in walletId int)
+
 BEGIN
-  DECLARE debt_count INT;
- DECLARE goal_count INT;
-	DELETE from transaction where wallet_id_wallet = walletId;
-    SELECT COUNT(*) into debt_count  FROM debt WHERE account_id_account = accountId;
-    SELECT COUNT(*) into goal_count  FROM goal WHERE account_id_account = accountId;
-    if debt_count > 0 THEN 
-        DELETE FROM debt WHERE account_id_account = accountId;
-        END IF;
-    if goal_count > 0 THEN
-         DELETE FROM goal WHERE account_id_account = accountId;
-         END IF;
-   DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
+    DELETE FROM wallet where  account_id_account = accountId;
+	DELETE FROM debt WHERE account_id_account = accountId;
+	DELETE FROM goal WHERE account_id_account = accountId;
+    DELETE from transaction where wallet_id_wallet = walletId;
+--   DECLARE debt_count INT;
+--  DECLARE goal_count INT;
+-- 	DELETE from transaction where wallet_id_wallet = walletId;
+--     SELECT COUNT(*) into debt_count  FROM debt WHERE account_id_account = accountId;
+--     SELECT COUNT(*) into goal_count  FROM goal WHERE account_id_account = accountId;
+--     if debt_count > 0 THEN 
+--         DELETE FROM debt WHERE account_id_account = accountId;
+--         END IF;
+--     if goal_count > 0 THEN
+--          DELETE FROM goal WHERE account_id_account = accountId;
+--          END IF;
+--    DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
 
 END //
 DELIMITER ;

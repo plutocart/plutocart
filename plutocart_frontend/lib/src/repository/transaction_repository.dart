@@ -223,4 +223,69 @@ class TransactionRepository {
     }
   }
 
+  Future<Map<String, dynamic>> createTransactionDebt(
+      int WalletId,
+      File? file,
+      double stmTransaction,
+      String dateTransaction,
+      String? description, 
+      int debtIdDebt) async {
+    print("create WalletId : ${WalletId}");
+    print("create  repository file : ${file}");
+    print(
+        "create repository stmTransaction : ${stmTransaction}");
+    print("create repository description : ${description}");
+    try {
+      FormData formData;
+      if (file == null) {
+        formData = FormData.fromMap({
+          "stmTransaction": stmTransaction,
+          "statementType": 2,
+          "dateTransaction": dateTransaction,
+          "description": description,
+          "transactionCategoryId": 33,
+          "debtIdDebt" : debtIdDebt
+        });
+      } else {
+        formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(file.path),
+          "stmTransaction": stmTransaction,
+          "statementType": 2,
+          "dateTransaction": dateTransaction,
+          "description": description,
+          "transactionCategoryId": 33,
+          "goalIdGoal" : debtIdDebt
+        });
+      }
+      print("form data : ${formData.fields}");
+      final storage = new FlutterSecureStorage();
+      String? token = await storage.read(key: "token");
+      String? accountId = await storage.read(key: "accountId");
+      int acId = int.parse(accountId!);
+      print("check token : ${token}");
+      print("wallet id : ${WalletId}");
+      Response response = await dio.post(
+        '${dotenv.env['API']}/api/account/${acId}/wallet/${WalletId}/transaction',
+        data: formData, 
+          options: Options(
+                 headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+      ),
+      );
+      print(
+          "respone code in process create transaction in class repository: ${response.statusCode}");
+      print(
+          "respone data in process create transaction  class repository: ${response.data}");
+
+      if (response.statusCode == 201 && response.data['data'] != null) {
+        return response.data;
+      } else {
+        throw Exception(
+            'Error Create : ${response.statusCode}');
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw error;
+    }
+  }
+
 }
