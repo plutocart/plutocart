@@ -244,7 +244,6 @@ BEGIN
     DELETE FROM wallet where  account_id_account = accountId;
 	DELETE FROM debt WHERE account_id_account = accountId;
 	DELETE FROM goal WHERE account_id_account = accountId;
-    DELETE from transaction where wallet_id_wallet = walletId;
 --   DECLARE debt_count INT;
 --  DECLARE goal_count INT;
 -- 	DELETE from transaction where wallet_id_wallet = walletId;
