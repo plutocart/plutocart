@@ -68,6 +68,11 @@ public class TransactionValidationService {
         if (account.getAccountId() != wallet.getAccountIdAccount().getAccountId())
             throw new PlutoCartServiceApiException(ResultCode.BAD_REQUEST, "this account don't have this wallet. ");
 
+        if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
+
+        BigDecimal stmTran = new BigDecimal(stmTranTrim);
+
         if (StringUtils.isEmpty(stmTyTrim) || !HelperMethod.isInteger(stmTyTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
 
@@ -97,12 +102,7 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
 
         if (description.length() > 100)
-            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description is over max length. ");
-
-        if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
-
-        BigDecimal stmTran = new BigDecimal(stmTranTrim);
+            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description over maximum length is 100. ");
 
         if (!StringUtils.isEmpty(goalId) && !StringUtils.isEmpty(debtId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "create transaction can not send goal id & debt id both. ");
@@ -114,11 +114,11 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id not match for create transaction. ");
 
         if (goalId != null && !HelperMethod.isInteger(goalId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number or null. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
 
         if (goalId != null) {
             if (tranCatId != 32)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement type of transaction in goal is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category of transaction in goal is not match. ");
 
             goId = Integer.parseInt(goalId);
             Goal goal = goalRepository.viewGoalByGoalId(goId);
@@ -128,11 +128,11 @@ public class TransactionValidationService {
         }
 
         if (debtId != null && !HelperMethod.isInteger(debtId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number or null.");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number.");
 
         if (debtId != null) {
             if (tranCatId != 33)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement type of transaction in debt is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category of transaction in debt is not match. ");
 
             deId = Integer.parseInt(debtId);
             Debt debt = debtRepository.viewDebtByDebtId(deId);
@@ -194,14 +194,17 @@ public class TransactionValidationService {
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
 
         if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + tranId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction id is not found. ");
 
         if (transaction.getWalletIdWallet().getWalletId() != wallet.getWalletId())
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "this wallet don't have this transaction. ");
 
 //        if (transaction.getId() != tranId)
 //            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
+        if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
 
+        BigDecimal stmTran = new BigDecimal(stmTranTrim);
 
         if (StringUtils.isEmpty(stmTyTrim) || !HelperMethod.isInteger(stmTyTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
@@ -232,12 +235,7 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
 
         if (description.length() > 100)
-            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description is over max length. ");
-
-        if (StringUtils.isEmpty(stmTranTrim) || !HelperMethod.isDecimal(stmTranTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm transaction must be number. ");
-
-        BigDecimal stmTran = new BigDecimal(stmTranTrim);
+            throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "description over maximum length is 100 ");
 
         if (goalId != null && transaction.getGoalIdGoal() == null || goalId == null && transaction.getGoalIdGoal() != null
                 || debtId != null && transaction.getDebtIdDebt() == null || debtId == null && transaction.getDebtIdDebt() != null)
@@ -253,11 +251,11 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id not match for create transaction. ");
 
         if (goalId != null && !HelperMethod.isInteger(goalId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number or null.");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
 
         if (goalId != null && transaction.getGoalIdGoal().getId() != null) {
             if (tranCatId != 32)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement of transaction in goal is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id of transaction in goal is not match. ");
 
             goId = Integer.parseInt(goalId);
 
@@ -271,11 +269,11 @@ public class TransactionValidationService {
         }
 
         if (debtId != null && !HelperMethod.isInteger(debtId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number or null. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number. ");
 
         if (debtId != null && transaction.getDebtIdDebt().getId() != null) {
             if (tranCatId != 33)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement of transaction in debt is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id of transaction in debt is not match. ");
 
             deId = Integer.parseInt(debtId);
 

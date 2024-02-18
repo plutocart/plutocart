@@ -71,7 +71,7 @@ public class DebtController {
     ) throws Exception {
 //        LocalDateTime actualEndDateGoal = (latestPayDate != null) ? latestPayDate : LocalDateTime.now();
         GenericResponse result = debtService.deleteDebtByAccountId(accountId, debtId, token);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 }
