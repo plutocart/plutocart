@@ -362,18 +362,11 @@ public class TransactionValidationService {
                 throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found.");
 
             List<Transaction> transactionList = transactionRepository.viewTransactionByDebtIdDesc(deId);
-            if (transactionList.get(0).getId() == tranId)
+            if (transactionList.get(0).getId() == tranId && transactionList.size() > 1) {
                 transactionDate = transactionList.get(1).getUpdateTransactionOn();
-
-//            List<Transaction> transactionList = transactionRepository.viewTransactionByDebtId(deId);
-//            if (transactionList.size() > 1) {
-//                for (Transaction transactionInList : transactionList) {
-//                    transactionId = String.valueOf(transactionInList.getId());
-//                    walletId = String.valueOf(transactionInList.getWalletIdWallet().getWalletId());
-//                    transactionService.deleteTransaction(accountId, walletId, transactionId, token);
-//                }
-//            }
-
+            } else if (transactionList.get(0).getId() != tranId && transactionList.size() > 1) {
+                transactionDate = transactionList.get(0).getUpdateTransactionOn();
+            } else ;
         }
 
         cloudinaryService.deleteImageOnCloudInTransaction(tranId);

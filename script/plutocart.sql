@@ -445,14 +445,9 @@ BEGIN
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
 		SET total_paid_debt = total_paid_debt - stmTransaction,
-			num_of_paid_period = num_of_paid_period - 1
+			num_of_paid_period = num_of_paid_period - 1,
+            latest_pay_date = transactionDate
 		WHERE id_debt = debtIdDebt;
-        
-        IF transactionDate IS NOT NULL THEN
-			UPDATE debt
-			SET latest_pay_date = transactionDate
-			WHERE id_debt = debtIdDebt;
-        END IF;
         
 		UPDATE debt
 		SET status_debt = 1

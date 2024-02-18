@@ -29,7 +29,7 @@ public class WalletController {
             return walletService.getWalletByIdAccount(acId , token);
         }
         catch (Exception e){
-            throw new NoSuchElementException(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping("/account/{account-id}/wallet/status-on")
