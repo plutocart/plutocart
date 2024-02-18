@@ -55,7 +55,7 @@ public class TransactionValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
 
         if (!HelperMethod.isInteger(walletId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
@@ -63,7 +63,7 @@ public class TransactionValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id is not found. ");
 
         if (account.getAccountId() != wallet.getAccountIdAccount().getAccountId())
             throw new PlutoCartServiceApiException(ResultCode.BAD_REQUEST, "this account don't have this wallet. ");
@@ -72,7 +72,7 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
 
         Integer sType = Integer.parseInt(stmTyTrim);
-        if (sType < 1 && sType > 2)
+        if (sType < 1 || sType > 2)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
 
         String sTypeString = "";
@@ -88,10 +88,10 @@ public class TransactionValidationService {
         Integer tranCatId = Integer.parseInt(tranCatTrim);
         TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(tranCatId);
         if (transactionCategory == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id " + tranCatId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id is not found. ");
 
-        if (tranCatId > 33 || tranCatId < 1)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id " + tranCatId + " is not create.");
+//        if (tranCatId > 33 || tranCatId < 1)
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id " + tranCatId + " is not create.");
 
         if (!transactionCategory.getTypeCategory().equals(sTypeString))
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
@@ -105,7 +105,7 @@ public class TransactionValidationService {
         BigDecimal stmTran = new BigDecimal(stmTranTrim);
 
         if (!StringUtils.isEmpty(goalId) && !StringUtils.isEmpty(debtId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "create transaction can not send goal id & debt id both.");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "create transaction can not send goal id & debt id both. ");
 
         if ((!StringUtils.isEmpty(goalId) || !StringUtils.isEmpty(debtId)) && sTypeString.equals("income"))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type not match for create transaction. ");
@@ -114,17 +114,17 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id not match for create transaction. ");
 
         if (goalId != null && !HelperMethod.isInteger(goalId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number or null.");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number or null. ");
 
         if (goalId != null) {
             if (tranCatId != 32)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement of transaction in goal is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement type of transaction in goal is not match. ");
 
             goId = Integer.parseInt(goalId);
             Goal goal = goalRepository.viewGoalByGoalId(goId);
 
             if (goal == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id " + goId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id in not found. ");
         }
 
         if (debtId != null && !HelperMethod.isInteger(debtId))
@@ -132,13 +132,13 @@ public class TransactionValidationService {
 
         if (debtId != null) {
             if (tranCatId != 33)
-                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement of transaction in debt is not match. ");
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "statement type of transaction in debt is not match. ");
 
             deId = Integer.parseInt(debtId);
             Debt debt = debtRepository.viewDebtByDebtId(deId);
 
             if (debt == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found. ");
         }
 
 //        if (transactionCategory.getId() != tranCatId)
@@ -174,7 +174,7 @@ public class TransactionValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
 
         if (!HelperMethod.isInteger(walletId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
@@ -182,7 +182,7 @@ public class TransactionValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id is not found.");
 
         if (account.getAccountId() != wallet.getAccountIdAccount().getAccountId())
             throw new PlutoCartServiceApiException(ResultCode.BAD_REQUEST, "this account don't have this wallet. ");
@@ -207,7 +207,7 @@ public class TransactionValidationService {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
 
         Integer sType = Integer.parseInt(stmTyTrim);
-        if (sType < 1 && sType > 2)
+        if (sType < 1 || sType > 2)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "stm type must be 1 or 2. ");
 
         String sTypeString = "";
@@ -223,10 +223,10 @@ public class TransactionValidationService {
         Integer tranCatId = Integer.parseInt(tranCatTrim);
         TransactionCategory transactionCategory = transactionCategoryRepository.viewTransactionCategoryById(tranCatId);
         if (transactionCategory == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id " + tranCatId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction category Id is not found. ");
 
-        if (tranCatId > 33 || tranCatId < 1)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id " + tranCatId + " is not create.");
+//        if (tranCatId > 33 || tranCatId < 1)
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction category id " + tranCatId + " is not create.");
 
         if (!transactionCategory.getTypeCategory().equals(sTypeString))
             throw new PlutoCartServiceApiException(ResultCode.INVALID_PARAM, "statement type of this transaction is not match in transaction category type. ");
@@ -267,11 +267,11 @@ public class TransactionValidationService {
             Goal goal = goalRepository.viewGoalByGoalId(goId);
 
             if (goal == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id " + goId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
         }
 
         if (debtId != null && !HelperMethod.isInteger(debtId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number or null.");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number or null. ");
 
         if (debtId != null && transaction.getDebtIdDebt().getId() != null) {
             if (tranCatId != 33)
@@ -285,7 +285,7 @@ public class TransactionValidationService {
             Debt debt = debtRepository.viewDebtByDebtId(deId);
 
             if (debt == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found. ");
         }
 
 //        if (transactionCategory.getId() != tranCatId)
@@ -323,7 +323,7 @@ public class TransactionValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (!HelperMethod.isInteger(walletId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
@@ -331,7 +331,7 @@ public class TransactionValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id " + walletId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet id is not found. ");
 
         if (account.getAccountId() != wallet.getAccountIdAccount().getAccountId())
             throw new PlutoCartServiceApiException(ResultCode.BAD_REQUEST, "this account don't have this wallet. ");
@@ -343,7 +343,7 @@ public class TransactionValidationService {
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
 
         if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction Id " + tranId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction id is not found.");
 
         if (transaction.getWalletIdWallet().getWalletId() != wallet.getWalletId())
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "this wallet don't have this transaction. ");
@@ -353,7 +353,7 @@ public class TransactionValidationService {
             Goal goal = goalRepository.viewGoalByGoalId(goId);
 
             if (goal == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id " + goId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
         }
 
         if (transaction.getDebtIdDebt() != null) {
@@ -361,7 +361,7 @@ public class TransactionValidationService {
             Debt debt = debtRepository.viewDebtByDebtId(deId);
 
             if (debt == null)
-                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id " + deId + " is not create. ");
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found.");
 
             List<Transaction> transactionList = transactionRepository.viewTransactionByDebtIdDesc(deId);
             if (transactionList.get(0).getId() == tranId)

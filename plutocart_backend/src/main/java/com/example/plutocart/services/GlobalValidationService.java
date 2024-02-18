@@ -36,7 +36,7 @@ public class GlobalValidationService {
         int acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
 
         return acId;
     }
@@ -51,7 +51,7 @@ public class GlobalValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
 
         if (!HelperMethod.isInteger(walletId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
@@ -59,7 +59,7 @@ public class GlobalValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this wallet id is not found. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet id is not found. ");
 
         TReqGetByAcIdWalId id = new TReqGetByAcIdWalId();
         id.setAccountId(acId);
@@ -74,7 +74,7 @@ public class GlobalValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
 
         if (!HelperMethod.isInteger(walletId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
@@ -82,7 +82,7 @@ public class GlobalValidationService {
         Integer walId = Integer.parseInt(walletId);
         Wallet wallet = walletRepository.viewWalletByWalletId(walId);
         if (wallet == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this wallet id is not found. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet id is not found. ");
 
         if (!HelperMethod.isInteger(transactionId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");
@@ -90,7 +90,7 @@ public class GlobalValidationService {
         Integer tranId = Integer.parseInt(transactionId);
         Transaction transaction = transactionRepository.viewTransactionByTransactionId(tranId);
         if (transaction == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "this transaction id is not found. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction id is not found. ");
 
         TReqGetByAcIdWalIdTranId id = new TReqGetByAcIdWalIdTranId();
         id.setAccountId(acId);
