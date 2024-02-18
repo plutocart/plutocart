@@ -2,6 +2,7 @@ package com.example.plutocart.services;
 
 import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ErrorMessage;
+import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.dtos.wallet.WalletPostDTO;
 import com.example.plutocart.entities.Transaction;
@@ -9,6 +10,7 @@ import com.example.plutocart.entities.Wallet;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
+import com.example.plutocart.utils.GenericResponse;
 import com.example.plutocart.utils.HelperMethod;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,10 @@ public class WalletService {
         String userId = JwtUtil.extractUsername(token);
         if (Integer.parseInt(userId) == accountId) {
             List<Wallet> walletList = walletRepository.viewWalletByAccountId(accountRepository.findById(accountId).orElseThrow().getAccountId());
+//            List<WalletDTO> walletDTO = walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList());
+//            response.setStatus(ResultCode.SUCCESS);
+//            response.setData(walletDTO);
+//            return response;
             return ResponseEntity.status(HttpStatus.OK).body(walletList.stream().map(e -> modelMapper.map(e, WalletDTO.class)).collect(Collectors.toList()));
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

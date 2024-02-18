@@ -145,8 +145,8 @@ public class DebtValidationService {
         if ((numOfPaidP <= 0 && latestPayDate != null) || (numOfPaidP > 0 && latestPayDate == null))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "you must have paid your debt at least 1 time for define your latest date of pay. ");
 
-        if (numOfPaidP > payP)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "number of paid period of debt must not over of pay period debt. ");
+//        if (numOfPaidP > payP)
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "number of paid period of debt must not over of pay period debt. ");
 
         if (StringUtils.isEmpty(paidDebtPerPeriod) || !HelperMethod.isDecimal(paidDebtPerPeriod))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "paid debt per period must be number. ");

@@ -37,7 +37,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `plutocart`.`wallet` (
   `id_wallet` INT NOT NULL AUTO_INCREMENT,
-  `name_wallet` VARCHAR(45) NOT NULL,
+  `name_wallet` VARCHAR(15) NOT NULL,
   `balance_wallet` DECIMAL(13,2) NOT NULL DEFAULT 1.00,
   `status_wallet` TINYINT NOT NULL DEFAULT 1,
   `account_id_account` INT NOT NULL,
@@ -242,6 +242,7 @@ CREATE PROCEDURE deleteAccountAllF( in accountId int , in walletId int)
 BEGIN
   DECLARE debt_count INT;
  DECLARE goal_count INT;
+	DELETE from transaction where wallet_id_wallet = walletId;
     SELECT COUNT(*) into debt_count  FROM debt WHERE account_id_account = accountId;
     SELECT COUNT(*) into goal_count  FROM goal WHERE account_id_account = accountId;
     if debt_count > 0 THEN 
@@ -250,7 +251,6 @@ BEGIN
     if goal_count > 0 THEN
          DELETE FROM goal WHERE account_id_account = accountId;
          END IF;
-   DELETE from transaction where wallet_id_wallet = walletId;
    DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
 
 END //
@@ -444,10 +444,17 @@ BEGIN
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt - stmTransaction,
-			num_of_paid_period = num_of_paid_period - 1,
-            latest_pay_date = transactionDate
+		SET total_paid_debt = CASE
+								WHEN stmTransaction < total_paid_debt THEN total_paid_debt - stmTransaction
+								ELSE total_paid_debt = 0
+							  END,
+			num_of_paid_period = CASE
+									WHEN num_of_paid_period > 0 THEN num_of_paid_period - 1
+									ELSE num_of_paid_period 
+								END,
+			latest_pay_date = transactionDate
 		WHERE id_debt = debtIdDebt;
+
         
 		UPDATE debt
 		SET status_debt = 1
@@ -855,7 +862,8 @@ BEGIN
         paid_debt_per_period = InPaidDebtPerPeriod,
         total_paid_debt = InTotalPaidDebt,
         money_lender = InMoneyLender,
-        latest_pay_date = InLatestPayDate
+        latest_pay_date = InLatestPayDate,
+        update_debt_on = now()
     WHERE id_debt = InDebtId;
     
     UPDATE debt

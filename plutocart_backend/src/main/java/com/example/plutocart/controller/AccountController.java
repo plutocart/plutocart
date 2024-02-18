@@ -2,6 +2,7 @@ package com.example.plutocart.controller;
 
 
 import com.example.plutocart.dtos.account.AccountDTO;
+import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
 import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.services.AccountService;
 import com.example.plutocart.utils.GenericResponse;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/api")
 @RestController
@@ -31,14 +31,14 @@ public class AccountController {
     }
 
     @DeleteMapping("/account/{account-id}/delete-account")
-    public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<GenericResponse> deleteAccount(@Valid @PathVariable(value = "account-id") Integer accountId, @RequestHeader("Authorization") String token) throws PlutoCartServiceApiInvalidParamException, PlutoCartServiceApiForbidden {
         System.out.println(token);
         GenericResponse result = accountService.DeleteAccount(accountId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/account/{account-id}/upgrade-role-member")
-    public ResponseEntity<GenericResponse> updateAccountToMember(@Valid @PathVariable(value = "account-id") Integer accountId, @RequestParam(name = "email") String email, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<GenericResponse> updateAccountToMember(@Valid @PathVariable(value = "account-id") Integer accountId, @RequestParam(name = "email") String email, @RequestHeader("Authorization") String token) throws PlutoCartServiceApiForbidden, PlutoCartServiceApiInvalidParamException {
         GenericResponse result = accountService.UpdateAccountToMember(email, accountId, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
