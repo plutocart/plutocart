@@ -237,13 +237,13 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
-CREATE PROCEDURE deleteAccountAllF( in accountId int , in walletId int)
+-- DELIMITER //
+-- CREATE PROCEDURE deleteAccountAllF( in accountId int , in walletId int)
 
-BEGIN
-    DELETE FROM wallet where  account_id_account = accountId;
-	DELETE FROM debt WHERE account_id_account = accountId;
-	DELETE FROM goal WHERE account_id_account = accountId;
+-- BEGIN
+--     DELETE FROM wallet where  account_id_account = accountId;
+-- 	DELETE FROM debt WHERE account_id_account = accountId;
+-- 	DELETE FROM goal WHERE account_id_account = accountId;
 --   DECLARE debt_count INT;
 --  DECLARE goal_count INT;
 -- 	DELETE from transaction where wallet_id_wallet = walletId;
@@ -257,8 +257,8 @@ BEGIN
 --          END IF;
 --    DELETE FROM wallet where id_wallet = walletId and account_id_account = accountId;
 
-END //
-DELIMITER ;
+-- END //
+-- DELIMITER ;
 
 -- view transaction by account id 
 DELIMITER //
@@ -901,16 +901,34 @@ DELIMITER ;
 
 -- delete account  
 DELIMITER //
+
 CREATE PROCEDURE `deleteAccount`(IN InAccountId INT)
 BEGIN
-  SET @wallet_ids = (SELECT GROUP_CONCAT(id_wallet) FROM wallet WHERE account_id_account = InAccountId);
-  WHILE LENGTH(@wallet_ids) > 0 DO
-    SET @wallet_id = SUBSTRING_INDEX(@wallet_ids, ',', 1);
-    CALL deleteAccountAllF(InAccountId, @wallet_id);
-    DELETE FROM transaction WHERE wallet_id_wallet =  @wallet_id;
-    SET @wallet_ids = TRIM(BOTH ',' FROM SUBSTRING(@wallet_ids, LENGTH(@wallet_id) + 2));
-  END WHILE;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE walletId INT;
+  DECLARE cur CURSOR FOR SELECT id_wallet FROM wallet WHERE account_id_account = InAccountId;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-  delete from account where id_account = InAccountId;
+  -- Delete goals and debts associated with the account
+  DELETE FROM goal WHERE account_id_account = InAccountId;
+  DELETE FROM debt WHERE account_id_account = InAccountId;
+
+  -- Delete transactions associated with wallets of the account
+  OPEN cur;
+  read_loop: LOOP
+    FETCH cur INTO walletId;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    DELETE FROM transaction WHERE wallet_id_wallet = walletId;
+  END LOOP;
+  CLOSE cur;
+
+  -- Delete wallets associated with the account
+  DELETE FROM wallet WHERE account_id_account = InAccountId;
+
+  -- Delete the account
+  DELETE FROM account WHERE id_account = InAccountId;
 END //
+
 DELIMITER ;
