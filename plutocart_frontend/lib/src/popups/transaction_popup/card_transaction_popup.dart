@@ -384,6 +384,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());
+                                context.read<TransactionBloc>().add(GetTransactionList());
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionLimit3());

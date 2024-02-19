@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
@@ -20,6 +18,11 @@ class BottomSheetTransaction extends StatefulWidget {
 }
 
 class _BottomSheetTransactionState extends State<BottomSheetTransaction> {
+  @override
+  void initState() {
+    context.read<TransactionBloc>().add(GetTransactionList());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(

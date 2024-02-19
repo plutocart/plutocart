@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/bottom_sheet_transaction.dart';
-import 'package:plutocart/src/popups/debt_popup/bottom_sheet_debt.dart';
-import 'package:plutocart/src/popups/debt_popup/edit_debt_popup.dart';
-
 class MoreVertTransaction extends StatelessWidget {
   final Map<String, dynamic>? transaction;
   final int? transactionId;

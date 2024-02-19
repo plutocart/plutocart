@@ -331,8 +331,8 @@ class _CardWalletState extends State<CardWallet> {
                                                   state.transactionsDailyInExList
                                                           .length >
                                                       index
-                                              ? "- ${state.transactionsDailyInExList[index]['todayExpense'].toStringAsFixed(2)}฿"
-                                              : "- 0.0",
+                                              ? "-${state.transactionsDailyInExList[index]['todayExpense'].toStringAsFixed(2)}฿"
+                                              : "-0.0",
                                           style: TextStyle(
                                               color: Color(0xFFDD0000),
                                               fontSize: 16,
@@ -390,8 +390,8 @@ class _CardWalletState extends State<CardWallet> {
                                                   state.transactionsDailyInExList
                                                           .length >
                                                       index
-                                              ? "+ ${state.transactionsDailyInExList[index]['todayIncome'].toStringAsFixed(2)}฿"
-                                              : "+ 0.0",
+                                              ? "+${state.transactionsDailyInExList[index]['todayIncome'].toStringAsFixed(2)}฿"
+                                              : "+0.0",
                                           style: TextStyle(
                                               color: Color(0xFF2DC653),
                                               fontSize: 16,
