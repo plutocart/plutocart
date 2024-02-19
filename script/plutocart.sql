@@ -887,14 +887,33 @@ DELIMITER //
 CREATE  PROCEDURE `updateAccountToMember`( IN InEmail VARCHAR(50) , in InAccountId int)
 BEGIN
     DECLARE countAccounts INT;
+    DECLARE linkedTablesCount INT;
 
-    SELECT COUNT(*) INTO countAccounts FROM account WHERE email = InEmail AND account_role = 2;
+    -- ตรวจสอบว่าบัญชีเชื่อมโยงกับตารางอื่นหรือไม่
+    SELECT COUNT(*) INTO linkedTablesCount
+    FROM information_schema.KEY_COLUMN_USAGE
+    WHERE TABLE_NAME IN ('wallet', 'transaction', 'debt', 'goal')
+    AND CONSTRAINT_SCHEMA = 'plutocart' -- แทนที่ด้วยชื่อของฐานข้อมูลของคุณ
+    AND COLUMN_NAME = 'id_account'
+    AND REFERENCED_TABLE_NAME = 'account';
 
-    IF countAccounts >= 1 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'account not update to account member becuase email has register';
+    IF linkedTablesCount > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ไม่สามารถอัพเดตบัญชีเป็นสมาชิกได้ เนื่องจากมีการเชื่อมโยงกับตารางอื่น';
     ELSE
-       update account  set email = inEmail , account_role = 2  where id_account = InAccountId and account_role != 2;
+        -- ตรวจสอบว่ามีบัญชีอื่นที่ใช้อีเมลเดียวกันและเป็นสมาชิกอยู่แล้วหรือไม่
+        SELECT COUNT(*) INTO countAccounts
+        FROM account
+        WHERE email = InEmail AND account_role = 2;
+
+        IF countAccounts >= 1 THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ไม่สามารถอัพเดตบัญชีเป็นสมาชิกได้ เนื่องจากอีเมล์นี้ได้ลงทะเบียนแล้ว';
+        ELSE
+            UPDATE account
+            SET email = InEmail, account_role = 2
+            WHERE id_account = InAccountId AND account_role != 2;
+        END IF;
     END IF;
+
     SET countAccounts = 0;
 END //
 DELIMITER ;
