@@ -3,6 +3,7 @@ package com.example.plutocart.controller;
 import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.dtos.wallet.WalletPostDTO;
 import com.example.plutocart.entities.Wallet;
+import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.services.WalletService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class WalletController {
 
     @PatchMapping("/account/{account-id}/wallet/{wallet-id}/wallet-name")
     private void updateNameWalletService(@Valid @RequestParam(name = "wallet-name", defaultValue = "Unknown Wallet") String walletName, @RequestParam(name = "balance-wallet") BigDecimal balanceWallet,
-                                         @PathVariable("account-id") String accountId, @PathVariable("wallet-id") String walletId, @RequestHeader("Authorization") String token) {
+                                         @PathVariable("account-id") String accountId, @PathVariable("wallet-id") String walletId, @RequestHeader("Authorization") String token) throws PlutoCartServiceApiInvalidParamException {
         walletService.updateWallet(walletName, balanceWallet, accountId, walletId, token);
     }
 

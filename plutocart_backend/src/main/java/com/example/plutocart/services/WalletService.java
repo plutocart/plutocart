@@ -7,10 +7,10 @@ import com.example.plutocart.dtos.wallet.WalletDTO;
 import com.example.plutocart.dtos.wallet.WalletPostDTO;
 import com.example.plutocart.entities.Transaction;
 import com.example.plutocart.entities.Wallet;
+import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.TransactionRepository;
 import com.example.plutocart.repositories.WalletRepository;
-import com.example.plutocart.utils.GenericResponse;
 import com.example.plutocart.utils.HelperMethod;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,13 +105,17 @@ public class WalletService {
     }
 
     //    Update
-    public void updateWallet(String walletName, BigDecimal balanceWallet, String accountId, String walletId, String token) {
+    public void updateWallet(String walletName, BigDecimal balanceWallet, String accountId, String walletId, String token) throws PlutoCartServiceApiInvalidParamException {
         String userId = JwtUtil.extractUsername(token);
+
+        if (walletName.length() > 15)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet name over maximum length is 15. ");
+
         if (accountId.equals(userId)) {
             try {
                 int acId = Integer.parseInt(accountId);
                 int wId = Integer.parseInt(walletId);
-                walletRepository.updateWallet(walletName, balanceWallet, acId, wId);
+                walletRepository.updateWallet(walletName, balanceWallet, accountRepository.findById(acId).get().getAccountId(), walletRepository.findById(wId).get().getWalletId());
             } catch (Exception ex) {
                 handleAccountIdAndWalletIdExceptions(accountId, walletId);
             }
@@ -126,7 +130,7 @@ public class WalletService {
             try {
                 int acId = Integer.parseInt(accountId);
                 int wId = Integer.parseInt(walletId);
-                walletRepository.updateStatusWallet((byte) (walletRepository.findById(wId).get().getStatusWallet() == 1 ? 0 : 1), accountRepository.findById(acId).get().getAccountId(), wId);
+                walletRepository.updateStatusWallet((byte) (walletRepository.findById(wId).get().getStatusWallet() == 1 ? 0 : 1), acId, wId);
             } catch (Exception ex) {
                 handleAccountIdAndWalletIdExceptions(accountId, walletId);
             }
@@ -152,7 +156,7 @@ public class WalletService {
                         transactionService.deleteTransaction(accountId, walletId, tranId, token);
 //                        transactionService.deleteTransaction(accountId , wId, transaction.getId() , token);
                     }
-                walletRepository.deleteWalletByAccountIdAndWalletId(acId, wId);
+                walletRepository.deleteWalletByAccountIdAndWalletId(accountRepository.findById(acId).get().getAccountId(), walletRepository.findById(wId).get().getWalletId());
             } catch (Exception ex) {
                 handleAccountIdAndWalletIdExceptions(accountId, walletId);
             }

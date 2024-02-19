@@ -42,13 +42,13 @@ public class DebtValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not created. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (StringUtils.isEmpty(nameDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt must be not empty. ");
 
         if (nameDebt.length() > 45)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt is over of limit character. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt is over maximum length is 45. ");
 
         if (StringUtils.isEmpty(amountDebt) || !HelperMethod.isDecimal(amountDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount of debt must be number. ");
@@ -66,7 +66,7 @@ public class DebtValidationService {
 
         Integer numOfPaidP = Integer.parseInt(numOfPaidPeriod);
 
-        if ((numOfPaidP <= 0 && latestPayDate != null) || (numOfPaidP > 0 && latestPayDate == null))
+        if ((numOfPaidP == 0 && latestPayDate != null) || (numOfPaidP > 0 && latestPayDate == null))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "you must have paid your debt at least 1 time for define your latest date of pay. ");
 
         if (numOfPaidP > payP)
@@ -86,8 +86,8 @@ public class DebtValidationService {
 
         BigDecimal totalPaidD = new BigDecimal(totalPaidDebt);
 
-        if (moneyLender.length() > 100)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "money lender is over of limit character. ");
+        if (moneyLender.length() > 15)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "money lender is over maximum length is 15. ");
 
         DReqPostDTO dReqPostDTO = new DReqPostDTO();
         dReqPostDTO.setAccountId(acId);
@@ -110,21 +110,21 @@ public class DebtValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + accountId + " is not created. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (!HelperMethod.isInteger(debtId))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number. ");
 
         Integer deId = Integer.parseInt(debtId);
         Debt debt = debtRepository.viewDebtByDebtId(deId);
         if (debt == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt Id " + debtId + " is not created. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found. ");
 
         if (StringUtils.isEmpty(nameDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt must be not empty. ");
 
         if (nameDebt.length() > 45)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt is over of limit character. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name of debt is over maximum length is 45. ");
 
         if (StringUtils.isEmpty(amountDebt) || !HelperMethod.isDecimal(amountDebt))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount of debt must be number. ");
@@ -142,7 +142,7 @@ public class DebtValidationService {
 
         Integer numOfPaidP = Integer.parseInt(numOfPaidPeriod);
 
-        if ((numOfPaidP <= 0 && latestPayDate != null) || (numOfPaidP > 0 && latestPayDate == null))
+        if ((numOfPaidP == 0 && latestPayDate != null) || (numOfPaidP > 0 && latestPayDate == null))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "you must have paid your debt at least 1 time for define your latest date of pay. ");
 
 //        if (numOfPaidP > payP)
@@ -162,8 +162,8 @@ public class DebtValidationService {
 
         BigDecimal totalPaidD = new BigDecimal(totalPaidDebt);
 
-        if (moneyLender.length() > 100)
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "money lender is over of limit character. ");
+        if (moneyLender.length() > 15)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "money lender is over maximum length is 15. ");
 
         DReqPutDTO dReqPutDTO = new DReqPutDTO();
         dReqPutDTO.setAccountId(acId);
@@ -190,7 +190,7 @@ public class DebtValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (!HelperMethod.isInteger(debtId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number. ");
@@ -198,7 +198,7 @@ public class DebtValidationService {
         Integer deId = Integer.parseInt(debtId);
         Debt debt = debtRepository.viewDebtByDebtId(deId);
         if (debt == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt Id " + deId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found. ");
 
         List<Transaction> transactionList = transactionRepository.viewTransactionByDebtId(deId);
         if (!transactionList.isEmpty()) {

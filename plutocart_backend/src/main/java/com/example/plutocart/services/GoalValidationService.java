@@ -46,10 +46,13 @@ public class GoalValidationService {
         Integer acId = Integer.parseInt(acIdTrim);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acIdTrim + " is not created. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id not found. ");
 
         if (StringUtils.isEmpty(nGoalTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal must be string. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal must be require. ");
+
+        if (nGoalTrim.length() > 45)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal over maximum length is 45. ");
 
         if (StringUtils.isEmpty(aGoalTrim) || !HelperMethod.isDecimal(aGoalTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount goal must be decimal. ");
@@ -81,7 +84,7 @@ public class GoalValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
 //        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(acId);
 //        if (!transactionList.isEmpty()) {
@@ -97,10 +100,13 @@ public class GoalValidationService {
         Integer goId = Integer.parseInt(goalId);
         Goal goal = goalRepository.viewGoalByGoalId(goId);
         if (goal == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal Id " + goId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
 
         if (StringUtils.isEmpty(nGoalTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal must be string. ");
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal must be require. ");
+
+        if (nGoalTrim.length() > 45)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal over maximum length is 45. ");
 
         if (StringUtils.isEmpty(aGoalTrim) || !HelperMethod.isDecimal(aGoalTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount goal must be decimal. ");
@@ -130,7 +136,7 @@ public class GoalValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (!HelperMethod.isInteger(goalId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
@@ -138,7 +144,7 @@ public class GoalValidationService {
         Integer goId = Integer.parseInt(goalId);
         Goal goal = goalRepository.viewGoalByGoalId(goId);
         if (goal == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal Id " + goId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
 
         GReqPostDTO gReqPostDTO = new GReqPostDTO();
         gReqPostDTO.setAccountId(acId);
@@ -157,7 +163,7 @@ public class GoalValidationService {
         Integer acId = Integer.parseInt(accountId);
         Account account = accountRepository.getAccountById(acId);
         if (account == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id " + acId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
 
         if (!HelperMethod.isInteger(goalId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "goal id must be number. ");
@@ -165,7 +171,7 @@ public class GoalValidationService {
         Integer goId = Integer.parseInt(goalId);
         Goal goal = goalRepository.viewGoalByGoalId(goId);
         if (goal == null)
-            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal Id " + goId + " is not create. ");
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
 
         List<Transaction> transactionList = transactionRepository.viewTransactionByGoalId(goId);
         if (!transactionList.isEmpty()) {
