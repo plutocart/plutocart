@@ -308,7 +308,7 @@ class LoginRepository {
         throw Exception('Unexpected error occurred: ${response.statusCode}');
       }
     } catch (error, stacktrace) {
-      print("Error: $error - Stacktrace: $stacktrace");
+      print("Error delete: $error - Stacktrace: $stacktrace");
       throw error;
     }
   }

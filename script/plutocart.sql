@@ -904,25 +904,26 @@ DELIMITER //
 
 CREATE PROCEDURE `deleteAccount`(IN InAccountId INT)
 BEGIN
-  DECLARE done INT DEFAULT FALSE;
-  DECLARE walletId INT;
-  DECLARE cur CURSOR FOR SELECT id_wallet FROM wallet WHERE account_id_account = InAccountId;
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  -- Delete transactions associated with goals and debts
+  DELETE transaction
+  FROM transaction
+  JOIN wallet ON transaction.wallet_id_wallet = wallet.id_wallet
+  JOIN account ON wallet.account_id_account = account.id_account
+  LEFT JOIN goal ON transaction.goal_id_goal = goal.id_goal
+  LEFT JOIN debt ON transaction.debt_id_debt = debt.id_debt
+  WHERE account.id_account = InAccountId;
 
-  -- Delete goals and debts associated with the account
+  -- Delete goals associated with the account
   DELETE FROM goal WHERE account_id_account = InAccountId;
+
+  -- Delete debts associated with the account
   DELETE FROM debt WHERE account_id_account = InAccountId;
 
   -- Delete transactions associated with wallets of the account
-  OPEN cur;
-  read_loop: LOOP
-    FETCH cur INTO walletId;
-    IF done THEN
-      LEAVE read_loop;
-    END IF;
-    DELETE FROM transaction WHERE wallet_id_wallet = walletId;
-  END LOOP;
-  CLOSE cur;
+  DELETE transaction
+  FROM transaction
+  JOIN wallet ON transaction.wallet_id_wallet = wallet.id_wallet
+  WHERE wallet.account_id_account = InAccountId;
 
   -- Delete wallets associated with the account
   DELETE FROM wallet WHERE account_id_account = InAccountId;
@@ -932,3 +933,4 @@ BEGIN
 END //
 
 DELIMITER ;
+
