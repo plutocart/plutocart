@@ -193,8 +193,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       String? email = await storage.read(key: "email");
       try {
         print("start update account in bloc");
-        Map<String, dynamic> response =
-            await LoginRepository().updateEmailToMember();
+        Map<String, dynamic> response = await LoginRepository().updateEmailToMember();
         print("after update in bloc: $response");
         if (response['data']['email'] == null || (email == " " || email!.isEmpty)) {
           print(
@@ -221,7 +220,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           signInGoogleStatus: false,
           isUpdateAccount: false,
           accountRole: "Guest",
-        );
+        );            
         emit(newState);
       }
     });

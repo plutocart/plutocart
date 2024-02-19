@@ -138,7 +138,8 @@ class _SettingPopupState extends State<SettingPopup> {
                         await Future.delayed(Duration(milliseconds: 1500));
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        if (context.read<LoginBloc>().state.isUpdateAccount == false) {
+                        if (context.read<LoginBloc>().state.isUpdateAccount ==
+                            false) {
                           customAlertPopup(
                               context,
                               "Update to account member unsuccessful",
