@@ -884,39 +884,41 @@ DELIMITER ;
 
 -- update account from guest to member
 DELIMITER //
-CREATE  PROCEDURE `updateAccountToMember`( IN InEmail VARCHAR(50) , in InAccountId int)
+CREATE PROCEDURE `updateAccountToMember`(IN InEmail VARCHAR(50), IN InAccountId INT)
 BEGIN
     DECLARE countAccounts INT;
-    DECLARE linkedTablesCount INT;
+    DECLARE walletCount INT;
+    DECLARE debtCount INT;
+    DECLARE goalCount INT;
 
-    -- ตรวจสอบว่าบัญชีเชื่อมโยงกับตารางอื่นหรือไม่
-    SELECT COUNT(*) INTO linkedTablesCount
-    FROM information_schema.KEY_COLUMN_USAGE
-    WHERE TABLE_NAME IN ('wallet', 'transaction', 'debt', 'goal')
-    AND CONSTRAINT_SCHEMA = 'plutocart' -- แทนที่ด้วยชื่อของฐานข้อมูลของคุณ
-    AND COLUMN_NAME = 'id_account'
-    AND REFERENCED_TABLE_NAME = 'account';
+    -- Check if the account is connected to wallet, debt, or goal
+    SELECT 
+        (SELECT COUNT(*) FROM wallet WHERE account_id = InAccountId) INTO walletCount,
+        (SELECT COUNT(*) FROM debt WHERE account_id = InAccountId) INTO debtCount,
+        (SELECT COUNT(*) FROM goal WHERE account_id = InAccountId) INTO goalCount;
 
-    IF linkedTablesCount > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ไม่สามารถอัพเดตบัญชีเป็นสมาชิกได้ เนื่องจากมีการเชื่อมโยงกับตารางอื่น';
+    IF walletCount > 0 OR debtCount > 0 OR goalCount > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot update account to member because it is connected to wallet, debt, or goal';
     ELSE
-        -- ตรวจสอบว่ามีบัญชีอื่นที่ใช้อีเมลเดียวกันและเป็นสมาชิกอยู่แล้วหรือไม่
-        SELECT COUNT(*) INTO countAccounts
-        FROM account
-        WHERE email = InEmail AND account_role = 2;
+        -- Check if the email is already registered with account_role = 2
+        SELECT COUNT(*) INTO countAccounts FROM account WHERE email = InEmail AND account_role = 2;
 
         IF countAccounts >= 1 THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ไม่สามารถอัพเดตบัญชีเป็นสมาชิกได้ เนื่องจากอีเมล์นี้ได้ลงทะเบียนแล้ว';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot update account to member because email is already registered';
         ELSE
-            UPDATE account
-            SET email = InEmail, account_role = 2
-            WHERE id_account = InAccountId AND account_role != 2;
+            -- Update account to member
+            UPDATE account SET email = InEmail, account_role = 2 WHERE id_account = InAccountId AND account_role != 2;
         END IF;
     END IF;
 
+    -- Reset variables
     SET countAccounts = 0;
+    SET walletCount = 0;
+    SET debtCount = 0;
+    SET goalCount = 0;
 END //
 DELIMITER ;
+
 
 -- delete account  
 DELIMITER //

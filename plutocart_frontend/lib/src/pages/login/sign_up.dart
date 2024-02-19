@@ -92,7 +92,6 @@ class _SignUpState extends State<SignUp> {
                             onPressed: () async {
                               print("start sign up account guest");
                               context.read<LoginBloc>().add(CreateAccountGuest());
-                              print("check state login guest bloc before : ${context.read<LoginBloc>().state}")  ;
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),

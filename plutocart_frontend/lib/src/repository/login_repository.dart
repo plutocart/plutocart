@@ -268,7 +268,7 @@ class LoginRepository {
       );
       print("update email  ${response.data}");
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.data != null) {
 
         await storage.write(
           key: "email",
