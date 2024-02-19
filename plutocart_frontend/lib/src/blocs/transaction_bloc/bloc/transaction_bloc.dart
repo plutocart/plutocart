@@ -168,5 +168,22 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         print("Error creating transacton income in transaction bloc");
       }
     });
+
+     on<DeleteTransaction>((event, emit) async {
+      try {
+        print("start step delete account bloc");
+         await TransactionRepository().deleteTransaction(event.transactionId , event.walletId);
+        final List<dynamic> newListTransaction = [...state.transactionList!];
+        print("new list transaction : ${newListTransaction}");
+        newListTransaction.removeWhere((element) => element['id'] == event.transactionId);
+              print("after new list transaction : ${newListTransaction}");
+        emit(state.copyWith(deleteTransactionStatus: TransactionStatus.loaded , transactionList: newListTransaction));
+        print("check list : ${state.transactionList}");
+       
+      } catch (error) {
+        print("error delete account bloc: $error");
+        throw error;
+      }
+    });
   }
 }

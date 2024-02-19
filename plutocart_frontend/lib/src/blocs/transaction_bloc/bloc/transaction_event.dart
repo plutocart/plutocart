@@ -54,6 +54,12 @@ class CreateTransactionDebt extends TransactionEvent {
       this.desctiption);
 }
 
+class DeleteTransaction extends TransactionEvent {
+  final int transactionId;
+  final int walletId;
+  DeleteTransaction(this.transactionId, this.walletId);
+}
+
 class ResetTransactionStatus extends TransactionEvent {}
 
 class ResetTransactionGoalStatus extends TransactionEvent {}

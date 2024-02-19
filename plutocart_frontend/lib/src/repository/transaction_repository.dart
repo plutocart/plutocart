@@ -288,4 +288,31 @@ class TransactionRepository {
     }
   }
 
+
+   Future<Map<String, dynamic>> deleteTransaction(int transactionId , int walletId) async {
+    final storage = new FlutterSecureStorage();
+    String? accountId = await storage.read(key: "accountId");
+    int id = int.parse(accountId!);
+    String ? token = await storage.read(key: "token");
+    print("id account in step deleteTransactionById : ${id}");
+    try {
+      Response response = await dio.delete(
+          '${dotenv.env['API']}/api/account/${id}/wallet/${walletId}/transaction/${transactionId}' , options: 
+          Options(
+                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+          ));
+      if (response.statusCode == 200) {
+        print("delete transaction id : ${transactionId} : success");
+        return response.data;
+      } else if (response.statusCode == 404) {
+        throw Exception('Resource not found');
+      } else {
+        throw Exception('Unexpected error occurred: ${response.statusCode}');
+      }
+    } catch (error, stacktrace) {
+      print("Error: $error - Stacktrace: $stacktrace");
+      throw error;
+    }
+  }
+
 }

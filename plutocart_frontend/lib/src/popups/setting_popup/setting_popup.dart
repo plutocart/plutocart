@@ -138,7 +138,8 @@ class _SettingPopupState extends State<SettingPopup> {
                         await Future.delayed(Duration(milliseconds: 1500));
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        if (context.read<LoginBloc>().state.isUpdateAccount ==
+                      context.read<LoginBloc>().stream.listen((event) { 
+                          if (event.isUpdateAccount ==
                             false) {
                           customAlertPopup(
                               context,
@@ -146,6 +147,7 @@ class _SettingPopupState extends State<SettingPopup> {
                               Icons.error_outline_rounded,
                               Colors.red.shade200);
                         }
+                      });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

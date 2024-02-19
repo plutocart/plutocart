@@ -47,7 +47,7 @@ class _DebtPageState extends State<DebtPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5),
+                  padding: const EdgeInsets.only(left: 5 ,),
                   child: Image.asset(
                     "assets/icon/icon_launch.png",
                     width: 25,
@@ -129,12 +129,15 @@ class _DebtPageState extends State<DebtPage> {
                                     AssetImage('assets/icon/icon_launch.png'),
                                 width: MediaQuery.of(context).size.width * 0.3,
                               ),
-                              Text("No record",
-                                  style: TextStyle(
-                                      color: Color(0xFF15616D),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Roboto")),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 79),
+                                child: Text("No record",
+                                    style: TextStyle(
+                                        color: Color(0xFF15616D),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "Roboto")),
+                              ),
                             ],
                           ),
                         ),

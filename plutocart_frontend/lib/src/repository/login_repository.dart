@@ -260,11 +260,12 @@ class LoginRepository {
       print("start update guest account");
       Response response = await dio.patch(
         '${dotenv.env['API']}/api/account/${id}/upgrade-role-member',
-        queryParameters: {"email": (email!.isEmpty || email == " ") ? null : email},
+        queryParameters: {"email":  email},
         options: 
           Options(
             headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
           ) , 
+          
       );
       print("update email  ${response.data}");
 
@@ -275,7 +276,9 @@ class LoginRepository {
           value: response.data['data']['email'].toString(),
         );
         return response.data;
-      } else {
+      } 
+   
+      else {
         throw Exception('Error: ${'404'}');
       }
     } catch (error) {
