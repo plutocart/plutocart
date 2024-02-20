@@ -227,8 +227,8 @@ class _CardGroupState extends State<CardGroup> {
                                                       Text(
                                                         transaction['statementType'] ==
                                                                 "expense"
-                                                            ? "-${transaction['stmTransaction'].toStringAsFixed(2)}"
-                                                            : "+${transaction['stmTransaction'].toStringAsFixed(2)}",
+                                                            ? "-${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"
+                                                            : "+${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}",
                                                         style: TextStyle(
                                                           color: transaction[
                                                                       'statementType'] ==
@@ -443,7 +443,7 @@ class _CardGroupState extends State<CardGroup> {
                                                               right: 2,
                                                               left: 20),
                                                       child: Text(
-                                                          "${state.goalList![state.goalList!.length - 1]['deficit'].toStringAsFixed(2)}฿",
+                                                          "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['deficit'])}฿",
                                                           style: TextStyle(
                                                               color: Color(
                                                                   0xFF15616D),
@@ -470,7 +470,7 @@ class _CardGroupState extends State<CardGroup> {
                                                                   "Roboto")),
                                                     ),
                                                     Text(
-                                                        "${state.goalList![state.goalList!.length - 1]['amountGoal'].toStringAsFixed(2)}฿",
+                                                        "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['amountGoal'])}฿",
                                                         style: TextStyle(
                                                             color: Color(
                                                                 0xFF1A9CB0),

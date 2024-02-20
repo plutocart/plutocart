@@ -90,8 +90,7 @@ class MoreVertDebt extends StatelessWidget {
   editDebt(Map<String , dynamic> debt , BuildContext context) {
     showSlideDialog(
         context: context,
-        child:
-            EditDebtPopup(debt: debt),
+        child: EditDebtPopup(debt: debt),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 3);

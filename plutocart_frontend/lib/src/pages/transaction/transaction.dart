@@ -32,7 +32,7 @@ class _TransactionPageState extends State<TransactionPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Transaction",
+                  "Transactions",
                   style: TextStyle(
                     color: Color(0xFF15616D),
                     fontSize: 24,
@@ -193,7 +193,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            "${transaction['statementType'] == "income" ? "+${transaction['stmTransaction'].toStringAsFixed(2)}" : "-${transaction['stmTransaction'].toStringAsFixed(2)}"}",
+                                            "${transaction['statementType'] == "income" ? "+${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}" : "-${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"}",
                                             style: TextStyle(
                                               color: transaction[
                                                           'statementType'] ==

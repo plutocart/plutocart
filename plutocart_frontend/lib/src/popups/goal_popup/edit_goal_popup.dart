@@ -117,7 +117,7 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
               tranDateController: tranDateController, nameField: 'Selected Date',
             ),
             ActionPopup(
-              bottonFirstName: "Cancle",
+              bottonFirstName: "Cancel",
               bottonSecondeName: "Confirm",
               bottonFirstNameFunction: () {
                 Navigator.pop(context);

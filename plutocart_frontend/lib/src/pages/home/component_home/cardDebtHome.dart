@@ -21,7 +21,7 @@ class CardDebtHome extends StatelessWidget {
           formattedDate = null;
         }
         return Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.9,
             child: Column(
@@ -139,7 +139,7 @@ class CardDebtHome extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "${state.debtList[state.debtList.length - 1]['totalPaidDebt']}฿",
+                                  "${NumberFormat("#,##0.00").format(state.debtList[state.debtList.length - 1]['totalPaidDebt'])}฿",
                                   style: TextStyle(
                                     color: Color(0xFF15616D),
                                     fontSize: 14,

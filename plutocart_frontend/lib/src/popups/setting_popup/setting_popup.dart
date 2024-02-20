@@ -218,7 +218,7 @@ class _SettingPopupState extends State<SettingPopup> {
                   elevation: 0,
                 ),
                 child: Center(
-                  child: Text("Delete Account Guest"),
+                  child: Text("Delete Account"),
                 ),
               );
             },

@@ -110,7 +110,7 @@ class _BottomSheetDeleteWalletState extends State<BottomSheetDeleteWallet> {
             ),
           ),
           ActionPopup(
-            bottonFirstName: "Cancle",
+            bottonFirstName: "Cancel",
             bottonSecondeName: "Delete",
             bottonFirstNameFunction: () {
               for (int i = 0; i < widget.numberPopUp1!; i++) {

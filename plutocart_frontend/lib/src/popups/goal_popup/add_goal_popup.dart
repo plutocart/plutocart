@@ -122,7 +122,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
               nameField: "Selected Date",
             ),
             ActionPopup(
-              bottonFirstName: "Cancle",
+              bottonFirstName: "Cancel",
               bottonSecondeName: "Add",
               bottonFirstNameFunction: () {
                 Navigator.pop(context);

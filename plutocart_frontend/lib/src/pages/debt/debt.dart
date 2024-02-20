@@ -38,7 +38,7 @@ class _DebtPageState extends State<DebtPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Debt",
+                  "Debts",
                   style: TextStyle(
                     color: Color(0xFF15616D),
                     fontSize: 24,
@@ -294,17 +294,17 @@ class _DebtPageState extends State<DebtPage> {
                                                   ),
                                                   DetailDebt(
                                                     value1: "Monthly payment",
-                                                    value2: debt[
-                                                        'paidDebtPerPeriod'],
+                                                    value2: NumberFormat("##,##0.00").format(debt[
+                                                        'paidDebtPerPeriod'],), 
                                                   ),
                                                   DetailDebt(
                                                     value1: "Debt paid",
                                                     value2:
-                                                        debt['totalPaidDebt'],
+                                                        NumberFormat("##,##0.00").format(debt['totalPaidDebt']),
                                                   ),
                                                   DetailDebt(
                                                     value1: "Total debt",
-                                                    value2: debt['amountDebt'],
+                                                    value2: NumberFormat("##,##0.00").format(debt['amountDebt']),
                                                   ),
                                                   DetailDebt(
                                                     value1: "Latest paid",
@@ -443,7 +443,7 @@ class _DebtPageState extends State<DebtPage> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        "${debt['totalPaidDebt']}฿",
+                                                        "${NumberFormat("#,##0.00").format(debt['totalPaidDebt'])}฿",
                                                         style: TextStyle(
                                                           color:
                                                               Color(0xFF15616D),

@@ -138,7 +138,7 @@ class _BottomSheetGoalState extends State<BottomSheetGoal> {
           BlocBuilder<GoalBloc, GoalState>(
             builder: (context, state) {
               return ActionPopup(
-                bottonFirstName: "Cancle",
+                bottonFirstName: "Cancel",
                 bottonSecondeName: "Delete",
                 bottonFirstNameFunction: () {
                   for (int i = 0; i < widget.numberPopUp1!; i++) {

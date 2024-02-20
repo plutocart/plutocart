@@ -39,7 +39,7 @@ class _GoalPageState extends State<GoalPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Goal",
+                  "Goals",
                   style: TextStyle(
                     color: Color(0xFF15616D),
                     fontSize: 24,
@@ -363,7 +363,7 @@ class _GoalPageState extends State<GoalPage> {
                                                             const EdgeInsets
                                                                 .only(right: 2),
                                                         child: Text(
-                                                            "${goal['deficit'].toStringAsFixed(2)}฿",
+                                                            "${NumberFormat("#,##0.00").format(goal['deficit'])}฿",
                                                             style: TextStyle(
                                                                 color: Color(
                                                                     0xFF15616D),
@@ -384,7 +384,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                       .w400,
                                                               fontFamily:
                                                                   "Roboto")) , 
-                                                      Text(  "${goal['amountGoal'].toStringAsFixed(2)}฿",
+                                                      Text(  "${NumberFormat("#,##0.00").format(goal['amountGoal'])}฿",
                                                           style: TextStyle(
                                                               color: Color(
                                                                   0xFF15616D),
@@ -439,7 +439,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                     fontFamily:
                                                                         "Roboto")),
                                                             Text(
-                                                                "${goal['deficit'].toStringAsFixed(2)} ฿",
+                                                                "${NumberFormat("#,##0.00").format(goal['deficit'])} ฿",
                                                                 style: TextStyle(
                                                                     color: Color(
                                                                         0xFF2DC653),
@@ -490,7 +490,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                     fontFamily:
                                                                         "Roboto")),
                                                             Text(
-                                                              "${(goal['amountGoal'] - goal['deficit']).abs().toStringAsFixed(2)} ฿",
+                                                              "${NumberFormat("#,##0.00").format(( goal['amountGoal'] - goal['deficit']).abs())} ฿",
                                                               style: TextStyle(
                                                                 color: Color(
                                                                     0XFF1A9CB0),

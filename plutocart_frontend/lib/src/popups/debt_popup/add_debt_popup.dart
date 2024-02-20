@@ -351,7 +351,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: ActionPopup(
-              bottonFirstName: "Cancle",
+              bottonFirstName: "Cancel",
               bottonSecondeName: "Add",
               bottonFirstNameFunction: () {
                 Navigator.pop(context);

@@ -39,16 +39,17 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
         widget.debt!['paidDebtPerPeriod'].toString();
     debtPaidController.text = widget.debt!['totalPaidDebt'].toString();
     moneyLenderController.text = widget.debt!['moneyLender'].toString();
+    DateTime now = DateTime.now();
+    String formattedDateTimeNow =   '${now.toString().substring(8, 10)}/${now.toString().substring(5, 7)}/${now.toString().substring(0, 4)} ${now.toString().substring(11, 13)}:${now.toString().substring(14, 16)}';
     String date = widget.debt!['latestPayDate'].toString();
-    String formattedDateTime =
-        '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
+    String formattedDateTime =  date == "null" ? "-" : '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
     latestPaidController.text = formattedDateTime;
 
     totalDebtController.addListener(() {
       setState(() {
         if (totalPeriodController.text.length != 0 &&
             totalPeriodController.text.length != 0 &&
-            paidPeriodController.text.length != 0) {
+            paidPeriodController.text.length != 0 ) {
           calMonthlyPayment = double.parse(totalDebtController.text) /
               double.parse(totalPeriodController.text);
           monthlyPaymentController.text = calMonthlyPayment!.toStringAsFixed(2);
@@ -61,6 +62,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
               double.parse(totalPeriodController.text);
           monthlyPaymentController.text = calMonthlyPayment!.toStringAsFixed(2);
         }
+
       });
     });
     totalPeriodController.addListener(() {
@@ -78,15 +80,20 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
       setState(() {
         if (paidPeriodController.text.length != 0 &&
             monthlyPaymentController.text.length != 0 &&
-            totalDebtController.text.length != 0) {
+            totalDebtController.text.length != 0 && int.parse(paidPeriodController.text) > 0) {
+            latestPaidController.text = formattedDateTimeNow;
           calDetPaid = double.parse(paidPeriodController.text) *
               double.parse(monthlyPaymentController.text);
           debtPaidController.text = calDetPaid!.toStringAsFixed(2);
         } else if (paidPeriodController.text.length != 0 &&
-            monthlyPaymentController.text.length != 0) {
+            monthlyPaymentController.text.length != 0 && int.parse(paidPeriodController.text) > 0 && int.parse(paidPeriodController.text) > 0) {
           calDetPaid = double.parse(paidPeriodController.text) *
               double.parse(monthlyPaymentController.text);
           debtPaidController.text = calDetPaid!.toStringAsFixed(2);
+           latestPaidController.text = "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}";
+        }
+        else if ( int.parse(paidPeriodController.text) == 0){
+           latestPaidController.text = "-";
         }
       });
     });
@@ -260,7 +267,8 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                     icon: Icon(
                       Icons.import_export_outlined,
                       color: Color(0xFF15616D),
-                    ), // ตัวอย่าง icon button เป็น calendar_today
+                    ), 
+                    // ตัวอย่าง icon button เป็น calendar_today
                     onPressed: () {
                       if (totalPeriodController.text == "") {
                         customAlertPopup(context, "Please input total period!",
@@ -275,6 +283,9 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                     },
                   ),
                 ),
+                 onChanged: (value) {
+                  setState(() {});
+                },
               ),
               SizedBox(
                 height: 15,
@@ -293,10 +304,10 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
               ),
               AmountTextField(
                   amountMoneyController: moneyLenderController, nameField: "Moneylender"),
-              SizedBox(
+              latestPaidController.text == "-" ||  paidPeriodController.text == "0"  ? SizedBox.shrink() : SizedBox(
                 height: 15,
               ),
-              DatePickerFieldOnlyDay(
+              latestPaidController.text == "-" || paidPeriodController.text == "0" ?  SizedBox.shrink() : DatePickerFieldOnlyDay(
                 tranDateController: latestPaidController,
                 nameField: "Latest paid",
               ),
@@ -306,7 +317,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: ActionPopup(
-                  bottonFirstName: "Cancle",
+                  bottonFirstName: "Cancel",
                   bottonSecondeName: "Confirm",
                   bottonFirstNameFunction: () {
                     Navigator.pop(context);
@@ -329,7 +340,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                       int paidPeriod = int.parse(paidPeriodController.text);
                       double monthlyPayment = double.parse(monthlyPaymentController.text);
                       double debtPaid = double.parse(debtPaidController.text);
-                      String lastestPaid = changeFormatter(latestPaidController.text);
+                      String lastestPaid = latestPaidController.text == "-" || paidPeriodController.text == "0"  ? "" : changeFormatter(latestPaidController.text);
                       showLoadingPagePopUp(context);
                       context.read<DebtBloc>().add(UpdateDebt(widget.debt!['id'], nameOfYourDebtController.text, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLenderController.text, lastestPaid));
                         context.read<DebtBloc>().stream.listen((state) {

@@ -336,7 +336,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
             return ActionPopup(
-                bottonFirstName: "Cancle",
+                bottonFirstName: "Cancel",
                 bottonSecondeName: "Add",
                 bottonFirstNameFunction: () {
                   Navigator.pop(context);
@@ -384,7 +384,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());
-                                context.read<TransactionBloc>().add(GetTransactionList());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList());
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionLimit3());
@@ -415,6 +417,10 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         context.read<TransactionBloc>().stream.listen((state) {
                           if (state.goalStatus == TransactionStatus.loaded) {
                             context.read<WalletBloc>().add(GetAllWallet());
+
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList());
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());
@@ -452,6 +458,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                           if (state.debtStatus == TransactionStatus.loaded) {
                             print("Check t");
                             context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList());
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());

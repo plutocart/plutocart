@@ -33,7 +33,7 @@ class BottomNavigatorBar extends StatelessWidget {
             AssetImage('assets/icon/transaction_icon.png'),
             color: Color(0XFF15616D),
           ),
-          label: 'Tx',
+          label: 'Trans',
         ),
         BottomNavigationBarItem(
           icon: ImageIcon(

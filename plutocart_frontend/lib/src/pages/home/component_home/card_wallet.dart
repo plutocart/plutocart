@@ -1,6 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
@@ -281,7 +282,7 @@ class _CardWalletState extends State<CardWallet> {
                                   children: [
                                     SizedBox(width: 32),
                                     Text(
-                                      wallet.walletBalance.toString(),
+                                     "${ NumberFormat("#,##0.00").format(wallet.walletBalance)}" , 
                                       style: TextStyle(
                                           color: Color(0xFF15616D),
                                           fontSize: 25,
@@ -331,7 +332,7 @@ class _CardWalletState extends State<CardWallet> {
                                                   state.transactionsDailyInExList
                                                           .length >
                                                       index
-                                              ? "-${state.transactionsDailyInExList[index]['todayExpense'].toStringAsFixed(2)}฿"
+                                              ? "-${NumberFormat("#,##0.00").format(state.transactionsDailyInExList[index]['todayExpense'])}฿"
                                               : "-0.0",
                                           style: TextStyle(
                                               color: Color(0xFFDD0000),
@@ -390,7 +391,7 @@ class _CardWalletState extends State<CardWallet> {
                                                   state.transactionsDailyInExList
                                                           .length >
                                                       index
-                                              ? "+${state.transactionsDailyInExList[index]['todayIncome'].toStringAsFixed(2)}฿"
+                                              ? "+${NumberFormat("#,##0.00").format(state.transactionsDailyInExList[index]['todayIncome'])}฿"
                                               : "+0.0",
                                           style: TextStyle(
                                               color: Color(0xFF2DC653),
