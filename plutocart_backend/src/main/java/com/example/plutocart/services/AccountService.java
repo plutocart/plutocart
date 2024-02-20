@@ -82,9 +82,15 @@ public class AccountService {
             accountRepository.updateAccountToMember(email, accountId);
             response.setStatus(ResultCode.SUCCESS);
             Account account = accountRepository.findById(accountId).get();
-            account.setAccountRole("Member");
-            account.setEmail(email);
-            response.setData(account);
+//            account.setAccountRole("Member");
+//            account.setEmail(email);
+//            response.setData(account);
+            AccountDTO accountDTO = new AccountDTO();
+            accountDTO.setAccountId(account.getAccountId());
+            accountDTO.setAccountRole(account.getAccountRole());
+            accountDTO.setEmail(account.getEmail());
+            response.setData(accountDTO);
+
             return response;
         } catch (Exception ex) {
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.BAD_REQUEST, "invalid body request.");
