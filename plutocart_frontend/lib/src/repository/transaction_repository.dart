@@ -254,7 +254,7 @@ class TransactionRepository {
           "dateTransaction": dateTransaction,
           "description": description,
           "transactionCategoryId": 33,
-          "goalIdGoal" : debtIdDebt
+          "debtIdDebt" : debtIdDebt
         });
       }
       print("form data : ${formData.fields}");

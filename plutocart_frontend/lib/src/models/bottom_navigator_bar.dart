@@ -35,6 +35,13 @@ class BottomNavigatorBar extends StatelessWidget {
           ),
           label: 'Trans',
         ),
+           BottomNavigationBarItem(
+          icon: ImageIcon(
+            AssetImage('assets/icon/graph_icon.png'),
+            color: Color(0XFF15616D),
+          ),
+          label: 'Graph',
+        ),
         BottomNavigationBarItem(
           icon: ImageIcon(
             AssetImage('assets/icon/goal_icon.png'),

@@ -472,9 +472,6 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             context
                                 .read<TransactionBloc>()
                                 .add(ResetTransactionDebtStatus());
-                            // context
-                            //     .read<GoalBloc>()
-                            //     .add(CheckGoalComplete(idGoalFormat));
                             Navigator.pop(context);
                             Navigator.pop(context);
                           }

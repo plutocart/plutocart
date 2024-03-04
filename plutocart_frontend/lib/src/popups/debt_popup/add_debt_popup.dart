@@ -226,8 +226,9 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                 ), // ตัวอย่าง icon button เป็น calendar_today
                 onPressed: () {
                   if (totalDebtController.text.length != 0) {
+                    int paidPeriod = int.parse(paidPeriodController.text) == 0 ? int.parse(paidPeriodController.text) : 1;
                     addPayPeriod(context, integerValuePayPeriod!,
-                        totalPeriodController, 1, 360);
+                        totalPeriodController, paidPeriod , 360);
                   } else {
                     customAlertPopup(context, "Please input total debt!",
                         Icons.error_outline_rounded, Colors.red.shade200);
