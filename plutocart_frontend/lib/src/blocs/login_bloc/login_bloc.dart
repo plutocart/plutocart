@@ -202,7 +202,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               signInGoogleStatus: false,
               accountRole: "Guest",
               email: null,
-              isUpdateAccount: false));
+              isUpdateAccount: false ));
         } else {
           print(
               "signin customer after update account guest to member repository loginEmailGoole working ? :");
@@ -210,18 +210,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             email: response['data']['email'],
             signInGoogleStatus: true,
             isUpdateAccount: true,
+             isUpdateFail: false ,
             accountRole: "Member",
           ));
         }
       } catch (error) {
-        print(
-            'Error loginEmailGoole during account guest to member creation: $error');
+        // print(
+        //     'Error loginEmailGoole during account guest to member creation: $error');
         final newState = state.copyWith(
           signInGoogleStatus: false,
           isUpdateAccount: false,
+          isUpdateFail: true ,
           accountRole: "Guest",
         );            
         emit(newState);
+             print(
+            'Error loginEmailGoole during account guest to member creation: $state');
       }
     });
 

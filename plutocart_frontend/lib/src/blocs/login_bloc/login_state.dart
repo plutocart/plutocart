@@ -14,6 +14,7 @@ class LoginState extends Equatable {
   final bool signInGoogleStatus;
   final bool isLogOut;
   final bool isUpdateAccount;
+  final bool isUpdateFail;
   const LoginState(
       {this.imei = "",
       this.accountRole = "Guest",
@@ -24,7 +25,7 @@ class LoginState extends Equatable {
       this.signUpMemberSuccess = false,
       this.signUpGuestSuccess = false,
       this.signInMemberSuccess = true,
-      this.signInGuestSuccess = true , this.signInGoogleStatus = true , this.isLogOut = false  , this.isUpdateAccount = false});
+      this.signInGuestSuccess = true , this.signInGoogleStatus = true , this.isLogOut = false  , this.isUpdateAccount = false , this.isUpdateFail = false});
 
   LoginState copyWith(
       {String? imei,
@@ -36,7 +37,7 @@ class LoginState extends Equatable {
       bool? signUpMemberSuccess,
       bool? signUpGuestSuccess,
       bool? signInMemberSuccess,
-      bool? signInGuestSuccess , bool ? signInGoogleStatus , bool ? isLogOut , bool? isUpdateAccount}) {
+      bool? signInGuestSuccess , bool ? signInGoogleStatus , bool ? isLogOut , bool? isUpdateAccount , bool? isUpdateFail}) {
     return LoginState(
         imei: imei ?? this.imei,
         accountRole: accountRole ?? this.accountRole,
@@ -48,7 +49,7 @@ class LoginState extends Equatable {
         signUpMemberSuccess ?? this.signUpMemberSuccess,
         signUpGuestSuccess: signUpGuestSuccess ?? this.signUpGuestSuccess,
         signInMemberSuccess: signInMemberSuccess ?? this.signInMemberSuccess,
-        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess , signInGoogleStatus : signInGoogleStatus ?? this.signInGoogleStatus , isLogOut: isLogOut ?? this.isLogOut , isUpdateAccount: isUpdateAccount ?? this.isUpdateAccount);
+        signInGuestSuccess: signInGuestSuccess ?? this.signInGuestSuccess , signInGoogleStatus : signInGoogleStatus ?? this.signInGoogleStatus , isLogOut: isLogOut ?? this.isLogOut , isUpdateAccount: isUpdateAccount ?? this.isUpdateAccount , isUpdateFail: isUpdateFail ?? this.isUpdateFail);
   }
 
   @override
@@ -62,6 +63,6 @@ class LoginState extends Equatable {
         signUpMemberSuccess,
         signUpGuestSuccess,
         signInMemberSuccess,
-        signInGuestSuccess , signInGoogleStatus , isLogOut , isUpdateAccount
+        signInGuestSuccess , signInGoogleStatus , isLogOut , isUpdateAccount , isUpdateFail
       ];
 }

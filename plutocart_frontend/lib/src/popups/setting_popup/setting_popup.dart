@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
@@ -138,16 +139,15 @@ class _SettingPopupState extends State<SettingPopup> {
                         await Future.delayed(Duration(milliseconds: 1500));
                         Navigator.pop(context);
                         Navigator.pop(context);
-                      context.read<LoginBloc>().stream.listen((event) { 
-                          if (event.isUpdateAccount ==
-                            false) {
-                          customAlertPopup(
+                             customAlertPopup(
                               context,
-                              "Update to account member unsuccessful",
-                              Icons.error_outline_rounded,
-                              Colors.red.shade200);
-                        }
-                      });
+                              state.isUpdateFail == false ? "Update to account member unsuccessful" : "Update to account member successful" ,
+                                state.isUpdateFail == false ? Icons.error_outline_rounded : Icons.check_circle_outlined,
+                              state.isUpdateFail == false ? Colors.red.shade200 : Colors.green.shade200);
+                              if(state.isUpdateFail == false){
+                                 final storage = FlutterSecureStorage();
+                                 storage.delete(key: "email");
+                              }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
