@@ -26,12 +26,12 @@ public interface DebtRepository extends JpaRepository<Debt, Integer> {
     @Transactional
     @Modifying
     @Procedure(procedureName = "createDebtByAccountId")
-    void insertDebtByAccountId(String nameDebt, BigDecimal amountDebt, Integer payPeriod, Integer numOfPaidPeriod, BigDecimal paidDebtPerPeriod, BigDecimal totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, Integer accountId);
+    void insertDebtByAccountId(String nameDebt, BigDecimal totalDebt, Integer totalPeriod, Integer paidPeriod, BigDecimal monthlyPayment, BigDecimal debtPaid, String moneyLender, LocalDateTime latestPayDate, Integer accountId);
 
     @Transactional
     @Modifying
     @Procedure(procedureName = "updateDebtByAccountId")
-    void updateDebtByAccountId(String nameDebt, BigDecimal amountDebt, Integer payPeriod, Integer numOfPaidPeriod, BigDecimal paidDebtPerPeriod, BigDecimal totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, Integer debtId);
+    void updateDebtByAccountId(String nameDebt, BigDecimal totalDebt, Integer totalPeriod, Integer paidPeriod, BigDecimal monthlyPayment, BigDecimal debtPaid, String moneyLender, LocalDateTime latestPayDate, Integer debtId);
 
 
     @Transactional

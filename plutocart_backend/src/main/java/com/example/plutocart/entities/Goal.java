@@ -24,11 +24,11 @@ public class Goal {
     @Column(name = "name_goal", nullable = false, length = 45)
     private String nameGoal;
 
-    @Column(name = "amount_goal", nullable = false, precision = 13, scale = 2)
-    private BigDecimal amountGoal;
+    @Column(name = "total_goal", nullable = false, precision = 13, scale = 2)
+    private BigDecimal totalGoal;
 
-    @Column(name = "deficit", nullable = false, precision = 13, scale = 2)
-    private BigDecimal deficit;
+    @Column(name = "collected_money", nullable = false, precision = 13, scale = 2)
+    private BigDecimal collectedMoney;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id_account", nullable = false)

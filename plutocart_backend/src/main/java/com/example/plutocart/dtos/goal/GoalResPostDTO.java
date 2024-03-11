@@ -12,8 +12,8 @@ public class GoalResPostDTO {
 
     private Integer acId;
     private String nameGoal;
-    private BigDecimal amountGoal;
-    private BigDecimal deficit;
+    private BigDecimal totalGoal;
+    private BigDecimal collectedMoney;
     private LocalDateTime endDateGoal;
     private String description;
 }

@@ -34,11 +34,11 @@ public class GoalValidationService {
     @Autowired
     TransactionService transactionService;
 
-    public GReqPostDTO validationCreateGoal(String accountId, String nameGoal, String amountGoal, String deficit) throws PlutoCartServiceApiException {
+    public GReqPostDTO validationCreateGoal(String accountId, String nameGoal, String totalGoal, String collectedMoney) throws PlutoCartServiceApiException {
         String acIdTrim = accountId.trim();
         String nGoalTrim = nameGoal.trim();
-        String aGoalTrim = amountGoal.trim();
-        String defTrim = deficit.trim();
+        String tGoalTrim = totalGoal.trim();
+        String cMTrim = collectedMoney.trim();
 
         if (!HelperMethod.isInteger(acIdTrim))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
@@ -54,29 +54,29 @@ public class GoalValidationService {
         if (nGoalTrim.length() > 45)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal over maximum length is 45. ");
 
-        if (StringUtils.isEmpty(aGoalTrim) || !HelperMethod.isDecimal(aGoalTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount goal must be decimal. ");
+        if (StringUtils.isEmpty(tGoalTrim) || !HelperMethod.isDecimal(tGoalTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "total goal must be decimal. ");
 
-        BigDecimal aGoal = new BigDecimal(aGoalTrim);
+        BigDecimal aGoal = new BigDecimal(tGoalTrim);
 
-        if (StringUtils.isEmpty(defTrim) || !HelperMethod.isDecimal(defTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "deficit must be decimal. ");
+        if (StringUtils.isEmpty(cMTrim) || !HelperMethod.isDecimal(cMTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "collected money must be decimal. ");
 
-        BigDecimal def = new BigDecimal(defTrim);
+        BigDecimal def = new BigDecimal(cMTrim);
 
         GReqPostDTO gReqPostDTO = new GReqPostDTO();
         gReqPostDTO.setAccountId(acId);
         gReqPostDTO.setNameGoal(nGoalTrim);
-        gReqPostDTO.setAmountGoal(aGoal);
-        gReqPostDTO.setDeficit(def);
+        gReqPostDTO.setTotalGoal(aGoal);
+        gReqPostDTO.setCollectedMoney(def);
         return gReqPostDTO;
     }
 
-    public GReqPostDTO validationUpdateGoal(String accountId, String goalId, String nameGoal, String amountGoal, String deficit) throws PlutoCartServiceApiException {
+    public GReqPostDTO validationUpdateGoal(String accountId, String goalId, String nameGoal, String totalGoal, String collectedMoney) throws PlutoCartServiceApiException {
         String nGoalTrim = nameGoal.trim();
-        String aGoalTrim = amountGoal.trim();
-        String defTrim = deficit.trim();
-//        BigDecimal totalDeficit = new BigDecimal(0.00);
+        String tGoalTrim = totalGoal.trim();
+        String cMTrim = collectedMoney.trim();
+//        BigDecimal totalCollectedMoney = new BigDecimal(0.00);
 
         if (!HelperMethod.isInteger(accountId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
@@ -90,7 +90,7 @@ public class GoalValidationService {
 //        if (!transactionList.isEmpty()) {
 //            for (Transaction transaction : transactionList) {
 //                if (transaction.getGoalIdGoal() != null)
-//                    totalDeficit = totalDeficit.add(transaction.getStmTransaction());
+//                    totalCollectedMoney = totalCollectedMoney.add(transaction.getStmTransaction());
 //            }
 //        }
 
@@ -108,23 +108,23 @@ public class GoalValidationService {
         if (nGoalTrim.length() > 45)
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "name goal over maximum length is 45. ");
 
-        if (StringUtils.isEmpty(aGoalTrim) || !HelperMethod.isDecimal(aGoalTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "amount goal must be decimal. ");
+        if (StringUtils.isEmpty(tGoalTrim) || !HelperMethod.isDecimal(tGoalTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "total goal must be decimal. ");
 
-        BigDecimal aGoal = new BigDecimal(aGoalTrim);
+        BigDecimal aGoal = new BigDecimal(tGoalTrim);
 
-        if (StringUtils.isEmpty(defTrim) || !HelperMethod.isDecimal(defTrim))
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "deficit must be decimal. ");
+        if (StringUtils.isEmpty(cMTrim) || !HelperMethod.isDecimal(cMTrim))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "collected money must be decimal. ");
 
-        BigDecimal def = new BigDecimal(defTrim);
+        BigDecimal def = new BigDecimal(cMTrim);
 
         GReqPostDTO gReqPostDTO = new GReqPostDTO();
         gReqPostDTO.setAccountId(acId);
         gReqPostDTO.setGoalId(goId);
         gReqPostDTO.setNameGoal(nGoalTrim);
-        gReqPostDTO.setAmountGoal(aGoal);
-        gReqPostDTO.setDeficit(def);
-//        gReqPostDTO.setTotalDefOfTransactionInGoal(totalDeficit);
+        gReqPostDTO.setTotalGoal(aGoal);
+        gReqPostDTO.setCollectedMoney(def);
+//        gReqPostDTO.setTotalDefOfTransactionInGoal(totalCollectedMoney);
         return gReqPostDTO;
     }
 

@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 public class DReqPostDTO {
     private Integer accountId;
     private String nameDebt;
-    private BigDecimal amountDebt;
-    private Integer payPeriod;
-    private Integer numOfPaidPeriod;
-    private BigDecimal paidDebtPerPeriod;
-    private BigDecimal totalPaidDebt;
+    private BigDecimal totalDebt;
+    private Integer totalPeriod;
+    private Integer paidPeriod;
+    private BigDecimal monthlyPayment;
+    private BigDecimal debtPaid;
     private String moneyLender;
     private LocalDateTime latestPayDate;
 }

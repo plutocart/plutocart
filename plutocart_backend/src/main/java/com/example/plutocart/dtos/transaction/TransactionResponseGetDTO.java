@@ -4,7 +4,6 @@ import com.example.plutocart.dtos.debt.DebtDTO;
 import com.example.plutocart.dtos.goal.GoalDTO;
 import com.example.plutocart.dtos.transaction_category.TSCResGetDTO;
 import com.example.plutocart.dtos.wallet.WalletDTO;
-import com.example.plutocart.entities.Debt;
 import lombok.Getter;
 import lombok.Setter;
 

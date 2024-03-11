@@ -56,7 +56,7 @@ public class GoalService {
     }
 
     @Transactional
-    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
+    public GenericResponse insertGoalByAccountId(String accountId, String nameGoal, String totalGoal, String collectedMoney, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
@@ -64,14 +64,14 @@ public class GoalService {
         GenericResponse response = new GenericResponse();
         GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
 
-        GReqPostDTO gReqPostDTO = goalValidationService.validationCreateGoal(accountId, nameGoal, amountGoal, deficit);
+        GReqPostDTO gReqPostDTO = goalValidationService.validationCreateGoal(accountId, nameGoal, totalGoal, collectedMoney);
 
-        goalRepository.insertGoalByAccountId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getAccountId());
+        goalRepository.insertGoalByAccountId(gReqPostDTO.getNameGoal(), gReqPostDTO.getTotalGoal(), gReqPostDTO.getCollectedMoney(), endDateGoal, gReqPostDTO.getAccountId());
 
         goalResPostDTO.setAcId(gReqPostDTO.getAccountId());
         goalResPostDTO.setNameGoal(gReqPostDTO.getNameGoal());
-        goalResPostDTO.setAmountGoal(gReqPostDTO.getAmountGoal());
-        goalResPostDTO.setDeficit(gReqPostDTO.getDeficit());
+        goalResPostDTO.setTotalGoal(gReqPostDTO.getTotalGoal());
+        goalResPostDTO.setCollectedMoney(gReqPostDTO.getCollectedMoney());
         goalResPostDTO.setEndDateGoal(endDateGoal);
         goalResPostDTO.setDescription("Create Success.");
         response.setStatus(ResultCode.SUCCESS);
@@ -80,21 +80,21 @@ public class GoalService {
     }
 
     @Transactional
-    public GenericResponse updateGoalByGoalId(String accountId, String goalId, String nameGoal, String amountGoal, String deficit, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
+    public GenericResponse updateGoalByGoalId(String accountId, String goalId, String nameGoal, String totalGoal, String collectedMoney, LocalDateTime endDateGoal, String token) throws PlutoCartServiceApiException {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
 
         GenericResponse response = new GenericResponse();
         GoalResPostDTO goalResPostDTO = new GoalResPostDTO();
-        GReqPostDTO gReqPostDTO = goalValidationService.validationUpdateGoal(accountId, goalId, nameGoal, amountGoal, deficit);
+        GReqPostDTO gReqPostDTO = goalValidationService.validationUpdateGoal(accountId, goalId, nameGoal, totalGoal, collectedMoney);
 
-        goalRepository.updateGoalByGoalId(gReqPostDTO.getNameGoal(), gReqPostDTO.getAmountGoal(), gReqPostDTO.getDeficit(), endDateGoal, gReqPostDTO.getGoalId());
+        goalRepository.updateGoalByGoalId(gReqPostDTO.getNameGoal(), gReqPostDTO.getTotalGoal(), gReqPostDTO.getCollectedMoney(), endDateGoal, gReqPostDTO.getGoalId());
 
         goalResPostDTO.setAcId(gReqPostDTO.getAccountId());
         goalResPostDTO.setNameGoal(gReqPostDTO.getNameGoal());
-        goalResPostDTO.setAmountGoal(gReqPostDTO.getAmountGoal());
-        goalResPostDTO.setDeficit(gReqPostDTO.getDeficit());
+        goalResPostDTO.setTotalGoal(gReqPostDTO.getTotalGoal());
+        goalResPostDTO.setCollectedMoney(gReqPostDTO.getCollectedMoney());
         goalResPostDTO.setEndDateGoal(endDateGoal);
         goalResPostDTO.setDescription("Update Success");
 

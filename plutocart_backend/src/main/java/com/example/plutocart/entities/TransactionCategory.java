@@ -6,9 +6,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
@@ -30,6 +27,9 @@ public class TransactionCategory {
     @NotNull
     @Column(name = "image_icon_url", nullable = false, length = 200)
     private String imageIconUrl;
+
+    @Column(name = "color_graph", nullable = false)
+    private String colorGraph;
 
 //    @OneToMany(mappedBy = "tranCategoryIdCategory")
 //    private Set<Transaction> transactions = new LinkedHashSet<>();

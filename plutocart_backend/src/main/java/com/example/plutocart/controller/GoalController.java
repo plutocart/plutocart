@@ -30,13 +30,13 @@ public class GoalController {
     public ResponseEntity<GenericResponse> createGoalByAccountId(@RequestHeader("Authorization") String token,
                                                                  @Valid @PathVariable(value = "account-id") String accountId,
                                                                  @RequestParam(name = "nameGoal") String nameGoal,
-                                                                 @RequestParam(name = "amountGoal") String amountGoal,
-                                                                 @RequestParam(name = "deficit") String deficit,
+                                                                 @RequestParam(name = "totalGoal") String totalGoal,
+                                                                 @RequestParam(name = "collectedMoney") String collectedMoney,
                                                                  @RequestParam(name = "endDateGoal", required = false)
                                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDateGoal
     ) throws PlutoCartServiceApiException {
         LocalDateTime actualEndDateGoal = (endDateGoal != null) ? endDateGoal : LocalDateTime.now();
-        GenericResponse result = goalService.insertGoalByAccountId(accountId, nameGoal, amountGoal, deficit, actualEndDateGoal, token);
+        GenericResponse result = goalService.insertGoalByAccountId(accountId, nameGoal, totalGoal, collectedMoney, actualEndDateGoal, token);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -45,13 +45,13 @@ public class GoalController {
                                                               @Valid @PathVariable(value = "account-id") String accountId,
                                                               @Valid @PathVariable(value = "goal-id") String goalId,
                                                               @RequestParam(name = "nameGoal") String nameGoal,
-                                                              @RequestParam(name = "amountGoal") String amountGoal,
-                                                              @RequestParam(name = "deficit") String deficit,
+                                                              @RequestParam(name = "totalGoal") String totalGoal,
+                                                              @RequestParam(name = "collectedMoney") String collectedMoney,
                                                               @RequestParam(name = "endDateGoal")
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDateGoal
     ) throws PlutoCartServiceApiException {
 //        LocalDateTime actualEndDateGoal = (endDateGoal != null) ? endDateGoal : LocalDateTime.now();
-        GenericResponse result = goalService.updateGoalByGoalId(accountId, goalId, nameGoal, amountGoal, deficit, endDateGoal, token);
+        GenericResponse result = goalService.updateGoalByGoalId(accountId, goalId, nameGoal, totalGoal, collectedMoney, endDateGoal, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

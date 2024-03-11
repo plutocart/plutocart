@@ -32,12 +32,12 @@ public interface GoalRepository extends JpaRepository<Goal, Integer> {
     @Transactional
     @Modifying
     @Procedure(procedureName = "createGoalByAccountId")
-    void insertGoalByAccountId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer accountId);
+    void insertGoalByAccountId(String nameGoal, BigDecimal totalGoal, BigDecimal collectedMoney, LocalDateTime endDateGoal, Integer accountId);
 
     @Transactional
     @Modifying
     @Procedure(procedureName = "updateGoalByGoalId")
-    void updateGoalByGoalId(String nameGoal, BigDecimal amountGoal, BigDecimal deficit, LocalDateTime endDateGoal, Integer goalId);
+    void updateGoalByGoalId(String nameGoal, BigDecimal totalGoal, BigDecimal collectedMoney, LocalDateTime endDateGoal, Integer goalId);
 
     @Transactional
     @Modifying

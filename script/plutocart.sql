@@ -59,8 +59,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `plutocart`.`goal` (
   `id_goal` INT NOT NULL AUTO_INCREMENT,
   `name_goal` VARCHAR(45) NOT NULL,
-  `amount_goal` DECIMAL(13,2) NOT NULL,
-  `deficit` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
+  `total_goal` DECIMAL(13,2) NOT NULL,
+  `collected_money` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
   `end_date_goal` DATETIME NOT NULL,
   `status_goal` ENUM('1','2','3') NOT NULL DEFAULT 1,
   `account_id_account` INT NOT NULL,
@@ -96,11 +96,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `plutocart`.`debt` (
   `id_debt` INT NOT NULL AUTO_INCREMENT,
   `name_debt` VARCHAR(45) NOT NULL,
-  `amount_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
-  `pay_period` INT NOT NULL DEFAULT 1,
-  `num_of_paid_period` INT NOT NULL DEFAULT 0,
-  `paid_debt_per_period`INT NOT NULL,
-  `total_paid_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
+  `total_debt` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
+  `total_period` INT NOT NULL DEFAULT 1,
+  `paid_period` INT NOT NULL DEFAULT 0,
+  `monthly_payment`INT NOT NULL,
+  `debt_paid` DECIMAL(13,2) NOT NULL DEFAULT 0.00,
   `money_lender` VARCHAR(15) NOT NULL,
   `status_debt` ENUM('1','2','3') NOT NULL DEFAULT 1,
   `latest_pay_date` DATETIME DEFAULT NULL,
@@ -367,35 +367,35 @@ BEGIN
     SET balance_wallet = balance_wallet + balanceAdjustment
     WHERE id_wallet = walletId;
     
-    -- goal check goal or debt id if it have update deficit + balanceAdjustment
+    -- goal check goal or debt id if it have update collected_money + balanceAdjustment
     IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
-		SET deficit = deficit + stmTransaction
+		SET collected_money = collected_money + stmTransaction
 		WHERE id_goal = goalIdGoal;
         
         	UPDATE goal
 		SET status_goal = 1
-		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money < total_goal;
     
 		UPDATE goal
 		SET status_goal = 2
-		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money >= total_goal;
 	END IF;
     
     IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt + stmTransaction,
-			num_of_paid_period = num_of_paid_period + 1,
+		SET debt_paid = debt_paid + stmTransaction,
+			paid_period = paid_period + 1,
             latest_pay_date = createTransactionOn
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
 		SET status_debt = 1
-		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid < total_debt;
     
 		UPDATE debt
 		SET status_debt = 2
-		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid >= total_debt;
 	END IF;
     
 END //
@@ -435,27 +435,27 @@ BEGIN
     
 	IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
-		SET deficit = deficit - stmTransaction
+		SET collected_money = collected_money - stmTransaction
 		WHERE id_goal = goalIdGoal;
         
 		UPDATE goal
 		SET status_goal = 1
-		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money < total_goal;
     
 		UPDATE goal
 		SET status_goal = 2
-		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money >= total_goal;
 	END IF;
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = CASE
-								WHEN stmTransaction < total_paid_debt THEN total_paid_debt - stmTransaction
-								ELSE total_paid_debt = 0
+		SET debt_paid = CASE
+								WHEN stmTransaction < debt_paid THEN debt_paid - stmTransaction
+								ELSE debt_paid = 0
 							  END,
-			num_of_paid_period = CASE
-									WHEN num_of_paid_period > 0 THEN num_of_paid_period - 1
-									ELSE num_of_paid_period 
+			paid_period = CASE
+									WHEN paid_period > 0 THEN paid_period - 1
+									ELSE paid_period 
 								END,
 			latest_pay_date = transactionDate
 		WHERE id_debt = debtIdDebt;
@@ -463,11 +463,11 @@ BEGIN
         
 		UPDATE debt
 		SET status_debt = 1
-		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid < total_debt;
     
 		UPDATE debt
 		SET status_debt = 2
-		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid >= total_debt;
 	END IF;
     
 END //
@@ -521,13 +521,13 @@ BEGIN
     
 	IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
-		SET deficit = deficit - oldStmTransaction
+		SET collected_money = collected_money - oldStmTransaction
 		WHERE id_goal = goalIdGoal;
 	END IF;
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt - oldStmTransaction
+		SET debt_paid = debt_paid - oldStmTransaction
 		WHERE id_debt = debtIdDebt;
 	END IF;
     
@@ -559,31 +559,31 @@ BEGIN
     
 	IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
-		SET deficit = deficit + stmTransaction
+		SET collected_money = collected_money + stmTransaction
 		WHERE id_goal = goalIdGoal;
         
 		UPDATE goal
 		SET status_goal = 1
-		WHERE id_goal = goalIdGoal AND deficit < amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money < total_goal;
         
 		UPDATE goal
 		SET status_goal = 2
-		WHERE id_goal = goalIdGoal AND deficit >= amount_goal;
+		WHERE id_goal = goalIdGoal AND collected_money >= total_goal;
 	END IF;
     
 	IF debtIdDebt IS NOT NULL THEN
         UPDATE debt
-		SET total_paid_debt = total_paid_debt + stmTransaction,
+		SET debt_paid = debt_paid + stmTransaction,
 			latest_pay_date = updateTransactionOn
 		WHERE id_debt = debtIdDebt;
         
 		UPDATE debt
 		SET status_debt = 1
-		WHERE id_debt = debtIdDebt AND total_paid_debt < amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid < total_debt;
     
 		UPDATE debt
 		SET status_debt = 2
-		WHERE id_debt = debtIdDebt AND total_paid_debt >= amount_debt;
+		WHERE id_debt = debtIdDebt AND debt_paid >= total_debt;
 	END IF;
     
 END //
@@ -727,11 +727,11 @@ BEGIN
     DECLARE currentDate DATE;
     SET currentDate = CURDATE();
 
-    UPDATE goal
-    SET status_goal = 3
-    WHERE account_id_account = InAccountId 
-    AND status_goal != 2
-    AND end_date_goal < currentDate;
+--     UPDATE goal
+--     SET status_goal = 3
+--     WHERE account_id_account = InAccountId 
+--     AND status_goal != 2
+--     AND end_date_goal < currentDate;
 
     SELECT * FROM goal WHERE account_id_account = InAccountId;
 END //
@@ -742,7 +742,7 @@ DELIMITER //
 CREATE PROCEDURE `createGoalByAccountId`(
     IN InNameGoal VARCHAR(45),
     IN InAmountGoal DECIMAL(13,2),
-    IN InDeficit DECIMAL(13,2),
+    IN Incollected_money DECIMAL(13,2),
     IN InEndDateGoal DATETIME,
     IN InAccountId INT
 )
@@ -750,8 +750,8 @@ BEGIN
     DECLARE new_goal_id INT;
 
     -- Step 1: Insert new goal
-    INSERT INTO `plutocart`.`goal` (`name_goal`, `amount_goal`, `deficit`, `end_date_goal`, `account_id_account`, `create_goal_on`, `update_goal_on`)
-    VALUES (InNameGoal, InAmountGoal, InDeficit, InEndDateGoal, InAccountId, NOW(), NOW());
+    INSERT INTO `plutocart`.`goal` (`name_goal`, `total_goal`, `collected_money`, `end_date_goal`, `account_id_account`, `create_goal_on`, `update_goal_on`)
+    VALUES (InNameGoal, InAmountGoal, Incollected_money, InEndDateGoal, InAccountId, NOW(), NOW());
 
     -- Step 2: Get the ID of the newly inserted goal
     SET new_goal_id = LAST_INSERT_ID();
@@ -759,7 +759,7 @@ BEGIN
     -- Step 3: Update the status_goal based on the condition
     UPDATE `plutocart`.`goal`
     SET `status_goal` = 2
-    WHERE `id_goal` = new_goal_id AND `deficit` >= `amount_goal`;
+    WHERE `id_goal` = new_goal_id AND `collected_money` >= `total_goal`;
 
 END //
 
@@ -770,7 +770,7 @@ DELIMITER //
 CREATE  PROCEDURE `updateGoalByGoalId`( 
 in InNameGoal VARCHAR(15) ,
 in InAmountGoal  decimal(10 , 2) ,
-in InDeficit decimal(10,2)  ,
+in Incollected_money decimal(10,2)  ,
 in InEndDateGoal dateTime ,
 in InGoalId int
 -- in amountOfTransaction decimal(10,2) 
@@ -780,19 +780,19 @@ BEGIN
  UPDATE goal
 		SET 
 			name_goal = InNameGoal,
-			amount_goal = InAmountGoal,
---             deficit = InDeficit + amountOfTransaction,
-            deficit = InDeficit,
+			total_goal= InAmountGoal,
+--             collected_money = Incollected_money + amountOfTransaction,
+            collected_money = Incollected_money,
             end_date_goal = InEndDateGoal,
             update_goal_on = now()
 		WHERE id_goal = InGoalId;
         
 	UPDATE goal
     SET status_goal = 1
-    WHERE id_goal = InGoalId AND deficit < amount_goal;
+    WHERE id_goal = InGoalId AND collected_money < total_goal;
     UPDATE goal
     SET status_goal = 2
-    WHERE id_goal = InGoalId AND deficit >= amount_goal;
+    WHERE id_goal = InGoalId AND collected_money >= total_goal;
         
 END //
 DELIMITER ;
@@ -829,7 +829,7 @@ BEGIN
     DECLARE new_debt_id INT;
 
     -- Step 1: Insert new debt
-    INSERT INTO plutocart.debt (name_debt, amount_debt, pay_period, num_of_paid_period, paid_debt_per_period, total_paid_debt, money_lender, latest_pay_date, create_debt_on, update_debt_on,account_id_account)
+    INSERT INTO debt (name_debt, total_debt, total_period, paid_period, monthly_payment, debt_paid, money_lender, latest_pay_date, create_debt_on, update_debt_on,account_id_account)
     VALUES (InNameDebt, InAmountDebt, InPayPeriod, InNumOfPaidPeriod, InPaidDebtPerPeriod, InTotalPaidDebt, InMoneyLender, InLatestPayDate, NOW(), NOW(), InAccountId);
 
     -- Step 2: Get the ID of the newly inserted goal
@@ -838,7 +838,7 @@ BEGIN
     -- Step 3: Update the status_goal based on the condition
     UPDATE debt
     SET status_debt = 2
-    WHERE id_debt = new_debt_id AND total_paid_debt >= amount_debt;
+    WHERE id_debt = new_debt_id AND debt_paid >= total_debt;
 
 END //
 
@@ -861,11 +861,11 @@ BEGIN
 	
     UPDATE debt
     SET name_debt = InNameDebt,
-		amount_debt = InAmountDebt,
-        pay_period = InPayPeriod,
-        num_of_paid_period = InNumOfPaidPeriod,
-        paid_debt_per_period = InPaidDebtPerPeriod,
-        total_paid_debt = InTotalPaidDebt,
+		total_debt = InAmountDebt,
+        total_period = InPayPeriod,
+        paid_period = InNumOfPaidPeriod,
+        monthly_payment = InPaidDebtPerPeriod,
+        debt_paid = InTotalPaidDebt,
         money_lender = InMoneyLender,
         latest_pay_date = InLatestPayDate,
         update_debt_on = now()
@@ -873,11 +873,11 @@ BEGIN
     
     UPDATE debt
     SET status_debt = 1
-    WHERE id_debt = InDebtId AND total_paid_debt < amount_debt;
+    WHERE id_debt = InDebtId AND debt_paid < total_debt;
     
     UPDATE debt
     SET status_debt = 2
-    WHERE id_debt = InDebtId AND total_paid_debt >= amount_debt;
+    WHERE id_debt = InDebtId AND debt_paid >= total_debt;
 
 END //
 

@@ -6,9 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TSCResGetDTO {
-        private Integer id;
-        private String nameTransactionCategory;
-        private String typeCategory;
-        private String imageIconUrl;
-    }
+    private Integer id;
+    private String nameTransactionCategory;
+    private String typeCategory;
+    private String imageIconUrl;
+    private String colorGraph;
+}
 

@@ -11,7 +11,7 @@ public class GReqPostDTO {
     private Integer accountId;
     private Integer goalId;
     private String nameGoal;
-    private BigDecimal amountGoal;
-    private BigDecimal deficit;
+    private BigDecimal totalGoal;
+    private BigDecimal collectedMoney;
 //    private BigDecimal totalDefOfTransactionInGoal;
 }

@@ -47,25 +47,25 @@ public class DebtService {
     }
 
     @Transactional
-    public GenericResponse insertDebtByAccountId(String accountId, String nameDebt, String amountDebt, String payPeriod, String numOfPaidPeriod, String paidDebtPerPeriod, String totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, String token) throws PlutoCartServiceApiException {
+    public GenericResponse insertDebtByAccountId(String accountId, String nameDebt, String totalDebt, String totalPeriod, String paidPeriod, String monthlyPayment, String debtPaid, String moneyLender, LocalDateTime latestPayDate, String token) throws PlutoCartServiceApiException {
 
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
 
-        DReqPostDTO dReqPostDTO = debtValidationService.validationCreateDebt(accountId, nameDebt, amountDebt, payPeriod, numOfPaidPeriod, paidDebtPerPeriod, totalPaidDebt, moneyLender, latestPayDate);
-        debtRepository.insertDebtByAccountId(dReqPostDTO.getNameDebt(), dReqPostDTO.getAmountDebt(), dReqPostDTO.getPayPeriod(), dReqPostDTO.getNumOfPaidPeriod(), dReqPostDTO.getPaidDebtPerPeriod(), dReqPostDTO.getTotalPaidDebt(), dReqPostDTO.getMoneyLender(), dReqPostDTO.getLatestPayDate(), dReqPostDTO.getAccountId());
+        DReqPostDTO dReqPostDTO = debtValidationService.validationCreateDebt(accountId, nameDebt, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLender, latestPayDate);
+        debtRepository.insertDebtByAccountId(dReqPostDTO.getNameDebt(), dReqPostDTO.getTotalDebt(), dReqPostDTO.getTotalPeriod(), dReqPostDTO.getPaidPeriod(), dReqPostDTO.getMonthlyPayment(), dReqPostDTO.getDebtPaid(), dReqPostDTO.getMoneyLender(), dReqPostDTO.getLatestPayDate(), dReqPostDTO.getAccountId());
 
         GenericResponse response = new GenericResponse();
         DResPostDTO dResPostDTO = new DResPostDTO();
 
         dResPostDTO.setAccountId(dReqPostDTO.getAccountId());
         dResPostDTO.setNameDebt(dReqPostDTO.getNameDebt());
-        dResPostDTO.setAmountDebt(dReqPostDTO.getAmountDebt());
-        dResPostDTO.setPayPeriod(dReqPostDTO.getPayPeriod());
-        dResPostDTO.setNumOfPaidPeriod(dReqPostDTO.getNumOfPaidPeriod());
-        dResPostDTO.setPaidDebtPerPeriod(dReqPostDTO.getPaidDebtPerPeriod());
-        dResPostDTO.setTotalPaidDebt(dReqPostDTO.getTotalPaidDebt());
+        dResPostDTO.setTotalDebt(dReqPostDTO.getTotalDebt());
+        dResPostDTO.setTotalPeriod(dReqPostDTO.getTotalPeriod());
+        dResPostDTO.setPaidPeriod(dReqPostDTO.getPaidPeriod());
+        dResPostDTO.setMonthlyPayment(dReqPostDTO.getMonthlyPayment());
+        dResPostDTO.setDebtPaid(dReqPostDTO.getDebtPaid());
         dResPostDTO.setMoneyLender(dReqPostDTO.getMoneyLender());
         dResPostDTO.setLatestPayDate(dReqPostDTO.getLatestPayDate());
         dResPostDTO.setDescription("Create Success.");
@@ -76,10 +76,10 @@ public class DebtService {
     }
 
     @Transactional
-    public GenericResponse updateDebtByAccountId(String accountId, String debtId, String nameDebt, String amountDebt, String payPeriod, String numOfPaidPeriod, String paidDebtPerPeriod, String totalPaidDebt, String moneyLender, LocalDateTime latestPayDate, String token) throws PlutoCartServiceApiForbidden, PlutoCartServiceApiInvalidParamException, PlutoCartServiceApiDataNotFound {
+    public GenericResponse updateDebtByAccountId(String accountId, String debtId, String nameDebt, String totalDebt, String totalPeriod, String paidPeriod, String monthlyPayment, String debtPaid, String moneyLender, LocalDateTime latestPayDate, String token) throws PlutoCartServiceApiForbidden, PlutoCartServiceApiInvalidParamException, PlutoCartServiceApiDataNotFound {
         globalValidationService.validationToken(accountId, token);
-        DReqPutDTO dReqPutDTO = debtValidationService.validationUpdateDebt(accountId, debtId, nameDebt, amountDebt, payPeriod, numOfPaidPeriod, paidDebtPerPeriod, totalPaidDebt, moneyLender, latestPayDate);
-        debtRepository.updateDebtByAccountId(dReqPutDTO.getNameDebt(), dReqPutDTO.getAmountDebt(), dReqPutDTO.getPayPeriod(), dReqPutDTO.getNumOfPaidPeriod(), dReqPutDTO.getPaidDebtPerPeriod(), dReqPutDTO.getTotalPaidDebt(), dReqPutDTO.getMoneyLender(), dReqPutDTO.getLatestPayDate(), dReqPutDTO.getDebtId());
+        DReqPutDTO dReqPutDTO = debtValidationService.validationUpdateDebt(accountId, debtId, nameDebt, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLender, latestPayDate);
+        debtRepository.updateDebtByAccountId(dReqPutDTO.getNameDebt(), dReqPutDTO.getTotalDebt(), dReqPutDTO.getTotalPeriod(), dReqPutDTO.getPaidPeriod(), dReqPutDTO.getMonthlyPayment(), dReqPutDTO.getDebtPaid(), dReqPutDTO.getMoneyLender(), dReqPutDTO.getLatestPayDate(), dReqPutDTO.getDebtId());
 
         GenericResponse response = new GenericResponse();
         DResPutDTO dResPutDTO = new DResPutDTO();
@@ -87,11 +87,11 @@ public class DebtService {
         dResPutDTO.setAccountId(dReqPutDTO.getAccountId());
         dResPutDTO.setDebtId(dReqPutDTO.getDebtId());
         dResPutDTO.setNameDebt(dReqPutDTO.getNameDebt());
-        dResPutDTO.setAmountDebt(dReqPutDTO.getAmountDebt());
-        dResPutDTO.setPayPeriod(dReqPutDTO.getPayPeriod());
-        dResPutDTO.setNumOfPaidPeriod(dReqPutDTO.getNumOfPaidPeriod());
-        dResPutDTO.setPaidDebtPerPeriod(dReqPutDTO.getPaidDebtPerPeriod());
-        dResPutDTO.setTotalPaidDebt(dReqPutDTO.getTotalPaidDebt());
+        dResPutDTO.setTotalDebt(dReqPutDTO.getTotalDebt());
+        dResPutDTO.setTotalPeriod(dReqPutDTO.getTotalPeriod());
+        dResPutDTO.setPaidPeriod(dReqPutDTO.getPaidPeriod());
+        dResPutDTO.setMonthlyPayment(dReqPutDTO.getMonthlyPayment());
+        dResPutDTO.setDebtPaid(dReqPutDTO.getDebtPaid());
         dResPutDTO.setMoneyLender(dReqPutDTO.getMoneyLender());
         dResPutDTO.setLatestPayDate(dReqPutDTO.getLatestPayDate());
         dResPutDTO.setDescription("Create Success.");

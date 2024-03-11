@@ -31,17 +31,17 @@ public class DebtController {
     public ResponseEntity<GenericResponse> createDebtByAccountId(@RequestHeader("Authorization") String token,
                                                                  @Valid @PathVariable(value = "account-id") String accountId,
                                                                  @RequestParam(name = "nameDebt") String nameDebt,
-                                                                 @RequestParam(name = "amountDebt") String amountDebt,
-                                                                 @RequestParam(name = "payPeriod") String payPeriod,
-                                                                 @RequestParam(name = "numOfPaidPeriod") String numOfPaidPeriod,
-                                                                 @RequestParam(name = "paidDebtPerPeriod") String paidDebtPerPeriod,
-                                                                 @RequestParam(name = "totalPaidDebt") String totalPaidDebt,
+                                                                 @RequestParam(name = "totalDebt") String totalDebt,
+                                                                 @RequestParam(name = "totalPeriod") String totalPeriod,
+                                                                 @RequestParam(name = "paidPeriod") String paidPeriod,
+                                                                 @RequestParam(name = "monthlyPayment") String monthlyPayment,
+                                                                 @RequestParam(name = "debtPaid") String debtPaid,
                                                                  @RequestParam(name = "moneyLender") String moneyLender,
                                                                  @RequestParam(name = "latestPayDate", required = false)
                                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime latestPayDate
     ) throws PlutoCartServiceApiException {
 //        LocalDateTime actualEndDateGoal = (latestPayDate != null) ? latestPayDate : LocalDateTime.now();
-        GenericResponse result = debtService.insertDebtByAccountId(accountId, nameDebt, amountDebt, payPeriod, numOfPaidPeriod, paidDebtPerPeriod, totalPaidDebt, moneyLender, latestPayDate, token);
+        GenericResponse result = debtService.insertDebtByAccountId(accountId, nameDebt, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLender, latestPayDate, token);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -50,17 +50,17 @@ public class DebtController {
                                                                  @Valid @PathVariable(value = "account-id") String accountId,
                                                                  @Valid @PathVariable(value = "debt-id") String debtId,
                                                                  @RequestParam(name = "nameDebt") String nameDebt,
-                                                                 @RequestParam(name = "amountDebt") String amountDebt,
-                                                                 @RequestParam(name = "payPeriod") String payPeriod,
-                                                                 @RequestParam(name = "numOfPaidPeriod") String numOfPaidPeriod,
-                                                                 @RequestParam(name = "paidDebtPerPeriod") String paidDebtPerPeriod,
-                                                                 @RequestParam(name = "totalPaidDebt") String totalPaidDebt,
+                                                                 @RequestParam(name = "totalDebt") String totalDebt,
+                                                                 @RequestParam(name = "totalPeriod") String totalPeriod,
+                                                                 @RequestParam(name = "paidPeriod") String paidPeriod,
+                                                                 @RequestParam(name = "monthlyPayment") String monthlyPayment,
+                                                                 @RequestParam(name = "debtPaid") String debtPaid,
                                                                  @RequestParam(name = "moneyLender") String moneyLender,
                                                                  @RequestParam(name = "latestPayDate", required = false)
                                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime latestPayDate
     ) throws PlutoCartServiceApiException {
 //        LocalDateTime actualEndDateGoal = (latestPayDate != null) ? latestPayDate : LocalDateTime.now();
-        GenericResponse result = debtService.updateDebtByAccountId(accountId, debtId, nameDebt, amountDebt, payPeriod, numOfPaidPeriod, paidDebtPerPeriod, totalPaidDebt, moneyLender, latestPayDate, token);
+        GenericResponse result = debtService.updateDebtByAccountId(accountId, debtId, nameDebt, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLender, latestPayDate, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -23,20 +23,20 @@ public class Debt {
     @Column(name = "name_debt", nullable = false, length = 45)
     private String nameDebt;
 
-    @Column(name = "amount_debt", nullable = false, precision = 13, scale = 2)
-    private BigDecimal amountDebt;
+    @Column(name = "total_debt", nullable = false, precision = 13, scale = 2)
+    private BigDecimal totalDebt;
 
-    @Column(name = "pay_period", nullable = false)
-    private Integer payPeriod;
+    @Column(name = "total_period", nullable = false)
+    private Integer totalPeriod;
 
-    @Column(name = "num_of_paid_period", nullable = false)
-    private Integer numOfPaidPeriod;
+    @Column(name = "paid_period", nullable = false)
+    private Integer paidPeriod;
 
-    @Column(name = "paid_debt_per_period", nullable = false, precision = 13, scale = 2)
-    private BigDecimal paidDebtPerPeriod;
+    @Column(name = "monthly_payment", nullable = false, precision = 13, scale = 2)
+    private BigDecimal monthlyPayment;
 
-    @Column(name = "total_paid_debt", nullable = false, precision = 13, scale = 2)
-    private BigDecimal totalPaidDebt;
+    @Column(name = "debt_paid", nullable = false, precision = 13, scale = 2)
+    private BigDecimal debtPaid;
 
     @Column(name = "money_lender", length = 100)
     private String moneyLender;

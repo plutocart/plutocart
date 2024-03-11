@@ -13,8 +13,8 @@ public class GoalResPutDTO {
     private Integer acId;
     private Integer goalId;
     private String nameGoal;
-    private BigDecimal amountGoal;
-    private BigDecimal deficit;
+    private BigDecimal totalGoal;
+    private BigDecimal collectedMoney;
     private LocalDateTime endDateGoal;
     private String description;
 }

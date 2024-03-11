@@ -13,8 +13,8 @@ public class GoalDTO {
 
     private Integer id;
     private String nameGoal;
-    private BigDecimal amountGoal;
-    private BigDecimal deficit;
+    private BigDecimal totalGoal;
+    private BigDecimal collectedMoney;
     private LocalDateTime endDateGoal;
     private Integer statusGoal;
     private AccountDTO accountIdAccount;

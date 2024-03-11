@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 public class DebtDTO {
     private Integer id;
     private String nameDebt;
-    private BigDecimal amountDebt;
-    private Integer payPeriod;
-    private Integer numOfPaidPeriod;
-    private BigDecimal paidDebtPerPeriod;
-    private BigDecimal totalPaidDebt;
+    private BigDecimal totalDebt;
+    private Integer totalPeriod;
+    private Integer paidPeriod;
+    private BigDecimal monthlyPayment;
+    private BigDecimal debtPaid;
     private String moneyLender;
     private Integer statusDebt;
     private LocalDateTime latestPayDate;
