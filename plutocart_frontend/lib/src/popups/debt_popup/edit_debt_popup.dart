@@ -29,24 +29,39 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
   double? calMonthlyPayment;
   double? calDetPaid;
 
+      bool ? fullField;
+
+    void checkFullField(){
+        fullField =    (nameOfYourDebtController.text.length <= 0 ||
+                    totalDebtController.text.length <= 0 ||
+                    totalPeriodController.text.length <= 0 ||
+                    paidPeriodController.text.length <= 0 ||
+                    monthlyPaymentController.text.length <= 0 ||
+                    debtPaidController.text.length <= 0 ||
+                    moneyLenderController.text.length <= 0 ) ?  false :  true;
+    }
+
   @override
   void initState() {
     nameOfYourDebtController.text = widget.debt!['nameDebt'];
-    totalDebtController.text = widget.debt!['amountDebt'].toString();
-    totalPeriodController.text = widget.debt!['payPeriod'].toString();
-    paidPeriodController.text = widget.debt!['numOfPaidPeriod'].toString();
+    totalDebtController.text = widget.debt!['totalDebt'].toString();
+    totalPeriodController.text = widget.debt!['totalPeriod'].toString();
+    paidPeriodController.text = widget.debt!['paidPeriod'].toString();
     monthlyPaymentController.text =
-        widget.debt!['paidDebtPerPeriod'].toString();
-    debtPaidController.text = widget.debt!['totalPaidDebt'].toString();
+        widget.debt!['monthlyPayment'].toString();
+    debtPaidController.text = widget.debt!['debtPaid'].toString();
     moneyLenderController.text = widget.debt!['moneyLender'].toString();
     DateTime now = DateTime.now();
     String formattedDateTimeNow =   '${now.toString().substring(8, 10)}/${now.toString().substring(5, 7)}/${now.toString().substring(0, 4)} ${now.toString().substring(11, 13)}:${now.toString().substring(14, 16)}';
     String date = widget.debt!['latestPayDate'].toString();
     String formattedDateTime =  date == "null" ? "-" : '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
     latestPaidController.text = formattedDateTime;
-
+    nameOfYourDebtController.addListener(() {setState(() {
+      checkFullField();
+    });});
     totalDebtController.addListener(() {
       setState(() {
+         checkFullField();
         if (totalPeriodController.text.length != 0 &&
             totalPeriodController.text.length != 0 &&
             paidPeriodController.text.length != 0 ) {
@@ -67,6 +82,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
     });
     totalPeriodController.addListener(() {
       setState(() {
+         checkFullField();
         if (totalDebtController.text.length != 0 &&
             totalPeriodController.text.length != 0) {
           calMonthlyPayment = double.parse(totalDebtController.text) /
@@ -78,6 +94,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
 
     paidPeriodController.addListener(() {
       setState(() {
+         checkFullField();
         if (paidPeriodController.text.length != 0 &&
             monthlyPaymentController.text.length != 0 &&
             totalDebtController.text.length != 0 && int.parse(paidPeriodController.text) > 0) {
@@ -97,6 +114,16 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
         }
       });
     });
+    monthlyPaymentController.addListener(() {setState(() {
+      checkFullField();
+    });});
+    debtPaidController.addListener((){setState(() {
+      checkFullField();
+    });});
+    moneyLenderController.addListener((){setState(() {
+      checkFullField();
+    });});
+    checkFullField();
     super.initState();
   }
 
@@ -141,14 +168,14 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                   labelStyle: TextStyle(
                     color: nameOfYourDebtController.text.length != 0
                         ? Color(0xFF1A9CB0)
-                        : Colors.red,
+                        : Color(0XFFDD0000),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 2,
                       color: nameOfYourDebtController.text.length != 0
                           ? Color(0xFF15616D)
-                          : Colors.red,
+                          : Color(0XFFDD0000),
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -157,7 +184,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                       width: 1,
                       color: nameOfYourDebtController.text.length != 0
                           ? Color(0xFF15616D)
-                          : Colors.red,
+                          : Color(0XFFDD0000),
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -194,13 +221,13 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                   labelStyle: TextStyle(
                       color: totalPeriodController.text.length != 0
                           ? Color(0xFF1A9CB0)
-                          : Colors.red),
+                          : Color(0XFFDD0000)),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 2,
                         color: totalPeriodController.text.length != 0
                             ? Color(0xFF15616D)
-                            : Colors.red),
+                            : Color(0XFFDD0000)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -208,14 +235,14 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                         width: 1,
                         color: totalPeriodController.text.length != 0
                             ? Color(0xFF15616D)
-                            : Colors.red),
+                            : Color(0XFFDD0000)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.import_export_outlined,
                       color: Color(0xFF15616D),
-                    ), // ตัวอย่าง icon button เป็น calendar_today
+                    ), 
                     onPressed: () {
                       if (totalDebtController.text.length != 0) {
                         addPayPeriod(
@@ -246,13 +273,13 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                   labelStyle: TextStyle(
                       color: totalPeriodController.text.length != 0
                           ? Color(0xFF1A9CB0)
-                          : Colors.red),
+                          : Color(0XFFDD0000)),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 2,
                         color: totalPeriodController.text.length != 0
                             ? Color(0xFF15616D)
-                            : Colors.red),
+                            : Color(0XFFDD0000)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -260,7 +287,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                         width: 1,
                         color: totalPeriodController.text.length != 0
                             ? Color(0xFF15616D)
-                            : Colors.red),
+                            : Color(0XFFDD0000)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   suffixIcon: IconButton(
@@ -317,6 +344,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: ActionPopup(
+                  isFullField: fullField,
                   bottonFirstName: "Cancel",
                   bottonSecondeName: "Confirm",
                   bottonFirstNameFunction: () {
@@ -331,8 +359,9 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                         debtPaidController.text.length <= 0 ||
                         moneyLenderController.text.length <= 0 ||
                         latestPaidController.text.length <= 0) {
-                      customAlertPopup(context, "Information missing",
-                          Icons.error_outline_rounded, Colors.red.shade200);
+                      // customAlertPopup(context, "Information missing",
+                      //     Icons.error_outline_rounded, Colors.red.shade200);
+                      null;
                     }else{
                       print("Check id debt : ${widget.debt!['id']}");
                       double totalDebt = double.parse(totalDebtController.text);

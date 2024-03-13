@@ -23,16 +23,31 @@ class EditWalletPopup extends StatefulWidget {
 class _EditWalletPopupState extends State<EditWalletPopup> {
   TextEditingController _nameWalletController = new TextEditingController();
   TextEditingController _amountMoneyController = new TextEditingController();
+  bool  fullField = true;
+   void checkFullField(){
+   fullField = ( _nameWalletController.text.length <= 0 || _amountMoneyController.text.length <= 0 ) ? false : true;
+  }
   @override
   void initState() {
-    super.initState();
-    if (widget.wallet?.walletName != null &&
+     if (widget.wallet?.walletName != null &&
         widget.wallet?.walletBalance != null) {
       _nameWalletController.text = widget.wallet!.walletName.length > 0
           ? widget.wallet!.walletName
           : "Unknow Wallet";
       _amountMoneyController =
           TextEditingController(text: "${widget.wallet!.walletBalance}");
+    _nameWalletController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+       _amountMoneyController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+    super.initState();
+   
     }
   }
 
@@ -44,7 +59,7 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -87,39 +102,44 @@ class _EditWalletPopupState extends State<EditWalletPopup> {
             nameWalletController: _nameWalletController,
             amountMoneyController: _amountMoneyController,
           ),
-          ActionPopup(
-            bottonFirstName: "Cancel",
-            bottonSecondeName: "Confirm",
-            bottonFirstNameFunction: () {
-              for (int i = 0; i < widget.numberPopUp1!; i++) {
-                FocusScope.of(context).unfocus();
-                Navigator.pop(context);
-              }
-            },
-            bottonSecondeNameFunction: () async {
-              if (_amountMoneyController.text.length != 0 &&
-                  _nameWalletController.text.length != 0) {
-                double balanceWallet =
-                    double.tryParse(_amountMoneyController.text) ?? 0.0;
-                context.read<WalletBloc>().add(UpdateWallet(
-                    widget.wallet?.walletId ?? 0,
-                    _nameWalletController.text,
-                    balanceWallet));
-                  showLoadingPagePopUp(context);    
-                  FocusScope.of(context).unfocus();
-                await Future.delayed(Duration(milliseconds: 500));    
-                Navigator.pop(context);
-                context.read<TransactionBloc>().add(GetTransactionLimit3());    
-                for (int i = 0; i < widget.numberPopUp2!; i++) {
+          Padding(
+            padding: const EdgeInsets.only(left: 10 , right: 10),
+            child: ActionPopup(
+              isFullField: fullField,
+              bottonFirstName: "Cancel",
+              bottonSecondeName: "Confirm",
+              bottonFirstNameFunction: () {
+                for (int i = 0; i < widget.numberPopUp1!; i++) {
                   FocusScope.of(context).unfocus();
                   Navigator.pop(context);
                 }
-              } else {
-                customAlertPopup(context, "Information missing" , Icons.error_outline_rounded , Colors.red.shade200);
-                print('check first1 ${_amountMoneyController.text.length}');
-                print('check first2 ${_nameWalletController.text.length}');
-              }
-            },
+              },
+              bottonSecondeNameFunction: () async {
+                if (_amountMoneyController.text.length != 0 &&
+                    _nameWalletController.text.length != 0) {
+                  double balanceWallet =
+                      double.tryParse(_amountMoneyController.text) ?? 0.0;
+                  context.read<WalletBloc>().add(UpdateWallet(
+                      widget.wallet?.walletId ?? 0,
+                      _nameWalletController.text,
+                      balanceWallet));
+                    showLoadingPagePopUp(context);    
+                    FocusScope.of(context).unfocus();
+                  await Future.delayed(Duration(milliseconds: 500));    
+                  Navigator.pop(context);
+                  context.read<TransactionBloc>().add(GetTransactionLimit3());    
+                  for (int i = 0; i < widget.numberPopUp2!; i++) {
+                    FocusScope.of(context).unfocus();
+                    Navigator.pop(context);
+                  }
+                } else {
+                  // customAlertPopup(context, "Information missing" , Icons.error_outline_rounded , Colors.red.shade200);
+                  null;
+                  print('check first1 ${_amountMoneyController.text.length}');
+                  print('check first2 ${_nameWalletController.text.length}');
+                }
+              },
+            ),
           )
         ],
       ),

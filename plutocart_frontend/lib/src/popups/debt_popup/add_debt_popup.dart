@@ -26,18 +26,38 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
   TextEditingController debtPaidController = new TextEditingController();
   TextEditingController moneyLeanderController = new TextEditingController();
   TextEditingController latestDatePayController = new TextEditingController();
+  bool? fullField;
   int? integerValuePayPeriod;
   int? integerValueHowMYPay;
   double? calMonthlyPayment;
   double? calDetPaid;
   bool? toggleLatestPaid;
+
+      void checkFullFiedl(){
+        fullField =   (nameDebtController.text.length <= 0 ||
+                    totalDebtController.text.length <= 0 ||
+                    totalPeriodController.text.length <= 0 ||
+                    paidPeriodController.text.length <= 0 ||
+                    monthlyPaymentController.text.length <= 0 ||
+                    debtPaidController.text.length <= 0 ||
+                    moneyLeanderController.text.length <= 0 ||
+                    latestDatePayController.text.length <= 0) ?  false :  true;
+    }
   @override
   void initState() {
+   
     integerValuePayPeriod = 1;
     integerValueHowMYPay = 0;
+    checkFullFiedl();
+    nameDebtController.addListener(() {
+      setState(() {
+        checkFullFiedl();
+      });
+    });
 
     totalDebtController.addListener(() {
       setState(() {
+           checkFullFiedl();
         if (totalPeriodController.text.length != 0 &&
             totalPeriodController.text.length != 0 &&
             paidPeriodController.text.length != 0) {
@@ -57,6 +77,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
     });
     totalPeriodController.addListener(() {
       setState(() {
+            checkFullFiedl();
         if (totalDebtController.text.length != 0 &&
             totalPeriodController.text.length != 0) {
           calMonthlyPayment = double.parse(totalDebtController.text) /
@@ -68,6 +89,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
 
     paidPeriodController.addListener(() {
       setState(() {
+           checkFullFiedl();
         if (paidPeriodController.text.length != 0 &&
             monthlyPaymentController.text.length != 0 &&
             totalDebtController.text.length != 0) {
@@ -84,17 +106,22 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
       });
     });
     monthlyPaymentController.addListener(() {
-      setState(() {});
+      setState(() {    checkFullFiedl();});
     });
     paidPeriodController.addListener(() {
-      setState(() {});
+      setState(() {   checkFullFiedl();});
     });
     debtPaidController.addListener(() {
-      setState(() {});
+      setState(() {   checkFullFiedl();});
     });
     moneyLeanderController.addListener(() {
-      setState(() {});
+      setState(() {
+       checkFullFiedl();
+      });
     });
+
+
+    
 
     DateTime now = DateTime.now();
     String formattedDateTime =
@@ -146,18 +173,21 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
             maxLength: 15,
             controller: nameDebtController,
             decoration: InputDecoration(
+              helperText: "Warning.............................ddd.",
               labelText: "Name of Your Debt",
               labelStyle: TextStyle(
                 color: nameDebtController.text.length != 0
                     ? Color(0xFF1A9CB0)
-                    : Colors.red,
+                    : Color(0XFFDD0000),
               ),
+               helperStyle: TextStyle(color: Color(0XFFDD0000)),
+               counterStyle: TextStyle(color: Color(0xFF15616D)),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
                   color: nameDebtController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -166,7 +196,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                   width: 1,
                   color: nameDebtController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -188,10 +218,9 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
           AmountTextField(
               amountMoneyController: totalDebtController,
               nameField: "Total debt"),
-          SizedBox(
-            height: 15,
-          ),
-          TextField(
+        totalDebtController.text.length == 0 ? SizedBox.shrink() :   SizedBox(height: 15),
+         totalDebtController.text.length == 0 ? SizedBox.shrink() : 
+         TextField(
             readOnly: true,
             controller: totalPeriodController,
             style: TextStyle(
@@ -202,13 +231,13 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               labelStyle: TextStyle(
                   color: totalPeriodController.text.length != 0
                       ? Color(0xFF1A9CB0)
-                      : Colors.red),
+                      : Color(0XFFDD0000)),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     width: 2,
                     color: totalPeriodController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red),
+                        : Color(0XFFDD0000)),
                 borderRadius: BorderRadius.circular(16),
               ),
               enabledBorder: OutlineInputBorder(
@@ -216,7 +245,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                     width: 1,
                     color: totalPeriodController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red),
+                        : Color(0XFFDD0000)),
                 borderRadius: BorderRadius.circular(16),
               ),
               suffixIcon: IconButton(
@@ -236,10 +265,16 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               ),
             ),
           ),
-          SizedBox(
+           totalPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
             height: 15,
           ),
-          TextField(
+          totalPeriodController.text.length == 0 ? SizedBox.shrink() :  AmountTextField(
+              amountMoneyController: monthlyPaymentController,
+              nameField: "Monthly payment"),
+        totalPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
+            height: 15,
+          ),
+           totalPeriodController.text.length == 0 ? SizedBox.shrink() :  TextField(
             readOnly: true,
             controller: paidPeriodController,
             style: TextStyle(
@@ -250,13 +285,13 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               labelStyle: TextStyle(
                   color: paidPeriodController.text.length != 0
                       ? Color(0xFF1A9CB0)
-                      : Colors.red),
+                      : Color(0XFFDD0000)),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     width: 2,
                     color: paidPeriodController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red),
+                        : Color(0XFFDD0000)),
                 borderRadius: BorderRadius.circular(16),
               ),
               enabledBorder: OutlineInputBorder(
@@ -264,7 +299,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                     width: 1,
                     color: paidPeriodController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red),
+                        : Color(0XFFDD0000)),
                 borderRadius: BorderRadius.circular(16),
               ),
               suffixIcon: IconButton(
@@ -287,16 +322,11 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               ),
             ),
           ),
-          SizedBox(
+        
+         paidPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
             height: 15,
           ),
-          AmountTextField(
-              amountMoneyController: monthlyPaymentController,
-              nameField: "Monthly payment"),
-          SizedBox(
-            height: 15,
-          ),
-          AmountTextField(
+          paidPeriodController.text.length == 0 ? SizedBox.shrink() :  AmountTextField(
               amountMoneyController: debtPaidController,
               nameField: "Debt paid"),
           SizedBox(
@@ -310,14 +340,15 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               labelStyle: TextStyle(
                 color: moneyLeanderController.text.length != 0
                     ? Color(0xFF1A9CB0)
-                    : Colors.red,
+                    : Color(0XFFDD0000),
               ),
+              counterStyle: TextStyle(color: Color(0xFF15616D)),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
                   color: moneyLeanderController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -326,7 +357,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                   width: 1,
                   color: moneyLeanderController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -353,6 +384,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
             child: ActionPopup(
               bottonFirstName: "Cancel",
               bottonSecondeName: "Add",
+              isFullField: fullField,
               bottonFirstNameFunction: () {
                 Navigator.pop(context);
               },
@@ -365,10 +397,11 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                     debtPaidController.text.length <= 0 ||
                     moneyLeanderController.text.length <= 0 ||
                     latestDatePayController.text.length <= 0) {
-                  customAlertPopup(context, "Information missing",
-                      Icons.error_outline_rounded, Colors.red.shade200);
+                      
+                  // customAlertPopup(context, "Information missing",
+                  //     Icons.error_outline_rounded, Colors.red.shade200);
+                  null;
                 } else {
-                                print("add debt !!222");
                   String nameOfYourDebt = nameDebtController.text;
                   double totalDebt = double.parse(totalDebtController.text);
                   int totalPeriod = int.parse(totalPeriodController.text);

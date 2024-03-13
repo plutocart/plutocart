@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
-import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/bottom_navigator_bar.dart';
 import 'package:plutocart/src/models/button_transaction.dart';

@@ -4,13 +4,12 @@ import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
-import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class EditGoalPopup extends StatefulWidget {
-  final Map<String , dynamic>? goal;
-  const EditGoalPopup({Key? key , this.goal}) : super(key: key);
+  final Map<String, dynamic>? goal;
+  const EditGoalPopup({Key? key, this.goal}) : super(key: key);
 
   @override
   _EditGoalPopupState createState() => _EditGoalPopupState();
@@ -21,19 +20,43 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
   TextEditingController yourSaveMoneyController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
   TextEditingController nameGoalController = TextEditingController();
+  bool? fullField;
+  void checkFullField() {
+    fullField = (budgetGoalController.text.length <= 0 ||
+            yourSaveMoneyController.text.length <= 0 ||
+            nameGoalController.text.length <= 0)
+        ? false
+        : true;
+  }
 
   @override
   void initState() {
     nameGoalController.text = widget.goal!['nameGoal'];
-    budgetGoalController.text = widget.goal!['amountGoal'].toString();
-    yourSaveMoneyController.text = widget.goal!['deficit'].toString();
-   String date = widget.goal!['endDateGoal'].toString();
-   String formattedDateTime ='${date.substring(8,10)}/${date.substring(5 , 7)}/${date.substring(0 , 4)} ${date.substring(11 , 13)}:${date.substring(14, 16)}';
-
+    budgetGoalController.text = widget.goal!['totalGoal'].toString();
+    yourSaveMoneyController.text = widget.goal!['collectedMoney'].toString();
+    String date = widget.goal!['endDateGoal'].toString();
+    String formattedDateTime =
+        '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
     tranDateController.text = formattedDateTime;
+    checkFullField();
+    nameGoalController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+    budgetGoalController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+    yourSaveMoneyController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +68,30 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Edit Goals",
-              style: TextStyle(
-                color: Color(0xFF15616D),
-                fontSize: 24,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w700,
-                height: 0,
-              ),
-            ),
-            Text(
-              "You can set 'Goals' of your life!",
-              style: TextStyle(
-                color: Color(0xFF898989),
-                fontSize: 14,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-                height: 0,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Edit Goals",
+                  style: TextStyle(
+                    color: Color(0xFF15616D),
+                    fontSize: 24,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                    height: 0,
+                  ),
+                ),
+                Text(
+                  "You can set 'Goals' of your life!",
+                  style: TextStyle(
+                    color: Color(0xFF898989),
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w400,
+                    height: 0,
+                  ),
+                ),
+              ],
             ),
             TextField(
               maxLength: 15,
@@ -73,14 +101,14 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                 labelStyle: TextStyle(
                   color: nameGoalController.text.length != 0
                       ? Color(0xFF1A9CB0)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
                     color: nameGoalController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red,
+                        : Color(0XFFDD0000),
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -89,7 +117,7 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                     width: 1,
                     color: nameGoalController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red,
+                        : Color(0XFFDD0000),
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -114,35 +142,44 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
               nameField: "Collect money",
             ),
             DatePickerFieldOnlyDay(
-              tranDateController: tranDateController, nameField: 'Selected Date',
+              tranDateController: tranDateController,
+              nameField: 'Selected Date',
             ),
             ActionPopup(
+              isFullField: fullField,
               bottonFirstName: "Cancel",
               bottonSecondeName: "Confirm",
               bottonFirstNameFunction: () {
                 Navigator.pop(context);
               },
               bottonSecondeNameFunction: () {
-                double amountGoal = double.parse(budgetGoalController.text);
-                double deficitGoal = double.parse(yourSaveMoneyController.text);
-                String tranDateFormat =changeFormatter(tranDateController.text);
-                print("amountGoal : ${amountGoal}");
-                print("dificitGoal : ${deficitGoal}");
-                print("tranStringToDateGoal : ${tranDateFormat}" );
-                showLoadingPagePopUp(context);
-                context.read<GoalBloc>().add(UpdateGoalbyGoalId(widget.goal!['id'], nameGoalController.text, amountGoal, deficitGoal, tranDateFormat));
+                if (fullField == true) {
+                  double amountGoal = double.parse(budgetGoalController.text);
+                  double deficitGoal =
+                      double.parse(yourSaveMoneyController.text);
+                  String tranDateFormat =
+                      changeFormatter(tranDateController.text);
+                  showLoadingPagePopUp(context);
+                  context.read<GoalBloc>().add(UpdateGoalbyGoalId(
+                      widget.goal!['id'],
+                      nameGoalController.text,
+                      amountGoal,
+                      deficitGoal,
+                      tranDateFormat));
                   print("dificitGoal! : ${deficitGoal}");
                   context.read<GoalBloc>().stream.listen((state) {
-                    if(state.updateGoalStatus == GoalStatus.loaded){
+                    if (state.updateGoalStatus == GoalStatus.loaded) {
                       context.read<GoalBloc>().add(ResetGoal());
                       context.read<GoalBloc>().add(GetGoalByAccountId());
                       print("check statetus : ${state.updateGoalStatus}");
                       Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.pop(context);
-                      
                     }
-                  }); 
+                  });
+                } else {
+                  null;
+                }
               },
             )
           ],

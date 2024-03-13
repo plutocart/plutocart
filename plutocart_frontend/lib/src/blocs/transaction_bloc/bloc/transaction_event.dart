@@ -73,3 +73,24 @@ class ResetTransaction extends TransactionEvent {}
 
 class GetTransactionList extends TransactionEvent {}
 
+class UpdateTransactionInEx extends TransactionEvent {
+   final int statementType;
+  final int transactionCategoryId;
+  final int walletId;
+  final double stmTransaction;
+  final String dateTimeTransaction;
+  final File? imageUrl;
+  final String? description;
+  final int transactionId;
+  UpdateTransactionInEx(
+      this.statementType,
+      this.transactionCategoryId,
+      this.walletId,
+      this.stmTransaction,
+      this.dateTimeTransaction,
+      this.imageUrl,
+      this.description , this.transactionId);
+}
+
+class ResetUpdateTransactionInEx extends TransactionEvent {}
+

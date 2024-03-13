@@ -5,11 +5,13 @@ class WalletDropdown extends StatefulWidget {
   final List<Wallet> walletList;
   final Function(String?) onChanged;
   final GlobalKey? selectKey;
+   final bool? isValue;
+   final String ? walleId;
 
   const WalletDropdown(
       {Key? key,
       required this.walletList,
-      required this.onChanged,  this.selectKey})
+      required this.onChanged,  this.selectKey , this.isValue , this.walleId})
       : super(key: key);
 
   @override
@@ -23,24 +25,25 @@ class _WalletDropdownState extends State<WalletDropdown> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       key: widget.selectKey,
+      value: widget.isValue == false ? null : widget.walleId,
       menuMaxHeight: MediaQuery.of(context).size.height * 0.4,
       icon: Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF15616D)),
       decoration: InputDecoration(
         labelText: "Choose Wallet",
         labelStyle: TextStyle(
-            color: isWalletSelected ? Color(0xFF1A9CB0) : Colors.red,
+            color: isWalletSelected || widget.isValue == true ? Color(0xFF1A9CB0) : Color(0XFFDD0000),
             fontSize: 16,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w400),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-              color: isWalletSelected ? Color(0xFF15616D) : Colors.red),
+              color: isWalletSelected || widget.isValue == true  ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: BorderSide(
-              color: isWalletSelected ? Color(0xFF15616D) : Colors.red),
+              color: isWalletSelected  || widget.isValue == true ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
       ),
       validator: (value) {

@@ -76,6 +76,6 @@ class _ButtonTransactionState extends State<ButtonTransaction> {
         child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 2);
+        hightCard: 1.75);
   }
 }

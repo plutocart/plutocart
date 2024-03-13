@@ -48,7 +48,7 @@ class CardDebtHome extends StatelessWidget {
                         Text(
                           "${state.debtList[state.debtList.length - 1]['moneyLender']}",
                           style: TextStyle(
-                            color: Color(0xFF707070),
+                            color: Color(0XFF898989),
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             fontFamily: "Roboto",
@@ -71,7 +71,7 @@ class CardDebtHome extends StatelessWidget {
                                 Text(
                                   "Paid period(s)",
                                   style: TextStyle(
-                                    color: Color(0xFF707070),
+                                    color: Color(0XFF898989),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Roboto",
@@ -80,7 +80,7 @@ class CardDebtHome extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "${state.debtList[state.debtList.length - 1]['numOfPaidPeriod']}",
+                                      "${state.debtList[state.debtList.length - 1]['paidPeriod']}",
                                       style: TextStyle(
                                         color: Color(0XFF15616D),
                                         fontSize: 14,
@@ -91,14 +91,14 @@ class CardDebtHome extends StatelessWidget {
                                     Text(
                                       "/",
                                       style: TextStyle(
-                                        color: Color(0xFF707070),
+                                        color: Color(0XFF898989),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                         fontFamily: "Roboto",
                                       ),
                                     ),
                                     Text(
-                                      "${state.debtList[state.debtList.length - 1]['payPeriod']}",
+                                      "${state.debtList[state.debtList.length - 1]['totalPeriod']}",
                                       style: TextStyle(
                                         color: Color(0xFF1A9CB0),
                                         fontSize: 14,
@@ -112,7 +112,7 @@ class CardDebtHome extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.only(right: 16, left: 16),
+                                  const EdgeInsets.only(right: 13, left: 13),
                               child: Container(
                                 height: 40,
                                 decoration: ShapeDecoration(
@@ -132,14 +132,14 @@ class CardDebtHome extends StatelessWidget {
                                 Text(
                                   "Debt paid",
                                   style: TextStyle(
-                                    color: Color(0xFF707070),
+                                    color: Color(0XFF898989),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Roboto",
                                   ),
                                 ),
                                 Text(
-                                  "${NumberFormat("#,##0.00").format(state.debtList[state.debtList.length - 1]['totalPaidDebt'])}฿",
+                                  "${NumberFormat("#,##0.00").format(state.debtList[state.debtList.length - 1]['debtPaid'])}฿",
                                   style: TextStyle(
                                     color: Color(0xFF15616D),
                                     fontSize: 14,
@@ -151,7 +151,7 @@ class CardDebtHome extends StatelessWidget {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.only(right: 16, left: 16),
+                                  const EdgeInsets.only(right: 13, left: 13),
                               child: Container(
                                 height: 40,
                                 decoration: ShapeDecoration(
@@ -171,7 +171,7 @@ class CardDebtHome extends StatelessWidget {
                                 Text(
                                   "Latest paid",
                                   style: TextStyle(
-                                    color: Color(0xFF707070),
+                                    color: Color(0XFF898989),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Roboto",

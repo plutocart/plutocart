@@ -121,7 +121,7 @@ class _ListWalletPopupState extends State<ListWalletPopup> {
                                           Text(
                                             "${wallet.walletBalance}",
                                             style: TextStyle(
-                                              color: Color(0xFF707070),
+                                              color: Color(0XFF898989),
                                               fontSize: 16,
                                               fontFamily: 'Roboto',
                                               fontWeight: FontWeight.w400,

@@ -26,14 +26,14 @@ class SettingPopup extends StatefulWidget {
 
 class _SettingPopupState extends State<SettingPopup> {
   TextStyle globalTextStyleRedHeadline = TextStyle(
-    color: Colors.red,
+    color: Color(0XFFDD0000) ,
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w500,
     height: 0,
   );
   TextStyle globalTextStyleRedDes = TextStyle(
-      color: Colors.red,
+      color: Color(0XFFDD0000),
       fontSize: 14,
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
@@ -139,15 +139,23 @@ class _SettingPopupState extends State<SettingPopup> {
                         await Future.delayed(Duration(milliseconds: 1500));
                         Navigator.pop(context);
                         Navigator.pop(context);
-                             customAlertPopup(
-                              context,
-                              state.isUpdateFail == false ? "Update to account member unsuccessful" : "Update to account member successful" ,
-                                state.isUpdateFail == false ? Icons.error_outline_rounded : Icons.check_circle_outlined,
-                              state.isUpdateFail == false ? Colors.red.shade200 : Colors.green.shade200);
-                              if(state.isUpdateFail == false){
-                                 final storage = FlutterSecureStorage();
-                                 storage.delete(key: "email");
-                              }
+                        // context.read<LoginBloc>().stream.listen((event) {
+                        //   customAlertPopup(
+                        //       context,
+                        //       state.isUpdateFail == true
+                        //           ? "Update to account member unsuccessful"
+                        //           : "Update to account member successful",
+                        //       state.isUpdateFail == true
+                        //           ? Icons.error_outline_rounded
+                        //           : Icons.check_circle_outlined,
+                        //       state.isUpdateFail == true
+                        //           ? Colors.red.shade200
+                        //           : Colors.green.shade200);
+                        //   if (state.isUpdateFail == true) {
+                        //     final storage = FlutterSecureStorage();
+                        //     storage.delete(key: "email");
+                        //   }
+                        // });
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -201,10 +209,10 @@ class _SettingPopupState extends State<SettingPopup> {
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.07,
           decoration: ShapeDecoration(
-            color: Colors.red,
+            color: Color(0XFFDD0000),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              side: BorderSide(width: 1, color: Colors.red),
+              side: BorderSide(width: 1, color: Color(0XFFDD0000)),
             ),
           ),
           child: BlocBuilder<LoginBloc, LoginState>(
@@ -290,7 +298,7 @@ class _SettingPopupState extends State<SettingPopup> {
                     Text(
                       "Delete Account",
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Color(0XFFDD0000),
                         fontSize: 24,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w700,

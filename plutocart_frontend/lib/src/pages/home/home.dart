@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                       nameRoute: AppRoute.goal,
                       lengthData: state.goalList!.length,
                       numberPopup: 3,
-                      indexPage: 2,
+                      indexPage: 3,
                     );
                   },
                 ),
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                       nameRoute: AppRoute.debt,
                       lengthData: state.debtList.length,
                       numberPopup: 4,
-                      indexPage: 3,
+                      indexPage: 4,
                     );
                   },
                 ),

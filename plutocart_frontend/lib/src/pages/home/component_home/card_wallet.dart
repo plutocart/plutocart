@@ -439,7 +439,7 @@ class _CardWalletState extends State<CardWallet> {
             EditWalletPopup(numberPopUp1: 1, numberPopUp2: 1, wallet: wallet),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 1.9);
+        hightCard: 1.75);
   }
 
   Future<void> showWallets() async {
@@ -457,6 +457,6 @@ class _CardWalletState extends State<CardWallet> {
         child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 2);
+        hightCard: 1.75);
   }
 }

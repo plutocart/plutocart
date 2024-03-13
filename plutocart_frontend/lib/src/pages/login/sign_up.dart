@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
-import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/router/router.dart';
 
 class SignUp extends StatefulWidget {

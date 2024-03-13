@@ -33,7 +33,7 @@ Future<T?>? showSlideDialog<T>({
     pageBuilder: (context, animation, secondaryAnimation) {
       return const AlertDialog(title: Text('Alert!'));
     },
-    barrierColor: barrierColor ?? Colors.black.withOpacity(0.7),
+    barrierColor: Colors.black.withOpacity(0.15),
     barrierDismissible: barrierDismissible,
     barrierLabel: "Dismiss",
     transitionDuration: transitionDuration,

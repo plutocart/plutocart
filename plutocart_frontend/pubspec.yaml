@@ -123,6 +123,7 @@ flutter:
     - "assets/icon/congranturation.png"
     - "assets/icon/calendar_icon.png"
     - "assets/icon/debt-icon.png"
+    - "assets/icon/remove_icon.png"
     - .env
     # - images/a_dot_ham.jpeg
 

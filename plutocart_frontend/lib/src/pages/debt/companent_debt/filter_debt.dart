@@ -8,22 +8,22 @@ class FilterDebt extends StatefulWidget {
 }
 class _FilterDebtState extends State<FilterDebt> {
 
-    List<Color>? sectionList ;
+List<Color>? sectionList ;
    List<Color>? textColorList ;
 
    @override
   void initState() {
-        sectionList = [Colors.white  , Color(0xFF15616D) , Color(0xFF15616D) ];
-        textColorList = [Color(0xFF15616D), Colors.white  , Colors.white ];
+      textColorList = [Colors.white  , Color(0xFF15616D) , Color(0xFF15616D) ];
+      sectionList = [Color(0xFF15616D), Colors.white  , Colors.white ];
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-             color: Color(0xFF15616D),
+             color: Colors.white,
           border: Border.all(width: 1.5, color: Color(0XFF15616D)),
-          borderRadius: BorderRadius.circular(20)),
+          borderRadius: BorderRadius.circular(16)),
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
@@ -34,16 +34,17 @@ class _FilterDebtState extends State<FilterDebt> {
             width: MediaQuery.of(context).size.width * 0.2,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                   elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                   borderRadius: sectionList![0] == Colors.white ? BorderRadius.circular(20.0) : BorderRadius.only(topLeft: Radius.circular(20) , bottomLeft: Radius.circular(20)),
+                   borderRadius: sectionList![0] == Color(0xFF15616D)? BorderRadius.circular(14.0) : BorderRadius.only(topLeft: Radius.circular(16) , bottomLeft: Radius.circular(20)),
                   ),
                   backgroundColor: sectionList![0],
                 ),
                 onPressed: () {
                   setState(() {
-                    sectionList = [Colors.white  , Color(0xFF15616D) , Color(0xFF15616D) ];
-                  textColorList = [Color(0xFF15616D), Colors.white  , Colors.white ];
+                    sectionList = [Color(0xFF15616D), Colors.white  , Colors.white ];
+                    textColorList = [Colors.white  , Color(0xFF15616D) , Color(0xFF15616D) ];
                   });
                 },
                 child: Text(
@@ -60,16 +61,18 @@ class _FilterDebtState extends State<FilterDebt> {
             width: MediaQuery.of(context).size.width * 0.4,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                    borderRadius: sectionList![1] == Colors.white ? BorderRadius.circular(20.0) : BorderRadius.zero,
+                    borderRadius: sectionList![1] == Color(0xFF15616D) ? BorderRadius.circular(14.0) : BorderRadius.zero,
                   ),
                   backgroundColor: sectionList![1],
                 ),
                 onPressed: () {
                  setState(() {
-                    sectionList = [Color(0xFF15616D)  , Colors.white , Color(0xFF15616D) ];
-                  textColorList = [Colors.white ,  Color(0xFF15616D)  , Colors.white ];
+                    sectionList =  [Colors.white ,  Color(0xFF15616D)  , Colors.white ];
+                  textColorList =[Color(0xFF15616D)  , Colors.white , Color(0xFF15616D) ];
+                  
                  });
                 },
                 child: Text(
@@ -86,16 +89,17 @@ class _FilterDebtState extends State<FilterDebt> {
             width: MediaQuery.of(context).size.width * 0.2915,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                   elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                    borderRadius: sectionList![2] == Colors.white ? BorderRadius.circular(20.0) : BorderRadius.only(bottomRight: Radius.circular(20) , topRight: Radius.circular(20)),
+                    borderRadius: sectionList![2] == Color(0xFF15616D) ? BorderRadius.circular(14.0) : BorderRadius.only(bottomRight: Radius.circular(20) , topRight: Radius.circular(20)),
                   ),
                  backgroundColor: sectionList![2],
                 ),
                 onPressed: () {
                    setState(() {
-                  sectionList = [Color(0xFF15616D)  , Color(0xFF15616D), Colors.white  ];
-                  textColorList = [Colors.white ,  Colors.white   , Color(0xFF15616D) ];
+                  sectionList = [Colors.white ,  Colors.white   , Color(0xFF15616D) ];
+                  textColorList =[Color(0xFF15616D)  , Color(0xFF15616D), Colors.white  ];
                  });
                 },
                 child: Text(

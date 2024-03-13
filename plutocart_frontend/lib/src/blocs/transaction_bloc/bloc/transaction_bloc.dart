@@ -25,6 +25,12 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           debtStatus: TransactionStatus.loading));
     });
 
+
+     on<ResetUpdateTransactionInEx>((event, emit) async {
+      emit(state.copyWith(
+          updateTransactionInEx: TransactionStatus.loading));
+    });
+
     on<ResetTransaction>((event, emit) {
       emit(TransactionState()); // Reset the state to the initial state
     });
@@ -183,6 +189,35 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       } catch (error) {
         print("error delete account bloc: $error");
         throw error;
+      }
+    });
+
+
+     on<UpdateTransactionInEx>((event, emit) async {
+      print("start working update transaction income");
+      try {
+        Map<String, dynamic> response = await TransactionRepository()
+            .updateTransactionInEx(
+                event.statementType,
+                event.transactionCategoryId,
+                event.walletId,
+                event.stmTransaction,
+                event.dateTimeTransaction,
+                event.imageUrl ,
+                event.description,
+                event.transactionId);
+        if (response['data'] == null) {
+          print(
+              "not update transacton income in transaction bloc : ${response['data']}");
+        } else {
+          print("update transacton income in transaction bloc success");
+          emit(state.copyWith(
+              updateTransactionInEx: TransactionStatus.loaded));
+          print("after update income status is : ${state.incomeStatus}");
+        }
+      } catch (e) {
+        emit(state.copyWith(updateTransactionInEx: TransactionStatus.loading));
+        print("Error update transacton income in transaction bloc");
       }
     });
   }

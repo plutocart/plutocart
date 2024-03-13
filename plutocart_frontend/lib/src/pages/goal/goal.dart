@@ -165,14 +165,14 @@ class _GoalPageState extends State<GoalPage> {
                                           ? MediaQuery.of(context).size.height *
                                               0.35
                                           : MediaQuery.of(context).size.height *
-                                              0.21,
+                                              0.22,
                                       width:
                                           MediaQuery.of(context).size.width * 0.9,
                                      decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                          width: 1.5,
+                                          width: 1,
                                           color: Color(0XFF15616D),
                                         ),
                                         boxShadow: [
@@ -236,7 +236,7 @@ class _GoalPageState extends State<GoalPage> {
                                                     icon: Icon(
                                                       Icons.more_vert_outlined,
                                                       color: Color(
-                                                          0XFF707070), // Set the color here
+                                                          0XFF898989), // Set the color here
                                                     ),
                                                     onPressed: () async {
                                                       more_vert(goal['id'], goal);
@@ -275,36 +275,36 @@ class _GoalPageState extends State<GoalPage> {
                                                           left: 0,
                                                           top: 0,
                                                           child: Container(
-                                                            width: goal['deficit'] /
+                                                            width: goal['collectedMoney'] /
                                                                         goal[
-                                                                            'amountGoal'] >=
+                                                                            'totalGoal'] >=
                                                                     1
                                                                 ? MediaQuery.of(context)
                                                                         .size
                                                                         .width *
                                                                     0.8
-                                                                : goal['deficit'] /
+                                                                : goal['collectedMoney'] /
                                                                             goal[
-                                                                                'amountGoal'] <
+                                                                                'totalGoal'] <
                                                                         0.1
                                                                     ? MediaQuery.of(
                                                                                 context)
                                                                             .size
                                                                             .width *
                                                                         0.1
-                                                                    : goal['deficit'] / goal['amountGoal'] ==
+                                                                    : goal['collectedMoney'] / goal['totalGoal'] ==
                                                                             0.8
                                                                         ? MediaQuery.of(context)
                                                                                 .size
                                                                                 .width *
                                                                             0.733
-                                                                        : goal['deficit'] / goal['amountGoal'] >
+                                                                        : goal['collectedMoney'] / goal['totalGoal'] >
                                                                                 0.8
                                                                             ? MediaQuery.of(context).size.width *
                                                                                 0.777
                                                                             : MediaQuery.of(context).size.width *
-                                                                                goal['deficit'] /
-                                                                                goal['amountGoal'],
+                                                                                goal['collectedMoney'] /
+                                                                                goal['totalGoal'],
                                                             height: MediaQuery.of(
                                                                         context)
                                                                     .size
@@ -340,9 +340,9 @@ class _GoalPageState extends State<GoalPage> {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        "${((goal['deficit'] / goal['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                                        "${((goal['collectedMoney'] / goal['totalGoal']) * 100).abs().toStringAsFixed(0)}%",
                                                         style: TextStyle(
-                                                          color: Color(0XFF707070),
+                                                          color: Color(0XFF898989),
                                                           fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -367,7 +367,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                 const EdgeInsets
                                                                     .only(right: 2),
                                                             child: Text(
-                                                                "${NumberFormat("#,##0.00").format(goal['deficit'])}฿",
+                                                                "${NumberFormat("#,##0.00").format(goal['collectedMoney'])}฿",
                                                                 style: TextStyle(
                                                                     color: Color(
                                                                         0xFF15616D),
@@ -388,7 +388,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                           .w400,
                                                                   fontFamily:
                                                                       "Roboto")) , 
-                                                          Text(  "${NumberFormat("#,##0.00").format(goal['amountGoal'])}฿",
+                                                          Text(  "${NumberFormat("#,##0.00").format(goal['totalGoal'])}฿",
                                                               style: TextStyle(
                                                                   color: Color(
                                                                       0xFF15616D),
@@ -406,7 +406,7 @@ class _GoalPageState extends State<GoalPage> {
                                                           Text("${formattedDate}",
                                                               style: TextStyle(
                                                                   color: Color(
-                                                                      0XFF707070),
+                                                                      0XFF898989),
                                                                   fontSize: 14,
                                                                   fontWeight:
                                                                       FontWeight
@@ -436,14 +436,14 @@ class _GoalPageState extends State<GoalPage> {
                                                                         color: Color(
                                                                             0xFF15616D),
                                                                         fontSize:
-                                                                            16,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .w400,
                                                                         fontFamily:
                                                                             "Roboto")),
                                                                 Text(
-                                                                    "${NumberFormat("#,##0.00").format(goal['deficit'])} ฿",
+                                                                    "${NumberFormat("#,##0.00").format(goal['collectedMoney'])} ฿",
                                                                     style: TextStyle(
                                                                         color: Color(
                                                                             0xFF2DC653),
@@ -487,14 +487,14 @@ class _GoalPageState extends State<GoalPage> {
                                                                         color: Color(
                                                                             0xFF15616D),
                                                                         fontSize:
-                                                                            16,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .w400,
                                                                         fontFamily:
                                                                             "Roboto")),
                                                                 Text(
-                                                                  "${NumberFormat("#,##0.00").format(( goal['amountGoal'] - goal['deficit']).abs())} ฿",
+                                                                  "${NumberFormat("#,##0.00").format(( goal['totalGoal'] - goal['collectedMoney']).abs())} ฿",
                                                                   style: TextStyle(
                                                                     color: Color(
                                                                         0XFF1A9CB0),
@@ -588,6 +588,6 @@ class _GoalPageState extends State<GoalPage> {
         child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 2);
+        hightCard: 1.75);
   }
 }

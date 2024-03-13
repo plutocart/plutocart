@@ -28,14 +28,14 @@ class _AmountTextFieldGenarateState extends State<AmountTextFieldGenarate> {
         labelStyle: TextStyle(
           color: widget.amountMoneyController.text.isNotEmpty
               ? Color(0xFF1A9CB0)
-              : Colors.red,
+              : Color(0XFFDD0000),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             width: 2,
             color: widget.amountMoneyController.text.isNotEmpty
                 ? Color(0xFF15616D)
-                : Colors.red,
+                : Color(0XFFDD0000),
           ),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -44,7 +44,7 @@ class _AmountTextFieldGenarateState extends State<AmountTextFieldGenarate> {
             width: 1,
             color: widget.amountMoneyController.text.isNotEmpty
                 ? Color(0xFF15616D)
-                : Colors.red,
+                : Color(0XFFDD0000),
           ),
           borderRadius: BorderRadius.circular(16),
         ),

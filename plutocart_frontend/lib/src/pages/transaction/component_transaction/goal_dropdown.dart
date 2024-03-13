@@ -22,19 +22,19 @@ class _GoalDropdownState extends State<GoalDropdown> {
       decoration: InputDecoration(
         labelText: "Select your goal",
         labelStyle: TextStyle(
-            color: isGoalSelected ? Color(0xFF1A9CB0) : Colors.red,
+            color: isGoalSelected ? Color(0xFF1A9CB0) : Color(0XFFDD0000),
             fontSize: 16,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w400),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-              color: isGoalSelected ? Color(0xFF15616D) : Colors.red),
+              color: isGoalSelected ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: BorderSide(
-              color: isGoalSelected ? Color(0xFF15616D) : Colors.red),
+              color: isGoalSelected ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
       ),
       validator: (value) {

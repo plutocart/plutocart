@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
-import 'package:plutocart/src/popups/wallet_popup/bottom_sheet_delete_wallet.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
+import 'package:plutocart/src/popups/bottom_sheet_delete.dart';
 import 'package:plutocart/src/popups/wallet_popup/edit_wallet_popup.dart';
 
 class MoreVertPopupWallet extends StatefulWidget {
@@ -90,16 +95,29 @@ class _MoreVertPopupWalletState extends State<MoreVertPopupWallet> {
         ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 1.9);
+        hightCard: 1.75);
   }
 
    buttomSheetDelete(Wallet wallet) {
     showSlideDialog(
         context: context,
-        child: BottomSheetDeleteWallet(
+        child: BottomSheetDelete(
           numberPopUp1: 2,
-          numberPopUp2: 2,
-          wallet: wallet,
+          keyDetial: wallet.walletName, 
+          valueDetail: '${wallet.walletBalance}' , 
+          bottomFunctionSecond: (){
+              context .read<WalletBloc>().add(DeleteWallet(wallet.walletId!));
+                showLoadingPagePopUp(context);
+                context.read<WalletBloc>().stream.listen((state) async {
+                  if (state.deleteStatus == WalletStatus.loaded) {
+                    context.read<TransactionBloc>().add(GetTransactionLimit3());
+                    context.read<GoalBloc>().add(GetGoalByAccountId());
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                });
+          },
         ),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,

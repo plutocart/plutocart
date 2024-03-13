@@ -24,19 +24,19 @@ class _DebtDropdownState extends State<DebtDropdown> {
       decoration: InputDecoration(
         labelText: "Select your debt",
         labelStyle: TextStyle(
-            color: isDebtSelected ? Color(0xFF1A9CB0) : Colors.red,
+            color: isDebtSelected ? Color(0xFF1A9CB0) : Color(0XFFDD0000),
             fontSize: 16,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w400),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-              color: isDebtSelected ? Color(0xFF15616D) : Colors.red),
+              color: isDebtSelected ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: BorderSide(
-              color: isDebtSelected ? Color(0xFF15616D) : Colors.red),
+              color: isDebtSelected ? Color(0xFF15616D) : Color(0XFFDD0000)),
         ),
       ),
       validator: (value) {

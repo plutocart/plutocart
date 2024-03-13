@@ -28,7 +28,7 @@ class ImageSelectionScreen extends StatelessWidget {
         border: Border.all(color: Color(0xFF15616D)),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: image == null
+      child: image == null 
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

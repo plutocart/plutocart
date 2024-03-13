@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -115,12 +114,12 @@ class _CardGroupState extends State<CardGroup> {
                                   children: [
                                     Text("more",
                                         style: TextStyle(
-                                            color: Color(0xFF707070),
+                                            color: Color(0XFF898989),
                                             fontSize: 14,
                                             fontFamily: "Roboto")),
                                     Icon(
                                       Icons.navigate_next,
-                                      color: Color(0xFF707070),
+                                      color: Color(0XFF898989),
                                     ),
                                   ],
                                 ),
@@ -142,7 +141,7 @@ class _CardGroupState extends State<CardGroup> {
                                             state.transactionLimit3[index];
                                         return Skeleton.replace(
                                           child: Container(
-                                            width: 320,
+                                            width: MediaQuery.of(context).size.width * 0.88,
                                             height: 57,
                                             margin: const EdgeInsets.only(
                                                 bottom: 10),
@@ -201,6 +200,7 @@ class _CardGroupState extends State<CardGroup> {
                                                               fontFamily:
                                                                   'Roboto',
                                                               height: 0,
+                                                              fontWeight:FontWeight.w500 
                                                             ),
                                                           ),
                                                           Text(
@@ -214,6 +214,7 @@ class _CardGroupState extends State<CardGroup> {
                                                               fontFamily:
                                                                   'Roboto',
                                                               height: 0,
+                                                              fontWeight:FontWeight.w500 
                                                             ),
                                                           )
                                                         ],
@@ -233,13 +234,13 @@ class _CardGroupState extends State<CardGroup> {
                                                           color: transaction[
                                                                       'statementType'] ==
                                                                   "expense"
-                                                              ? Colors.red
+                                                              ? Color(0XFFDD0000)
                                                               : Color(
                                                                   0xFF2DC653),
                                                           fontSize: 16,
                                                           fontFamily: 'Roboto',
                                                           fontWeight:
-                                                              FontWeight.w400,
+                                                              FontWeight.w500,
                                                         ),
                                                       ),
                                                       Text(
@@ -355,19 +356,19 @@ class _CardGroupState extends State<CardGroup> {
                                                         left: 0,
                                                         top: 0,
                                                         child: Container(
-                                                          width: state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] >=
+                                                          width: state.goalList![state.goalList!.length - 1]['collectedMoney'] / state.goalList![state.goalList!.length - 1]['totalGoal'] >=
                                                                   1
                                                               ? MediaQuery.of(context)
                                                                       .size
                                                                       .width *
                                                                   0.84
-                                                              : state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] <
+                                                              : state.goalList![state.goalList!.length - 1]['collectedMoney'] / state.goalList![state.goalList!.length - 1]['totalGoal'] <
                                                                       0.1
                                                                   ? MediaQuery.of(context)
                                                                           .size
                                                                           .width *
                                                                       0.1
-                                                                  : state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal'] >
+                                                                  : state.goalList![state.goalList!.length - 1]['collectedMoney'] / state.goalList![state.goalList!.length - 1]['totalGoal'] >
                                                                           0.8
                                                                       ? MediaQuery.of(context)
                                                                               .size
@@ -377,8 +378,8 @@ class _CardGroupState extends State<CardGroup> {
                                                                               .size
                                                                               .width *
                                                                           state.goalList![state.goalList!.length - 1]
-                                                                              ['deficit'] /
-                                                                          state.goalList![state.goalList!.length - 1]['amountGoal'],
+                                                                              ['collectedMoney'] /
+                                                                          state.goalList![state.goalList!.length - 1]['totalGoal'],
                                                           height: MediaQuery.of(
                                                                       context)
                                                                   .size
@@ -416,9 +417,9 @@ class _CardGroupState extends State<CardGroup> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  "${((state.goalList![state.goalList!.length - 1]['deficit'] / state.goalList![state.goalList!.length - 1]['amountGoal']) * 100).abs().toStringAsFixed(0)}%",
+                                                  "${((state.goalList![state.goalList!.length - 1]['collectedMoney'] / state.goalList![state.goalList!.length - 1]['totalGoal']) * 100).abs().toStringAsFixed(0)}%",
                                                   style: TextStyle(
-                                                    color: Color(0XFF707070),
+                                                    color: Color(0XFF898989),
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w500,
                                                     fontFamily: "Roboto",
@@ -443,7 +444,7 @@ class _CardGroupState extends State<CardGroup> {
                                                               right: 2,
                                                               left: 20),
                                                       child: Text(
-                                                          "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['deficit'])}฿",
+                                                          "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['collectedMoney'])}฿",
                                                           style: TextStyle(
                                                               color: Color(
                                                                   0xFF15616D),
@@ -470,7 +471,7 @@ class _CardGroupState extends State<CardGroup> {
                                                                   "Roboto")),
                                                     ),
                                                     Text(
-                                                        "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['amountGoal'])}฿",
+                                                        "${NumberFormat("#,##0.00").format(state.goalList![state.goalList!.length - 1]['totalGoal'])}฿",
                                                         style: TextStyle(
                                                             color: Color(
                                                                 0xFF1A9CB0),
@@ -490,7 +491,7 @@ class _CardGroupState extends State<CardGroup> {
                                                       Text("${formattedDate}",
                                                           style: TextStyle(
                                                               color: Color(
-                                                                  0XFF707070),
+                                                                  0XFF898989),
                                                               fontSize: 14,
                                                               fontWeight:
                                                                   FontWeight
@@ -641,6 +642,6 @@ class _CardGroupState extends State<CardGroup> {
         child: CreateWalletPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 2);
+        hightCard: 1.75);
   }
 }

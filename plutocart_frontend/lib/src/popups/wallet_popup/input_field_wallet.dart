@@ -22,7 +22,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: TextField(
             maxLength: 15,
             controller: widget.nameWalletController,
@@ -31,14 +31,14 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               labelStyle: TextStyle(
                 color: widget.nameWalletController.text.length != 0
                     ? Color(0xFF1A9CB0)
-                    : Colors.red,
+                    : Color(0XFFDD0000),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
                   color: widget.nameWalletController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -47,7 +47,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
                   width: 1,
                   color: widget.nameWalletController.text.length != 0
                       ? Color(0xFF15616D)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -65,7 +65,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
           child: AmountTextField(amountMoneyController: widget.amountMoneyController, nameField: "Amount of money",)
         ),
       ],

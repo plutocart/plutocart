@@ -52,8 +52,8 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
           print("create goal in goal bloc success");
           emit(state.copyWith(
               nameGoal: response['data']['nameGoal'],
-              amountGoal: response['data']['amountGoal'],
-              deficit: response['data']['deficit'],
+              amountGoal: response['data']['totalGoal'],
+              deficit: response['data']['collectedMoney'],
               endDateGoal: dateTime,
               createGoalStatus: GoalStatus.loaded));
           print("after create goal status is : ${state.createGoalStatus}");
@@ -91,10 +91,10 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
         int indexGoal = response.indexWhere((element) => element['id'] == event.goalId);
        print("show respinse goal : ${response[indexGoal]}");
        print("element  ${event.goalId}");
-       print("defecit : ${response[indexGoal]['deficit']}");
-         print("amount : ${response[indexGoal]['amountGoal']}");
-       print("response[0]['deficit'] >= response[0]['amountGoal'] : ${response[indexGoal]['deficit'] >= response[indexGoal]['amountGoal']}");
-        if(response[indexGoal]['deficit'] >= response[indexGoal]['amountGoal']){
+       print("defecit : ${response[indexGoal]['collectedMoney']}");
+         print("amount : ${response[indexGoal]['totalGoal']}");
+       print("response[0]['deficit'] >= response[0]['amountGoal'] : ${response[indexGoal]['collectedMoney'] >= response[indexGoal]['totalGoal']}");
+        if(response[indexGoal]['collectedMoney'] >= response[indexGoal]['totalGoal']){
           print("response goal complete true");
            emit( state.copyWith(
               goalComplete: true
@@ -153,8 +153,8 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
         emit(state.copyWith(
           updateGoalStatus: GoalStatus.loaded,
           nameGoal: response['data']['nameGoal'],
-          amountGoal: response['data']['amountGoal'],
-          deficit: response['data']['deficit'],
+          amountGoal: response['data']['totalGoal'],
+          deficit: response['data']['collectedMoney'],
           endDateGoalString: response['data']['endDateGoal'],
         ));
       } else {
@@ -181,8 +181,8 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
         emit(state.copyWith(
           updateGoalStatus: GoalStatus.loaded,
           nameGoal: response['data']['nameGoal'],
-          amountGoal: response['data']['amountGoal'],
-          deficit: response['data']['deficit'],
+          amountGoal: response['data']['totalGoal'],
+          deficit: response['data']['collectedMoney'],
           endDateGoalString: response['data']['endDateGoal'],
         ));
       } else {

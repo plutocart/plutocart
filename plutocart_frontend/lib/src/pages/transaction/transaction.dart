@@ -163,7 +163,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  width: 1.5,
+                                  width: 1,
                                   color: Color(0XFF15616D),
                                 ),
                                 boxShadow: [
@@ -303,7 +303,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                   icon: Icon(
                                                     Icons.more_vert_outlined,
                                                     color: Color(
-                                                        0XFF707070), // Set the color here
+                                                        0XFF898989), // Set the color here
                                                   ),
                                                   onPressed: () async {
                                                     more_vert(transaction['id'],
@@ -375,7 +375,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                           fontWeight:
                                                               FontWeight.w400,
                                                           color:
-                                                              Color(0XFF707070),
+                                                              Color(0XFF898989),
                                                           fontSize: 16,
                                                           fontFamily: 'Roboto',
                                                           height: 0,
@@ -404,7 +404,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                           fontWeight:
                                                               FontWeight.w400,
                                                           color:
-                                                              Color(0XFF707070),
+                                                              Color(0XFF898989),
                                                           fontSize: 16,
                                                           fontFamily: 'Roboto',
                                                           height: 0,
@@ -431,7 +431,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                         "Description",
                                                         style: TextStyle(
                                                           color:
-                                                              Color(0XFF707070),
+                                                              Color(0XFF898989),
                                                           fontSize: 16,
                                                           fontFamily: 'Roboto',
                                                           fontWeight:
@@ -460,7 +460,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                                         "Photo",
                                                         style: TextStyle(
                                                           color:
-                                                              Color(0XFF707070),
+                                                              Color(0XFF898989),
                                                           fontSize: 16,
                                                           fontFamily: 'Roboto',
                                                           height: 0,

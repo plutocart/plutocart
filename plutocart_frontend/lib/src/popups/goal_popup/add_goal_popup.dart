@@ -4,7 +4,6 @@ import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
-import 'package:plutocart/src/pages/transaction/component_transaction/date_picker_field.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
@@ -21,9 +20,29 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
   TextEditingController yourSaveMoneyController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
   TextEditingController nameGoalController = TextEditingController();
+  bool ? fullField;
+
+  void checkFullField(){
+   fullField = ( budgetGoalController.text.length <= 0 || yourSaveMoneyController.text.length <= 0 || nameGoalController.text.length <= 0 ) ? false : true;
+  }
   @override
   void initState() {
     DateTime now = DateTime.now();
+    nameGoalController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+     budgetGoalController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+     yourSaveMoneyController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
     String formattedDateTime =
         '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
     tranDateController.text = formattedDateTime;
@@ -77,14 +96,14 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                 labelStyle: TextStyle(
                   color: nameGoalController.text.length != 0
                       ? Color(0xFF1A9CB0)
-                      : Colors.red,
+                      : Color(0XFFDD0000),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
                     color: nameGoalController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red,
+                        : Color(0XFFDD0000),
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -93,7 +112,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                     width: 1,
                     color: nameGoalController.text.length != 0
                         ? Color(0xFF15616D)
-                        : Colors.red,
+                        : Color(0XFFDD0000),
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -111,7 +130,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
             ),
             AmountTextField(
               amountMoneyController: budgetGoalController,
-              nameField: "Goal amount",
+              nameField: "Total goal",
             ),
             AmountTextField(
               amountMoneyController: yourSaveMoneyController,
@@ -122,6 +141,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
               nameField: "Selected Date",
             ),
             ActionPopup(
+              isFullField: fullField,
               bottonFirstName: "Cancel",
               bottonSecondeName: "Add",
               bottonFirstNameFunction: () {
@@ -131,9 +151,10 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                 if (nameGoalController.text.length <= 0 ||
                     budgetGoalController.text.length <= 0 ||
                     yourSaveMoneyController.text.length <= 0 ||
-                    tranDateController.text.length <= 0) {
-                  customAlertPopup(context, "Information missing",
-                      Icons.error_outline_rounded, Colors.red.shade200);
+                    tranDateController.text.length <= 0) {    
+                  // customAlertPopup(context, "Information missing",
+                  //     Icons.error_outline_rounded, Colors.red.shade200);
+                  null;
                 } else {
                   double amountGoal = double.parse(budgetGoalController.text);
                   double dificitGoal =

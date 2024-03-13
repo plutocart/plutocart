@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:plutocart/src/repository/debt_repository.dart';
 
@@ -32,11 +31,11 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
           final List<dynamic> newListeDebt = [...state.debtList];
           print("check debt monthly payment : 1B");
           print(
-              "check debt monthly payment : ${newListeDebt.where((element) => element['id'] == event.debtId).first['paidDebtPerPeriod']}");
+              "check debt monthly payment : ${newListeDebt.where((element) => element['id'] == event.debtId).first['monthlyPayment']}");
           emit(state.copyWith(
               monthlyPayment: double.parse(newListeDebt
                   .where((element) => element['id'] == event.debtId)
-                  .first['paidDebtPerPeriod']),
+                  .first['monthlyPayment']),
               genarateMothlyPaymentStatus: DebtStatus.loaded));
         } catch (e) {
           emit(state.copyWith(genarateMothlyPaymentStatus: DebtStatus.loading));

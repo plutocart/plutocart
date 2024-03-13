@@ -14,7 +14,7 @@ class TransactionTypeDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: DropdownButtonFormField<String>( // Specify explicit type here (String in this case)
         decoration: InputDecoration(border: InputBorder.none),
         icon: Icon(

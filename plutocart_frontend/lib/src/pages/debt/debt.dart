@@ -186,7 +186,7 @@ class _DebtPageState extends State<DebtPage> {
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                          width: 1.5,
+                                          width: 1,
                                           color: Color(0XFF15616D),
                                         ),
                                         boxShadow: [
@@ -239,7 +239,7 @@ class _DebtPageState extends State<DebtPage> {
                                                           "${debt['moneyLender']}",
                                                           style: TextStyle(
                                                             color:
-                                                                Color(0xFF707070),
+                                                                Color(0XFF898989),
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -259,7 +259,7 @@ class _DebtPageState extends State<DebtPage> {
                                                     icon: Icon(
                                                       Icons.more_vert_outlined,
                                                       color: Color(
-                                                          0XFF707070), // Set the color here
+                                                          0XFF898989), // Set the color here
                                                     ),
                                                     onPressed: () async {
                                                       more_vert(debt['id'], debt);
@@ -280,7 +280,7 @@ class _DebtPageState extends State<DebtPage> {
                                                             side: BorderSide(
                                                               width: 1,
                                                               color:
-                                                                  Color(0X89707070),
+                                                                  Color(0XFF898989),
                                                             ),
                                                             borderRadius: BorderRadius
                                                                 .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
@@ -289,26 +289,26 @@ class _DebtPageState extends State<DebtPage> {
                                                       ),
                                                       DetailDebt(
                                                         value1: "Total periods",
-                                                        value2: debt['payPeriod'],
+                                                        value2: debt['totalPeriod'],
                                                       ),
                                                       DetailDebt(
                                                         value1: "Paid period(s)",
                                                         value2:
-                                                            debt['numOfPaidPeriod'],
+                                                            debt['paidPeriod'],
                                                       ),
                                                       DetailDebt(
                                                         value1: "Monthly payment",
                                                         value2: NumberFormat("##,##0.00").format(debt[
-                                                            'paidDebtPerPeriod'],), 
+                                                            'monthlyPayment'],), 
                                                       ),
                                                       DetailDebt(
                                                         value1: "Debt paid",
                                                         value2:
-                                                            NumberFormat("##,##0.00").format(debt['totalPaidDebt']),
+                                                            NumberFormat("##,##0.00").format(debt['debtPaid']),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Total debt",
-                                                        value2: NumberFormat("##,##0.00").format(debt['amountDebt']),
+                                                        value2: NumberFormat("##,##0.00").format(debt['totalDebt']),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Latest paid",
@@ -360,7 +360,7 @@ class _DebtPageState extends State<DebtPage> {
                                                             "Paid period(s)",
                                                             style: TextStyle(
                                                               color:
-                                                                  Color(0xFF707070),
+                                                                  Color(0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight.w400,
@@ -370,7 +370,7 @@ class _DebtPageState extends State<DebtPage> {
                                                           Row(
                                                             children: [
                                                               Text(
-                                                                "${debt['numOfPaidPeriod']}",
+                                                                "${debt['paidPeriod']}",
                                                                 style: TextStyle(
                                                                   color: Color(
                                                                       0XFF15616D),
@@ -386,7 +386,7 @@ class _DebtPageState extends State<DebtPage> {
                                                                 "/",
                                                                 style: TextStyle(
                                                                   color: Color(
-                                                                      0xFF707070),
+                                                                      0XFF898989),
                                                                   fontSize: 14,
                                                                   fontWeight:
                                                                       FontWeight
@@ -396,7 +396,7 @@ class _DebtPageState extends State<DebtPage> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "${debt['payPeriod']}",
+                                                                "${debt['totalPeriod']}",
                                                                 style: TextStyle(
                                                                   color: Color(
                                                                       0xFF1A9CB0),
@@ -439,7 +439,7 @@ class _DebtPageState extends State<DebtPage> {
                                                             "Debt paid",
                                                             style: TextStyle(
                                                               color:
-                                                                  Color(0xFF707070),
+                                                                  Color(0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight.w400,
@@ -447,7 +447,7 @@ class _DebtPageState extends State<DebtPage> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            "${NumberFormat("#,##0.00").format(debt['totalPaidDebt'])}฿",
+                                                            "${NumberFormat("#,##0.00").format(debt['debtPaid'])}฿",
                                                             style: TextStyle(
                                                               color:
                                                                   Color(0xFF15616D),
@@ -486,7 +486,7 @@ class _DebtPageState extends State<DebtPage> {
                                                             "Latest paid",
                                                             style: TextStyle(
                                                               color:
-                                                                  Color(0xFF707070),
+                                                                  Color(0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight.w400,

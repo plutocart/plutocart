@@ -15,7 +15,7 @@ class BottomNavigatorBar extends StatelessWidget {
       currentIndex: context.read<PageBloc>().state.indexPage,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Color(0XFF15616D),
-      unselectedItemColor: Color(0XFF707070),
+      unselectedItemColor: Color(0XFF898989),
       backgroundColor: Colors.white,
       onTap: (int index) {
         onTap(index);

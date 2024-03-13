@@ -16,7 +16,7 @@ class DetailDebt extends StatelessWidget {
           Text(
             "${value1}",
             style: TextStyle(
-              color: Color(0xFF707070),
+              color: Color(0XFF898989),
               fontSize: 14,
               fontWeight: FontWeight.w500,
               fontFamily: "Roboto",

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
@@ -33,7 +32,7 @@ class _BottomSheetDebtState extends State<BottomSheetDebt> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "You want to goal ?",
+                  "You want to debt ?",
                   style: TextStyle(
                     color: Color(0XFFDD0000),
                     fontSize: 24,
@@ -64,51 +63,51 @@ class _BottomSheetDebtState extends State<BottomSheetDebt> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 16),
-            child: Row(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 16),
+            child: Column(
               children: [
-                Text(
-                  "Details",
-                  style: TextStyle(
-                    color: Color(0XFF15616D),
-                    fontSize: 18,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w700,
-                    height: 0,
-                  ),
-                )
+                Row(
+                  children: [
+                    Text(
+                      "Details",
+                      style: TextStyle(
+                        color: Color(0XFF898989),
+                        fontSize: 18,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Debt",
+                      style: TextStyle(
+                        color: Color(0xFF15616D),
+                        fontSize: 18,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                    Text(
+                      "${widget.debt!['nameDebt']}",
+                      style: TextStyle(
+                        color: Color(0xFF15616D),
+                        fontSize: 18,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 40, right: 20, bottom: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Debt",
-                  style: TextStyle(
-                    color: Color(0xFF15616D),
-                    fontSize: 18,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w700,
-                    height: 0,
-                  ),
-                ),
-                Text(
-                  "${widget.debt!['nameDebt']}",
-                  style: TextStyle(
-                    color: Color(0xFF15616D),
-                    fontSize: 18,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w700,
-                    height: 0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
           BlocBuilder<GoalBloc, GoalState>(
             builder: (context, state) {
               return ActionPopup(
@@ -120,12 +119,14 @@ class _BottomSheetDebtState extends State<BottomSheetDebt> {
                   }
                 },
                 bottonSecondeNameFunction: () async {
-                    context.read<DebtBloc>().add(DeleteDebt(widget.debt!['id']));
-                       showLoadingPagePopUp(context);
+                  context.read<DebtBloc>().add(DeleteDebt(widget.debt!['id']));
+                  showLoadingPagePopUp(context);
                   context.read<DebtBloc>().stream.listen((state) {
                     if (state.deleteDebtStatus == DebtStatus.loaded) {
-                       context.read<DebtBloc>().add(GetDebtByAccountId());
-                       context.read<TransactionBloc>().add(GetTransactionDailyInEx());
+                      context.read<DebtBloc>().add(GetDebtByAccountId());
+                      context
+                          .read<TransactionBloc>()
+                          .add(GetTransactionDailyInEx());
                       Navigator.pop(context);
                       Navigator.pop(context);
                       Navigator.pop(context);

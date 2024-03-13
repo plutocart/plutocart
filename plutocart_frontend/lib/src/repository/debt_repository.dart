@@ -25,11 +25,11 @@ class DebtRepository {
         '${dotenv.env['API']}/api/account/${id}/debt/${debtId}',
         queryParameters: {
           "nameDebt": nameOfYourDebt,
-          "amountDebt": totalDebt,
-          "payPeriod": totalPeriod,
-          "numOfPaidPeriod": paidPeriod,
-          "paidDebtPerPeriod": monthlyPayment,
-          "totalPaidDebt": debtPaid,
+          "totalDebt": totalDebt,
+          "totalPeriod": totalPeriod,
+          "paidPeriod": paidPeriod,
+          "monthlyPayment": monthlyPayment,
+          "debtPaid": debtPaid,
           "moneyLender": moneyLender,
           "latestPayDate": latestPayDate
         },
@@ -92,7 +92,7 @@ class DebtRepository {
     double monthlyPayment,
     double debtPaid,
     String moneyLender,
-    String debtDate,
+    String latestPayDate,
   ) async {
     await dotenv.load();
     String? accountId = await storage.read(key: "accountId");
@@ -109,13 +109,13 @@ class DebtRepository {
         ),
         queryParameters: {
           "nameDebt": nameOfYourDebt,
-          "amountDebt": totalDebt,
-          "payPeriod": totalPeriod,
-          "numOfPaidPeriod": paidPeriod,
-          "paidDebtPerPeriod": monthlyPayment,
-          "totalPaidDebt": debtPaid,
+          "totalDebt": totalDebt,
+          "totalPeriod": totalPeriod,
+          "paidPeriod": paidPeriod,
+          "monthlyPayment": monthlyPayment,
+          "debtPaid": debtPaid,
           "moneyLender": moneyLender,
-          "latestPayDate": debtDate
+          "latestPayDate": latestPayDate
         },
       );
       print(

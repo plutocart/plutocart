@@ -21,9 +21,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/transactio
 import 'package:plutocart/src/pages/transaction/component_transaction/type_transaction_router.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/wallet_dropdown.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
-import 'package:plutocart/src/popups/transaction_popup/alert_goal_complete_popup.dart';
 
 class CardTransactionPopup extends StatefulWidget {
   const CardTransactionPopup({Key? key}) : super(key: key);
@@ -48,6 +46,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
   TextEditingController tranDateController = TextEditingController();
   TypeTransactionType typeTransaction = TypeTransactionType();
   // form
+  bool? fullFieldTranactionInEx;
   int? idTransactionCategory;
   int? idWallet;
   int? idGoal;
@@ -104,6 +103,30 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
     });
   }
 
+  void checkFullFieldTransactionInEx() {
+    fullFieldTranactionInEx = (idTransactionCategory == null ||
+            idWallet == null ||
+            amountMoneyController.text.length <= 0)
+        ? false
+        : true;
+  }
+
+  void checkFullFieldTransactionGoal() {
+    fullFieldTranactionInEx = (idGoal == null ||
+            idWallet == null ||
+            amountMoneyController.text.length <= 0)
+        ? false
+        : true;
+  }
+
+  void checkFullFieldTransactionDebt() {
+    fullFieldTranactionInEx = (idDebt == null ||
+            idWallet == null ||
+            amountMoneyController.text.length <= 0)
+        ? false
+        : true;
+  }
+
   @override
   void initState() {
     DateTime now = DateTime.now();
@@ -119,6 +142,19 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       print("check set state debtId : ${debtMonthLyPaymentController.text}");
       setState(() {
         amountMoneyController.text = debtMonthLyPaymentController.text;
+      });
+    });
+
+    checkFullFieldTransactionInEx();
+    amountMoneyController.addListener(() {
+      setState(() {
+        if (indexTransactionType == 2) {
+          checkFullFieldTransactionGoal();
+        } else if (indexTransactionType == 3) {
+          checkFullFieldTransactionDebt();
+        } else {
+          checkFullFieldTransactionInEx();
+        }
       });
     });
 
@@ -148,18 +184,23 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
               case 0:
               case 1:
                 return Container(
-                  child: TransactionCategoryDropdown(
-                    selectKey: globalKeyTransaction,
-                    transactionCategoryList: indexTransactionType == 0
-                        ? state.transactionCategoryInComeList
-                        : state.transactionCategoryExpenseList,
-                    indexTransactionCategoryType: indexTransactionCategoryType,
-                    onCategoryChanged: (index, categoryId) {
-                      setState(() {
-                        indexTransactionCategoryType = index;
-                        idTransactionCategory = categoryId;
-                      });
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: TransactionCategoryDropdown(
+                      selectKey: globalKeyTransaction,
+                      transactionCategoryList: indexTransactionType == 0
+                          ? state.transactionCategoryInComeList
+                          : state.transactionCategoryExpenseList,
+                      indexTransactionCategoryType:
+                          indexTransactionCategoryType,
+                      onCategoryChanged: (index, categoryId) {
+                        setState(() {
+                          indexTransactionCategoryType = index;
+                          idTransactionCategory = categoryId;
+                          checkFullFieldTransactionInEx();
+                        });
+                      },
+                    ),
                   ),
                 );
             }
@@ -181,7 +222,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           height: 5,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: BlocBuilder<TransactionCategoryBloc, TransactionCategoryState>(
             builder: (context, state) {
               print("indexWallet : ${indexWallet}");
@@ -204,6 +245,15 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               .firstWhere((element) =>
                                   element.walletId.toString() == newValueWallet)
                               .walletId;
+                          setState(() {
+                            if (indexTransactionType == 2) {
+                              checkFullFieldTransactionGoal();
+                            } else if (indexTransactionType == 3) {
+                              checkFullFieldTransactionDebt();
+                            } else {
+                              checkFullFieldTransactionInEx();
+                            }
+                          });
                         },
                       );
                     },
@@ -216,7 +266,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
 
         indexTransactionType == 2
             ? Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
                 child: BlocBuilder<GoalBloc, GoalState>(
                   builder: (context, goalState) {
                     print("indexGoal : ${indexGoal}");
@@ -228,6 +278,11 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             element['id'].toString() == newValueGoal);
                         idGoal = goalState.goalList!.firstWhere((element) =>
                             element['id'].toString() == newValueGoal)['id'];
+                            setState(() {
+                              checkFullFieldTransactionGoal();
+                            });
+
+                            
                       },
                     );
                   },
@@ -236,7 +291,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
 
         indexTransactionType == 3
             ? Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
                 child: BlocBuilder<DebtBloc, DebtState>(
                   builder: (context, debtState) {
                     print("indexDebt : ${indexDebt}");
@@ -253,8 +308,11 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                         debtMonthLyPaymentController.text = debtState.debtList
                             .firstWhere((element) =>
                                 element['id'].toString() ==
-                                newValueDebt)['paidDebtPerPeriod']
+                                newValueDebt)['monthlyPayment']
                             .toString();
+                            setState(() {
+                              checkFullFieldTransactionDebt();
+                            });
                       },
                     );
                   },
@@ -266,7 +324,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         ),
 
         Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: AmountTextField(
               amountMoneyController: amountMoneyController,
               nameField: "Amount of money",
@@ -276,7 +334,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         ),
         // Trsndate
         Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: DatePickerField(
               tranDateController: tranDateController,
               nameField: 'Selected date',
@@ -287,7 +345,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
 
         // image
         Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: ImageSelectionScreen(
             image: _image,
             getImageFromCamera: _getImageFromCamera,
@@ -327,7 +385,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           height: 15,
         ),
         Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: DescriptionTextField(
                 descriptionController: descriptionController)),
         SizedBox(
@@ -335,151 +393,170 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         ),
         BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
-            return ActionPopup(
-                bottonFirstName: "Cancel",
-                bottonSecondeName: "Add",
-                bottonFirstNameFunction: () {
-                  Navigator.pop(context);
-                },
-                bottonSecondeNameFunction: () async {
-                  bool isDropdownDataMissing = false;
+            return Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: ActionPopup(
+                  isFullField: fullFieldTranactionInEx,
+                  bottonFirstName: "Cancel",
+                  bottonSecondeName: "Add",
+                  bottonFirstNameFunction: () {
+                    Navigator.pop(context);
+                  },
+                  bottonSecondeNameFunction: () async {
+                    bool isDropdownDataMissing = false;
 
-                  switch (indexTransactionType) {
-                    case 0:
-                    case 1:
-                      if (idTransactionCategory == null ||
-                          idWallet == null ||
-                          amountMoneyController.text == "") {
-                        isDropdownDataMissing = true;
-                      }
-                      break;
-                  }
-                  if (isDropdownDataMissing) {
-                    customAlertPopup(context, "Missing Information",
-                        Icons.error_outline_rounded, Colors.red.shade200);
-                  } else {
                     switch (indexTransactionType) {
                       case 0:
                       case 1:
-                        int idTransactionCategoryFormat =
-                            int.parse(idTransactionCategory.toString());
-                        int idWalletFormat = int.parse(idWallet.toString());
-                        double amount =
-                            double.parse(amountMoneyController.text);
-                        String tranDateFormat =
-                            changeFormatter(tranDateController.text);
-                        showLoadingPagePopUp(context);
-                        context.read<TransactionBloc>().add(CreateTransaction(
-                            indexTransactionType == 0 ? 1 : 2,
-                            idTransactionCategoryFormat,
-                            idWalletFormat,
-                            amount,
-                            tranDateFormat,
-                            _imageFile,
-                            descriptionController.text));
-
-                        context.read<TransactionBloc>().stream.listen((state) {
-                          if (state.incomeStatus == TransactionStatus.loaded) {
-                            context.read<WalletBloc>().add(GetAllWallet());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionDailyInEx());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionList());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionLimit3());
-                            context
-                                .read<TransactionBloc>()
-                                .add(ResetTransactionStatus());
-                            Navigator.of(context).pop();
-                            Navigator.pop(context);
-                          }
-                        });
-                      case 2:
-                        int idWalletFormat = int.parse(idWallet.toString());
-                        int idGoalFormat = int.parse(idGoal.toString());
-                        double amount =
-                            double.parse(amountMoneyController.text);
-                        String tranDateFormat =
-                            changeFormatter(tranDateController.text);
-                        showLoadingPagePopUp(context);
-                        context.read<TransactionBloc>().add(
-                            CreateTransactionGoal(
-                                idWalletFormat,
-                                idGoalFormat,
-                                amount,
-                                tranDateFormat,
-                                _imageFile,
-                                descriptionController.text));
-
-                        context.read<TransactionBloc>().stream.listen((state) {
-                          if (state.goalStatus == TransactionStatus.loaded) {
-                            context.read<WalletBloc>().add(GetAllWallet());
-
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionList());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionDailyInEx());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionLimit3());
-                            context.read<GoalBloc>().add(GetGoalByAccountId());
-                            context
-                                .read<TransactionBloc>()
-                                .add(ResetTransactionGoalStatus());
-                            context
-                                .read<GoalBloc>()
-                                .add(CheckGoalComplete(idGoalFormat));
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          }
-                        });
-                      case 3:
-                        int idWalletFormat = int.parse(idWallet.toString());
-                        int idDebtFormat = int.parse(idDebt.toString());
-                        double amount =
-                            double.parse(amountMoneyController.text);
-                        String tranDateFormat =
-                            changeFormatter(tranDateController.text);
-                        showLoadingPagePopUp(context);
-                        context.read<TransactionBloc>().add(
-                            CreateTransactionDebt(
-                                idWalletFormat,
-                                idDebtFormat,
-                                amount,
-                                tranDateFormat,
-                                _imageFile,
-                                descriptionController.text));
-                        context.read<TransactionBloc>().stream.listen((state) {
-                          if (state.debtStatus == TransactionStatus.loaded) {
-                            print("Check t");
-                            context.read<WalletBloc>().add(GetAllWallet());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionList());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionDailyInEx());
-                            context
-                                .read<TransactionBloc>()
-                                .add(GetTransactionLimit3());
-                            context.read<DebtBloc>().add(GetDebtByAccountId());
-                            context.read<DebtBloc>().add(GetDebtByAccountId());
-                            context
-                                .read<TransactionBloc>()
-                                .add(ResetTransactionDebtStatus());
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          }
-                        });
+                        if (idTransactionCategory == null ||
+                            idWallet == null ||
+                            amountMoneyController.text == "") {
+                          isDropdownDataMissing = true;
+                        }
                         break;
                     }
-                  }
-                });
+                    if (isDropdownDataMissing) {
+                      null;
+                    } else {
+                      switch (indexTransactionType) {
+                        case 0:
+                        case 1:
+                          int idTransactionCategoryFormat =
+                              int.parse(idTransactionCategory.toString());
+                          int idWalletFormat = int.parse(idWallet.toString());
+                          double amount =
+                              double.parse(amountMoneyController.text);
+                          String tranDateFormat =
+                              changeFormatter(tranDateController.text);
+                          showLoadingPagePopUp(context);
+                          context.read<TransactionBloc>().add(CreateTransaction(
+                              indexTransactionType == 0 ? 1 : 2,
+                              idTransactionCategoryFormat,
+                              idWalletFormat,
+                              amount,
+                              tranDateFormat,
+                              _imageFile,
+                              descriptionController.text));
+
+                          context
+                              .read<TransactionBloc>()
+                              .stream
+                              .listen((state) {
+                            if (state.incomeStatus ==
+                                TransactionStatus.loaded) {
+                              context.read<WalletBloc>().add(GetAllWallet());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionDailyInEx());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionList());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionLimit3());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(ResetTransactionStatus());
+                              Navigator.of(context).pop();
+                              Navigator.pop(context);
+                            }
+                          });
+                        case 2:
+                          int idWalletFormat = int.parse(idWallet.toString());
+                          int idGoalFormat = int.parse(idGoal.toString());
+                          double amount =
+                              double.parse(amountMoneyController.text);
+                          String tranDateFormat =
+                              changeFormatter(tranDateController.text);
+                          showLoadingPagePopUp(context);
+                          context.read<TransactionBloc>().add(
+                              CreateTransactionGoal(
+                                  idWalletFormat,
+                                  idGoalFormat,
+                                  amount,
+                                  tranDateFormat,
+                                  _imageFile,
+                                  descriptionController.text));
+
+                          context
+                              .read<TransactionBloc>()
+                              .stream
+                              .listen((state) {
+                            if (state.goalStatus == TransactionStatus.loaded) {
+                              context.read<WalletBloc>().add(GetAllWallet());
+
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionList());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionDailyInEx());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionLimit3());
+                              context
+                                  .read<GoalBloc>()
+                                  .add(GetGoalByAccountId());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(ResetTransactionGoalStatus());
+                              context
+                                  .read<GoalBloc>()
+                                  .add(CheckGoalComplete(idGoalFormat));
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          });
+                        case 3:
+                          int idWalletFormat = int.parse(idWallet.toString());
+                          int idDebtFormat = int.parse(idDebt.toString());
+                          double amount =
+                              double.parse(amountMoneyController.text);
+                          String tranDateFormat =
+                              changeFormatter(tranDateController.text);
+                          showLoadingPagePopUp(context);
+                          context.read<TransactionBloc>().add(
+                              CreateTransactionDebt(
+                                  idWalletFormat,
+                                  idDebtFormat,
+                                  amount,
+                                  tranDateFormat,
+                                  _imageFile,
+                                  descriptionController.text));
+                          context
+                              .read<TransactionBloc>()
+                              .stream
+                              .listen((state) {
+                            if (state.debtStatus == TransactionStatus.loaded) {
+                              print("Check t");
+                              context.read<WalletBloc>().add(GetAllWallet());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionList());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionDailyInEx());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(GetTransactionLimit3());
+                              context
+                                  .read<DebtBloc>()
+                                  .add(GetDebtByAccountId());
+                              context
+                                  .read<DebtBloc>()
+                                  .add(GetDebtByAccountId());
+                              context
+                                  .read<TransactionBloc>()
+                                  .add(ResetTransactionDebtStatus());
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          });
+                          break;
+                      }
+                    }
+                  }),
+            );
           },
         )
       ],

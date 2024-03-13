@@ -7,7 +7,7 @@ class GoalRepository{
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
 
-  Future<Map<String, dynamic>> createGoalByAccountId(String nameGoal , double amountGoal , double deficit , String endDateGoal) async {
+  Future<Map<String, dynamic>> createGoalByAccountId(String nameGoal , double totalGoal , double collectedMoney , String endDateGoal) async {
       await dotenv.load();
       String? accountId = await storage.read(key: "accountId");
           int acId = int.parse(accountId!);
@@ -18,7 +18,7 @@ class GoalRepository{
         options: Options(
                    headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
         ),
-          queryParameters: {"nameGoal": nameGoal, "amountGoal": amountGoal , "deficit" : deficit ,  "endDateGoal" : endDateGoal},
+          queryParameters: {"nameGoal": nameGoal, "totalGoal": totalGoal , "collectedMoney" : collectedMoney ,  "endDateGoal" : endDateGoal},
       );
       print(
           "respone code in process create goal in class repository: ${response.statusCode}");
@@ -103,7 +103,7 @@ class GoalRepository{
       print("start update goal");
       Response response = await dio.patch(
         '${dotenv.env['API']}/api/account/${id}/goal/${goalId}',
-        queryParameters: {"nameGoal": nameGoal,  "amountGoal" : amountGoal , "deficit" : deficit , "endDateGoal" : endDateGoal},
+        queryParameters: {"nameGoal": nameGoal,  "totalGoal" : amountGoal , "collectedMoney" : deficit , "endDateGoal" : endDateGoal},
         options: 
           Options(
                      headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
