@@ -94,3 +94,50 @@ class UpdateTransactionInEx extends TransactionEvent {
 
 class ResetUpdateTransactionInEx extends TransactionEvent {}
 
+
+class UpdateTransactionGoal extends TransactionEvent {
+  final int goalId;
+   final int statementType;
+  final int transactionCategoryId;
+  final int walletId;
+  final double stmTransaction;
+  final String dateTimeTransaction;
+  final File? imageUrl;
+  final String? description;
+  final int transactionId;
+  UpdateTransactionGoal(
+      this.goalId,
+      this.statementType,
+      this.transactionCategoryId,
+      this.walletId,
+      this.stmTransaction,
+      this.dateTimeTransaction,
+      this.imageUrl,
+      this.description , this.transactionId);
+}
+
+class ResetUpdateTransactionGoal extends TransactionEvent {}
+
+
+class UpdateTransactionDebt extends TransactionEvent {
+  final int debtId;
+   final int statementType;
+  final int transactionCategoryId;
+  final int walletId;
+  final double stmTransaction;
+  final String dateTimeTransaction;
+  final File? imageUrl;
+  final String? description;
+  final int transactionId;
+  UpdateTransactionDebt(
+      this.debtId,
+      this.statementType,
+      this.transactionCategoryId,
+      this.walletId,
+      this.stmTransaction,
+      this.dateTimeTransaction,
+      this.imageUrl,
+      this.description , this.transactionId);
+}
+
+class ResetUpdateTransactionDebt extends TransactionEvent {}

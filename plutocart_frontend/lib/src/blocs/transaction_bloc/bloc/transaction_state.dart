@@ -15,12 +15,14 @@ class TransactionState extends Equatable {
   final TransactionStatus incomeStatus;
   final TransactionStatus expenseStatus;
   final TransactionStatus goalStatus;
-    final TransactionStatus debtStatus;
-    final TransactionStatus deleteTransactionStatus;
+  final TransactionStatus debtStatus;
+  final TransactionStatus deleteTransactionStatus;
   final List<dynamic> transactionsDailyInExList;
   final List<dynamic> transactionLimit3;
   final List<dynamic> transactionList;
   final TransactionStatus updateTransactionInEx;
+  final TransactionStatus updateTransactionGoal;
+  final TransactionStatus updateTransactionDebt;
 
   TransactionState(
       {this.id = 0,
@@ -35,9 +37,13 @@ class TransactionState extends Equatable {
       this.expenseStatus = TransactionStatus.loading,
       this.transactionsDailyInExList = const [],
       this.transactionLimit3 = const [],
-      this.transactionList = const [],  
+      this.transactionList = const [],
       this.goalId = 0,
-      this.goalStatus = TransactionStatus.loading , this.debtStatus = TransactionStatus.loading , this.deleteTransactionStatus = TransactionStatus.loading , this.updateTransactionInEx = TransactionStatus.loading})
+      this.goalStatus = TransactionStatus.loading,
+      this.debtStatus = TransactionStatus.loading,
+      this.deleteTransactionStatus = TransactionStatus.loading,
+      this.updateTransactionInEx = TransactionStatus.loading,
+      this.updateTransactionGoal = TransactionStatus.loading , this.updateTransactionDebt = TransactionStatus.loading})
       : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -55,7 +61,11 @@ class TransactionState extends Equatable {
       List<dynamic>? transactionLimit3,
       List<dynamic>? transactionList,
       int? goalId,
-      TransactionStatus? goalStatus , TransactionStatus? debtStatus, TransactionStatus? deleteTransactionStatus , TransactionStatus? updateTransactionInEx ,}) {
+      TransactionStatus? goalStatus,
+      TransactionStatus? debtStatus,
+      TransactionStatus? deleteTransactionStatus,
+      TransactionStatus? updateTransactionInEx,
+      TransactionStatus? updateTransactionGoal , TransactionStatus? updateTransactionDebt}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -73,8 +83,14 @@ class TransactionState extends Equatable {
         transactionLimit3: transactionLimit3 ?? this.transactionLimit3,
         transactionList: transactionList ?? this.transactionList,
         goalId: goalId ?? this.goalId,
-        goalStatus: goalStatus ?? this.goalStatus , debtStatus:  debtStatus ?? this.debtStatus , deleteTransactionStatus: deleteTransactionStatus ?? this.deleteTransactionStatus , 
-        updateTransactionInEx: updateTransactionInEx ?? this.updateTransactionInEx);
+        goalStatus: goalStatus ?? this.goalStatus,
+        debtStatus: debtStatus ?? this.debtStatus,
+        deleteTransactionStatus:
+            deleteTransactionStatus ?? this.deleteTransactionStatus,
+        updateTransactionInEx:
+            updateTransactionInEx ?? this.updateTransactionInEx,
+        updateTransactionGoal:
+            updateTransactionGoal ?? this.updateTransactionGoal , updateTransactionDebt: updateTransactionDebt ?? this.updateTransactionDebt);
   }
 
   @override
@@ -91,6 +107,12 @@ class TransactionState extends Equatable {
         expenseStatus,
         transactionsDailyInExList,
         transactionList,
-        transactionLimit3 , goalId , goalStatus, debtStatus , deleteTransactionStatus , updateTransactionInEx
+        transactionLimit3,
+        goalId,
+        goalStatus,
+        debtStatus,
+        deleteTransactionStatus,
+        updateTransactionInEx,
+        updateTransactionGoal , updateTransactionDebt
       ];
 }

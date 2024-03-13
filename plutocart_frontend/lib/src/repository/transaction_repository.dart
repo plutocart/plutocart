@@ -427,4 +427,197 @@ class TransactionRepository {
       throw error;
     }
   }
+
+
+
+   Future<Map<String, dynamic>> updateTransactionGoal(
+    int goalId,
+    int statementType,
+    int transactionCategoryId,
+    int walletId,
+    double stmTransaction,
+    String dateTimeTransaction,
+    File? imageUrl,
+    String? description,
+    int transactionId,
+  ) async {
+    print("update transaction inCome repository WalletId : ${walletId}");
+    print("update transaction inCome repository file : ${imageUrl}");
+    print(
+        "update transaction inCome repository stmTransaction : ${stmTransaction}");
+    print("update transaction inCome repository description : ${description}");
+    print(
+        "update transaction inCome repository transactionCategoryId : ${transactionCategoryId}");
+    print("statement type : ${statementType}");
+    try {
+      FormData formData;
+      if (imageUrl == null) {
+        formData = FormData.fromMap({
+          "stmTransaction": stmTransaction,
+          "statementType": statementType,
+          "dateTransaction": dateTimeTransaction,
+          "description": description,
+          "transactionCategoryId": transactionCategoryId,
+          "goalIdGoal" : goalId
+        });
+      } else {
+        print("aakims2");
+        try {
+          print("aakim case 1");
+          http.Response response = await http.get(Uri.parse(imageUrl.path));
+          print("aakim case 1  response: ${response.bodyBytes}");
+          formData = FormData.fromMap({
+            "file": await MultipartFile.fromBytes(
+              filename: "image.jpg",
+              response.bodyBytes,
+              contentType: MediaType('image', 'jpg'),
+            ),
+            "stmTransaction": stmTransaction,
+            "statementType": statementType,
+            "dateTransaction": dateTimeTransaction,
+            "description": description,
+            "transactionCategoryId": transactionCategoryId,
+            "goalIdGoal" : goalId
+          });
+        } catch (Exception) {
+            print("aakim case 2");
+          formData = FormData.fromMap({
+            "file": await MultipartFile.fromFile(imageUrl.path),
+            "stmTransaction": stmTransaction,
+            "statementType": statementType,
+            "dateTransaction": dateTimeTransaction,
+            "description": description,
+            "transactionCategoryId": transactionCategoryId,
+            "goalIdGoal" : goalId
+          });
+        }
+      }
+      final storage = new FlutterSecureStorage();
+      String? token = await storage.read(key: "token");
+      String? accountId = await storage.read(key: "accountId");
+      int acId = int.parse(accountId!);
+      print("check token : ${token}");
+      print("wallet id : ${walletId}");
+      Response response = await dio.patch(
+        '${dotenv.env['API']}/api/account/${acId}/wallet/${walletId}/transaction/${transactionId}',
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": 'Bearer $token',
+            "${dotenv.env['HEADER_KEY']}": dotenv.env['VALUE_HEADER'].toString()
+          },
+        ),
+      );
+      print(
+          "respone code in process create transaction income in class repository: ${response.statusCode}");
+      print(
+          "respone data in process create transaction income class repository: ${response.data}");
+
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        return response.data;
+      } else {
+        throw Exception(
+            'Error Create Guest from login repository: ${response.statusCode}');
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw error;
+    }
+  }
+
+
+  Future<Map<String, dynamic>> updateTransactionDebt(
+    int debId,
+    int statementType,
+    int transactionCategoryId,
+    int walletId,
+    double stmTransaction,
+    String dateTimeTransaction,
+    File? imageUrl,
+    String? description,
+    int transactionId,
+  ) async {
+    print("update transaction debt repository WalletId : ${walletId}");
+    print("update transaction debt repository file : ${imageUrl}");
+    print(
+        "update transaction debt repository stmTransaction : ${stmTransaction}");
+    print("update transaction debt repository description : ${description}");
+    print(
+        "update transaction debt repository transactionCategoryId : ${transactionCategoryId}");
+    print("statement type : ${statementType}");
+    try {
+      FormData formData;
+      if (imageUrl == null) {
+        formData = FormData.fromMap({
+          "stmTransaction": stmTransaction,
+          "statementType": statementType,
+          "dateTransaction": dateTimeTransaction,
+          "description": description,
+          "transactionCategoryId": transactionCategoryId,
+          "debtIdDebt" : debId
+        });
+      } else {
+        print("aakims2");
+        try {
+          print("aakim case 1");
+          http.Response response = await http.get(Uri.parse(imageUrl.path));
+          print("aakim case 1  response: ${response.bodyBytes}");
+          formData = FormData.fromMap({
+            "file": await MultipartFile.fromBytes(
+              filename: "image.jpg",
+              response.bodyBytes,
+              contentType: MediaType('image', 'jpg'),
+            ),
+            "stmTransaction": stmTransaction,
+            "statementType": statementType,
+            "dateTransaction": dateTimeTransaction,
+            "description": description,
+            "transactionCategoryId": transactionCategoryId,
+             "debtIdDebt" : debId
+          });
+        } catch (Exception) {
+            print("aakim case 2");
+          formData = FormData.fromMap({
+            "file": await MultipartFile.fromFile(imageUrl.path),
+            "stmTransaction": stmTransaction,
+            "statementType": statementType,
+            "dateTransaction": dateTimeTransaction,
+            "description": description,
+            "transactionCategoryId": transactionCategoryId,
+             "debtIdDebt" : debId
+          });
+        }
+      }
+      final storage = new FlutterSecureStorage();
+      String? token = await storage.read(key: "token");
+      String? accountId = await storage.read(key: "accountId");
+      int acId = int.parse(accountId!);
+      print("check token : ${token}");
+      print("wallet id : ${walletId}");
+      Response response = await dio.patch(
+        '${dotenv.env['API']}/api/account/${acId}/wallet/${walletId}/transaction/${transactionId}',
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": 'Bearer $token',
+            "${dotenv.env['HEADER_KEY']}": dotenv.env['VALUE_HEADER'].toString()
+          },
+        ),
+      );
+      print(
+          "respone code in process create transaction income in class repository: ${response.statusCode}");
+      print(
+          "respone data in process create transaction income class repository: ${response.data}");
+
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        return response.data;
+      } else {
+        throw Exception(
+            'Error Create Guest from login repository: ${response.statusCode}');
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw error;
+    }
+  }
 }

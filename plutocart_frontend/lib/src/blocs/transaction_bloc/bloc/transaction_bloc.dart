@@ -30,6 +30,14 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       emit(state.copyWith(
           updateTransactionInEx: TransactionStatus.loading));
     });
+     on<ResetUpdateTransactionGoal>((event, emit) async {
+      emit(state.copyWith(
+          updateTransactionGoal: TransactionStatus.loading));
+    });
+     on<ResetUpdateTransactionDebt>((event, emit) async {
+      emit(state.copyWith(
+          updateTransactionDebt: TransactionStatus.loading));
+    });
 
     on<ResetTransaction>((event, emit) {
       emit(TransactionState()); // Reset the state to the initial state
@@ -218,6 +226,65 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       } catch (e) {
         emit(state.copyWith(updateTransactionInEx: TransactionStatus.loading));
         print("Error update transacton income in transaction bloc");
+      }
+    });
+
+
+     on<UpdateTransactionGoal>((event, emit) async {
+      print("start working update transaction income");
+      try {
+        Map<String, dynamic> response = await TransactionRepository()
+            .updateTransactionGoal(
+                event.goalId ,
+                event.statementType,
+                event.transactionCategoryId,
+                event.walletId,
+                event.stmTransaction,
+                event.dateTimeTransaction,
+                event.imageUrl ,
+                event.description,
+                event.transactionId);
+        if (response['data'] == null) {
+          print(
+              "not update transacton goal in transaction bloc : ${response['data']}");
+        } else {
+          print("update transacton goal in transaction bloc success");
+          emit(state.copyWith(
+              updateTransactionGoal: TransactionStatus.loaded));
+          print("after update goal status is : ${state.incomeStatus}");
+        }
+      } catch (e) {
+        emit(state.copyWith(updateTransactionGoal: TransactionStatus.loading));
+        print("Error update transacton goal in transaction bloc");
+      }
+    });
+
+    on<UpdateTransactionDebt>((event, emit) async {
+      print("start working update transaction income");
+      try {
+        Map<String, dynamic> response = await TransactionRepository()
+            .updateTransactionDebt(
+                event.debtId ,
+                event.statementType,
+                event.transactionCategoryId,
+                event.walletId,
+                event.stmTransaction,
+                event.dateTimeTransaction,
+                event.imageUrl ,
+                event.description,
+                event.transactionId);
+        if (response['data'] == null) {
+          print(
+              "not update transacton debt in transaction bloc : ${response['data']}");
+        } else {
+          print("update transacton debt in transaction bloc success");
+          emit(state.copyWith(
+              updateTransactionDebt: TransactionStatus.loaded));
+          print("after update debt status is : ${state.incomeStatus}");
+        }
+      } catch (e) {
+        emit(state.copyWith(updateTransactionDebt: TransactionStatus.loading));
+        print("Error update transacton debt in transaction bloc");
       }
     });
   }

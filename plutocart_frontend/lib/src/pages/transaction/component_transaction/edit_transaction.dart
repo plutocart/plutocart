@@ -229,8 +229,6 @@ class _EditTransactionState extends State<EditTransaction> {
                         '${widget.transaction!['walletIdWallet']['walletId']}',
                     walletList: state.wallets,
                     onChanged: (value) {
-                      print(
-                          "Hello value : ${widget.transaction!['walletIdWallet']['walletId']}");
                       setState(() {
                         walletController.text = value!;
                         checkFullFieldTransactionInEx();
@@ -339,7 +337,8 @@ class _EditTransactionState extends State<EditTransaction> {
                       print("aakimindexType : ${indexType}");
                       print("aakimindexTransaction : ${indexType}");
                       print("aakimName :${ widget.transaction!['tranCategoryIdCategory']['typeCategory']}");
-                      if (idTransactionCategory != 32 || idTransactionCategory != 33) {
+                      print("aakim id : ${idTransactionCategory}");
+                      if (idTransactionCategory != 32 && idTransactionCategory != 33) {
                         // print("aakimTransction : ${widget.transaction}");
                         print(
                             "aakimTransaction Category Id : ${idTransactionCategory}");
@@ -394,8 +393,96 @@ class _EditTransactionState extends State<EditTransaction> {
                             Navigator.pop(context);
                           }
                         });
-                      } else {
-                        print("aakimHello");
+                      }  
+                     else if (idTransactionCategory == 32) {
+                          int walletId = int.parse(walletController.text);
+                        double amountOfTransaction =
+                            double.parse(amoutOfMoneyController.text);
+                        String tranDateFormat =
+                            changeFormatter(tranOfTransactionController.text);
+                            int goalId = widget.transaction!['goalIdGoal']['id'];
+                        showLoadingPagePopUp(context);
+                        print("aakim : ${goalId}");
+                        context.read<TransactionBloc>().add(
+                            UpdateTransactionGoal(
+                                goalId ,
+                                2,
+                                idTransactionCategory!,
+                                walletId,
+                                amountOfTransaction,
+                                tranDateFormat,
+                                _imageFile == null
+                                    ? imageController.text.isEmpty
+                                        ? null
+                                        : File(imageController.text)
+                                    : _imageFile,
+                                descriptionController.text,
+                                widget.transaction!['id']));
+                        context.read<TransactionBloc>().stream.listen((event) {
+                          if (event.updateTransactionGoal ==  TransactionStatus.loaded) {
+                            context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionDailyInEx());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionLimit3());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetUpdateTransactionGoal());
+                            resetData();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
+                      } else if (idTransactionCategory == 33) {
+                          int walletId = int.parse(walletController.text);
+                        double amountOfTransaction =
+                            double.parse(amoutOfMoneyController.text);
+                        String tranDateFormat =
+                            changeFormatter(tranOfTransactionController.text);
+                            int debtId = widget.transaction!['debtIdDebt']['id'];
+                        showLoadingPagePopUp(context);
+                        context.read<TransactionBloc>().add(
+                            UpdateTransactionDebt(
+                                debtId ,
+                                2,
+                                idTransactionCategory!,
+                                walletId,
+                                amountOfTransaction,
+                                tranDateFormat,
+                                _imageFile == null
+                                    ? imageController.text.isEmpty
+                                        ? null
+                                        : File(imageController.text)
+                                    : _imageFile,
+                                descriptionController.text,
+                                widget.transaction!['id']));
+                        context.read<TransactionBloc>().stream.listen((event) {
+                          if (event.updateTransactionDebt==  TransactionStatus.loaded) {
+                            context.read<WalletBloc>().add(GetAllWallet());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionDailyInEx());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList());
+                            context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionLimit3());
+                            context
+                                .read<TransactionBloc>()
+                                .add(ResetUpdateTransactionDebt());
+                            resetData();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
+                        });
                       }
                     },
                   )
