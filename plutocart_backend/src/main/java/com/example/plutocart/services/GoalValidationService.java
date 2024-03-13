@@ -3,6 +3,7 @@ package com.example.plutocart.services;
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.goal.GReqDelDTO;
 import com.example.plutocart.dtos.goal.GReqPostDTO;
+import com.example.plutocart.dtos.goal.GReqPutDTO;
 import com.example.plutocart.entities.Account;
 import com.example.plutocart.entities.Goal;
 import com.example.plutocart.entities.Transaction;
@@ -128,7 +129,7 @@ public class GoalValidationService {
         return gReqPostDTO;
     }
 
-    public GReqPostDTO validationUpdateGoalToComplete(String accountId, String goalId) throws PlutoCartServiceApiException {
+    public GReqPutDTO validationUpdateGoalToComplete(String accountId, String goalId) throws PlutoCartServiceApiException {
 
         if (!HelperMethod.isInteger(accountId))
             throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
@@ -146,10 +147,10 @@ public class GoalValidationService {
         if (goal == null)
             throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "goal id is not found. ");
 
-        GReqPostDTO gReqPostDTO = new GReqPostDTO();
-        gReqPostDTO.setAccountId(acId);
-        gReqPostDTO.setGoalId(goId);
-        return gReqPostDTO;
+        GReqPutDTO gReqPutDTO = new GReqPutDTO();
+        gReqPutDTO.setAccountId(acId);
+        gReqPutDTO.setGoalId(goId);
+        return gReqPutDTO;
     }
 
     public GReqDelDTO validationDeleteGoal(String accountId, String goalId, String token) throws Exception {

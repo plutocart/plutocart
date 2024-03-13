@@ -196,8 +196,8 @@ public class TransactionValidationService {
         if (transaction == null)
             throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "transaction id is not found. ");
 
-        if (transaction.getWalletIdWallet().getWalletId() != wallet.getWalletId())
-            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "this wallet don't have this transaction. ");
+//        if (transaction.getWalletIdWallet().getWalletId() != wallet.getWalletId())
+//            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "this wallet don't have this transaction. ");
 
 //        if (transaction.getId() != tranId)
 //            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "transaction id must be number. ");

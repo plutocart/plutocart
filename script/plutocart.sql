@@ -493,30 +493,31 @@ BEGIN
     DECLARE newBalance DECIMAL(10, 2);
     DECLARE stmType INT;
     DECLARE updateTransactionOn DATETIME;
+    DECLARE walId INT;
     
     SET updateTransactionOn = NOW();
 
     -- Get the old stmTransaction value and statementType
-    SELECT stm_transaction, statement_type INTO oldStmTransaction, stmType
+    SELECT stm_transaction, statement_type, wallet_id_wallet INTO oldStmTransaction, stmType, walId
     FROM transaction
     WHERE id_transaction = transactionId;
 
     -- Get the current balance
     SELECT balance_wallet INTO currentBalance
     FROM wallet
-    WHERE id_wallet = walletId;
+    WHERE id_wallet = walId;
 
     -- Update the wallet table based on statementType
     IF stmType = 1 THEN
         -- Subtract the old stmTransaction for statementType = 1
         UPDATE wallet
         SET balance_wallet = balance_wallet - oldStmTransaction
-        WHERE id_wallet = walletId;
+        WHERE id_wallet = walId;
     ELSEIF stmType = 2 THEN
         -- Add the old stmTransaction for statementType = 2
         UPDATE wallet
         SET balance_wallet = balance_wallet + oldStmTransaction
-        WHERE id_wallet = walletId;
+        WHERE id_wallet = walId;
     END IF;
     
 	IF goalIdGoal IS NOT NULL THEN
@@ -542,7 +543,8 @@ BEGIN
         image_url = imageUrl,
         debt_id_debt = debtIdDebt,
         goal_id_goal = goalIdGoal,
-        update_transaction_on = updateTransactionOn
+        update_transaction_on = updateTransactionOn,
+        wallet_id_wallet = walletId
     WHERE id_transaction = transactionId;
 
     -- Calculate new balance based on statementType
@@ -881,6 +883,21 @@ BEGIN
 
 END //
 
+DELIMITER ;
+
+-- update debt to complete 
+DELIMITER //
+CREATE  PROCEDURE `updateDebtToComplete`( 
+in InAccountId int,
+in InDebtId int
+)
+BEGIN
+
+ UPDATE debt
+		SET status_debt = 2
+		WHERE id_debt = InDebtId AND account_id_account = InAccountId;
+        
+END //
 DELIMITER ;
 
 -- update account from guest to member
