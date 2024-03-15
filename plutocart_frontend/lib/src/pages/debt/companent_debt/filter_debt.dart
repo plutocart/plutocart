@@ -23,7 +23,7 @@ List<Color>? sectionList ;
       decoration: BoxDecoration(
              color: Colors.white,
           border: Border.all(width: 1.5, color: Color(0XFF15616D)),
-          borderRadius: BorderRadius.circular(16)),
+          borderRadius: BorderRadius.circular(20)),
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
@@ -37,7 +37,7 @@ List<Color>? sectionList ;
                    elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                   borderRadius: sectionList![0] == Color(0xFF15616D)? BorderRadius.circular(14.0) : BorderRadius.only(topLeft: Radius.circular(16) , bottomLeft: Radius.circular(20)),
+                   borderRadius: sectionList![0] == Color(0xFF15616D)? BorderRadius.circular(20) : BorderRadius.only(topLeft: Radius.circular(20) , bottomLeft: Radius.circular(20)),
                   ),
                   backgroundColor: sectionList![0],
                 ),
@@ -64,7 +64,7 @@ List<Color>? sectionList ;
                   elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                    borderRadius: sectionList![1] == Color(0xFF15616D) ? BorderRadius.circular(14.0) : BorderRadius.zero,
+                    borderRadius: sectionList![1] == Color(0xFF15616D) ? BorderRadius.circular(20.0) : BorderRadius.zero,
                   ),
                   backgroundColor: sectionList![1],
                 ),
@@ -92,7 +92,7 @@ List<Color>? sectionList ;
                    elevation: 0,
                    animationDuration: Duration.zero,
                   shape: RoundedRectangleBorder(
-                    borderRadius: sectionList![2] == Color(0xFF15616D) ? BorderRadius.circular(14.0) : BorderRadius.only(bottomRight: Radius.circular(20) , topRight: Radius.circular(20)),
+                    borderRadius: sectionList![2] == Color(0xFF15616D) ? BorderRadius.circular(20.0) : BorderRadius.only(bottomRight: Radius.circular(20) , topRight: Radius.circular(20)),
                   ),
                  backgroundColor: sectionList![2],
                 ),

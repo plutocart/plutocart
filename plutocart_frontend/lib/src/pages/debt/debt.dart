@@ -124,7 +124,7 @@ class _DebtPageState extends State<DebtPage> {
                             child: Container(
                               constraints: BoxConstraints(
                                   minHeight:
-                                      MediaQuery.of(context).size.height * 0.8),
+                                      MediaQuery.of(context).size.height * 0.9),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -178,10 +178,9 @@ class _DebtPageState extends State<DebtPage> {
                                       width:
                                           MediaQuery.of(context).size.width * 0.9,
                                       height: statusCard[index] == true
-                                          ? MediaQuery.of(context).size.height *
-                                              0.38
-                                          : MediaQuery.of(context).size.height *
-                                              0.15,
+                                          ?  debt['statusDebt'] != 1  ? MediaQuery.of(context).size.height * 0.31 
+                                           : MediaQuery.of(context).size.height * 0.38
+                                          : MediaQuery.of(context).size.height * 0.15,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(20),
@@ -315,7 +314,7 @@ class _DebtPageState extends State<DebtPage> {
                                                         value2:
                                                             "${formattedDate == null ? "-" : formattedDate}",
                                                       ),
-                                                      Padding(
+                                                     debt['statusDebt'] != 1 ? SizedBox.shrink() : Padding(
                                                         padding:
                                                             const EdgeInsets.only(
                                                                 top: 10),
@@ -330,7 +329,7 @@ class _DebtPageState extends State<DebtPage> {
                                                                       .size
                                                                       .height *
                                                                   0.055,
-                                                          child: ElevatedButton(
+                                                          child:  ElevatedButton(
                                                               style: ElevatedButton
                                                                   .styleFrom(
                                                                       backgroundColor:
@@ -342,7 +341,10 @@ class _DebtPageState extends State<DebtPage> {
                                                                             BorderRadius.circular(
                                                                                 20),
                                                                       )),
-                                                              onPressed: () {},
+                                                              onPressed: () {
+                                                                print("debt : ${debt}");
+                                                                context.read<DebtBloc>().add(CompleteDebt(debt['id']));
+                                                              },
                                                               child:
                                                                   Text("Complete")),
                                                         ),

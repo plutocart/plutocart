@@ -25,8 +25,8 @@ class _DatePickerFieldState extends State<DatePickerField> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2200),
     );
     if (pickedDate != null ) {
       setState(() {

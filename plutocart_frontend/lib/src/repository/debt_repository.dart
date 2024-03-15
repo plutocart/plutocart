@@ -6,6 +6,34 @@ class DebtRepository {
   final Dio dio = Dio();
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
+   Future<Map<String, dynamic>> completeDebt(int debtId,) async {
+    String? accountId = await storage.read(key: "accountId");
+    String? token = await storage.read(key: "token");
+    int id = int.parse(accountId!);
+    try {
+      Response response = await dio.patch(
+        '${dotenv.env['API']}/api/account/${id}/debt/${debtId}/complete-now',
+        options: Options(
+          headers: {
+            "Authorization": 'Bearer $token',
+            "${dotenv.env['HEADER_KEY']}": dotenv.env['VALUE_HEADER'].toString()
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("check working update complete debt : ${response.data}");
+        
+        return response.data;
+      } else {
+        throw Exception('Error: ${'404'}');
+      }
+    } catch (error) {
+      print("Error update debt $error");
+      throw error;
+    }
+  }
+
   Future<Map<String, dynamic>> updateDebt(
       int debtId,
       String nameOfYourDebt,

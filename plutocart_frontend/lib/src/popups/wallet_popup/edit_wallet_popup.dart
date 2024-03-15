@@ -4,7 +4,6 @@ import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart'
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/models/wallet/wallet_model.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/input_field_wallet.dart';
 

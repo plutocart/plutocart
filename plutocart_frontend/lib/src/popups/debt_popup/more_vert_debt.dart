@@ -4,7 +4,6 @@ import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/bottom_sheet_delete.dart';
-import 'package:plutocart/src/popups/debt_popup/bottom_sheet_debt.dart';
 import 'package:plutocart/src/popups/debt_popup/edit_debt_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 

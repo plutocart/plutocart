@@ -75,18 +75,35 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                return IconButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<CircleBorder>(
-                      CircleBorder(),
+                return Row(
+                  children: [
+                     IconButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<CircleBorder>(
+                          CircleBorder(),
+                        ),
+                      ),
+                      splashRadius: 20,
+                      onPressed: () {
+                       filterTransaction();
+                      },
+                      icon: Icon(Icons.filter_alt_rounded),
+                      color: Color(0xFF15616D),
                     ),
-                  ),
-                  splashRadius: 20,
-                  onPressed: () {
-                    SettingPopUp(state.accountRole, state.email, context);
-                  },
-                  icon: Icon(Icons.settings),
-                  color: Color(0xFF15616D),
+                    IconButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<CircleBorder>(
+                          CircleBorder(),
+                        ),
+                      ),
+                      splashRadius: 20,
+                      onPressed: () {
+                        SettingPopUp(state.accountRole, state.email, context);
+                      },
+                      icon: Icon(Icons.settings),
+                      color: Color(0xFF15616D),
+                    ),
+                  ],
                 );
               },
             )
@@ -564,6 +581,15 @@ class _TransactionPageState extends State<TransactionPage> {
         ),
       ),
     );
+  }
+
+  filterTransaction() async {
+    showSlideDialog(
+        context: context,
+        child: Text("data"),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 3);
   }
 
 

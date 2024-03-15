@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
@@ -255,7 +256,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                 ), // ตัวอย่าง icon button เป็น calendar_today
                 onPressed: () {
                   if (totalDebtController.text.length != 0) {
-                    addPayPeriod(context, integerValuePayPeriod!,
+                    selectPeriod(context, integerValuePayPeriod!,
                         totalPeriodController, 1 , 360);
                   } else {
                     customAlertPopup(context, "Please input total debt!",
@@ -315,7 +316,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                     int parsePayPeriodToInt =
                         int.parse(totalPeriodController.text);
 
-                    addPayPeriod(context, integerValuePayPeriod!,
+                    selectPeriod(context, integerValuePayPeriod!,
                         paidPeriodController, 0, parsePayPeriodToInt);
                   }
                 },
@@ -440,14 +441,12 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
     );
   }
 
-  void addPayPeriod(BuildContext context, int currentValue,
-      TextEditingController textEditingController, int minValue, int maxValue) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  selectPeriod(BuildContext context, int currentValue,
+      TextEditingController textEditingController, int minValue, int maxValue) async {
+    showSlideDialog(
+        context: context,
+        child: AlertDialog(
+          elevation: 0,
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -463,30 +462,36 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                       });
                     },
                   ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF15616D),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        textEditingController.text = currentValue.toString();
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Confirm value: $currentValue",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ))
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF15616D),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        onPressed: () {
+                          textEditingController.text = currentValue.toString();
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Confirm value: $currentValue",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )),
+                  )
                 ],
               );
             },
           ),
-        );
-      },
-    );
+        ),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.66);
   }
+
 }

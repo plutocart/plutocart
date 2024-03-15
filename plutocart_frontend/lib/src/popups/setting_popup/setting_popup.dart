@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_c
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/repository/login_repository.dart';
 
@@ -327,6 +325,7 @@ class _SettingPopupState extends State<SettingPopup> {
                   ],
                 ),
                 ActionPopup(
+                  isDelete: true,
                   bottonFirstName: "Cancel",
                   bottonSecondeName: "Delete",
                   bottonFirstNameFunction: () => Navigator.pop(context),

@@ -271,12 +271,13 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                   builder: (context, goalState) {
                     print("indexGoal : ${indexGoal}");
                     print("idGoal : ${idGoal}");
+                    print("Goal : ${goalState.goalList!.where((element) => element['statusGoal'] == 1)}");
                     return GoalDropdown(
-                      goalList: goalState.goalList!,
+                      goalList: goalState.goalList!.where((element) => element['statusGoal'] == 1).toList(),
                       onChanged: (newValueGoal) {
-                        indexGoal = goalState.goalList!.indexWhere((element) =>
+                        indexGoal = goalState.goalList!.where((element) => element['statusGoal'] == 1).toList().indexWhere((element) =>
                             element['id'].toString() == newValueGoal);
-                        idGoal = goalState.goalList!.firstWhere((element) =>
+                        idGoal = goalState.goalList!.where((element) => element['statusGoal'] == 1).toList().firstWhere((element) =>
                             element['id'].toString() == newValueGoal)['id'];
                             setState(() {
                               checkFullFieldTransactionGoal();
@@ -298,14 +299,14 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                     print("idDebtsss : ${idDebt}");
 
                     return DebtDropdown(
-                      debtList: debtState.debtList,
+                      debtList: debtState.debtList.where((element) => element['statusDebt'] == 1).toList(),
                       onChanged: (newValueDebt) {
-                        indexDebt = debtState.debtList.indexWhere((element) =>
+                        indexDebt =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList().indexWhere((element) =>
                             element['id'].toString() == newValueDebt);
-                        idDebt = debtState.debtList.firstWhere((element) =>
+                        idDebt =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList().firstWhere((element) =>
                             element['id'].toString() == newValueDebt)['id'];
 
-                        debtMonthLyPaymentController.text = debtState.debtList
+                        debtMonthLyPaymentController.text =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList()
                             .firstWhere((element) =>
                                 element['id'].toString() ==
                                 newValueDebt)['monthlyPayment']

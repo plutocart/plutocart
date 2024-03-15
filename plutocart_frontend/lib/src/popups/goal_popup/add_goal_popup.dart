@@ -5,7 +5,6 @@ import 'package:plutocart/src/pages/transaction/component_transaction/DatePicker
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
-import 'package:plutocart/src/popups/custom_alert_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class AddGoalPopup extends StatefulWidget {

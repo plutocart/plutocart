@@ -62,3 +62,8 @@ class CreateDebt extends DebtEvent {
       this.moneyLender,
       this.debtDate);
 }
+
+class CompleteDebt extends DebtEvent{
+  final int debtId;
+  CompleteDebt(this.debtId);
+}

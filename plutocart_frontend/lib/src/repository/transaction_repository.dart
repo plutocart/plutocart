@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http_parser/http_parser.dart'; // Import for MediaType
-import 'package:dio/dio.dart'; // Import for FormData
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionRepository {
@@ -17,14 +16,6 @@ class TransactionRepository {
       String dateTransaction,
       String? description,
       int transactionCategoryId) async {
-    print("create transaction inCome repository WalletId : ${WalletId}");
-    print("create transaction inCome repository file : ${file}");
-    print(
-        "create transaction inCome repository stmTransaction : ${stmTransaction}");
-    print("create transaction inCome repository description : ${description}");
-    print(
-        "create transaction inCome repository transactionCategoryId : ${transactionCategoryId}");
-    print("statement type : ${statementType}");
     try {
       FormData formData;
       if (file == null) {
@@ -524,6 +515,7 @@ class TransactionRepository {
       throw error;
     }
   }
+  
 
 
   Future<Map<String, dynamic>> updateTransactionDebt(
@@ -537,14 +529,6 @@ class TransactionRepository {
     String? description,
     int transactionId,
   ) async {
-    print("update transaction debt repository WalletId : ${walletId}");
-    print("update transaction debt repository file : ${imageUrl}");
-    print(
-        "update transaction debt repository stmTransaction : ${stmTransaction}");
-    print("update transaction debt repository description : ${description}");
-    print(
-        "update transaction debt repository transactionCategoryId : ${transactionCategoryId}");
-    print("statement type : ${statementType}");
     try {
       FormData formData;
       if (imageUrl == null) {

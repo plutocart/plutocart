@@ -130,8 +130,32 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
             )); 
         }
       } catch (error) {
-        print('Error updating goal: $error');
+        print('Error updating debt: $error');
       }
     });
+
+      on<CompleteDebt>((event, emit) async {
+  try {
+    print("start complete debt in bloc");
+    Map<String, dynamic> response = await DebtRepository().completeDebt(event.debtId);
+    print("after complete debt  in bloc: $response");
+
+    if (response['data'] == null) {
+      print("Error updating debt: ${response['error']}");
+    } else {
+      print("Update successful. Response data: ${response['data']}");
+
+      if (response['data'] is Map<String, dynamic>) {
+        emit(state.copyWith(
+          updateDebtStatus: DebtStatus.loaded,
+        ));
+      } else {
+        print("Invalid response data structure.");
+      }
+    }
+  } catch (error) {
+    print('Error updating goal: $error');
+  }
+});
   }
 }

@@ -27,6 +27,12 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
            goalComplete: false));
     });
 
+   on<ResetUpdateGoalStatus>((event , emit) async {
+      emit(state.copyWith(
+        updateGoalStatus : GoalStatus.loading
+      ));
+   }); 
+
   on<StatusCardGoal>((event, emit) {
       emit(state.copyWith(
            statusCardGoal: event.statusCardGoal));
@@ -180,10 +186,6 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
       if (response['data'] is Map<String, dynamic>) {
         emit(state.copyWith(
           updateGoalStatus: GoalStatus.loaded,
-          nameGoal: response['data']['nameGoal'],
-          amountGoal: response['data']['totalGoal'],
-          deficit: response['data']['collectedMoney'],
-          endDateGoalString: response['data']['endDateGoal'],
         ));
       } else {
         print("Invalid response data structure.");

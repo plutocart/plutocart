@@ -8,6 +8,7 @@ import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/goal/companent_goal/filter_goal.dart';
 import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/more_vert_goal.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 
@@ -162,7 +163,7 @@ class _GoalPageState extends State<GoalPage> {
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Container(
                                       height: statusCard[index] == true
-                                          ? MediaQuery.of(context).size.height *
+                                          ? goal['statusGoal'] != 1  ? MediaQuery.of(context).size.height * 0.29 : MediaQuery.of(context).size.height *
                                               0.35
                                           : MediaQuery.of(context).size.height *
                                               0.22,
@@ -518,7 +519,7 @@ class _GoalPageState extends State<GoalPage> {
                                               height: 10,
                                             ),
                                             statusCard[index] == true
-                                                ? Container(
+                                                ? goal['statusGoal'] != 1  ? SizedBox.shrink() : Container(
                                                     width: MediaQuery.of(context)
                                                             .size
                                                             .width *
@@ -536,11 +537,16 @@ class _GoalPageState extends State<GoalPage> {
                                                                     BorderRadius
                                                                         .circular(
                                                                             16))),
-                                                        onPressed: () {
-                                                          context
-                                                              .read<GoalBloc>()
-                                                              .add(CompleteGoal(
-                                                                  goal['id']));
+                                                        onPressed: () async{
+                                                          context.read<GoalBloc>().add(CompleteGoal(goal['id']));
+                                                          context.read<GoalBloc>().stream.listen((event) { 
+                                                            if(event.updateGoalStatus == GoalStatus.loaded){
+                                                              print("aakim test update complete goal");
+                                                               context.read<GoalBloc>().add(GetGoalByAccountId());
+                                                               context.read<GoalBloc>().add(ResetUpdateGoalStatus());
+                                                            }
+                                                          });
+
                                                         },
                                                         child: Text("Complete")),
                                                   )

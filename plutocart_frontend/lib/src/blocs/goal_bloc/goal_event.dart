@@ -22,6 +22,8 @@ class ResetGoalStatusDelete extends GoalEvent {}
 
 class ResetGoalCompleteStatus extends GoalEvent {}
 
+class ResetUpdateGoalStatus extends GoalEvent{}
+
 
 class GetGoalByAccountId extends GoalEvent {}
 
@@ -54,3 +56,4 @@ class UpdateGoalbyGoalId extends GoalEvent {
   UpdateGoalbyGoalId(this.goalId, this.nameGoal, this.amountGoal, this.deficit,
       this.endDateString);
 }
+
