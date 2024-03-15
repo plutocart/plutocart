@@ -32,13 +32,24 @@ public class DebtService {
     @Autowired
     ModelMapper modelMapper;
 
-
-    public GenericResponse getDebtByAccountId(String accountId, String token) throws PlutoCartServiceApiException {
+    @Transactional
+    public GenericResponse getDebtByAccountId(String accountId, Integer status, String token) throws PlutoCartServiceApiException {
         globalValidationService.validationToken(accountId, token);
         Integer acId = globalValidationService.validationAccountId(accountId);
 
+        if (status != null && status != 1 && status != 2)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid status for check debt. ");
+
         GenericResponse response = new GenericResponse();
-        List<Debt> debtList = debtRepository.viewDebtByAccountId(acId);
+        List<Debt> debtList = null;
+
+        if (status == null)
+            debtList = debtRepository.viewDebtByAccountId(acId);
+        else if (status == 1)
+            debtList = debtRepository.viewDebtStatusInProgress(acId);
+        else if (status == 2)
+            debtList = debtRepository.viewDebtStatusSuccess(acId);
+
         List<DebtDTO> debtResponse = debtList.stream().map(debt -> modelMapper.map(debt, DebtDTO.class)).collect(Collectors.toList());
 
         response.setData(debtResponse);

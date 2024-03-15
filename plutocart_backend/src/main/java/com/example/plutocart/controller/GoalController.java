@@ -20,9 +20,10 @@ public class GoalController {
 
     @GetMapping("account/{account-id}/goal")
     public ResponseEntity<GenericResponse> getGoalByAccountId(@RequestHeader("Authorization") String token,
-                                                              @PathVariable("account-id") String accountId
+                                                              @PathVariable("account-id") String accountId,
+                                                              @RequestParam(name = "status", required = false) Integer status
     ) throws PlutoCartServiceApiException {
-        GenericResponse result = goalService.getGoalByAccountId(accountId, token);
+        GenericResponse result = goalService.getGoalByAccountId(accountId, status, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
