@@ -7,6 +7,7 @@ import com.example.plutocart.dtos.goal.*;
 import com.example.plutocart.entities.Goal;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
 import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
+import com.example.plutocart.exceptions.PlutoCartServiceApiInvalidParamException;
 import com.example.plutocart.repositories.AccountRepository;
 import com.example.plutocart.repositories.GoalRepository;
 import com.example.plutocart.repositories.TransactionRepository;
@@ -39,15 +40,26 @@ public class GoalService {
     ModelMapper modelMapper;
 
     @Transactional
-    public GenericResponse getGoalByAccountId(String accountId, String token) throws PlutoCartServiceApiException {
+    public GenericResponse getGoalByAccountId(String accountId, Integer status, String token) throws PlutoCartServiceApiException {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
-            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
+            throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key.");
+
+        if (status != null && status != 1 && status != 2)
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "invalid status for check goal. ");
 
         GenericResponse response = new GenericResponse();
         Integer acId = globalValidationService.validationAccountId(accountId);
 
-        List<Goal> goalList = goalRepository.viewGoalByAccountId(acId);
+        List<Goal> goalList = null;
+
+        if (status == null)
+            goalList = goalRepository.viewGoalByAccountId(acId);
+        else if (status == 1)
+            goalList = goalRepository.viewGoalStatusInProgress(acId);
+        else if (status == 2)
+            goalList = goalRepository.viewGoalStatusSuccess(acId);
+
         List<GoalDTO> goalResponse = goalList.stream().map(goal -> modelMapper.map(goal, GoalDTO.class)).collect(Collectors.toList());
 
         response.setData(goalResponse);

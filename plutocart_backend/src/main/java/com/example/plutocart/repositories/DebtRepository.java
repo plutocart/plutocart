@@ -19,6 +19,14 @@ public interface DebtRepository extends JpaRepository<Debt, Integer> {
     List<Debt> viewDebtByAccountId(Integer accountId);
 
     @Transactional
+    @Procedure(procedureName = "viewDebtStatusInProgress")
+    List<Debt> viewDebtStatusInProgress(Integer accountId);
+
+    @Transactional
+    @Procedure(procedureName = "viewDebtStatusSuccess")
+    List<Debt> viewDebtStatusSuccess(Integer accountId);
+
+    @Transactional
     @Query(value = "SELECT * FROM debt where id_debt = :debtId", nativeQuery = true)
     Debt viewDebtByDebtId(Integer debtId);
 

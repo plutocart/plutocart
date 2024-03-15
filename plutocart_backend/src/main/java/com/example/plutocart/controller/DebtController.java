@@ -21,8 +21,9 @@ public class DebtController {
 
     @GetMapping("account/{account-id}/debt")
     public ResponseEntity<GenericResponse> getDebtByAccountId(@RequestHeader("Authorization") String token,
-                                                              @Valid @PathVariable(value = "account-id") String accountId) throws PlutoCartServiceApiException {
-        GenericResponse result = debtService.getDebtByAccountId(accountId, token);
+                                                              @Valid @PathVariable(value = "account-id") String accountId,
+                                                              @RequestParam(value = "status", required = false) Integer status) throws PlutoCartServiceApiException {
+        GenericResponse result = debtService.getDebtByAccountId(accountId,status, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -720,6 +720,7 @@ BEGIN
 END //
 DELIMITER ;
 
+-- GOAL ---------------------------------------------------------------------------
 -- view goal
 DELIMITER //
 CREATE PROCEDURE `viewGoalByAccountId`( 
@@ -736,6 +737,28 @@ BEGIN
 --     AND end_date_goal < currentDate;
 
     SELECT * FROM goal WHERE account_id_account = InAccountId;
+END //
+DELIMITER ;
+
+-- view goal status in progress
+DELIMITER //
+CREATE PROCEDURE `viewGoalStatusInProgress`( 
+    IN InAccountId INT 
+)
+BEGIN
+
+    SELECT * FROM goal WHERE account_id_account = InAccountId and status_goal = 1;
+END //
+DELIMITER ;
+
+-- view goal status success
+DELIMITER //
+CREATE PROCEDURE `viewGoalStatusSuccess`( 
+    IN InAccountId INT 
+)
+BEGIN
+
+    SELECT * FROM goal WHERE account_id_account = InAccountId and status_goal = 2;
 END //
 DELIMITER ;
 
@@ -811,6 +834,29 @@ BEGIN
 		SET status_goal = 2
 		WHERE id_goal = InGoalId AND account_id_account = InAccountId;
         
+END //
+DELIMITER ;
+
+-- DEBT ---------------------------------------------------------------------------
+-- view debt status in progress
+DELIMITER //
+CREATE PROCEDURE `viewDebtStatusInProgress`( 
+    IN InAccountId INT 
+)
+BEGIN
+
+    SELECT * FROM debt WHERE account_id_account = InAccountId and status_debt = 1;
+END //
+DELIMITER ;
+
+-- view debt status success
+DELIMITER //
+CREATE PROCEDURE `viewDebtStatusSuccess`( 
+    IN InAccountId INT 
+)
+BEGIN
+
+    SELECT * FROM debt WHERE account_id_account = InAccountId and status_debt = 2;
 END //
 DELIMITER ;
 
