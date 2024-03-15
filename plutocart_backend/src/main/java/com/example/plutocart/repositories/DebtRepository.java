@@ -39,4 +39,9 @@ public interface DebtRepository extends JpaRepository<Debt, Integer> {
     @Query(value = "DELETE FROM debt where id_debt = :debtId", nativeQuery = true)
     void deleteDebtByDebtId(Integer debtId);
 
+    @Transactional
+    @Modifying
+    @Procedure(procedureName = "updateDebtToComplete")
+    void updateDebtToComplete(Integer accountId, Integer debtId);
+
 }

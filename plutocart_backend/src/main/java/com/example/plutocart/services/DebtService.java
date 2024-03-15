@@ -102,6 +102,26 @@ public class DebtService {
     }
 
     @Transactional
+    public GenericResponse updateDebtToComplete(String accountId, String debtId, String token) throws PlutoCartServiceApiException {
+        globalValidationService.validationToken(accountId, token);
+        DReqPutDTO dReqPutDTO = debtValidationService.validationUpdateDebtToComplete(accountId, debtId);
+
+        DResPutDTO dResPutDTO = new DResPutDTO();
+        debtRepository.updateDebtToComplete(dReqPutDTO.getAccountId(), dReqPutDTO.getDebtId());
+
+        GenericResponse response = new GenericResponse();
+
+        dResPutDTO.setAccountId(dReqPutDTO.getAccountId());
+        dResPutDTO.setDebtId(dReqPutDTO.getDebtId());
+        dResPutDTO.setDescription("Update Success");
+
+        response.setData(dResPutDTO);
+        response.setStatus(ResultCode.SUCCESS);
+
+        return response;
+    }
+
+    @Transactional
     public GenericResponse deleteDebtByAccountId(String accountId, String debtId, String token) throws Exception {
 
         String userId = JwtUtil.extractUsername(token);

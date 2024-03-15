@@ -179,6 +179,30 @@ public class DebtValidationService {
         return dReqPutDTO;
     }
 
+    public DReqPutDTO validationUpdateDebtToComplete(String accountId, String debtId) throws PlutoCartServiceApiException {
+
+        if (!HelperMethod.isInteger(accountId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
+
+        Integer acId = Integer.parseInt(accountId);
+        Account account = accountRepository.getAccountById(acId);
+        if (account == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account id is not found. ");
+
+        if (!HelperMethod.isInteger(debtId))
+            throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "debt id must be number. ");
+
+        Integer deId = Integer.parseInt(debtId);
+        Debt debt = debtRepository.viewDebtByDebtId(deId);
+        if (debt == null)
+            throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "debt id is not found. ");
+
+        DReqPutDTO dReqPutDTO = new DReqPutDTO();
+        dReqPutDTO.setAccountId(acId);
+        dReqPutDTO.setDebtId(deId);
+        return dReqPutDTO;
+    }
+
 
     public DReqDelDTO validationDeleteDebt(String accountId, String debtId, String token) throws Exception {
         String transactionId = null;

@@ -64,6 +64,15 @@ public class DebtController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PatchMapping("account/{account-id}/debt/{debt-id}/complete-now")
+    public ResponseEntity<GenericResponse> updateDebtToComplete(@RequestHeader("Authorization") String token,
+                                                                @Valid @PathVariable(value = "account-id") String accountId,
+                                                                @Valid @PathVariable(value = "debt-id") String debtId
+    ) throws PlutoCartServiceApiException {
+        GenericResponse result = debtService.updateDebtToComplete(accountId, debtId, token);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @DeleteMapping("account/{account-id}/debt/{debt-id}")
     public ResponseEntity<GenericResponse> deleteDebtByAccountId(@RequestHeader("Authorization") String token,
                                                                  @Valid @PathVariable(value = "account-id") String accountId,
