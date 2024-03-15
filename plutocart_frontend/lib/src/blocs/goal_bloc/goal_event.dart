@@ -25,7 +25,15 @@ class ResetGoalCompleteStatus extends GoalEvent {}
 class ResetUpdateGoalStatus extends GoalEvent{}
 
 
-class GetGoalByAccountId extends GoalEvent {}
+class GetGoalByAccountId extends GoalEvent {
+  final int ? status;
+  GetGoalByAccountId(this.status);
+}
+
+class UpdateStatusNumberGoal extends GoalEvent{
+  final int ? status;
+  UpdateStatusNumberGoal(this.status);
+}
 
 class CompleteGoal extends GoalEvent{
   final int goalId;

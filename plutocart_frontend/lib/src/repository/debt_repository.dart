@@ -22,8 +22,6 @@ class DebtRepository {
       );
 
       if (response.statusCode == 200) {
-        print("check working update complete debt : ${response.data}");
-        
         return response.data;
       } else {
         throw Exception('Error: ${'404'}');

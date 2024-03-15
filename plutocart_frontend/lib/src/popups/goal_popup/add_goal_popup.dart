@@ -45,7 +45,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
     String formattedDateTime =
         '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
     tranDateController.text = formattedDateTime;
-    context.read<GoalBloc>().add(GetGoalByAccountId());
+    context.read<GoalBloc>().add(GetGoalByAccountId(context.read<GoalBloc>().state.statusFilterGoalNumber));
     super.initState();
   }
 
@@ -168,8 +168,10 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                       tranDateFormat));
                   context.read<GoalBloc>().stream.listen((state) {
                     if (state.createGoalStatus == GoalStatus.loaded) {
-                      context.read<GoalBloc>().add(ResetGoal());
-                      context.read<GoalBloc>().add(GetGoalByAccountId());
+                      print("status goal number : ${state.statusFilterGoalNumber}");
+                      context.read<GoalBloc>().add(ResetGoalStatus());
+                      context.read<GoalBloc>().add(UpdateStatusNumberGoal(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
                       Navigator.pop(context);
                       Navigator.pop(context);
                      

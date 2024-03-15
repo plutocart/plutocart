@@ -9,10 +9,6 @@ part 'goal_state.dart';
 
 class GoalBloc extends Bloc<GoalEvent, GoalState> {
   GoalBloc() : super(GoalState()) {
-    on<ResetGoal>((event, emit) {
-      emit(GoalState()); // Reset the state to the initial state
-    });
-
     on<ResetGoalStatus>((event, emit) async {
       emit(state.copyWith(
           createGoalStatus: GoalStatus.loading, amountGoal: 0.0 , deficit: 0.0 , nameGoal: ""));
@@ -77,7 +73,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   (event, emit) async {
     print("Start get goal in goal bloc");
     try {
-      List<dynamic> response = await GoalRepository().getGoalByAccountId();
+      List<dynamic> response = await GoalRepository().getGoalByAccountId(event.status);
       
       if (response.isNotEmpty) {
         print("response is:  ${response}");
@@ -93,7 +89,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   (event, emit) async {
     print("Start check goal in goal bloc");
     try {
-      List<dynamic> response = await GoalRepository().getGoalByAccountId();
+      List<dynamic> response = await GoalRepository().getGoalByAccountId(null);
         int indexGoal = response.indexWhere((element) => element['id'] == event.goalId);
        print("show respinse goal : ${response[indexGoal]}");
        print("element  ${event.goalId}");
@@ -172,6 +168,12 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   }
 });
 
+on<UpdateStatusNumberGoal>(((event, emit) {
+  emit(state.copyWith(
+    goalList: [],
+    statusFilterGoalNumber: event.status
+  ));
+}));
      on<CompleteGoal>((event, emit) async {
   try {
     print("start complete goal in bloc");

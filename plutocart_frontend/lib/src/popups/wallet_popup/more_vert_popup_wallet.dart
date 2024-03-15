@@ -111,7 +111,7 @@ class _MoreVertPopupWalletState extends State<MoreVertPopupWallet> {
                 context.read<WalletBloc>().stream.listen((state) async {
                   if (state.deleteStatus == WalletStatus.loaded) {
                     context.read<TransactionBloc>().add(GetTransactionLimit3());
-                    context.read<GoalBloc>().add(GetGoalByAccountId());
+                    context.read<GoalBloc>().add(GetGoalByAccountId(0));
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);

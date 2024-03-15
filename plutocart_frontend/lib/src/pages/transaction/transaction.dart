@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
@@ -24,6 +25,7 @@ class _TransactionPageState extends State<TransactionPage> {
   List<bool> statusCard = [];
   @override
   void initState() {
+    context.read<GoalBloc>().add(GetGoalByAccountId(null));
     context.read<TransactionBloc>().stream.listen((event) { 
       statusCard = [];
       context.read<TransactionBloc>().add(GetTransactionList());

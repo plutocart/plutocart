@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
-import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/goal/companent_goal/filter_goal.dart';
 import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/more_vert_goal.dart';
-import 'package:plutocart/src/popups/loading_page_popup.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
 import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 
@@ -23,7 +21,7 @@ class _GoalPageState extends State<GoalPage> {
   List<bool> statusCard = [];
   @override
   void initState() {
-    context.read<GoalBloc>().add(GetGoalByAccountId());
+    context.read<GoalBloc>().add(GetGoalByAccountId(context.read<GoalBloc>().state.statusFilterGoalNumber));
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });
@@ -76,10 +74,7 @@ class _GoalPageState extends State<GoalPage> {
                           setState(() {
                             context.read<GoalBloc>().stream.listen((event) {
                               statusCard = []; // Clear the list
-
-                              context
-                                  .read<GoalBloc>()
-                                  .add(GetGoalByAccountId());
+                              context.read<GoalBloc>().add(GetGoalByAccountId(event.statusFilterGoalNumber));
                               BlocProvider.of<GoalBloc>(context)
                                   .state
                                   .goalList!
@@ -542,7 +537,8 @@ class _GoalPageState extends State<GoalPage> {
                                                           context.read<GoalBloc>().stream.listen((event) { 
                                                             if(event.updateGoalStatus == GoalStatus.loaded){
                                                               print("aakim test update complete goal");
-                                                               context.read<GoalBloc>().add(GetGoalByAccountId());
+                                                               context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
+                                                               context.read<GoalBloc>().add(UpdateStatusNumberGoal(state.statusFilterGoalNumber));
                                                                context.read<GoalBloc>().add(ResetUpdateGoalStatus());
                                                             }
                                                           });

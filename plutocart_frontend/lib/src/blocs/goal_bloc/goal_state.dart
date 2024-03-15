@@ -15,6 +15,7 @@ class GoalState extends Equatable {
   final String endDateGoalString;
   final bool goalComplete;
   final List<bool> statusCardGoal;
+  final int statusFilterGoalNumber;
   
 
   GoalState(
@@ -29,7 +30,7 @@ class GoalState extends Equatable {
       this.updateGoalStatus = GoalStatus.loading,
       this.endDateGoalString = "",
       this.goalComplete = false,
-      this.statusCardGoal = const []})
+      this.statusCardGoal = const [] , this.statusFilterGoalNumber = 0})
       : endDateGoal = endDateGoal ?? DateTime.now();
 
   GoalState copyWith(
@@ -43,7 +44,7 @@ class GoalState extends Equatable {
       bool? statusGoal,
       GoalStatus? updateGoalStatus,
       String? endDateGoalString,
-      bool? goalComplete , List<bool> ? statusCardGoal}) {
+      bool? goalComplete , List<bool> ? statusCardGoal , int ? statusFilterGoalNumber}) {
     return GoalState(
         amountGoal: amountGoal ?? this.amountGoal,
         nameGoal: nameGoal ?? this.nameGoal,
@@ -55,7 +56,7 @@ class GoalState extends Equatable {
         statusGoal: statusGoal ?? this.statusGoal,
         updateGoalStatus: updateGoalStatus ?? this.updateGoalStatus,
         endDateGoalString: endDateGoalString ?? this.endDateGoalString,
-        goalComplete: goalComplete ?? this.goalComplete , statusCardGoal : statusCardGoal ?? this.statusCardGoal);
+        goalComplete: goalComplete ?? this.goalComplete , statusCardGoal : statusCardGoal ?? this.statusCardGoal , statusFilterGoalNumber : statusFilterGoalNumber ?? this.statusFilterGoalNumber);
   }
 
   @override
@@ -71,6 +72,6 @@ class GoalState extends Equatable {
         updateGoalStatus,
         endDateGoalString,
         goalComplete , 
-        statusCardGoal
+        statusCardGoal , statusFilterGoalNumber
       ];
 }

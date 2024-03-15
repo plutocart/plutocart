@@ -497,7 +497,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   .add(GetTransactionLimit3());
                               context
                                   .read<GoalBloc>()
-                                  .add(GetGoalByAccountId());
+                                  .add(GetGoalByAccountId(1));
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionGoalStatus());

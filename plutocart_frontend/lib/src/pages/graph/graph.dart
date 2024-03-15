@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
 class GraphPage extends StatefulWidget {
@@ -10,6 +11,11 @@ class GraphPage extends StatefulWidget {
 }
 
 class _GraphPageState extends State<GraphPage> {
+  @override
+  void initState() {
+       context.read<GoalBloc>().add(GetGoalByAccountId(null));
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -169,8 +169,8 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                   print("dificitGoal! : ${deficitGoal}");
                   context.read<GoalBloc>().stream.listen((state) {
                     if (state.updateGoalStatus == GoalStatus.loaded) {
-                      context.read<GoalBloc>().add(ResetGoal());
-                      context.read<GoalBloc>().add(GetGoalByAccountId());
+                      context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(ResetUpdateGoalStatus());
                       print("check statetus : ${state.updateGoalStatus}");
                       Navigator.pop(context);
                       Navigator.pop(context);

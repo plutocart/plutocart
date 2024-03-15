@@ -38,7 +38,7 @@ class GoalRepository{
   }
 
 
- Future<List<dynamic>> getGoalByAccountId() async {
+ Future<List<dynamic>> getGoalByAccountId(int ? statusGoal) async {
   await dotenv.load();
       String? accountId = await storage.read(key: "accountId");
           int acId = int.parse(accountId!);
@@ -48,7 +48,9 @@ class GoalRepository{
         '${dotenv.env['API']}/api/account/${acId}/goal',
         options: Options(
                     headers: { "Authorization": 'Bearer $token' , "${dotenv.env['HEADER_KEY']}" : dotenv.env['VALUE_HEADER'].toString()},
+                   
         ),
+        queryParameters: {"status" : statusGoal == 0 ? null : statusGoal}
       );
       print(
           "respone code in process get goal in class repository: ${response.statusCode}");

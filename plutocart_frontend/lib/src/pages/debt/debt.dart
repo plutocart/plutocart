@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/debt/companent_debt/detailDebt.dart';
@@ -22,6 +23,7 @@ class _DebtPageState extends State<DebtPage> {
   @override
   void initState() {
     context.read<DebtBloc>().add(GetDebtByAccountId());
+    context.read<GoalBloc>().add(GetGoalByAccountId(null));
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
     });
@@ -535,7 +537,7 @@ class _DebtPageState extends State<DebtPage> {
         child: AddDebtPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 3);
+        hightCard: 2.15);
   }
 
   more_vert(int debtId, Map<String, dynamic> debt) {

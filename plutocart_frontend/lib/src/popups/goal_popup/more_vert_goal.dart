@@ -92,7 +92,7 @@ class MoreVertGoal extends StatelessWidget {
             context.read<GoalBloc>().stream.listen((state) {
               if (state.deleteGoalStatus == GoalStatus.loaded) {
                 context.read<WalletBloc>().add(GetAllWallet());
-                context.read<GoalBloc>().add(GetGoalByAccountId());
+                context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
                 context.read<TransactionBloc>().add(GetTransactionLimit3());
                 print(
                     "check delete goal state : ${context.read<GoalBloc>().state.goalList!.length}");
