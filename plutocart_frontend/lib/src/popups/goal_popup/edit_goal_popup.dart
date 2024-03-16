@@ -6,6 +6,7 @@ import 'package:plutocart/src/pages/transaction/component_transaction/amount_tex
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
+import 'package:plutocart/src/router/router.dart';
 
 class EditGoalPopup extends StatefulWidget {
   final Map<String, dynamic>? goal;
@@ -159,7 +160,6 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                       double.parse(yourSaveMoneyController.text);
                   String tranDateFormat =
                       changeFormatter(tranDateController.text);
-                  showLoadingPagePopUp(context);
                   context.read<GoalBloc>().add(UpdateGoalbyGoalId(
                       widget.goal!['id'],
                       nameGoalController.text,
@@ -167,14 +167,16 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                       deficitGoal,
                       tranDateFormat));
                   print("dificitGoal! : ${deficitGoal}");
-                  context.read<GoalBloc>().stream.listen((state) {
+                  showLoadingPagePopUp(context);
+                  context.read<GoalBloc>().stream.listen((state) async {
                     if (state.updateGoalStatus == GoalStatus.loaded) {
-                      context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(
+                          UpdateStatusNumberGoal(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(
+                          GetGoalByAccountId(state.statusFilterGoalNumber));
                       context.read<GoalBloc>().add(ResetUpdateGoalStatus());
                       print("check statetus : ${state.updateGoalStatus}");
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                     Navigator.popUntil(context, (route) => route.isFirst);                   
                     }
                   });
                 } else {

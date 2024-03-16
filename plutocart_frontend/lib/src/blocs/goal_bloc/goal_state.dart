@@ -16,6 +16,7 @@ class GoalState extends Equatable {
   final bool goalComplete;
   final List<bool> statusCardGoal;
   final int statusFilterGoalNumber;
+  final GoalStatus getGoalStatus;
   
 
   GoalState(
@@ -28,6 +29,7 @@ class GoalState extends Equatable {
       this.deleteGoalStatus = GoalStatus.loading,
       this.statusGoal = false,
       this.updateGoalStatus = GoalStatus.loading,
+       this.getGoalStatus = GoalStatus.loading,
       this.endDateGoalString = "",
       this.goalComplete = false,
       this.statusCardGoal = const [] , this.statusFilterGoalNumber = 0})
@@ -43,8 +45,9 @@ class GoalState extends Equatable {
       GoalStatus? deleteGoalStatus,
       bool? statusGoal,
       GoalStatus? updateGoalStatus,
+      GoalStatus ? getGoalStatus,
       String? endDateGoalString,
-      bool? goalComplete , List<bool> ? statusCardGoal , int ? statusFilterGoalNumber}) {
+      bool? goalComplete , List<bool> ? statusCardGoal , int? statusFilterGoalNumber}) {
     return GoalState(
         amountGoal: amountGoal ?? this.amountGoal,
         nameGoal: nameGoal ?? this.nameGoal,
@@ -56,7 +59,7 @@ class GoalState extends Equatable {
         statusGoal: statusGoal ?? this.statusGoal,
         updateGoalStatus: updateGoalStatus ?? this.updateGoalStatus,
         endDateGoalString: endDateGoalString ?? this.endDateGoalString,
-        goalComplete: goalComplete ?? this.goalComplete , statusCardGoal : statusCardGoal ?? this.statusCardGoal , statusFilterGoalNumber : statusFilterGoalNumber ?? this.statusFilterGoalNumber);
+        goalComplete: goalComplete ?? this.goalComplete , statusCardGoal : statusCardGoal ?? this.statusCardGoal , statusFilterGoalNumber : statusFilterGoalNumber ?? this.statusFilterGoalNumber , getGoalStatus : getGoalStatus ?? this.getGoalStatus);
   }
 
   @override
@@ -72,6 +75,6 @@ class GoalState extends Equatable {
         updateGoalStatus,
         endDateGoalString,
         goalComplete , 
-        statusCardGoal , statusFilterGoalNumber
+        statusCardGoal , statusFilterGoalNumber , getGoalStatus
       ];
 }

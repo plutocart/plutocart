@@ -5,7 +5,15 @@ abstract class DebtEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetDebtByAccountId extends DebtEvent {}
+class GetDebtByAccountId extends DebtEvent {
+  final int? statusDebt;
+  GetDebtByAccountId(this.statusDebt);
+}
+
+class UpdateStatusNumberDebt extends DebtEvent{
+  final int  ? statusNumber;
+  UpdateStatusNumberDebt(this.statusNumber);
+}
 
 class ResetDebt extends DebtEvent {}
 class ResetDebtStatus extends DebtEvent {}

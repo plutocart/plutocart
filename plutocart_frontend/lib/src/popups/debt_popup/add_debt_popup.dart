@@ -256,6 +256,8 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                 ), // ตัวอย่าง icon button เป็น calendar_today
                 onPressed: () {
                   if (totalDebtController.text.length != 0) {
+                    int numberOfPaidPeriod = paidPeriodController.text.length > 0 ? int.parse(paidPeriodController.text) : 0;
+                    print("numberOfPaidPeriod: + numberOfPaidPeriod : ${numberOfPaidPeriod}" );
                     selectPeriod(context, integerValuePayPeriod!,
                         totalPeriodController, 1 , 360);
                   } else {
@@ -425,9 +427,9 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
                       toggleLatestPaid == true ? debtDate : ""));
                   context.read<DebtBloc>().stream.listen((state) {
                     if (state.createDebtStatus == DebtStatus.loaded) {
-                      context.read<DebtBloc>().add(ResetDebt());
-                      context.read<DebtBloc>().add(GetDebtByAccountId());
-                      context.read<TransactionBloc>().add(GetTransactionLimit3());
+                      context.read<DebtBloc>().add(ResetDebtStatus());
+                      context.read<DebtBloc>().add(UpdateStatusNumberDebt(state.statusFilterDebtNumber));
+                      context.read<DebtBloc>().add(GetDebtByAccountId(state.statusFilterDebtNumber));
                       Navigator.pop(context);
                       Navigator.pop(context);
                     }

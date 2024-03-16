@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
+import 'package:plutocart/src/pages/debt/debt.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/DatePickerFieldOnlyDay.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
@@ -29,17 +30,19 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
   double? calMonthlyPayment;
   double? calDetPaid;
 
-      bool ? fullField;
+  bool? fullField;
 
-    void checkFullField(){
-        fullField =    (nameOfYourDebtController.text.length <= 0 ||
-                    totalDebtController.text.length <= 0 ||
-                    totalPeriodController.text.length <= 0 ||
-                    paidPeriodController.text.length <= 0 ||
-                    monthlyPaymentController.text.length <= 0 ||
-                    debtPaidController.text.length <= 0 ||
-                    moneyLenderController.text.length <= 0 ) ?  false :  true;
-    }
+  void checkFullField() {
+    fullField = (nameOfYourDebtController.text.length <= 0 ||
+            totalDebtController.text.length <= 0 ||
+            totalPeriodController.text.length <= 0 ||
+            paidPeriodController.text.length <= 0 ||
+            monthlyPaymentController.text.length <= 0 ||
+            debtPaidController.text.length <= 0 ||
+            moneyLenderController.text.length <= 0)
+        ? false
+        : true;
+  }
 
   @override
   void initState() {
@@ -47,24 +50,28 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
     totalDebtController.text = widget.debt!['totalDebt'].toString();
     totalPeriodController.text = widget.debt!['totalPeriod'].toString();
     paidPeriodController.text = widget.debt!['paidPeriod'].toString();
-    monthlyPaymentController.text =
-        widget.debt!['monthlyPayment'].toString();
+    monthlyPaymentController.text = widget.debt!['monthlyPayment'].toString();
     debtPaidController.text = widget.debt!['debtPaid'].toString();
     moneyLenderController.text = widget.debt!['moneyLender'].toString();
     DateTime now = DateTime.now();
-    String formattedDateTimeNow =   '${now.toString().substring(8, 10)}/${now.toString().substring(5, 7)}/${now.toString().substring(0, 4)} ${now.toString().substring(11, 13)}:${now.toString().substring(14, 16)}';
+    String formattedDateTimeNow =
+        '${now.toString().substring(8, 10)}/${now.toString().substring(5, 7)}/${now.toString().substring(0, 4)} ${now.toString().substring(11, 13)}:${now.toString().substring(14, 16)}';
     String date = widget.debt!['latestPayDate'].toString();
-    String formattedDateTime =  date == "null" ? "-" : '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
+    String formattedDateTime = date == "null"
+        ? "-"
+        : '${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}';
     latestPaidController.text = formattedDateTime;
-    nameOfYourDebtController.addListener(() {setState(() {
-      checkFullField();
-    });});
+    nameOfYourDebtController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
     totalDebtController.addListener(() {
       setState(() {
-         checkFullField();
+        checkFullField();
         if (totalPeriodController.text.length != 0 &&
             totalPeriodController.text.length != 0 &&
-            paidPeriodController.text.length != 0 ) {
+            paidPeriodController.text.length != 0) {
           calMonthlyPayment = double.parse(totalDebtController.text) /
               double.parse(totalPeriodController.text);
           monthlyPaymentController.text = calMonthlyPayment!.toStringAsFixed(2);
@@ -77,12 +84,11 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
               double.parse(totalPeriodController.text);
           monthlyPaymentController.text = calMonthlyPayment!.toStringAsFixed(2);
         }
-
       });
     });
     totalPeriodController.addListener(() {
       setState(() {
-         checkFullField();
+        checkFullField();
         if (totalDebtController.text.length != 0 &&
             totalPeriodController.text.length != 0) {
           calMonthlyPayment = double.parse(totalDebtController.text) /
@@ -94,35 +100,46 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
 
     paidPeriodController.addListener(() {
       setState(() {
-         checkFullField();
+        checkFullField();
         if (paidPeriodController.text.length != 0 &&
             monthlyPaymentController.text.length != 0 &&
-            totalDebtController.text.length != 0 && int.parse(paidPeriodController.text) > 0) {
-            latestPaidController.text = formattedDateTimeNow;
+            totalDebtController.text.length != 0 &&
+            int.parse(paidPeriodController.text) > 0) {
+          latestPaidController.text = formattedDateTimeNow;
           calDetPaid = double.parse(paidPeriodController.text) *
               double.parse(monthlyPaymentController.text);
           debtPaidController.text = calDetPaid!.toStringAsFixed(2);
         } else if (paidPeriodController.text.length != 0 &&
-            monthlyPaymentController.text.length != 0 && int.parse(paidPeriodController.text) > 0 && int.parse(paidPeriodController.text) > 0) {
+            monthlyPaymentController.text.length != 0 &&
+            int.parse(paidPeriodController.text) > 0 &&
+            int.parse(paidPeriodController.text) > 0) {
           calDetPaid = double.parse(paidPeriodController.text) *
               double.parse(monthlyPaymentController.text);
           debtPaidController.text = calDetPaid!.toStringAsFixed(2);
-           latestPaidController.text = "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}";
-        }
-        else if ( int.parse(paidPeriodController.text) == 0){
-           latestPaidController.text = "-";
+          latestPaidController.text =
+              "${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)} ${date.substring(11, 13)}:${date.substring(14, 16)}";
+        } else if (int.parse(paidPeriodController.text) == 0 ||
+            paidPeriodController.text == "0") {
+          latestPaidController.text = "-";
+          debtPaidController.text = "0";
         }
       });
     });
-    monthlyPaymentController.addListener(() {setState(() {
-      checkFullField();
-    });});
-    debtPaidController.addListener((){setState(() {
-      checkFullField();
-    });});
-    moneyLenderController.addListener((){setState(() {
-      checkFullField();
-    });});
+    monthlyPaymentController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+    debtPaidController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
+    moneyLenderController.addListener(() {
+      setState(() {
+        checkFullField();
+      });
+    });
     checkFullField();
     super.initState();
   }
@@ -242,14 +259,16 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                     icon: Icon(
                       Icons.import_export_outlined,
                       color: Color(0xFF15616D),
-                    ), 
+                    ),
                     onPressed: () {
                       if (totalDebtController.text.length != 0) {
                         addPayPeriod(
                             context,
                             int.parse(totalPeriodController.text),
                             totalPeriodController,
-                            1,
+                            int.parse(paidPeriodController.text) > 1
+                                ? int.parse(paidPeriodController.text)
+                                : 1,
                             360);
                       } else {
                         customAlertPopup(context, "Please input total debt!",
@@ -294,23 +313,25 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                     icon: Icon(
                       Icons.import_export_outlined,
                       color: Color(0xFF15616D),
-                    ), 
-                    // ตัวอย่าง icon button เป็น calendar_today
+                    ),
                     onPressed: () {
                       if (totalPeriodController.text == "") {
-                        customAlertPopup(context, "Please input total period!",
-                            Icons.error_outline_rounded, Colors.red.shade200);
                       } else {
                         int parsePayPeriodToInt =
                             int.parse(totalPeriodController.text);
-
-                        addPayPeriod(context, 1, paidPeriodController, 0,
+                        addPayPeriod(
+                            context,
+                            int.parse(paidPeriodController.text) > 0
+                                ? int.parse(paidPeriodController.text)
+                                : 0,
+                            paidPeriodController,
+                            0,
                             parsePayPeriodToInt);
                       }
                     },
                   ),
                 ),
-                 onChanged: (value) {
+                onChanged: (value) {
                   setState(() {});
                 },
               ),
@@ -330,14 +351,21 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                 height: 15,
               ),
               AmountTextField(
-                  amountMoneyController: moneyLenderController, nameField: "Moneylender"),
-              latestPaidController.text == "-" ||  paidPeriodController.text == "0"  ? SizedBox.shrink() : SizedBox(
-                height: 15,
-              ),
-              latestPaidController.text == "-" || paidPeriodController.text == "0" ?  SizedBox.shrink() : DatePickerFieldOnlyDay(
-                tranDateController: latestPaidController,
-                nameField: "Latest paid",
-              ),
+                  amountMoneyController: moneyLenderController,
+                  nameField: "Moneylender"),
+              latestPaidController.text == "-" ||
+                      paidPeriodController.text == "0"
+                  ? SizedBox.shrink()
+                  : SizedBox(
+                      height: 15,
+                    ),
+              latestPaidController.text == "-" ||
+                      paidPeriodController.text == "0"
+                  ? SizedBox.shrink()
+                  : DatePickerFieldOnlyDay(
+                      tranDateController: latestPaidController,
+                      nameField: "Latest paid",
+                    ),
               SizedBox(
                 height: 15,
               ),
@@ -362,26 +390,40 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                       // customAlertPopup(context, "Information missing",
                       //     Icons.error_outline_rounded, Colors.red.shade200);
                       null;
-                    }else{
+                    } else {
+                       showLoadingPagePopUp(context);
                       print("Check id debt : ${widget.debt!['id']}");
                       double totalDebt = double.parse(totalDebtController.text);
-                      int totalPeriod  = int.parse(totalPeriodController.text);
+                      int totalPeriod = int.parse(totalPeriodController.text);
                       int paidPeriod = int.parse(paidPeriodController.text);
-                      double monthlyPayment = double.parse(monthlyPaymentController.text);
+                      double monthlyPayment =
+                          double.parse(monthlyPaymentController.text);
                       double debtPaid = double.parse(debtPaidController.text);
-                      String lastestPaid = latestPaidController.text == "-" || paidPeriodController.text == "0"  ? "" : changeFormatter(latestPaidController.text);
-                      showLoadingPagePopUp(context);
-                      context.read<DebtBloc>().add(UpdateDebt(widget.debt!['id'], nameOfYourDebtController.text, totalDebt, totalPeriod, paidPeriod, monthlyPayment, debtPaid, moneyLenderController.text, lastestPaid));
-                        context.read<DebtBloc>().stream.listen((state) {
-                    if(state.updateDebtStatus == DebtStatus.loaded){
-                      context.read<DebtBloc>().add(ResetUpdateDebtStatus());
-                      context.read<DebtBloc>().add(GetDebtByAccountId());
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      
-                    }
-                  }); 
+                      String lastestPaid = latestPaidController.text == "-" ||
+                              paidPeriodController.text == "0"
+                          ? ""
+                          : changeFormatter(latestPaidController.text);
+
+                      context.read<DebtBloc>().add(UpdateDebt(
+                          widget.debt!['id'],
+                          nameOfYourDebtController.text,
+                          totalDebt,
+                          totalPeriod,
+                          paidPeriod,
+                          monthlyPayment,
+                          debtPaid,
+                          moneyLenderController.text,
+                          lastestPaid));
+                      context.read<DebtBloc>().stream.listen((state) {
+                        if (state.updateDebtStatus == DebtStatus.loaded) {
+                          context.read<DebtBloc>().add(UpdateStatusNumberDebt(
+                              state.statusFilterDebtNumber));
+                          context.read<DebtBloc>().add(
+                              GetDebtByAccountId(state.statusFilterDebtNumber));
+                          context.read<DebtBloc>().add(ResetUpdateDebtStatus());
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        }
+                      });
                     }
                   },
                 ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 
 class FilterDebt extends StatefulWidget {
   const FilterDebt({Key? key}) : super(key: key);
@@ -45,6 +47,8 @@ List<Color>? sectionList ;
                   setState(() {
                     sectionList = [Color(0xFF15616D), Colors.white  , Colors.white ];
                     textColorList = [Colors.white  , Color(0xFF15616D) , Color(0xFF15616D) ];
+                    context.read<DebtBloc>().add(GetDebtByAccountId(0));
+                    context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
                   });
                 },
                 child: Text(
@@ -70,8 +74,10 @@ List<Color>? sectionList ;
                 ),
                 onPressed: () {
                  setState(() {
-                    sectionList =  [Colors.white ,  Color(0xFF15616D)  , Colors.white ];
+                  sectionList =  [Colors.white ,  Color(0xFF15616D)  , Colors.white ];
                   textColorList =[Color(0xFF15616D)  , Colors.white , Color(0xFF15616D) ];
+                    context.read<DebtBloc>().add(GetDebtByAccountId(1));
+                    context.read<DebtBloc>().add(UpdateStatusNumberDebt(1));
                   
                  });
                 },
@@ -100,6 +106,8 @@ List<Color>? sectionList ;
                    setState(() {
                   sectionList = [Colors.white ,  Colors.white   , Color(0xFF15616D) ];
                   textColorList =[Color(0xFF15616D)  , Color(0xFF15616D), Colors.white  ];
+                    context.read<DebtBloc>().add(GetDebtByAccountId(2));
+                    context.read<DebtBloc>().add(UpdateStatusNumberDebt(2));
                  });
                 },
                 child: Text(

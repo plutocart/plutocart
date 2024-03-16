@@ -542,10 +542,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   .add(GetTransactionLimit3());
                               context
                                   .read<DebtBloc>()
-                                  .add(GetDebtByAccountId());
-                              context
-                                  .read<DebtBloc>()
-                                  .add(GetDebtByAccountId());
+                                  .add(GetDebtByAccountId(1));
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionDebtStatus());

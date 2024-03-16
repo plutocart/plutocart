@@ -77,7 +77,10 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
       
       if (response.isNotEmpty) {
         print("response is:  ${response}");
-        emit(state.copyWith(goalList: response));
+        emit(state.copyWith(goalList: response , getGoalStatus: GoalStatus.loaded ));  
+      }
+      else {
+         emit(state.copyWith(getGoalStatus: GoalStatus.loaded ));  
       }
     } catch (e) {
       print("Error: $e");

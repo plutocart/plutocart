@@ -22,7 +22,7 @@ class _DebtPageState extends State<DebtPage> {
   List<bool> statusCard = [];
   @override
   void initState() {
-    context.read<DebtBloc>().add(GetDebtByAccountId());
+    context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
@@ -76,7 +76,7 @@ class _DebtPageState extends State<DebtPage> {
                           context.read<DebtBloc>().stream.listen((event) {
                             statusCard = []; // Clear the list
 
-                            context.read<DebtBloc>().add(GetDebtByAccountId());
+                            context.read<DebtBloc>().add(GetDebtByAccountId(event.statusFilterDebtNumber));
                             BlocProvider.of<DebtBloc>(context)
                                 .state
                                 .debtList
@@ -262,7 +262,7 @@ class _DebtPageState extends State<DebtPage> {
                                                       color: Color(
                                                           0XFF898989), // Set the color here
                                                     ),
-                                                    onPressed: () async {
+                                                    onPressed: ()  {
                                                       more_vert(debt['id'], debt);
                                                     },
                                                   ),
@@ -346,6 +346,15 @@ class _DebtPageState extends State<DebtPage> {
                                                               onPressed: () {
                                                                 print("debt : ${debt}");
                                                                 context.read<DebtBloc>().add(CompleteDebt(debt['id']));
+                                                                context.read<DebtBloc>().add(UpdateStatusNumberDebt(state.statusFilterDebtNumber));
+                                                                 context.read<DebtBloc>().stream.listen((event) { 
+                                                            if(event.updateDebtStatus == DebtStatus.loaded){
+                                                              print("aakim test update complete debt");
+                                                               context.read<DebtBloc>().add(GetDebtByAccountId(event.statusFilterDebtNumber));
+                                                               context.read<DebtBloc>().add(ResetUpdateDebtStatus());
+                                                            }
+                                                          });
+
                                                               },
                                                               child:
                                                                   Text("Complete")),
@@ -540,7 +549,7 @@ class _DebtPageState extends State<DebtPage> {
         hightCard: 2.15);
   }
 
-  more_vert(int debtId, Map<String, dynamic> debt) {
+  more_vert(int debtId, Map<String, dynamic> debt ) {
     showSlideDialog(
         context: context,
         child: MoreVertDebt(debt: debt, debtId: debtId),

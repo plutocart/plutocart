@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
@@ -14,6 +15,7 @@ class _GraphPageState extends State<GraphPage> {
   @override
   void initState() {
        context.read<GoalBloc>().add(GetGoalByAccountId(0));
+       context.read<DebtBloc>().add(GetDebtByAccountId(0));
     super.initState();
   }
   @override

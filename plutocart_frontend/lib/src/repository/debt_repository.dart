@@ -78,7 +78,7 @@ class DebtRepository {
     }
   }
 
-  Future<List<dynamic>> getDebtByAccountId() async {
+  Future<List<dynamic>> getDebtByAccountId(int ? statusDebt) async {
     await dotenv.load();
     String? accountId = await storage.read(key: "accountId");
     int acId = int.parse(accountId!);
@@ -86,6 +86,7 @@ class DebtRepository {
       String? token = await storage.read(key: "token");
       Response response = await dio.get(
         '${dotenv.env['API']}/api/account/${acId}/debt',
+           queryParameters: {"status" : statusDebt == 0 ? null : statusDebt} ,
         options: Options(
           headers: {
             "Authorization": 'Bearer $token',

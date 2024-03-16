@@ -34,8 +34,7 @@ void showLoadingPagePopUp(BuildContext context) {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
-             LoadingAnimationWidget.inkDrop(color: Color(0xFF15616D), size: 40),
-           
+             LoadingAnimationWidget.inkDrop(color: Color(0xFF15616D), size: 40),          
           ],
         ),
       );

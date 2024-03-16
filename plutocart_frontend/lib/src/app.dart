@@ -50,7 +50,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
                       stateLogin.signUpGuestSuccess == true)) {
                 return Skeletonizer(
                   enabled: walletState.status == WalletStatus.loading,
-                  effect: ShimmerEffect(duration: Duration(microseconds: 300)),
+                  effect: ShimmerEffect(duration: Duration(seconds: 1)),
                   child: Stack(
                     children: [
                       BlocBuilder<PageBloc, PageState>(
@@ -60,7 +60,7 @@ class _PlutocartAppState extends State<PlutocartApp> {
                             body: pageRoutes[state.indexPage],
                             floatingActionButton: ButtonTransaction(),
                             bottomNavigationBar: BottomNavigatorBar(
-                              onTap: (index) {
+                              onTap: (index)  {
                                 setState(() {
                                   context.read<PageBloc>().add(saveIndexPage(index));
                                 });

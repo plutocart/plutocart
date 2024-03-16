@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,8 +16,50 @@ import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_c
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
+
 Future<void> main() async {
-  await dotenv.load();    
+     ErrorWidget.builder = (FlutterErrorDetails details) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: Container(
+          height: 500,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                  image: AssetImage('assets/icon/icon_launch.png'),
+                  height: 100,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    Text("Please restart application ",
+                        style: TextStyle(
+                            color: Color(0xFF15616D),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Roboto")),
+                    Text("or change menu slow down!",
+                        style: TextStyle(
+                            color: Color(0xFF15616D),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Roboto")),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    };
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   HttpOverrides.global = new MyHttpOverrides();
@@ -30,11 +71,13 @@ Future<void> main() async {
     runApp(MyWidget());
   });
 }
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -49,31 +92,37 @@ class _MyWidgetState extends State<MyWidget> {
   bool isConnected = true;
   @override
   Widget build(BuildContext context) {
+ 
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
-    final transactionCategoryBloc = BlocProvider(create: (context) => TransactionCategoryBloc());
-    final transactionBloc = BlocProvider(create: (context) => TransactionBloc());
+    final transactionCategoryBloc =
+        BlocProvider(create: (context) => TransactionCategoryBloc());
+    final transactionBloc =
+        BlocProvider(create: (context) => TransactionBloc());
     final pageBloc = BlocProvider(create: (context) => PageBloc());
     final goalBloc = BlocProvider(create: (context) => GoalBloc());
-    final debtBloc = BlocProvider(create: (context) =>DebtBloc());
+    final debtBloc = BlocProvider(create: (context) => DebtBloc());
     return MultiBlocProvider(
         providers: [
           walletBloc,
           loginBloc,
           transactionCategoryBloc,
           transactionBloc,
-          pageBloc , 
-          goalBloc , 
+          pageBloc,
+          goalBloc,
           debtBloc
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSwatch().copyWith(primary: Color(0XFF15616D)),
+                colorScheme: ColorScheme.fromSwatch()
+                    .copyWith(primary: Color(0XFF15616D)),
                 textTheme: TextTheme(
-              displayLarge: TextStyle(
-                  fontFamily: 'Roboto', fontSize: 16, color: Color(0xFF15616D)),
-            )),
+                  displayLarge: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 16,
+                      color: Color(0xFF15616D)),
+                )),
             home: Scaffold(
               resizeToAvoidBottomInset: false,
               body: isConnected ? PlutocartApp() : NoConnectionPage(),
@@ -104,8 +153,6 @@ class _MyWidgetState extends State<MyWidget> {
     });
   }
 
-  
-
   @override
   void initState() {
     super.initState();
@@ -118,6 +165,4 @@ class _MyWidgetState extends State<MyWidget> {
     super.dispose();
     subscription.cancel();
   }
-  
 }
-

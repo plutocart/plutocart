@@ -123,7 +123,7 @@ class _BottomSheetDebtState extends State<BottomSheetDebt> {
                   showLoadingPagePopUp(context);
                   context.read<DebtBloc>().stream.listen((state) {
                     if (state.deleteDebtStatus == DebtStatus.loaded) {
-                      context.read<DebtBloc>().add(GetDebtByAccountId());
+                      context.read<DebtBloc>().add(GetDebtByAccountId(state.statusFilterDebtNumber));
                       context
                           .read<TransactionBloc>()
                           .add(GetTransactionDailyInEx());

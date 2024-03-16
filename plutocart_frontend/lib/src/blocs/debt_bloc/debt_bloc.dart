@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/repository/debt_repository.dart';
 
 part 'debt_event.dart';
@@ -7,11 +8,10 @@ part 'debt_state.dart';
 
 class DebtBloc extends Bloc<DebtEvent, DebtState> {
   DebtBloc() : super(DebtState()) {
-    on<GetDebtByAccountId>(
-      (event, emit) async {
+    on<GetDebtByAccountId>( (event, emit) async {
         print("Start get debt in debt bloc");
         try {
-          List<dynamic> response = await DebtRepository().getDebtByAccountId();
+          List<dynamic> response = await DebtRepository().getDebtByAccountId(event.statusDebt);
 
           if (response.isNotEmpty) {
             print("response is:  ${response}");
@@ -154,8 +154,15 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
       }
     }
   } catch (error) {
-    print('Error updating goal: $error');
+    print('Error updating debtsss: $error');
   }
 });
+
+on<UpdateStatusNumberDebt>(((event, emit) {
+  emit(state.copyWith(
+    debtList: [],
+    statusFilterDebtNumber: event.statusNumber
+  ));
+}));
   }
 }
