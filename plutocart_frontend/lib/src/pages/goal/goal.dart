@@ -21,7 +21,7 @@ class _GoalPageState extends State<GoalPage> {
   List<bool> statusCard = [];
   @override
   void initState() {
-    context.read<GoalBloc>().add(GetGoalByAccountId(context.read<GoalBloc>().state.statusFilterGoalNumber));
+    context.read<GoalBloc>().add(GetGoalByAccountId(0));
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });

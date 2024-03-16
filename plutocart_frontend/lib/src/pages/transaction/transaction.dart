@@ -25,7 +25,7 @@ class _TransactionPageState extends State<TransactionPage> {
   List<bool> statusCard = [];
   @override
   void initState() {
-    context.read<GoalBloc>().add(GetGoalByAccountId(null));
+    context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<TransactionBloc>().stream.listen((event) { 
       statusCard = [];
       context.read<TransactionBloc>().add(GetTransactionList());

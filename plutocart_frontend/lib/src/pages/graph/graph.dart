@@ -13,7 +13,7 @@ class GraphPage extends StatefulWidget {
 class _GraphPageState extends State<GraphPage> {
   @override
   void initState() {
-       context.read<GoalBloc>().add(GetGoalByAccountId(null));
+       context.read<GoalBloc>().add(GetGoalByAccountId(0));
     super.initState();
   }
   @override

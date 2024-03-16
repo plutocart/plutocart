@@ -23,7 +23,7 @@ class _DebtPageState extends State<DebtPage> {
   @override
   void initState() {
     context.read<DebtBloc>().add(GetDebtByAccountId());
-    context.read<GoalBloc>().add(GetGoalByAccountId(null));
+    context.read<GoalBloc>().add(GetGoalByAccountId(0));
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
     });
