@@ -5,22 +5,21 @@ import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/pages/transaction/component_transaction/filter_transaction.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/more_vert_transaction.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
+import 'package:plutocart/src/popups/wallet_popup/create_wallet_popup.dart';
 
 class TransactionPage extends StatefulWidget {
-  
   const TransactionPage({Key? key}) : super(key: key);
 
   @override
   _TransactionPageState createState() => _TransactionPageState();
-
-  
 }
-  void updateChildWidgetState() {
 
-  }
+void updateChildWidgetState() {}
 
 class _TransactionPageState extends State<TransactionPage> {
   List<bool> statusCard = [];
@@ -28,15 +27,15 @@ class _TransactionPageState extends State<TransactionPage> {
   void initState() {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
-    context.read<TransactionBloc>().stream.listen((event) { 
+    context.read<TransactionBloc>().stream.listen((event) {
       statusCard = [];
       context.read<TransactionBloc>().add(GetTransactionList());
-       BlocProvider.of<TransactionBloc>(context)
-        .state
-        .transactionList
-        .forEach((_) {
-      statusCard.add(false);
-    });
+      BlocProvider.of<TransactionBloc>(context)
+          .state
+          .transactionList
+          .forEach((_) {
+        statusCard.add(false);
+      });
     });
     context.read<TransactionBloc>().add(GetTransactionList());
     BlocProvider.of<TransactionBloc>(context)
@@ -81,7 +80,7 @@ class _TransactionPageState extends State<TransactionPage> {
               builder: (context, state) {
                 return Row(
                   children: [
-                     IconButton(
+                    IconButton(
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all<CircleBorder>(
                           CircleBorder(),
@@ -89,7 +88,12 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                       splashRadius: 20,
                       onPressed: () {
-                       filterTransaction();
+                        if (context.read<WalletBloc>().state.wallets.length >
+                            0) {
+                          filterTransaction();
+                        } else {
+                          createWallet();
+                        }
                       },
                       icon: Icon(Icons.filter_alt_rounded),
                       color: Color(0xFF15616D),
@@ -590,12 +594,20 @@ class _TransactionPageState extends State<TransactionPage> {
   filterTransaction() async {
     showSlideDialog(
         context: context,
-        child: Text("data"),
+        child: FilterTransaction(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 3);
   }
 
+  createWallet() async {
+    showSlideDialog(
+        context: context,
+        child: CreateWalletPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.75);
+  }
 
   more_vert(int transactionId, Map<String, dynamic> transaction) {
     showSlideDialog(
