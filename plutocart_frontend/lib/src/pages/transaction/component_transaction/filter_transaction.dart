@@ -14,18 +14,18 @@ class FilterTransaction extends StatefulWidget {
 }
 
 class _FilterTransactionState extends State<FilterTransaction> {
-  DateTime now = DateTime.now();
-  TextEditingController yearController =
-      TextEditingController(text: "${DateTime.now().year}");
+  TextEditingController yearController = TextEditingController();
   TextEditingController monthController = TextEditingController();
   TextEditingController walletController = TextEditingController();
   int selectedMonthIndex = -1;
   int selectedWalletIndex = -1;
 
   void resetData() {
-    yearController.text = "${now.year}";
+    yearController.clear();
     monthController.clear();
     walletController.clear();
+    selectedMonthIndex = -1;
+    selectedWalletIndex = -1;
   }
 
   FilterMonth filterMonth = FilterMonth();
@@ -176,25 +176,22 @@ class _FilterTransactionState extends State<FilterTransaction> {
                   color: Color(0xFF15616D),
                 ),
                 decoration: InputDecoration(
-                  labelText: "Total period",
+                  labelText: "Year",
                   labelStyle: TextStyle(
-                      color: yearController.text.length != 0
-                          ? Color(0xFF1A9CB0)
-                          : Color(0XFFDD0000)),
+                    color: Color(0xFF1A9CB0)
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 2,
-                        color: yearController.text.length != 0
-                            ? Color(0xFF15616D)
-                            : Color(0XFFDD0000)),
+                        color: Color(0xFF15616D)
+                            ),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 1,
-                        color: yearController.text.length != 0
-                            ? Color(0xFF15616D)
-                            : Color(0XFFDD0000)),
+                        color:  Color(0xFF15616D)
+                            ),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   suffixIcon: IconButton(
@@ -203,10 +200,10 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       color: Color(0xFF15616D),
                     ), // ตัวอย่าง icon button เป็น calendar_today
                     onPressed: () {
-                      if (yearController.text.length != 0) {
+
                         selectPeriod(
-                            context, now.year, yearController, 1900, 2200);
-                      }
+                            context, 1900 ,  yearController, 1900, 2200);
+                      
                     },
                   ),
                 ),
@@ -284,13 +281,15 @@ class _FilterTransactionState extends State<FilterTransaction> {
                 bottonFirstName: "Clear All",
                 bottonSecondeName: "Apply",
                 bottonFirstNameFunction: () {
-                  resetData();
+                  setState(() {
+                    resetData();
+                  });
                   print("reset year : ${yearController.text}");
                   print("reset month : ${monthController.text}");
                   print("reset wallet : ${walletController.text}");
                 },
                 bottonSecondeNameFunction: () {
-                     print("reset year : ${yearController.text}");
+                   print("reset year : ${yearController.text}");
                   print("reset month : ${monthController.text}");
                   print("reset wallet : ${walletController.text}");
                 },
