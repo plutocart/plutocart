@@ -50,6 +50,7 @@ dependencies:
   intl: 0.18.1
   loading_animation_widget: ^1.2.0+4
   numberpicker: ^2.1.2
+  syncfusion_flutter_charts: ^22.2.12
 
 
   # The following adds the Cupertino Icons font to your application.

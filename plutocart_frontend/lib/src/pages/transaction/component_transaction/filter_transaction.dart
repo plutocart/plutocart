@@ -200,10 +200,8 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       color: Color(0xFF15616D),
                     ), // ตัวอย่าง icon button เป็น calendar_today
                     onPressed: () {
-
                         selectPeriod(
                             context, 1900 ,  yearController, 1900, 2200);
-                      
                     },
                   ),
                 ),

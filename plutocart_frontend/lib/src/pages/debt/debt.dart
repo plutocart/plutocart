@@ -136,7 +136,7 @@ class _DebtPageState extends State<DebtPage> {
                                     width: MediaQuery.of(context).size.width * 0.3,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 79),
+                                    padding: const EdgeInsets.only(bottom: 157),
                                     child: Text("No record",
                                         style: TextStyle(
                                             color: Color(0xFF15616D),
