@@ -20,6 +20,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> viewTransactionByAccountId(Integer accountId);
 
     @Transactional
+    @Procedure(procedureName = "viewTransactionByFilter")
+    List<Transaction> viewTransactionByFilter(Integer accountId, Integer walletId, Integer month, Integer year);
+
+    @Transactional
     @Procedure(procedureName = "viewTransactionByDebtIdDesc")
     List<Transaction> viewTransactionByDebtIdDesc(Integer debtId);
 

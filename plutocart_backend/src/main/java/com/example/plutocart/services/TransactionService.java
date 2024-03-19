@@ -50,15 +50,17 @@ public class TransactionService {
 
 
     @Transactional
-    public GenericResponse getTransactionByAccountId(String accountId, String token) throws PlutoCartServiceApiException {
+    public GenericResponse getTransactionByAccountId(String accountId, String walletId, String month, String year, String token) throws PlutoCartServiceApiException {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
 
         GenericResponse response = new GenericResponse();
-        Integer acId = globalValidationService.validationAccountId(accountId);
+//        Integer acId = globalValidationService.validationAccountId(accountId);
+        TReqGetByFilterDTO tReqGetByFilterDTO = transactionValidationService.validationFilterTransaction(accountId, walletId, month, year);
 
-        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(acId).orElseThrow().getAccountId());
+//        List<Transaction> transactionList = transactionRepository.viewTransactionByAccountId(accountRepository.findById(acId).orElseThrow().getAccountId());
+        List<Transaction> transactionList = transactionRepository.viewTransactionByFilter(tReqGetByFilterDTO.getAccountId(), tReqGetByFilterDTO.getWalletId(), tReqGetByFilterDTO.getMonth(), tReqGetByFilterDTO.getYear());
         List<TransactionResponseGetDTO> transactionResponse = transactionList.stream().map(transaction -> modelMapper.map(transaction, TransactionResponseGetDTO.class)).collect(Collectors.toList());
 
         response.setStatus(ResultCode.SUCCESS);
@@ -197,7 +199,9 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse createTransaction(String accountId, String walletId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, String goalIdGoal, String debtIdDebt, String token) throws IOException, PlutoCartServiceApiException {
+    public GenericResponse createTransaction(String accountId, String walletId, MultipartFile file, String
+            stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String
+                                                     description, String goalIdGoal, String debtIdDebt, String token) throws IOException, PlutoCartServiceApiException {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId)) {
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
@@ -227,7 +231,9 @@ public class TransactionService {
     }
 
     @Transactional
-    public GenericResponse updateTransaction(String accountId, String walletId, String transactionId, MultipartFile file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String transactionCategoryId, String description, String goalIdGoal, String debtIdDebt, String token) throws Exception {
+    public GenericResponse updateTransaction(String accountId, String walletId, String transactionId, MultipartFile
+            file, String stmTransaction, String statementType, LocalDateTime dateTransaction, String
+                                                     transactionCategoryId, String description, String goalIdGoal, String debtIdDebt, String token) throws Exception {
         String userId = JwtUtil.extractUsername(token);
         if (userId == null || !userId.equals(accountId))
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");

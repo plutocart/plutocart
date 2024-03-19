@@ -207,11 +207,46 @@ insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , a
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(2 , 'admin wallet' , 999999.00 , default , 1 , now() , now());
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(3 , 'admin 🥲🐇' , 1111111.00 , default , 1 , now() , now());
 
-insert into transaction values(1,1000,1,now(),1,"this is first transaction. ", null,null,null,now(),now(),1);
 
 insert into goal values(1,"goal 1",10000.00,2000.00,"2024-08-01 00:00:00",1,1,now(),now());
 
 insert into debt values(1,"debt 1",20000.00,10,1,2000.00, 2000.00,"test debt 01",1,now(),now(),now(),1);
+
+insert into transaction values(1,1000,1,now(),1,"this is first transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(2,1000,1,now(),2,"this is second transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(3,1000,1,now(),3,"this is third transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(4,1000,1,now(),4,"this is fourth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(5,1000,1,now(),5,"this is fifth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(6,1000,1,now(),6,"this is sixth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(7,1000,1,now(),7,"this is seventh transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(8,1000,1,now(),8,"this is eighth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(9,1000,1,now(),9,"this is ninth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(10,1000,1,now(),10,"this is tenth transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(11,1000,1,now(),11,"this is 11 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(12,1000,1,now(),12,"this is 12 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(13,1000,1,now(),13,"this is 13 transaction. ", null,null,null,now(),now(),1);
+
+insert into transaction values(14,1000,2,now(),14,"this is 14 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(15,1000,2,now(),15,"this is 15 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(16,1000,2,now(),16,"this is 16 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(17,1000,2,now(),17,"this is 17 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(18,1000,2,now(),18,"this is 18 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(19,1000,2,now(),19,"this is 19 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(20,1000,2,now(),20,"this is 20 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(21,1000,2,now(),21,"this is 21 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(22,1000,2,now(),22,"this is 22 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(23,1000,2,now(),23,"this is 23 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(24,1000,2,now(),24,"this is 24 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(25,1000,2,now(),25,"this is 25 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(26,1000,2,now(),26,"this is 26 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(27,1000,2,now(),27,"this is 27 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(28,1000,2,now(),28,"this is 28 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(29,1000,2,now(),29,"this is 29 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(30,1000,2,now(),30,"this is 30 transaction. ", null,null,null,now(),now(),1);
+insert into transaction values(31,1000,2,now(),31,"this is 31 transaction. ", null,null,null,now(),now(),1);
+
+insert into transaction values(32,1000,2,now(),32,"this is 32 transaction. ", null,null,1,now(),now(),1);
+insert into transaction values(33,1000,2,now(),33,"this is 33 transaction. ", null,1,null,now(),now(),1);
 
 DELIMITER //
 
@@ -302,6 +337,26 @@ BEGIN
 	select t.* from transaction t join wallet w on
     t.wallet_id_wallet = w.id_wallet where t.id_transaction = transactionId and t.wallet_id_wallet = walletId and w.account_id_account = accountId;
 END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE viewTransactionByFilter(
+    IN p_account_id INT,
+    IN p_walletId INT,
+    IN p_month INT,
+    IN p_year INT
+)
+BEGIN
+    SELECT *
+    FROM transaction t 
+    JOIN wallet w ON t.wallet_id_wallet = w.id_wallet
+    WHERE w.account_id_account = p_account_id
+    AND (
+		(p_year IS NULL OR YEAR(date_transaction) = p_year)
+	AND (p_month IS NULL OR MONTH(date_transaction) = p_month)
+	AND (p_walletId IS NULL OR wallet_id_wallet = p_walletId)
+    );
+END//
 DELIMITER ;
 
 -- create transaction 

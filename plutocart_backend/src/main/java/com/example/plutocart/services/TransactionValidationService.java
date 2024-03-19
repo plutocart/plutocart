@@ -2,6 +2,7 @@ package com.example.plutocart.services;
 
 import com.example.plutocart.constants.ResultCode;
 import com.example.plutocart.dtos.transaction.TReqDelTran;
+import com.example.plutocart.dtos.transaction.TReqGetByFilterDTO;
 import com.example.plutocart.dtos.transaction.TReqPostTran;
 import com.example.plutocart.entities.*;
 import com.example.plutocart.exceptions.PlutoCartServiceApiDataNotFound;
@@ -36,6 +37,56 @@ public class TransactionValidationService {
     GoalRepository goalRepository;
     @Autowired
     DebtRepository debtRepository;
+
+    public TReqGetByFilterDTO validationFilterTransaction(String accountId, String walletId, String month, String year) throws PlutoCartServiceApiInvalidParamException, PlutoCartServiceApiDataNotFound {
+
+        Integer acId = null;
+        Integer walId = null;
+        Integer m = null;
+        Integer y = null;
+
+        if (!StringUtils.isEmpty(accountId)) {
+            if (!HelperMethod.isInteger(accountId))
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "account id must be number. ");
+
+            acId = Integer.parseInt(accountId);
+            Account account = accountRepository.getAccountById(acId);
+            if (account == null)
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "account Id is not found. ");
+        }
+
+        if (!StringUtils.isEmpty(walletId)) {
+            if (!HelperMethod.isInteger(walletId))
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "wallet id must be number. ");
+
+            walId = Integer.parseInt(walletId);
+            Wallet wallet = walletRepository.viewWalletByWalletId(walId);
+            if (wallet == null)
+                throw new PlutoCartServiceApiDataNotFound(ResultCode.DATA_NOT_FOUND, "wallet Id is not found. ");
+        }
+
+        if (!StringUtils.isEmpty(month)) {
+            if (!HelperMethod.isInteger(month))
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "Month must be number. ");
+
+            m = Integer.parseInt(month);
+        }
+
+        if (!StringUtils.isEmpty(year)) {
+            if (!HelperMethod.isInteger(year))
+                throw new PlutoCartServiceApiInvalidParamException(ResultCode.INVALID_PARAM, "Year must be number. ");
+
+            y = Integer.parseInt(year);
+        }
+
+        TReqGetByFilterDTO tReqGetByFilterDTO = new TReqGetByFilterDTO();
+        tReqGetByFilterDTO.setAccountId(acId);
+        tReqGetByFilterDTO.setWalletId(walId);
+        tReqGetByFilterDTO.setMonth(m);
+        tReqGetByFilterDTO.setYear(y);
+
+        return tReqGetByFilterDTO;
+    }
 
     public TReqPostTran validationCreateTransaction(String accountId, String walletId, MultipartFile file, String stmTransaction, String stmType, String transactionCategoryId, String description, String goalId, String debtId) throws PlutoCartServiceApiException, IOException {
         String imageUrl = null;

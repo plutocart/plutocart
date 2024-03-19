@@ -21,8 +21,11 @@ public class TransactionController {
 
     @GetMapping("/account/{account-id}/transaction")
     private ResponseEntity<GenericResponse> getTransactionByAccountId(@RequestHeader("Authorization") String token,
-                                                                      @PathVariable("account-id") String accountId) throws PlutoCartServiceApiException {
-        GenericResponse result = transactionService.getTransactionByAccountId(accountId, token);
+                                                                      @PathVariable("account-id") String accountId,
+                                                                      @RequestParam(name = "walletId", required = false) String walletId,
+                                                                      @RequestParam(name = "month", required = false) String month,
+                                                                      @RequestParam(name = "year", required = false) String year) throws PlutoCartServiceApiException {
+        GenericResponse result = transactionService.getTransactionByAccountId(accountId, walletId, month, year, token);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
