@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
+import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 
 
 class DebtDropdown extends StatefulWidget {
@@ -82,4 +84,5 @@ class _DebtDropdownState extends State<DebtDropdown> {
       },
     );
   }
+
 }

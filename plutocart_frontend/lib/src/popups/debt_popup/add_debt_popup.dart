@@ -174,7 +174,7 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
             maxLength: 15,
             controller: nameDebtController,
             decoration: InputDecoration(
-              helperText: "Warning.............................ddd.",
+              // helperText: "Warning.............................ddd.",
               labelText: "Name of Your Debt",
               labelStyle: TextStyle(
                 color: nameDebtController.text.length != 0

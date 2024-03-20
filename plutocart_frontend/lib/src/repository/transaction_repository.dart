@@ -135,7 +135,7 @@ class TransactionRepository {
     }
   }
 
-  Future<List<dynamic>> getTransactionByAccountId() async {
+  Future<List<dynamic>> getTransactionByAccountId(int ? walletId , int ? month , int ? year) async {
     final storage = new FlutterSecureStorage();
     await dotenv.load();
     String? accountId = await storage.read(key: "accountId");
@@ -144,6 +144,7 @@ class TransactionRepository {
       String? token = await storage.read(key: "token");
       Response response = await dio.get(
         '${dotenv.env['API']}/api/account/${acId}/transaction',
+        queryParameters: {"walletId" : walletId != 0 ? walletId : null , "month" : month != 0 ? month : null , "year" : year != 0 ? year : null},
         options: Options(
           headers: {
             "Authorization": 'Bearer $token',

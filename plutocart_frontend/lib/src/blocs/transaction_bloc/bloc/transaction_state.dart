@@ -12,6 +12,9 @@ class TransactionState extends Equatable {
   final int tranCategoryIdCategory;
   final int goalId;
   final int walletId;
+  final int filterWalletId;
+  final int filterMonth;
+  final int filterYear;
   final TransactionStatus incomeStatus;
   final TransactionStatus expenseStatus;
   final TransactionStatus goalStatus;
@@ -23,6 +26,7 @@ class TransactionState extends Equatable {
   final TransactionStatus updateTransactionInEx;
   final TransactionStatus updateTransactionGoal;
   final TransactionStatus updateTransactionDebt;
+  final TransactionStatus getTransactionStatus;
 
   TransactionState(
       {this.id = 0,
@@ -43,7 +47,12 @@ class TransactionState extends Equatable {
       this.debtStatus = TransactionStatus.loading,
       this.deleteTransactionStatus = TransactionStatus.loading,
       this.updateTransactionInEx = TransactionStatus.loading,
-      this.updateTransactionGoal = TransactionStatus.loading , this.updateTransactionDebt = TransactionStatus.loading})
+      this.updateTransactionGoal = TransactionStatus.loading,
+      this.updateTransactionDebt = TransactionStatus.loading,
+      this.getTransactionStatus = TransactionStatus.loading,
+      this.filterWalletId = 0,
+      this.filterMonth = 0,
+      this.filterYear = 0})
       : dateTransaction = dateTransaction ?? DateTime.now();
 
   TransactionState copyWith(
@@ -65,7 +74,12 @@ class TransactionState extends Equatable {
       TransactionStatus? debtStatus,
       TransactionStatus? deleteTransactionStatus,
       TransactionStatus? updateTransactionInEx,
-      TransactionStatus? updateTransactionGoal , TransactionStatus? updateTransactionDebt}) {
+      TransactionStatus? updateTransactionGoal,
+      TransactionStatus? updateTransactionDebt,
+      TransactionStatus? getTransactionStatus,
+      int? filterWalletId,
+      int? filterMonth,
+      int? filterYear}) {
     return TransactionState(
         id: id ?? this.id,
         stmTransaction: stmTransaction ?? this.stmTransaction,
@@ -90,7 +104,13 @@ class TransactionState extends Equatable {
         updateTransactionInEx:
             updateTransactionInEx ?? this.updateTransactionInEx,
         updateTransactionGoal:
-            updateTransactionGoal ?? this.updateTransactionGoal , updateTransactionDebt: updateTransactionDebt ?? this.updateTransactionDebt);
+            updateTransactionGoal ?? this.updateTransactionGoal,
+        updateTransactionDebt:
+            updateTransactionDebt ?? this.updateTransactionDebt,
+        getTransactionStatus: getTransactionStatus ?? this.getTransactionStatus,
+        filterWalletId: filterWalletId ?? this.filterWalletId,
+        filterMonth: filterMonth ?? this.filterMonth,
+        filterYear: filterYear ?? this.filterYear);
   }
 
   @override
@@ -113,6 +133,8 @@ class TransactionState extends Equatable {
         debtStatus,
         deleteTransactionStatus,
         updateTransactionInEx,
-        updateTransactionGoal , updateTransactionDebt
+        updateTransactionGoal,
+        updateTransactionDebt,
+        getTransactionStatus , filterWalletId , filterMonth , filterYear
       ];
 }

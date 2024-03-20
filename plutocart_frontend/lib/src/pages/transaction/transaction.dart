@@ -29,7 +29,7 @@ class _TransactionPageState extends State<TransactionPage> {
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<TransactionBloc>().stream.listen((event) {
       statusCard = [];
-      context.read<TransactionBloc>().add(GetTransactionList());
+      context.read<TransactionBloc>().add(GetTransactionList(event.filterWalletId , event.filterMonth , event.filterYear));
       BlocProvider.of<TransactionBloc>(context)
           .state
           .transactionList
@@ -37,7 +37,7 @@ class _TransactionPageState extends State<TransactionPage> {
         statusCard.add(false);
       });
     });
-    context.read<TransactionBloc>().add(GetTransactionList());
+    context.read<TransactionBloc>().add(GetTransactionList(0 , 0 , 0));
     BlocProvider.of<TransactionBloc>(context)
         .state
         .transactionList

@@ -71,7 +71,23 @@ class GetTransactionLimit3 extends TransactionEvent {}
 
 class ResetTransaction extends TransactionEvent {}
 
-class GetTransactionList extends TransactionEvent {}
+class StatusLoadTransactionList extends TransactionEvent {}
+
+class ResetTransactionList extends TransactionEvent {}
+
+class UpdateFilterStatus extends TransactionEvent {
+   final int walletId ;
+   final int? month ;
+   final int? year ;
+   UpdateFilterStatus(this.walletId, this.month, this.year);
+}
+
+class GetTransactionList extends TransactionEvent {
+   final int walletId ;
+   final int? month ;
+   final int? year ;
+   GetTransactionList(this.walletId, this.month, this.year);
+}
 
 class UpdateTransactionInEx extends TransactionEvent {
    final int statementType;

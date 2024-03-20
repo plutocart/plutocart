@@ -364,9 +364,9 @@ class _EditTransactionState extends State<EditTransaction> {
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());
-                            context
+                              context
                                 .read<TransactionBloc>()
-                                .add(GetTransactionList());
+                                .add(GetTransactionList(event.filterWalletId , event.filterMonth , event.filterYear ));
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionLimit3());
@@ -410,9 +410,9 @@ class _EditTransactionState extends State<EditTransaction> {
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionDailyInEx());
-                            context
+                               context
                                 .read<TransactionBloc>()
-                                .add(GetTransactionList());
+                                .add(GetTransactionList(event.filterWalletId , event.filterMonth , event.filterYear ));
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionLimit3());
@@ -458,7 +458,7 @@ class _EditTransactionState extends State<EditTransaction> {
                                 .add(GetTransactionDailyInEx());
                             context
                                 .read<TransactionBloc>()
-                                .add(GetTransactionList());
+                                .add(GetTransactionList(event.filterWalletId , event.filterMonth , event.filterYear ));
                             context
                                 .read<TransactionBloc>()
                                 .add(GetTransactionLimit3());

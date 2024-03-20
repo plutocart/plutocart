@@ -88,7 +88,9 @@ class MoreVertTransaction extends StatelessWidget {
                          showLoadingPagePopUp(context);
                     context.read<TransactionBloc>().stream.listen((state) {
                       if (state.deleteTransactionStatus == TransactionStatus.loaded) {
-                         context.read<TransactionBloc>().add(GetTransactionList());
+                         context
+                                .read<TransactionBloc>()
+                                .add(GetTransactionList(state.filterWalletId , state.filterMonth , state.filterYear ));
                          context.read<TransactionBloc>().add(GetTransactionDailyInEx());
                         Navigator.pop(context);
                         Navigator.pop(context);

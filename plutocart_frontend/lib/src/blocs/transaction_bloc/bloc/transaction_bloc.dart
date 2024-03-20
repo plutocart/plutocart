@@ -38,7 +38,17 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       emit(state.copyWith(
           updateTransactionDebt: TransactionStatus.loading));
     });
+    
+         on<StatusLoadTransactionList>((event, emit) async {
+      emit(state.copyWith(
+          getTransactionStatus: TransactionStatus.loading));
+    });
+    
 
+ on<ResetTransactionList>((event, emit) async {
+      emit(state.copyWith(
+          transactionList: []));
+    });
     on<ResetTransaction>((event, emit) {
       emit(TransactionState()); // Reset the state to the initial state
     });
@@ -60,6 +70,12 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       },
     );
 
+      on<UpdateFilterStatus>(
+      (event, emit) async {
+          emit(state.copyWith(filterWalletId: event.walletId , filterMonth : event.month ,  filterYear: event.year)); 
+      },
+    );
+
     on<GetTransactionLimit3>(
       (event, emit) async {
         List<dynamic> response =
@@ -78,10 +94,11 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         on<GetTransactionList>(
       (event, emit) async {
         List<dynamic> response =
-            await TransactionRepository().getTransactionByAccountId();
+            await TransactionRepository().getTransactionByAccountId(event.walletId != null ? event.walletId : null , event.month !=null ? event.month : null , event.year != null ? event.year : null ,);
+            print(event.walletId);
         print("Start get transaction by account id");
         try {
-          emit(state.copyWith(transactionList: response));
+          emit(state.copyWith(transactionList: response , getTransactionStatus : TransactionStatus.loaded));
           print(
               "state.transactionsList : ${state.transactionList[0]}");
         } catch (e) {

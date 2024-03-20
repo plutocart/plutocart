@@ -31,6 +31,7 @@ class _GoalPageState extends State<GoalPage> {
       statusCard.add(false);
     });
 
+
     super.initState();
     print("check number : ${context.read<GoalBloc>().state.goalList!.length}");
     print("check numbera : ${statusCard.length}");

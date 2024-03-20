@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/filter/filter_month.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class FilterTransaction extends StatefulWidget {
   const FilterTransaction({Key? key}) : super(key: key);
@@ -96,7 +98,7 @@ class _FilterTransactionState extends State<FilterTransaction> {
                 height: 16,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Month",
@@ -108,6 +110,29 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       height: 0,
                     ),
                   ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                        CircleBorder(),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        monthController.clear();
+                        selectedMonthIndex = -1;
+                      });
+                    },
+                    child: Text(
+                      "Clear",
+                      style: TextStyle(
+                        color: Color(0XFF989898),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  )
                 ],
               ),
               GridView.count(
@@ -152,7 +177,7 @@ class _FilterTransactionState extends State<FilterTransaction> {
                 height: 16,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Year",
@@ -164,6 +189,28 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       height: 0,
                     ),
                   ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                        CircleBorder(),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        yearController.clear();
+                      });
+                    },
+                    child: Text(
+                      "Clear",
+                      style: TextStyle(
+                        color: Color(0XFF989898),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  )
                 ],
               ),
               SizedBox(
@@ -177,21 +224,13 @@ class _FilterTransactionState extends State<FilterTransaction> {
                 ),
                 decoration: InputDecoration(
                   labelText: "Year",
-                  labelStyle: TextStyle(
-                    color: Color(0xFF1A9CB0)
-                  ),
+                  labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 2,
-                        color: Color(0xFF15616D)
-                            ),
+                    borderSide: BorderSide(width: 2, color: Color(0xFF15616D)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        width: 1,
-                        color:  Color(0xFF15616D)
-                            ),
+                    borderSide: BorderSide(width: 1, color: Color(0xFF15616D)),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   suffixIcon: IconButton(
@@ -200,8 +239,7 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       color: Color(0xFF15616D),
                     ), // ตัวอย่าง icon button เป็น calendar_today
                     onPressed: () {
-                        selectPeriod(
-                            context, 1900 ,  yearController, 1900, 2200);
+                      selectPeriod(context, 1900, yearController, 1900, 2200);
                     },
                   ),
                 ),
@@ -210,7 +248,7 @@ class _FilterTransactionState extends State<FilterTransaction> {
                 height: 16,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Wallet",
@@ -222,6 +260,29 @@ class _FilterTransactionState extends State<FilterTransaction> {
                       height: 0,
                     ),
                   ),
+                  TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                        CircleBorder(),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        walletController.clear();
+                        selectedWalletIndex = -1;
+                      });
+                    },
+                    child: Text(
+                      "Clear",
+                      style: TextStyle(
+                        color: Color(0XFF989898),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  )
                 ],
               ),
               GridView.count(
@@ -286,10 +347,40 @@ class _FilterTransactionState extends State<FilterTransaction> {
                   print("reset month : ${monthController.text}");
                   print("reset wallet : ${walletController.text}");
                 },
-                bottonSecondeNameFunction: () {
-                   print("reset year : ${yearController.text}");
-                  print("reset month : ${monthController.text}");
-                  print("reset wallet : ${walletController.text}");
+                bottonSecondeNameFunction: () async {
+                
+                  int walletId = walletController.text == ""
+                      ? 0
+                      : int.parse(walletController.text);
+                  int month = monthController.text == ""
+                      ? 0
+                      : int.parse(monthController.text);
+                  int year = yearController.text == ""
+                      ? 0
+                      : int.parse(yearController.text);
+      
+                  context.read<TransactionBloc>().add(ResetTransactionList());
+                                  
+                  context
+                      .read<TransactionBloc>()
+                      .add(UpdateFilterStatus(walletId, month, year));
+                      
+                  context
+                      .read<TransactionBloc>()
+                      .add(GetTransactionList(walletId, month, year));
+                         showLoadingPagePopUp(context);
+                         await Future.delayed(Duration(seconds: 1));
+                                   Navigator.popUntil(context, (route) => route.isFirst);   
+                      context.read<TransactionBloc>().stream.listen((event)  { 
+              
+   
+                        if(event.getTransactionStatus == TransactionStatus.loaded){
+                           context.read<TransactionBloc>().add(StatusLoadTransactionList());
+                          //  Navigator.pop(context);
+                            Navigator.popUntil(context, (route) => route.isFirst);   
+                        }
+                      });
+                      
                 },
               )
             ],

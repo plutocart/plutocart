@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
     context.read<TransactionCategoryBloc>().add(GetTransactionCategoryExpense());
-    context.read<TransactionBloc>().add(GetTransactionList());
+    context.read<TransactionBloc>().add(GetTransactionList(0 , 0 , 0));
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
     context.read<TransactionBloc>().add(GetTransactionLimit3());
     context.read<GoalBloc>().add(GetGoalByAccountId(0));

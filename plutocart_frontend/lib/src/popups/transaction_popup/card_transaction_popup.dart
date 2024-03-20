@@ -9,6 +9,7 @@ import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
+import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/debt/companent_debt/DebtDropdown.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/amount_text_field.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/change_formatter.dart';
@@ -21,6 +22,8 @@ import 'package:plutocart/src/pages/transaction/component_transaction/transactio
 import 'package:plutocart/src/pages/transaction/component_transaction/type_transaction_router.dart';
 import 'package:plutocart/src/pages/transaction/component_transaction/wallet_dropdown.dart';
 import 'package:plutocart/src/popups/action_popup.dart';
+import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
+import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/loading_page_popup.dart';
 
 class CardTransactionPopup extends StatefulWidget {
@@ -171,8 +174,13 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           indexTransactionType: indexTransactionType,
           onChanged: (newValue) {
             setState(() {
-              indexTransactionType = typeTransaction.listTypeTransaction
-                  .indexWhere((element) => element['typeName'] == newValue);
+              indexTransactionType = typeTransaction.listTypeTransaction.indexWhere((element) => element['typeName'] == newValue);
+              if(indexTransactionType == 3 && context.read<DebtBloc>().state.debtList.length == 0){
+                createDebt();
+              }
+              else if (indexTransactionType == 2 && context.read<GoalBloc>().state.goalList!.length == 0){
+                createGoal();
+              }
               resetData();
             });
           },
@@ -271,19 +279,26 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                   builder: (context, goalState) {
                     print("indexGoal : ${indexGoal}");
                     print("idGoal : ${idGoal}");
-                    print("Goal : ${goalState.goalList!.where((element) => element['statusGoal'] == 1)}");
+                    print(
+                        "Goal : ${goalState.goalList!.where((element) => element['statusGoal'] == 1)}");
                     return GoalDropdown(
-                      goalList: goalState.goalList!.where((element) => element['statusGoal'] == 1).toList(),
+                      goalList: goalState.goalList!
+                          .where((element) => element['statusGoal'] == 1)
+                          .toList(),
                       onChanged: (newValueGoal) {
-                        indexGoal = goalState.goalList!.where((element) => element['statusGoal'] == 1).toList().indexWhere((element) =>
-                            element['id'].toString() == newValueGoal);
-                        idGoal = goalState.goalList!.where((element) => element['statusGoal'] == 1).toList().firstWhere((element) =>
-                            element['id'].toString() == newValueGoal)['id'];
-                            setState(() {
-                              checkFullFieldTransactionGoal();
-                            });
-
-                            
+                        indexGoal = goalState.goalList!
+                            .where((element) => element['statusGoal'] == 1)
+                            .toList()
+                            .indexWhere((element) =>
+                                element['id'].toString() == newValueGoal);
+                        idGoal = goalState.goalList!
+                            .where((element) => element['statusGoal'] == 1)
+                            .toList()
+                            .firstWhere((element) =>
+                                element['id'].toString() == newValueGoal)['id'];
+                        setState(() {
+                          checkFullFieldTransactionGoal();
+                        });
                       },
                     );
                   },
@@ -299,21 +314,31 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                     print("idDebtsss : ${idDebt}");
 
                     return DebtDropdown(
-                      debtList: debtState.debtList.where((element) => element['statusDebt'] == 1).toList(),
+                      debtList: debtState.debtList
+                          .where((element) => element['statusDebt'] == 1)
+                          .toList(),
                       onChanged: (newValueDebt) {
-                        indexDebt =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList().indexWhere((element) =>
-                            element['id'].toString() == newValueDebt);
-                        idDebt =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList().firstWhere((element) =>
-                            element['id'].toString() == newValueDebt)['id'];
+                        indexDebt = debtState.debtList
+                            .where((element) => element['statusDebt'] == 1)
+                            .toList()
+                            .indexWhere((element) =>
+                                element['id'].toString() == newValueDebt);
+                        idDebt = debtState.debtList
+                            .where((element) => element['statusDebt'] == 1)
+                            .toList()
+                            .firstWhere((element) =>
+                                element['id'].toString() == newValueDebt)['id'];
 
-                        debtMonthLyPaymentController.text =  debtState.debtList.where((element) => element['statusDebt'] == 1).toList()
+                        debtMonthLyPaymentController.text = debtState.debtList
+                            .where((element) => element['statusDebt'] == 1)
+                            .toList()
                             .firstWhere((element) =>
                                 element['id'].toString() ==
                                 newValueDebt)['monthlyPayment']
                             .toString();
-                            setState(() {
-                              checkFullFieldTransactionDebt();
-                            });
+                        setState(() {
+                          checkFullFieldTransactionDebt();
+                        });
                       },
                     );
                   },
@@ -419,6 +444,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                     if (isDropdownDataMissing) {
                       null;
                     } else {
+                      int walletId = context.read<TransactionBloc>().state.filterWalletId;
+                        int month = context.read<TransactionBloc>().state.filterMonth;
+                          int year = context.read<TransactionBloc>().state.filterYear;
                       switch (indexTransactionType) {
                         case 0:
                         case 1:
@@ -438,7 +466,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               tranDateFormat,
                               _imageFile,
                               descriptionController.text));
-
+                          context
+                              .read<TransactionBloc>()
+                              .add(ResetTransactionList());
                           context
                               .read<TransactionBloc>()
                               .stream
@@ -451,7 +481,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   .add(GetTransactionDailyInEx());
                               context
                                   .read<TransactionBloc>()
-                                  .add(GetTransactionList());
+                                  .add(GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionLimit3());
@@ -478,7 +508,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   tranDateFormat,
                                   _imageFile,
                                   descriptionController.text));
-
+                          context
+                              .read<TransactionBloc>()
+                              .add(ResetTransactionList());
                           context
                               .read<TransactionBloc>()
                               .stream
@@ -486,9 +518,9 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             if (state.goalStatus == TransactionStatus.loaded) {
                               context.read<WalletBloc>().add(GetAllWallet());
 
-                              context
+                         context
                                   .read<TransactionBloc>()
-                                  .add(GetTransactionList());
+                                  .add(GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionDailyInEx());
@@ -497,7 +529,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   .add(GetTransactionLimit3());
                               context
                                   .read<GoalBloc>()
-                                  .add(GetGoalByAccountId(1));
+                                  .add(GetGoalByAccountId(0));
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionGoalStatus());
@@ -526,14 +558,17 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   descriptionController.text));
                           context
                               .read<TransactionBloc>()
+                              .add(ResetTransactionList());
+                          context
+                              .read<TransactionBloc>()
                               .stream
                               .listen((state) {
                             if (state.debtStatus == TransactionStatus.loaded) {
                               print("Check t");
                               context.read<WalletBloc>().add(GetAllWallet());
-                              context
+                      context
                                   .read<TransactionBloc>()
-                                  .add(GetTransactionList());
+                                  .add(GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionDailyInEx());
@@ -542,7 +577,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                                   .add(GetTransactionLimit3());
                               context
                                   .read<DebtBloc>()
-                                  .add(GetDebtByAccountId(1));
+                                  .add(GetDebtByAccountId(0));
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionDebtStatus());
@@ -559,5 +594,22 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         )
       ],
     ));
+  }
+      createDebt() async {
+    showSlideDialog(
+        context: context,
+        child: AddDebtPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2.15);
+  }
+
+   createGoal() async {
+    showSlideDialog(
+        context: context,
+        child: AddGoalPopup(),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 2.5);
   }
 }
