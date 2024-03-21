@@ -221,53 +221,61 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               nameField: "Total debt"),
         totalDebtController.text.length == 0 ? SizedBox.shrink() :   SizedBox(height: 15),
          totalDebtController.text.length == 0 ? SizedBox.shrink() : 
-         TextField(
-            readOnly: true,
-            controller: totalPeriodController,
-            style: TextStyle(
-              color: Color(0xFF15616D),
-            ),
-            decoration: InputDecoration(
-              labelText: "Total period",
-              labelStyle: TextStyle(
-                  color: totalPeriodController.text.length != 0
-                      ? Color(0xFF1A9CB0)
-                      : Color(0XFFDD0000)),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 2,
-                    color: totalPeriodController.text.length != 0
-                        ? Color(0xFF15616D)
-                        : Color(0XFFDD0000)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: totalPeriodController.text.length != 0
-                        ? Color(0xFF15616D)
-                        : Color(0XFFDD0000)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  Icons.import_export_outlined,
+         GestureDetector(
+            onTap: () {
+                if (totalDebtController.text.length != 0) {
+                      int numberOfPaidPeriod = paidPeriodController.text.length > 0 ? int.parse(paidPeriodController.text) : 0;
+                      print("numberOfPaidPeriod: + numberOfPaidPeriod : ${numberOfPaidPeriod}" );
+                      selectPeriod(context, integerValuePayPeriod!,
+                          totalPeriodController, 1 , 360);
+                    } else {
+                      customAlertPopup(context, "Please input total debt!",
+                          Icons.error_outline_rounded, Colors.red.shade200);
+                    }
+            },
+           child: AbsorbPointer(
+               absorbing: true,
+             child: TextField(
+                readOnly: true,
+                controller: totalPeriodController,
+                style: TextStyle(
                   color: Color(0xFF15616D),
-                ), // ตัวอย่าง icon button เป็น calendar_today
-                onPressed: () {
-                  if (totalDebtController.text.length != 0) {
-                    int numberOfPaidPeriod = paidPeriodController.text.length > 0 ? int.parse(paidPeriodController.text) : 0;
-                    print("numberOfPaidPeriod: + numberOfPaidPeriod : ${numberOfPaidPeriod}" );
-                    selectPeriod(context, integerValuePayPeriod!,
-                        totalPeriodController, 1 , 360);
-                  } else {
-                    customAlertPopup(context, "Please input total debt!",
-                        Icons.error_outline_rounded, Colors.red.shade200);
-                  }
-                },
+                ),
+                decoration: InputDecoration(
+                  labelText: "Total period",
+                  labelStyle: TextStyle(
+                      color: totalPeriodController.text.length != 0
+                          ? Color(0xFF1A9CB0)
+                          : Color(0XFFDD0000)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 2,
+                        color: totalPeriodController.text.length != 0
+                            ? Color(0xFF15616D)
+                            : Color(0XFFDD0000)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1,
+                        color: totalPeriodController.text.length != 0
+                            ? Color(0xFF15616D)
+                            : Color(0XFFDD0000)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.import_export_outlined,
+                      color: Color(0xFF15616D),
+                    ), // ตัวอย่าง icon button เป็น calendar_today
+                    onPressed: () {
+                    
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
+           ),
+         ),
            totalPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
             height: 15,
           ),
@@ -277,54 +285,63 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
         totalPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
             height: 15,
           ),
-           totalPeriodController.text.length == 0 ? SizedBox.shrink() :  TextField(
-            readOnly: true,
-            controller: paidPeriodController,
-            style: TextStyle(
-              color: Color(0xFF15616D),
-            ),
-            decoration: InputDecoration(
-              labelText: "Paid period(s)",
-              labelStyle: TextStyle(
-                  color: paidPeriodController.text.length != 0
-                      ? Color(0xFF1A9CB0)
-                      : Color(0XFFDD0000)),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 2,
-                    color: paidPeriodController.text.length != 0
-                        ? Color(0xFF15616D)
-                        : Color(0XFFDD0000)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: paidPeriodController.text.length != 0
-                        ? Color(0xFF15616D)
-                        : Color(0XFFDD0000)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  Icons.import_export_outlined,
+           totalPeriodController.text.length == 0 ? SizedBox.shrink() : 
+            GestureDetector(
+               onTap: () {
+                if (totalPeriodController.text == "") {
+                      customAlertPopup(context, "Please input total period!",
+                          Icons.error_outline_rounded, Colors.red.shade200);
+                    } else {
+                      int parsePayPeriodToInt =
+                          int.parse(totalPeriodController.text);
+            
+                      selectPeriod(context, 0,
+                          paidPeriodController, 0, parsePayPeriodToInt);
+                    }
+            },
+              child: AbsorbPointer(
+                absorbing: true,
+                child: TextField(
+                readOnly: true,
+                controller: paidPeriodController,
+                style: TextStyle(
                   color: Color(0xFF15616D),
                 ),
-                onPressed: () {
-                  if (totalPeriodController.text == "") {
-                    customAlertPopup(context, "Please input total period!",
-                        Icons.error_outline_rounded, Colors.red.shade200);
-                  } else {
-                    int parsePayPeriodToInt =
-                        int.parse(totalPeriodController.text);
-
-                    selectPeriod(context, integerValuePayPeriod!,
-                        paidPeriodController, 0, parsePayPeriodToInt);
-                  }
-                },
+                decoration: InputDecoration(
+                  labelText: "Paid period(s)",
+                  labelStyle: TextStyle(
+                      color: paidPeriodController.text.length != 0
+                          ? Color(0xFF1A9CB0)
+                          : Color(0XFFDD0000)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 2,
+                        color: paidPeriodController.text.length != 0
+                            ? Color(0xFF15616D)
+                            : Color(0XFFDD0000)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1,
+                        color: paidPeriodController.text.length != 0
+                            ? Color(0xFF15616D)
+                            : Color(0XFFDD0000)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.import_export_outlined,
+                      color: Color(0xFF15616D),
+                    ),
+                    onPressed: () {
+                
+                    },
+                  ),
+                ),
+                        ),
               ),
             ),
-          ),
         
          paidPeriodController.text.length == 0 ? SizedBox.shrink() :  SizedBox(
             height: 15,

@@ -216,14 +216,21 @@ class _FilterTransactionState extends State<FilterTransaction> {
               SizedBox(
                 height: 16,
               ),
-              TextField(
+             GestureDetector(
+            onTap: () {
+              DateTime now = DateTime.now();
+              selectPeriod(context, now.year, yearController, 1900, 2200);
+            },
+            child: AbsorbPointer(
+              absorbing: true,
+              child: TextField(
                 readOnly: true,
                 controller: yearController,
                 style: TextStyle(
                   color: Color(0xFF15616D),
                 ),
                 decoration: InputDecoration(
-                  labelText: "Year",
+                  // labelText: "Year",
                   labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(width: 2, color: Color(0xFF15616D)),
@@ -237,13 +244,16 @@ class _FilterTransactionState extends State<FilterTransaction> {
                     icon: Icon(
                       Icons.import_export_outlined,
                       color: Color(0xFF15616D),
-                    ), // ตัวอย่าง icon button เป็น calendar_today
+                    ),
                     onPressed: () {
-                      selectPeriod(context, 1900, yearController, 1900, 2200);
+                 
                     },
                   ),
                 ),
               ),
+            ),
+          ),
+       
               SizedBox(
                 height: 16,
               ),
