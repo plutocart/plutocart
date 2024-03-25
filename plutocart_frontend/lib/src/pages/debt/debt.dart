@@ -7,6 +7,7 @@ import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/debt/companent_debt/detailDebt.dart';
 import 'package:plutocart/src/pages/debt/companent_debt/filter_debt.dart';
+import 'package:plutocart/src/popups/action_complete_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/more_vert_debt.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
@@ -50,7 +51,9 @@ class _DebtPageState extends State<DebtPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5 ,),
+                  padding: const EdgeInsets.only(
+                    left: 5,
+                  ),
                   child: Image.asset(
                     "assets/icon/icon_launch.png",
                     width: 25,
@@ -72,11 +75,12 @@ class _DebtPageState extends State<DebtPage> {
                           ),
                         ),
                         onPressed: () async {
-                           createDebt();
+                          createDebt();
                           context.read<DebtBloc>().stream.listen((event) {
                             statusCard = []; // Clear the list
 
-                            context.read<DebtBloc>().add(GetDebtByAccountId(event.statusFilterDebtNumber));
+                            context.read<DebtBloc>().add(GetDebtByAccountId(
+                                event.statusFilterDebtNumber));
                             BlocProvider.of<DebtBloc>(context)
                                 .state
                                 .debtList
@@ -131,9 +135,10 @@ class _DebtPageState extends State<DebtPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image(
-                                    image:
-                                        AssetImage('assets/icon/icon_launch.png'),
-                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    image: AssetImage(
+                                        'assets/icon/icon_launch.png'),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 157),
@@ -149,27 +154,30 @@ class _DebtPageState extends State<DebtPage> {
                             ),
                           )
                         : Column(
-                            children: List.generate(state.debtList.length, (index) {
+                            children:
+                                List.generate(state.debtList.length, (index) {
                               final Map<String, dynamic> debt =
                                   state.debtList[index];
                               final DateTime inputDate;
                               final dynamic formattedDate;
                               if (debt['latestPayDate'] != null) {
-                                inputDate = DateTime.parse(debt['latestPayDate']);
+                                inputDate =
+                                    DateTime.parse(debt['latestPayDate']);
                                 formattedDate =
                                     DateFormat('dd MMM yyyy').format(inputDate);
                               } else {
                                 formattedDate = null;
                               }
-      
+
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: OutlinedButton(
                                   style: ButtonStyle(
                                     side: MaterialStateProperty.all<BorderSide>(
                                         BorderSide.none),
-                                    overlayColor: MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                    overlayColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
                                   ),
                                   onPressed: () {
                                     statusCard[index] = !statusCard[index];
@@ -177,12 +185,20 @@ class _DebtPageState extends State<DebtPage> {
                                   },
                                   child: Center(
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.9,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
                                       height: statusCard[index] == true
-                                          ?  debt['statusDebt'] != 1  ? MediaQuery.of(context).size.height * 0.31 
-                                           : MediaQuery.of(context).size.height * 0.38
-                                          : MediaQuery.of(context).size.height * 0.15,
+                                          ? debt['statusDebt'] != 1
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.31
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.38
+                                          : MediaQuery.of(context).size.height *
+                                              0.15,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.rectangle,
                                         borderRadius: BorderRadius.circular(20),
@@ -192,12 +208,11 @@ class _DebtPageState extends State<DebtPage> {
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(
-                                                0.2), 
-                                            spreadRadius: 0, 
-                                            blurRadius: 2, 
-                                            offset: Offset(2,
-                                                2), 
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            spreadRadius: 0,
+                                            blurRadius: 2,
+                                            offset: Offset(2, 2),
                                           ),
                                         ],
                                         color: Colors.white, // Background color
@@ -209,42 +224,47 @@ class _DebtPageState extends State<DebtPage> {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Image.network(
                                                       'https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441750/category_images/Debts_89cb0a76-a6c2-49c6-8ff3-e4a70555330d.png',
-                                                      width: MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.1,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.1,
                                                     ),
                                                     SizedBox(width: 10),
                                                     Column(
                                                       crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Text(
                                                           "${debt['nameDebt']}",
                                                           style: TextStyle(
-                                                            color:
-                                                                Color(0xFF15616D),
+                                                            color: Color(
+                                                                0xFF15616D),
                                                             fontSize: 20,
                                                             fontWeight:
                                                                 FontWeight.w500,
-                                                            fontFamily: "Roboto",
+                                                            fontFamily:
+                                                                "Roboto",
                                                           ),
                                                         ),
                                                         Text(
                                                           "${debt['moneyLender']}",
                                                           style: TextStyle(
-                                                            color:
-                                                                Color(0XFF898989),
+                                                            color: Color(
+                                                                0XFF898989),
                                                             fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight.w500,
-                                                            fontFamily: "Roboto",
+                                                            fontFamily:
+                                                                "Roboto",
                                                           ),
                                                         )
                                                       ],
@@ -262,8 +282,9 @@ class _DebtPageState extends State<DebtPage> {
                                                       color: Color(
                                                           0XFF898989), // Set the color here
                                                     ),
-                                                    onPressed: ()  {
-                                                      more_vert(debt['id'], debt);
+                                                    onPressed: () {
+                                                      more_vert(
+                                                          debt['id'], debt);
                                                     },
                                                   ),
                                                 )
@@ -275,91 +296,110 @@ class _DebtPageState extends State<DebtPage> {
                                                     children: [
                                                       Container(
                                                         height: 2,
-                                                        decoration: ShapeDecoration(
+                                                        decoration:
+                                                            ShapeDecoration(
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             side: BorderSide(
                                                               width: 1,
-                                                              color:
-                                                                  Color(0XFF898989),
+                                                              color: Color(
+                                                                  0XFF898989),
                                                             ),
-                                                            borderRadius: BorderRadius
-                                                                .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
                                                           ),
                                                         ),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Total periods",
-                                                        value2: debt['totalPeriod'],
+                                                        value2:
+                                                            debt['totalPeriod'],
                                                       ),
                                                       DetailDebt(
-                                                        value1: "Paid period(s)",
+                                                        value1:
+                                                            "Paid period(s)",
                                                         value2:
                                                             debt['paidPeriod'],
                                                       ),
                                                       DetailDebt(
-                                                        value1: "Monthly payment",
-                                                        value2: NumberFormat("##,##0.00").format(debt[
-                                                            'monthlyPayment'],), 
+                                                        value1:
+                                                            "Monthly payment",
+                                                        value2: NumberFormat(
+                                                                "##,##0.00")
+                                                            .format(
+                                                          debt[
+                                                              'monthlyPayment'],
+                                                        ),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Debt paid",
-                                                        value2:
-                                                            NumberFormat("##,##0.00").format(debt['debtPaid']),
+                                                        value2: NumberFormat(
+                                                                "##,##0.00")
+                                                            .format(debt[
+                                                                'debtPaid']),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Total debt",
-                                                        value2: NumberFormat("##,##0.00").format(debt['totalDebt']),
+                                                        value2: NumberFormat(
+                                                                "##,##0.00")
+                                                            .format(debt[
+                                                                'totalDebt']),
                                                       ),
                                                       DetailDebt(
                                                         value1: "Latest paid",
                                                         value2:
                                                             "${formattedDate == null ? "-" : formattedDate}",
                                                       ),
-                                                     debt['statusDebt'] != 1 ? SizedBox.shrink() : Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                top: 10),
-                                                        child: Container(
-                                                          width:
-                                                              MediaQuery.of(context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.9,
-                                                          height:
-                                                              MediaQuery.of(context)
-                                                                      .size
-                                                                      .height *
-                                                                  0.055,
-                                                          child:  ElevatedButton(
-                                                              style: ElevatedButton
-                                                                  .styleFrom(
-                                                                      backgroundColor:
-                                                                          Color(
-                                                                              0XFF15616D),
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                20),
-                                                                      )),
-                                                              onPressed: () {
-                                                                print("debt : ${debt}");
-                                                                context.read<DebtBloc>().add(CompleteDebt(debt['id']));
-                                                                context.read<DebtBloc>().add(UpdateStatusNumberDebt(state.statusFilterDebtNumber));
-                                                                 context.read<DebtBloc>().stream.listen((event) { 
-                                                            if(event.updateDebtStatus == DebtStatus.loaded){
-                                                              print("aakim test update complete debt");
-                                                               context.read<DebtBloc>().add(GetDebtByAccountId(event.statusFilterDebtNumber));
-                                                               context.read<DebtBloc>().add(ResetUpdateDebtStatus());
-                                                            }
-                                                          });
-
-                                                              },
-                                                              child:
-                                                                  Text("Complete")),
-                                                        ),
-                                                      ),
+                                                      debt['statusDebt'] != 1
+                                                          ? SizedBox.shrink()
+                                                          : Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      top: 10),
+                                                              child: Container(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.9,
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.055,
+                                                                child: ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        backgroundColor: Color(0XFF15616D),
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20),
+                                                                        )),
+                                                                    onPressed: () {
+                                                                      completeDebtAction(
+                                                                          debt,
+                                                                          state);
+                                                                      context
+                                                                          .read<
+                                                                              DebtBloc>()
+                                                                          .stream
+                                                                          .listen(
+                                                                              (event) {
+                                                                        if (event.updateDebtStatus ==
+                                                                            DebtStatus.loaded) {
+                                                                          context
+                                                                              .read<DebtBloc>()
+                                                                              .add(GetDebtByAccountId(event.statusFilterDebtNumber));
+                                                                          context
+                                                                              .read<DebtBloc>()
+                                                                              .add(ResetUpdateDebtStatus());
+                                                                        }
+                                                                      });
+                                                                    },
+                                                                    child: Text("Complete")),
+                                                              ),
+                                                            ),
                                                     ],
                                                   )
                                                 : Row(
@@ -372,19 +412,22 @@ class _DebtPageState extends State<DebtPage> {
                                                           Text(
                                                             "Paid period(s)",
                                                             style: TextStyle(
-                                                              color:
-                                                                  Color(0XFF898989),
+                                                              color: Color(
+                                                                  0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
-                                                                  FontWeight.w400,
-                                                              fontFamily: "Roboto",
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto",
                                                             ),
                                                           ),
                                                           Row(
                                                             children: [
                                                               Text(
                                                                 "${debt['paidPeriod']}",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Color(
                                                                       0XFF15616D),
                                                                   fontSize: 14,
@@ -397,7 +440,8 @@ class _DebtPageState extends State<DebtPage> {
                                                               ),
                                                               Text(
                                                                 "/",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Color(
                                                                       0XFF898989),
                                                                   fontSize: 14,
@@ -410,7 +454,8 @@ class _DebtPageState extends State<DebtPage> {
                                                               ),
                                                               Text(
                                                                 "${debt['totalPeriod']}",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Color(
                                                                       0xFF1A9CB0),
                                                                   fontSize: 14,
@@ -427,7 +472,8 @@ class _DebtPageState extends State<DebtPage> {
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                .only(
                                                                 right: 10,
                                                                 left: 10),
                                                         child: Container(
@@ -438,10 +484,12 @@ class _DebtPageState extends State<DebtPage> {
                                                                 RoundedRectangleBorder(
                                                               side: BorderSide(
                                                                 width: 1,
-                                                                color: Colors.grey,
+                                                                color:
+                                                                    Colors.grey,
                                                               ),
-                                                              borderRadius: BorderRadius
-                                                                  .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
                                                             ),
                                                           ),
                                                         ),
@@ -451,30 +499,35 @@ class _DebtPageState extends State<DebtPage> {
                                                           Text(
                                                             "Debt paid",
                                                             style: TextStyle(
-                                                              color:
-                                                                  Color(0XFF898989),
+                                                              color: Color(
+                                                                  0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
-                                                                  FontWeight.w400,
-                                                              fontFamily: "Roboto",
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto",
                                                             ),
                                                           ),
                                                           Text(
                                                             "${NumberFormat("#,##0.00").format(debt['debtPaid'])}฿",
                                                             style: TextStyle(
-                                                              color:
-                                                                  Color(0xFF15616D),
+                                                              color: Color(
+                                                                  0xFF15616D),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily: "Roboto",
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  "Roboto",
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                .only(
                                                                 right: 10,
                                                                 left: 10),
                                                         child: Container(
@@ -485,10 +538,12 @@ class _DebtPageState extends State<DebtPage> {
                                                                 RoundedRectangleBorder(
                                                               side: BorderSide(
                                                                 width: 1,
-                                                                color: Colors.grey,
+                                                                color:
+                                                                    Colors.grey,
                                                               ),
-                                                              borderRadius: BorderRadius
-                                                                  .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
                                                             ),
                                                           ),
                                                         ),
@@ -498,23 +553,27 @@ class _DebtPageState extends State<DebtPage> {
                                                           Text(
                                                             "Latest paid",
                                                             style: TextStyle(
-                                                              color:
-                                                                  Color(0XFF898989),
+                                                              color: Color(
+                                                                  0XFF898989),
                                                               fontSize: 12,
                                                               fontWeight:
-                                                                  FontWeight.w400,
-                                                              fontFamily: "Roboto",
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily:
+                                                                  "Roboto",
                                                             ),
                                                           ),
                                                           Text(
                                                             "${formattedDate == null ? "-" : formattedDate}",
                                                             style: TextStyle(
-                                                              color:
-                                                                  Color(0xFF15616D),
+                                                              color: Color(
+                                                                  0xFF15616D),
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight.w500,
-                                                              fontFamily: "Roboto",
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  "Roboto",
                                                             ),
                                                           ),
                                                         ],
@@ -540,6 +599,26 @@ class _DebtPageState extends State<DebtPage> {
     );
   }
 
+  completeDebtAction(Map<String, dynamic> debt, DebtState state) async {
+    showSlideDialog(
+        context: context,
+        child: ActionCompletePopup(
+            nameAction: "to Complete Debt?",
+            imageIcon: Image.asset(
+              'assets/icon/debt-icon.png',
+              height: MediaQuery.of(context).size.height * 0.06,
+            ),
+            buttonFuction2: () {
+              context.read<DebtBloc>().add(CompleteDebt(debt['id']));
+              context
+                  .read<DebtBloc>()
+                  .add(UpdateStatusNumberDebt(state.statusFilterDebtNumber));
+            }),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.6);
+  }
+
   createDebt() async {
     showSlideDialog(
         context: context,
@@ -549,7 +628,7 @@ class _DebtPageState extends State<DebtPage> {
         hightCard: 2.15);
   }
 
-  more_vert(int debtId, Map<String, dynamic> debt ) {
+  more_vert(int debtId, Map<String, dynamic> debt) {
     showSlideDialog(
         context: context,
         child: MoreVertDebt(debt: debt, debtId: debtId),

@@ -6,6 +6,7 @@ import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/goal/companent_goal/filter_goal.dart';
+import 'package:plutocart/src/popups/action_complete_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/add_goal_popup.dart';
 import 'package:plutocart/src/popups/goal_popup/more_vert_goal.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
@@ -21,16 +22,15 @@ class GoalPage extends StatefulWidget {
 
 class _GoalPageState extends State<GoalPage> {
   List<bool> statusCard = [];
- 
+
   @override
   void initState() {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
-        BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
+    BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });
-
 
     super.initState();
     print("check number : ${context.read<GoalBloc>().state.goalList!.length}");
@@ -584,34 +584,41 @@ class _GoalPageState extends State<GoalPage> {
                                                                       .size
                                                                       .height *
                                                                   0.055,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          backgroundColor: Color(
-                                                                              0XFF15616D),
-                                                                          shape: RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                  16))),
-                                                                      onPressed:
-                                                                          () async {
+                                                              child: ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                      backgroundColor: Color(0XFF15616D),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(16),
+                                                                      )),
+                                                                  onPressed: () async {
+                                                                    completeGoalAction(
+                                                                        goal);
+                                                                    context
+                                                                        .read<
+                                                                            GoalBloc>()
+                                                                        .stream
+                                                                        .listen(
+                                                                            (event) {
+                                                                      if (event
+                                                                              .updateGoalStatus ==
+                                                                          GoalStatus
+                                                                              .loaded) {
+                                                                        print(
+                                                                            "aakim test update complete goal");
                                                                         context
                                                                             .read<GoalBloc>()
-                                                                            .add(CompleteGoal(goal['id']));
+                                                                            .add(GetGoalByAccountId(event.statusFilterGoalNumber));
                                                                         context
                                                                             .read<GoalBloc>()
-                                                                            .stream
-                                                                            .listen((event) {
-                                                                          if (event.updateGoalStatus ==
-                                                                              GoalStatus.loaded) {
-                                                                            print("aakim test update complete goal");
-                                                                            context.read<GoalBloc>().add(GetGoalByAccountId(event.statusFilterGoalNumber));
-                                                                            context.read<GoalBloc>().add(UpdateStatusNumberGoal(event.statusFilterGoalNumber));
-                                                                            context.read<GoalBloc>().add(ResetUpdateGoalStatus());
-                                                                          }
-                                                                        });
-                                                                      },
-                                                                      child: Text(
-                                                                          "Complete")),
+                                                                            .add(UpdateStatusNumberGoal(event.statusFilterGoalNumber));
+                                                                        context
+                                                                            .read<GoalBloc>()
+                                                                            .add(ResetUpdateGoalStatus());
+                                                                      }
+                                                                    });
+                                                                  },
+                                                                  child: Text("Complete")),
                                                             )
                                                       : SizedBox.shrink()
                                                 ],
@@ -652,6 +659,22 @@ class _GoalPageState extends State<GoalPage> {
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
         hightCard: 2.5);
+  }
+
+  completeGoalAction(Map<String, dynamic> goal) async {
+    showSlideDialog(
+        context: context,
+        child: ActionCompletePopup(
+            nameAction: "to Complete Goal?",
+            imageIcon: Image.asset(
+              'assets/icon/Goals-icon.png',
+              height: MediaQuery.of(context).size.height * 0.06,
+            ),
+            buttonFuction2: () =>
+                context.read<GoalBloc>().add(CompleteGoal(goal['id']))),
+        barrierColor: Colors.white.withOpacity(0.7),
+        backgroundColor: Colors.white,
+        hightCard: 1.6);
   }
 
   createWallet() async {
