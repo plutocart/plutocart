@@ -212,7 +212,7 @@ public class TransactionService {
 
         TReqPostTran tReqPostTran = transactionValidationService.validationCreateTransaction(accountId, walletId, file, stmTransaction, statementType, transactionCategoryId, description, goalIdGoal, debtIdDebt);
 
-        transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
+        transactionRepository.InsertIntoTransactionByWalletId(tReqPostTran.getAccountId(), tReqPostTran.getWalletId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction,
                 tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), tReqPostTran.getDebtId(), tReqPostTran.getGoalId());
         Transaction currentTransaction = transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).get(transactionRepository.viewTransactionByWalletId(tReqPostTran.getWalletId()).toArray().length - 1);
 
@@ -242,7 +242,7 @@ public class TransactionService {
         TResPostDTO tRes = new TResPostDTO();
         TReqPostTran tReqPostTran = transactionValidationService.validationUpdateTransaction(accountId, walletId, transactionId, file, stmTransaction, statementType, transactionCategoryId, description, goalIdGoal, debtIdDebt);
 
-        transactionRepository.updateTransaction(tReqPostTran.getWalletId(), tReqPostTran.getTransactionId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), tReqPostTran.getDebtId(), tReqPostTran.getGoalId());
+        transactionRepository.updateTransaction(tReqPostTran.getAccountId(), tReqPostTran.getWalletId(), tReqPostTran.getTransactionId(), tReqPostTran.getStmTransaction(), tReqPostTran.getStmType(), dateTransaction, tReqPostTran.getTransactionCategoryId(), description, tReqPostTran.getImageUrl(), tReqPostTran.getDebtId(), tReqPostTran.getGoalId());
 
         tRes.setWalletId(tReqPostTran.getWalletId());
         tRes.setTransactionId(tReqPostTran.getTransactionId());
@@ -269,7 +269,7 @@ public class TransactionService {
 
         TReqDelTran tReqDelTran = transactionValidationService.validationDeleteTransaction(accountId, walletId, transactionId);
 
-        transactionRepository.deleteTransactionByTransactionId(tReqDelTran.getTransactionId(), tReqDelTran.getStmTransaction(),
+        transactionRepository.deleteTransactionByTransactionId(tReqDelTran.getAccountId(), tReqDelTran.getTransactionId(), tReqDelTran.getStmTransaction(),
                 tReqDelTran.getStmType(), tReqDelTran.getWalletId(), tReqDelTran.getGoalId(), tReqDelTran.getDebtId(), tReqDelTran.getTransactionDate());
 
         transactionResponse.setTransactionId(tReqDelTran.getTransactionId());

@@ -160,6 +160,32 @@ CREATE TABLE IF NOT EXISTS `plutocart`.`transaction` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `plutocart`.`graph`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `plutocart`.`graph` (
+  `id_graph` INT NOT NULL AUTO_INCREMENT,
+  `total_in_graph` DECIMAL(13,2) NULL,
+  `tran_category_id_category` INT NOT NULL,
+  `account_id_account` INT NOT NULL,
+  PRIMARY KEY (`id_graph`, `tran_category_id_category`, `account_id_account`),
+  CONSTRAINT `fk_transaction_category_has_account_transaction_category`
+    FOREIGN KEY (`tran_category_id_category`)
+    REFERENCES `plutocart`.`transaction_category` (`id_transaction_category`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaction_category_has_account_account1`
+    FOREIGN KEY (`account_id_account`)
+    REFERENCES `plutocart`.`account` (`id_account`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_transaction_category_has_account_account1_idx` ON `plutocart`.`graph` (`account_id_account` ASC) VISIBLE;
+
+CREATE INDEX `fk_transaction_category_has_account_transaction_category_idx` ON `plutocart`.`graph` (`tran_category_id_category` ASC) VISIBLE;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -208,45 +234,45 @@ insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , a
 insert into wallet (id_wallet , name_wallet , balance_wallet , status_wallet , account_id_account , create_wallet_on , update_wallet_on) values(3 , 'admin 🥲🐇' , 1111111.00 , default , 1 , now() , now());
 
 
-insert into goal values(1,"goal 1",10000.00,2000.00,"2024-08-01 00:00:00",1,1,now(),now());
+-- insert into goal values(1,"goal 1",10000.00,2000.00,"2024-08-01 00:00:00",1,1,now(),now());
 
-insert into debt values(1,"debt 1",20000.00,10,1,2000.00, 2000.00,"test debt 01",1,now(),now(),now(),1);
+-- insert into debt values(1,"debt 1",20000.00,10,1,2000.00, 2000.00,"test debt 01",1,now(),now(),now(),1);
 
-insert into transaction values(1,1000,1,now(),1,"this is first transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(2,1000,1,now(),2,"this is second transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(3,1000,1,now(),3,"this is third transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(4,1000,1,now(),4,"this is fourth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(5,1000,1,now(),5,"this is fifth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(6,1000,1,now(),6,"this is sixth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(7,1000,1,now(),7,"this is seventh transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(8,1000,1,now(),8,"this is eighth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(9,1000,1,now(),9,"this is ninth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(10,1000,1,now(),10,"this is tenth transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(11,1000,1,now(),11,"this is 11 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(12,1000,1,now(),12,"this is 12 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(13,1000,1,now(),13,"this is 13 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(1,1000,1,now(),1,"this is first transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(2,1000,1,now(),2,"this is second transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(3,1000,1,now(),3,"this is third transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(4,1000,1,now(),4,"this is fourth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(5,1000,1,now(),5,"this is fifth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(6,1000,1,now(),6,"this is sixth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(7,1000,1,now(),7,"this is seventh transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(8,1000,1,now(),8,"this is eighth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(9,1000,1,now(),9,"this is ninth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(10,1000,1,now(),10,"this is tenth transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(11,1000,1,now(),11,"this is 11 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(12,1000,1,now(),12,"this is 12 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(13,1000,1,now(),13,"this is 13 transaction. ", null,null,null,now(),now(),1);
 
-insert into transaction values(14,1000,2,now(),14,"this is 14 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(15,1000,2,now(),15,"this is 15 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(16,1000,2,now(),16,"this is 16 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(17,1000,2,now(),17,"this is 17 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(18,1000,2,now(),18,"this is 18 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(19,1000,2,now(),19,"this is 19 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(20,1000,2,now(),20,"this is 20 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(21,1000,2,now(),21,"this is 21 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(22,1000,2,now(),22,"this is 22 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(23,1000,2,now(),23,"this is 23 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(24,1000,2,now(),24,"this is 24 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(25,1000,2,now(),25,"this is 25 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(26,1000,2,now(),26,"this is 26 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(27,1000,2,now(),27,"this is 27 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(28,1000,2,now(),28,"this is 28 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(29,1000,2,now(),29,"this is 29 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(30,1000,2,now(),30,"this is 30 transaction. ", null,null,null,now(),now(),1);
-insert into transaction values(31,1000,2,now(),31,"this is 31 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(14,1000,2,now(),14,"this is 14 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(15,1000,2,now(),15,"this is 15 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(16,1000,2,now(),16,"this is 16 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(17,1000,2,now(),17,"this is 17 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(18,1000,2,now(),18,"this is 18 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(19,1000,2,now(),19,"this is 19 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(20,1000,2,now(),20,"this is 20 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(21,1000,2,now(),21,"this is 21 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(22,1000,2,now(),22,"this is 22 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(23,1000,2,now(),23,"this is 23 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(24,1000,2,now(),24,"this is 24 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(25,1000,2,now(),25,"this is 25 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(26,1000,2,now(),26,"this is 26 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(27,1000,2,now(),27,"this is 27 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(28,1000,2,now(),28,"this is 28 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(29,1000,2,now(),29,"this is 29 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(30,1000,2,now(),30,"this is 30 transaction. ", null,null,null,now(),now(),1);
+-- insert into transaction values(31,1000,2,now(),31,"this is 31 transaction. ", null,null,null,now(),now(),1);
 
-insert into transaction values(32,1000,2,now(),32,"this is 32 transaction. ", null,null,1,now(),now(),1);
-insert into transaction values(33,1000,2,now(),33,"this is 33 transaction. ", null,1,null,now(),now(),1);
+-- insert into transaction values(32,1000,2,now(),32,"this is 32 transaction. ", null,null,1,now(),now(),1);
+-- insert into transaction values(33,1000,2,now(),33,"this is 33 transaction. ", null,1,null,now(),now(),1);
 
 DELIMITER //
 
@@ -362,14 +388,15 @@ DELIMITER ;
 -- create transaction 
 DELIMITER //
 CREATE PROCEDURE InsertIntoTransactionByWalletId(
+    IN accountId INT,
     IN walletId INT,
     IN stmTransaction DECIMAL(10, 2),
     IN statementType INT,
     IN dateTransaction DATETIME,
     IN tranCategoryIdCategory INT,
-    IN descriptionOfT varchar(100),
-    IN imageUrl varchar(200),
-	IN debtIdDebt INT,
+    IN descriptionOfT VARCHAR(100),
+    IN imageUrl VARCHAR(200),
+    IN debtIdDebt INT,
     IN goalIdGoal INT
 )
 BEGIN
@@ -422,54 +449,67 @@ BEGIN
     SET balance_wallet = balance_wallet + balanceAdjustment
     WHERE id_wallet = walletId;
     
-    -- goal check goal or debt id if it have update collected_money + balanceAdjustment
+    -- Update graph table
+    IF NOT EXISTS (
+        SELECT 1 FROM graph WHERE account_id_account = accountId AND tran_category_id_category = tranCategoryIdCategory
+    ) THEN
+        -- Insert new record into graph table
+        INSERT INTO graph (total_in_graph, tran_category_id_category, account_id_account)
+        VALUES (stmTransaction, tranCategoryIdCategory, accountId);
+    ELSE
+        -- Update existing record in graph table
+        UPDATE graph
+        SET total_in_graph = total_in_graph + stmTransaction
+        WHERE account_id_account = accountId AND tran_category_id_category = tranCategoryIdCategory;
+    END IF;
+
+    -- Handle goal and debt updates
     IF goalIdGoal IS NOT NULL THEN
+        -- Update goal table
         UPDATE goal
-		SET collected_money = collected_money + stmTransaction
-		WHERE id_goal = goalIdGoal;
-        
-        	UPDATE goal
-		SET status_goal = 1
-		WHERE id_goal = goalIdGoal AND collected_money < total_goal;
-    
-		UPDATE goal
-		SET status_goal = 2
-		WHERE id_goal = goalIdGoal AND collected_money >= total_goal;
-	END IF;
+        SET collected_money = collected_money + stmTransaction,
+            status_goal = CASE
+                WHEN collected_money < total_goal THEN 1
+                ELSE 2
+            END
+        WHERE id_goal = goalIdGoal;
+    END IF;
     
     IF debtIdDebt IS NOT NULL THEN
+        -- Update debt table
         UPDATE debt
-		SET debt_paid = debt_paid + stmTransaction,
-			paid_period = paid_period + 1,
-            latest_pay_date = createTransactionOn
-		WHERE id_debt = debtIdDebt;
-        
-		UPDATE debt
-		SET status_debt = 1
-		WHERE id_debt = debtIdDebt AND debt_paid < total_debt;
-    
-		UPDATE debt
-		SET status_debt = 2
-		WHERE id_debt = debtIdDebt AND debt_paid >= total_debt;
-	END IF;
-    
+        SET debt_paid = debt_paid + stmTransaction,
+            paid_period = paid_period + 1,
+            latest_pay_date = createTransactionOn,
+            status_debt = CASE
+                WHEN debt_paid < total_debt THEN 1
+                ELSE 2
+            END
+        WHERE id_debt = debtIdDebt;
+    END IF;
 END //
+
 DELIMITER ;
 
 -- delete transaction
 DELIMITER //
 CREATE PROCEDURE deleteTransactionByTransactionId(
+    IN accountId INT,
     IN transactionId INT,
     IN stmTransaction DECIMAL(10, 2),
     IN stmType VARCHAR(10),
     IN walletId INT,
     IN goalIdGoal INT,
     IN debtIdDebt INT,
-	IN transactionDate DATETIME
+    IN transactionDate DATETIME
 )
 BEGIN
     DECLARE balanceAdjustment DECIMAL(10, 2);
+	DECLARE tranCategoryIdCategory INT;
 
+    -- Retrieve tran_category_id_category from transaction table using transactionId
+    SELECT tran_category_id_category INTO tranCategoryIdCategory FROM transaction WHERE id_transaction = transactionId;
+    
     -- Delete the transaction by transactionId
     DELETE FROM transaction WHERE id_transaction = transactionId;
 
@@ -487,56 +527,63 @@ BEGIN
     UPDATE wallet
     SET balance_wallet = balance_wallet + balanceAdjustment
     WHERE id_wallet = walletId;
-    
-	IF goalIdGoal IS NOT NULL THEN
-        UPDATE goal
-		SET collected_money = collected_money - stmTransaction
-		WHERE id_goal = goalIdGoal;
-        
-		UPDATE goal
-		SET status_goal = 1
-		WHERE id_goal = goalIdGoal AND collected_money < total_goal;
-    
-		UPDATE goal
-		SET status_goal = 2
-		WHERE id_goal = goalIdGoal AND collected_money >= total_goal;
-	END IF;
-    
-	IF debtIdDebt IS NOT NULL THEN
-        UPDATE debt
-		SET debt_paid = CASE
-								WHEN stmTransaction < debt_paid THEN debt_paid - stmTransaction
-								ELSE debt_paid = 0
-							  END,
-			paid_period = CASE
-									WHEN paid_period > 0 THEN paid_period - 1
-									ELSE paid_period 
-								END,
-			latest_pay_date = transactionDate
-		WHERE id_debt = debtIdDebt;
 
-        
-		UPDATE debt
-		SET status_debt = 1
-		WHERE id_debt = debtIdDebt AND debt_paid < total_debt;
-    
-		UPDATE debt
-		SET status_debt = 2
-		WHERE id_debt = debtIdDebt AND debt_paid >= total_debt;
-	END IF;
-    
+    -- Update graph table
+    UPDATE graph
+    SET total_in_graph = total_in_graph - stmTransaction
+    WHERE account_id_account = accountId AND tran_category_id_category = tranCategoryIdCategory;
+
+    -- Check if any transaction exists for the given category and account
+    IF (SELECT count(*) FROM transaction t JOIN wallet w ON t.wallet_id_wallet = w.id_wallet 
+		WHERE w.account_id_account = accountId AND t.tran_category_id_category = tranCategoryIdCategory) = 0 THEN
+        -- Delete graph record if no transactions exist
+        DELETE FROM graph WHERE account_id_account = accountId AND tran_category_id_category = tranCategoryIdCategory;
+    END IF;
+
+    -- Handle goal and debt updates
+    IF goalIdGoal IS NOT NULL THEN
+        -- Update goal table
+        UPDATE goal
+        SET collected_money = collected_money - stmTransaction,
+            status_goal = CASE
+                WHEN collected_money < total_goal THEN 1
+                ELSE 2
+            END
+        WHERE id_goal = goalIdGoal;
+    END IF;
+
+    IF debtIdDebt IS NOT NULL THEN
+        -- Update debt table
+        UPDATE debt
+        SET debt_paid = CASE
+                            WHEN stmTransaction < debt_paid THEN debt_paid - stmTransaction
+                            ELSE 0
+                        END,
+            paid_period = CASE
+                                WHEN paid_period > 0 THEN paid_period - 1
+                                ELSE paid_period
+                            END,
+            latest_pay_date = transactionDate,
+            status_debt = CASE
+                WHEN debt_paid < total_debt THEN 1
+                ELSE 2
+            END
+        WHERE id_debt = debtIdDebt;
+    END IF;
 END //
+
 DELIMITER ;
 
 -- update transaction
 DELIMITER //
 CREATE PROCEDURE UpdateTransaction(
+    IN accountId INT,
     IN walletId INT,
     IN transactionId INT,
     IN stmTransaction DECIMAL(10, 2),
     IN statementType INT,
     IN dateTransaction DATETIME,
-	IN tranCategoryIdCategory INT,
+    IN tranCategoryIdCategory INT,
     IN description VARCHAR(100),
     IN imageUrl VARCHAR(200),
     IN debtIdDebt INT,
@@ -546,34 +593,41 @@ BEGIN
     DECLARE oldStmTransaction DECIMAL(10, 2);
     DECLARE currentBalance DECIMAL(10, 2);
     DECLARE newBalance DECIMAL(10, 2);
-    DECLARE stmType INT;
+    DECLARE oldStmType INT;
     DECLARE updateTransactionOn DATETIME;
-    DECLARE walId INT;
-    
+    DECLARE oldWalId INT;
+    DECLARE oldTranCatId INT;
+
     SET updateTransactionOn = NOW();
 
-    -- Get the old stmTransaction value and statementType
-    SELECT stm_transaction, statement_type, wallet_id_wallet INTO oldStmTransaction, stmType, walId
+    -- Get the old stmTransaction value, statementType, and tranCategoryIdCategory
+    SELECT stm_transaction, statement_type, wallet_id_wallet, tran_category_id_category
+    INTO oldStmTransaction, oldStmType, oldWalId, oldTranCatId
     FROM transaction
     WHERE id_transaction = transactionId;
 
     -- Get the current balance
     SELECT balance_wallet INTO currentBalance
     FROM wallet
-    WHERE id_wallet = walId;
+    WHERE id_wallet = oldWalId;
 
     -- Update the wallet table based on statementType
-    IF stmType = 1 THEN
+    IF oldStmType = 1 THEN
         -- Subtract the old stmTransaction for statementType = 1
         UPDATE wallet
         SET balance_wallet = balance_wallet - oldStmTransaction
-        WHERE id_wallet = walId;
-    ELSEIF stmType = 2 THEN
+        WHERE id_wallet = oldWalId;
+    ELSEIF oldStmType = 2 THEN
         -- Add the old stmTransaction for statementType = 2
         UPDATE wallet
         SET balance_wallet = balance_wallet + oldStmTransaction
-        WHERE id_wallet = walId;
+        WHERE id_wallet = oldWalId;
     END IF;
+    
+    -- Update graph field
+    UPDATE graph
+    SET total_in_graph = total_in_graph - oldStmTransaction
+    WHERE tran_category_id_category = oldTranCatId AND account_id_account = accountId;
     
 	IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
@@ -586,7 +640,7 @@ BEGIN
 		SET debt_paid = debt_paid - oldStmTransaction
 		WHERE id_debt = debtIdDebt;
 	END IF;
-    
+
     -- Update the transaction table
     UPDATE transaction
     SET
@@ -613,6 +667,26 @@ BEGIN
     UPDATE wallet
     SET balance_wallet = balance_wallet + newBalance
     WHERE id_wallet = walletId;
+
+    -- Update graph with new total
+    IF EXISTS (SELECT * FROM graph WHERE tran_category_id_category = tranCategoryIdCategory AND account_id_account = accountId) THEN
+        UPDATE graph
+        SET total_in_graph = total_in_graph + stmTransaction
+        WHERE tran_category_id_category = tranCategoryIdCategory AND account_id_account = accountId;
+    ELSE
+        INSERT INTO graph (tran_category_id_category, account_id_account, total_in_graph)
+        VALUES (tranCategoryIdCategory, accountId, stmTransaction);
+    END IF;
+
+    -- Check if oldTranCatId is different from tranCategoryIdCategory
+    IF oldTranCatId != tranCategoryIdCategory THEN
+        -- Check if any transaction exists for the given category and account
+        IF (SELECT COUNT(*) FROM transaction t JOIN wallet w ON t.wallet_id_wallet = w.id_wallet 
+            WHERE w.account_id_account = accountId AND t.tran_category_id_category = oldTranCatId) = 0 THEN
+            -- Delete graph record if no transactions exist
+            DELETE FROM graph WHERE account_id_account = accountId AND tran_category_id_category = oldTranCatId;
+        END IF;
+    END IF;
     
 	IF goalIdGoal IS NOT NULL THEN
         UPDATE goal
@@ -644,6 +718,7 @@ BEGIN
 	END IF;
     
 END //
+
 DELIMITER ;
 
 -- view latested 3 transaction
@@ -1070,4 +1145,19 @@ BEGIN
   DELETE FROM account WHERE id_account = InAccountId;
 END //
 
+DELIMITER ;
+
+
+-- view graph
+
+DELIMITER //
+CREATE PROCEDURE viewGraphByAccountIdAndStmType(
+	IN accountId INT,
+    IN stmType INT
+)
+BEGIN
+	select g.* from graph g 
+    join transaction_category t on g.tran_category_id_category = t.id_transaction_category
+    where g.account_id_account = accountId and t.type_category = stmType;
+END//
 DELIMITER ;

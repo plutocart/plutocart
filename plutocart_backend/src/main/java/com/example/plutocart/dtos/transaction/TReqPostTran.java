@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class TReqPostTran {
+    private Integer accountId;
     private Integer walletId;
     private Integer transactionId;
     private String imageUrl;

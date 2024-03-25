@@ -200,6 +200,7 @@ public class TransactionValidationService {
         }
 
         TReqPostTran tReqPostTran = new TReqPostTran();
+        tReqPostTran.setAccountId(acId);
         tReqPostTran.setWalletId(walId);
         tReqPostTran.setImageUrl(imageUrl);
         tReqPostTran.setStmTransaction(stmTran);
@@ -349,6 +350,7 @@ public class TransactionValidationService {
         }
 
         TReqPostTran tReqPostTran = new TReqPostTran();
+        tReqPostTran.setAccountId(acId);
         tReqPostTran.setWalletId(walId);
         tReqPostTran.setTransactionId(tranId);
         tReqPostTran.setImageUrl(imageUrl);
@@ -423,6 +425,7 @@ public class TransactionValidationService {
         cloudinaryService.deleteImageOnCloudInTransaction(tranId);
 
         TReqDelTran tReqDelTran = new TReqDelTran();
+        tReqDelTran.setAccountId(acId);
         tReqDelTran.setWalletId(walId);
         tReqDelTran.setTransactionId(tranId);
         tReqDelTran.setStmTransaction(transaction.getStmTransaction());
