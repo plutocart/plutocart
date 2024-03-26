@@ -1,5 +1,11 @@
 part of 'graph_bloc.dart';
 
-sealed class GraphEvent extends Equatable {
-  const GraphEvent();
+abstract class GraphEvent extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+class GetGraph extends GraphEvent {
+  final int stmType;
+  GetGraph(this.stmType);
 }

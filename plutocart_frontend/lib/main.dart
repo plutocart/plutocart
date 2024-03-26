@@ -9,6 +9,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:plutocart/src/app.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -102,6 +103,7 @@ class _MyWidgetState extends State<MyWidget> {
     final pageBloc = BlocProvider(create: (context) => PageBloc());
     final goalBloc = BlocProvider(create: (context) => GoalBloc());
     final debtBloc = BlocProvider(create: (context) => DebtBloc());
+    final graphBloc = BlocProvider(create: (context) => GraphBloc());
     return MultiBlocProvider(
         providers: [
           walletBloc,
@@ -110,7 +112,8 @@ class _MyWidgetState extends State<MyWidget> {
           transactionBloc,
           pageBloc,
           goalBloc,
-          debtBloc
+          debtBloc,
+          graphBloc
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

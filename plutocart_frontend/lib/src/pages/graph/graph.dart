@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/pages/graph/companent_graph/entity_data_graph.dart';
 import 'package:plutocart/src/pages/graph/companent_graph/filter_graph.dart';
@@ -28,6 +29,8 @@ class _GraphPageState extends State<GraphPage> {
   void initState() {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
+    context.read<GraphBloc>().add(GetGraph(1));
+    print(context.read<GraphBloc>().state.graphList);
     super.initState();
   }
 

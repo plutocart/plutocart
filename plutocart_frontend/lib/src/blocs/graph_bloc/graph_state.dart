@@ -3,13 +3,24 @@ part of 'graph_bloc.dart';
 enum GraphStatus { loading, loaded }
 
 class GraphState extends Equatable {
-  final String test;
-  const GraphState({this.test = ""});
+  final Map<String,dynamic> graphList;
+  final GraphStatus getLoading;
 
-  GraphState copyWith(String test) {
-    return GraphState(test: test ?? this.test);
+  GraphState({
+    this.graphList = const {},
+    this.getLoading = GraphStatus.loading
+    });
+
+  GraphState copyWith({Map<String,dynamic>? graphList, GraphStatus? getLoading}) {
+    return GraphState(
+      graphList: graphList ?? this.graphList,
+      getLoading: getLoading ?? this.getLoading
+    );
   }
 
   @override
-  List<Object> get props => [test];
+  List<Object> get props => [
+    graphList,
+    getLoading
+  ];
 }
