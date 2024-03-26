@@ -665,9 +665,11 @@ class _GoalPageState extends State<GoalPage> {
     showSlideDialog(
         context: context,
         child: ActionCompletePopup(
-            nameAction: "to Complete Goal?",
+            keyname: "${goal['nameGoal']}",
+            value: "${goal['totalGoal']}฿",
+            nameAction: "Congratulations you Goal",
             imageIcon: Image.asset(
-              'assets/icon/Goals-icon.png',
+              'assets/icon/Congratulation_icon.png',
               height: MediaQuery.of(context).size.height * 0.06,
             ),
             buttonFuction2: () =>

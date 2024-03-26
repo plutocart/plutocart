@@ -8,10 +8,12 @@ part 'debt_state.dart';
 
 class DebtBloc extends Bloc<DebtEvent, DebtState> {
   DebtBloc() : super(DebtState()) {
-    on<GetDebtByAccountId>( (event, emit) async {
+    on<GetDebtByAccountId>(
+      (event, emit) async {
         print("Start get debt in debt bloc");
         try {
-          List<dynamic> response = await DebtRepository().getDebtByAccountId(event.statusDebt);
+          List<dynamic> response =
+              await DebtRepository().getDebtByAccountId(event.statusDebt);
 
           if (response.isNotEmpty) {
             print("response is:  ${response}");
@@ -99,7 +101,7 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
               DebtStatus.loading)); // Reset the state to the initial state
     });
 
-       on<ResetUpdateDebtStatus>((event, emit) {
+    on<ResetUpdateDebtStatus>((event, emit) {
       emit(state.copyWith(
           updateDebtStatus:
               DebtStatus.loading)); // Reset the state to the initial state
@@ -125,44 +127,41 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
           print("Error updating debt: ${response['error']}");
         } else {
           print("Update successful. Response data: ${response['data']}");
-            emit(state.copyWith(
-               updateDebtStatus :  DebtStatus.loaded
-            )); 
+          emit(state.copyWith(updateDebtStatus: DebtStatus.loaded));
         }
       } catch (error) {
         print('Error updating debt: $error');
       }
     });
 
-      on<CompleteDebt>((event, emit) async {
-  try {
-    print("start complete debt in bloc");
-    Map<String, dynamic> response = await DebtRepository().completeDebt(event.debtId);
-    print("after complete debt  in bloc: $response");
+    on<CompleteDebt>((event, emit) async {
+      try {
+        print("start complete debt in bloc");
+        Map<String, dynamic> response =
+            await DebtRepository().completeDebt(event.debtId);
+        print("after complete debt  in bloc: $response");
 
-    if (response['data'] == null) {
-      print("Error updating debt: ${response['error']}");
-    } else {
-      print("Update successful. Response data: ${response['data']}");
+        if (response['data'] == null) {
+          print("Error updating debt: ${response['error']}");
+        } else {
+          print("Update successful. Response data: ${response['data']}");
 
-      if (response['data'] is Map<String, dynamic>) {
-        emit(state.copyWith(
-          updateDebtStatus: DebtStatus.loaded,
-        ));
-      } else {
-        print("Invalid response data structure.");
+          if (response['data'] is Map<String, dynamic>) {
+            emit(state.copyWith(
+              updateDebtStatus: DebtStatus.loaded,
+            ));
+          } else {
+            print("Invalid response data structure.");
+          }
+        }
+      } catch (error) {
+        print('Error updating debtsss: $error');
       }
-    }
-  } catch (error) {
-    print('Error updating debtsss: $error');
-  }
-});
+    });
 
-on<UpdateStatusNumberDebt>(((event, emit) {
-  emit(state.copyWith(
-    debtList: [],
-    statusFilterDebtNumber: event.statusNumber
-  ));
-}));
+    on<UpdateStatusNumberDebt>(((event, emit) {
+      emit(state
+          .copyWith(debtList: [], statusFilterDebtNumber: event.statusNumber));
+    }));
   }
 }

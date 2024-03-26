@@ -216,44 +216,43 @@ class _FilterTransactionState extends State<FilterTransaction> {
               SizedBox(
                 height: 16,
               ),
-             GestureDetector(
-            onTap: () {
-              DateTime now = DateTime.now();
-              selectPeriod(context, now.year, yearController, 1900, 2200);
-            },
-            child: AbsorbPointer(
-              absorbing: true,
-              child: TextField(
-                readOnly: true,
-                controller: yearController,
-                style: TextStyle(
-                  color: Color(0xFF15616D),
-                ),
-                decoration: InputDecoration(
-                  // labelText: "Year",
-                  labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Color(0xFF15616D)),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1, color: Color(0xFF15616D)),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.import_export_outlined,
+              GestureDetector(
+                onTap: () {
+                  DateTime now = DateTime.now();
+                  selectPeriod(context, now.year, yearController, 1900, 2200);
+                },
+                child: AbsorbPointer(
+                  absorbing: true,
+                  child: TextField(
+                    readOnly: true,
+                    controller: yearController,
+                    style: TextStyle(
                       color: Color(0xFF15616D),
                     ),
-                    onPressed: () {
-                 
-                    },
+                    decoration: InputDecoration(
+                      // labelText: "Year",
+                      labelStyle: TextStyle(color: Color(0xFF1A9CB0)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 2, color: Color(0xFF15616D)),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 1, color: Color(0xFF15616D)),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: ImageIcon(
+                          AssetImage('assets/icon/topup_icon.png'),
+                          color: Color(0xFF15616D),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-       
               SizedBox(
                 height: 16,
               ),
@@ -358,7 +357,6 @@ class _FilterTransactionState extends State<FilterTransaction> {
                   print("reset wallet : ${walletController.text}");
                 },
                 bottonSecondeNameFunction: () async {
-                
                   int walletId = walletController.text == ""
                       ? 0
                       : int.parse(walletController.text);
@@ -368,29 +366,29 @@ class _FilterTransactionState extends State<FilterTransaction> {
                   int year = yearController.text == ""
                       ? 0
                       : int.parse(yearController.text);
-      
+
                   context.read<TransactionBloc>().add(ResetTransactionList());
-                                  
+
                   context
                       .read<TransactionBloc>()
                       .add(UpdateFilterStatus(walletId, month, year));
-                      
+
                   context
                       .read<TransactionBloc>()
                       .add(GetTransactionList(walletId, month, year));
-                         showLoadingPagePopUp(context);
-                         await Future.delayed(Duration(seconds: 1));
-                                   Navigator.popUntil(context, (route) => route.isFirst);   
-                      context.read<TransactionBloc>().stream.listen((event)  { 
-              
-   
-                        if(event.getTransactionStatus == TransactionStatus.loaded){
-                           context.read<TransactionBloc>().add(StatusLoadTransactionList());
-                          //  Navigator.pop(context);
-                            Navigator.popUntil(context, (route) => route.isFirst);   
-                        }
-                      });
-                      
+                  showLoadingPagePopUp(context);
+                  await Future.delayed(Duration(seconds: 1));
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                  context.read<TransactionBloc>().stream.listen((event) {
+                    if (event.getTransactionStatus ==
+                        TransactionStatus.loaded) {
+                      context
+                          .read<TransactionBloc>()
+                          .add(StatusLoadTransactionList());
+                      //  Navigator.pop(context);
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    }
+                  });
                 },
               )
             ],

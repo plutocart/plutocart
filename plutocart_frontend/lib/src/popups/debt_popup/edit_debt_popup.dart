@@ -261,19 +261,14 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                       color: Color(0xFF15616D),
                     ),
                     onPressed: () {
-                      if (totalDebtController.text.length != 0) {
-                        addPayPeriod(
-                            context,
-                            int.parse(totalPeriodController.text),
-                            totalPeriodController,
-                            int.parse(paidPeriodController.text) > 1
-                                ? int.parse(paidPeriodController.text)
-                                : 1,
-                            360);
-                      } else {
-                        customAlertPopup(context, "Please input total debt!",
-                            Icons.error_outline_rounded, Colors.red.shade200);
-                      }
+                      addPayPeriod(
+                          context,
+                          int.parse(totalPeriodController.text),
+                          totalPeriodController,
+                          int.parse(paidPeriodController.text) > 1
+                              ? int.parse(paidPeriodController.text)
+                              : 1,
+                          360);
                     },
                   ),
                 ),
@@ -391,7 +386,7 @@ class _EditDebtPopupState extends State<EditDebtPopup> {
                       //     Icons.error_outline_rounded, Colors.red.shade200);
                       null;
                     } else {
-                       showLoadingPagePopUp(context);
+                      showLoadingPagePopUp(context);
                       print("Check id debt : ${widget.debt!['id']}");
                       double totalDebt = double.parse(totalDebtController.text);
                       int totalPeriod = int.parse(totalPeriodController.text);

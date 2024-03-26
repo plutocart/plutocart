@@ -603,9 +603,11 @@ class _DebtPageState extends State<DebtPage> {
     showSlideDialog(
         context: context,
         child: ActionCompletePopup(
-            nameAction: "to Complete Debt?",
+            keyname: "${debt['nameDebt']}",
+            value: "${debt['totalDebt']}฿",
+            nameAction: "Congratulations you Debt",
             imageIcon: Image.asset(
-              'assets/icon/debt-icon.png',
+              'assets/icon/Congratulation_icon.png',
               height: MediaQuery.of(context).size.height * 0.06,
             ),
             buttonFuction2: () {
@@ -625,7 +627,7 @@ class _DebtPageState extends State<DebtPage> {
         child: AddDebtPopup(),
         barrierColor: Colors.white.withOpacity(0.7),
         backgroundColor: Colors.white,
-        hightCard: 2.15);
+        hightCard: 3);
   }
 
   more_vert(int debtId, Map<String, dynamic> debt) {

@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AmountTextField extends StatefulWidget {
-  final String  nameField;
+  final String nameField;
   final TextEditingController amountMoneyController;
+  final String? helperText;
+  final bool? readOnly;
 
-  const AmountTextField({Key? key, required this.amountMoneyController , required this.nameField })
+  const AmountTextField(
+      {Key? key,
+      required this.amountMoneyController,
+      required this.nameField,
+      this.readOnly = false,
+      this.helperText = null})
       : super(key: key);
 
   @override
@@ -16,9 +23,12 @@ class _AmountTextFieldState extends State<AmountTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      readOnly: widget.readOnly!,
       controller: widget.amountMoneyController,
       decoration: InputDecoration(
+        helperText: widget.helperText,
         labelText: "${widget.nameField}",
+        helperStyle: TextStyle(color: Color(0xFF1A9CB0)),
         labelStyle: TextStyle(
           color: widget.amountMoneyController.text.isNotEmpty
               ? Color(0xFF1A9CB0)
