@@ -1,12 +1,9 @@
 package com.example.plutocart.services;
-
 import com.example.plutocart.auth.JwtUtil;
 import com.example.plutocart.constants.ResultCode;
-import com.example.plutocart.dtos.transaction.GraphDTO;
 import com.example.plutocart.dtos.transaction.GraphDetailDTO;
 import com.example.plutocart.dtos.transaction.GraphListDTO;
 import com.example.plutocart.entities.Graph;
-import com.example.plutocart.entities.TransactionCategory;
 import com.example.plutocart.exceptions.PlutoCartServiceApiException;
 import com.example.plutocart.exceptions.PlutoCartServiceApiForbidden;
 import com.example.plutocart.repositories.GraphRepository;
@@ -19,11 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class GraphService {
@@ -46,7 +41,8 @@ public class GraphService {
             throw new PlutoCartServiceApiForbidden(ResultCode.FORBIDDEN, "invalid account id key");
 
         GenericResponse response = new GenericResponse();
-        BigDecimal totalIncome = new BigDecimal(0);
+        BigDecimal totalAmountOther = new BigDecimal(0);
+        BigDecimal totalAmount = new BigDecimal(0);
 
         Integer acId = globalValidationService.validationAccountId(accountId);
 
@@ -65,11 +61,17 @@ public class GraphService {
 
                 graphInfoList.put(i, graphDTO);
 //            }
-            totalIncome = totalIncome.add(graphList.get(i).getTotalInGraph());
+
+            if(i > 4){
+                totalAmountOther = totalAmountOther.add(graphList.get(i).getTotalInGraph());
+            }
+            
+            totalAmount = totalAmount.add(graphList.get(i).getTotalInGraph());
         }
 //        graphResponse.setGraphDTO(graphDTOList);
         graphResponse.setGraphStatementList(graphInfoList);
-        graphResponse.setTotalAmount(totalIncome);
+        graphResponse.setTotalAmountOther(totalAmountOther);
+        graphResponse.setTotalAmount(totalAmount);
 
         response.setStatus(ResultCode.SUCCESS);
         response.setData(graphResponse);

@@ -12,4 +12,5 @@ import java.util.Map;
 public class GraphListDTO {
     private Map<Integer, GraphDetailDTO> graphStatementList;
     private BigDecimal totalAmount;
+    private BigDecimal totalAmountOther;
 }
