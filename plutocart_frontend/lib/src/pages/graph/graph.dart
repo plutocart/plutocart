@@ -79,31 +79,92 @@ class _GraphPageState extends State<GraphPage> {
         backgroundColor: Colors.white10,
         elevation: 0,
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width * 1,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FilterGraph(),
-            SizedBox(height: 16),
-            Container(
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              FilterGraph(),
+              SizedBox(height: 16),
+              Container(
                 height: 300, // Adjust height as needed
                 child: SfCircularChart(
-                    legend: Legend(isVisible: true , overflowMode: LegendItemOverflowMode.wrap),
+                    legend: Legend(
+                        isVisible: true,
+                        overflowMode: LegendItemOverflowMode.wrap),
                     series: <CircularSeries<SalesData, String>>[
                       DoughnutSeries<SalesData, String>(
                           dataSource: data,
                           xValueMapper: (SalesData data, _) => data.year,
-                          yValueMapper: (SalesData data, _) =>data.sales,
-                          dataLabelSettings:DataLabelSettings(isVisible: true ) , 
+                          yValueMapper: (SalesData data, _) => data.sales,
+                          dataLabelSettings: DataLabelSettings(isVisible: true),
                           enableTooltip: true),
                     ]),
-                    ),
-          ],
+              ),
+              Container(
+                child: Column(
+                  children: [
+                    BlocBuilder<GraphBloc, GraphState>(
+                      builder: (context, state) {
+                        return Container(
+                          constraints: BoxConstraints(
+                              minHeight:
+                                  MediaQuery.of(context).size.height * 0.06,
+                              minWidth:
+                                  MediaQuery.of(context).size.width * 0.5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.0),
+                              border: Border.all(
+                                width: 1.5,
+                                color: Color(0xFF15616D),
+                              )),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Total amount",
+                                style: TextStyle(
+                                  color: Color(0XFF1A9CB0),
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w500,
+                                  height: 0,
+                                ),
+                              ),
+                              Text(
+                                "${state.graphList['totalAmount']}฿",
+                                style: TextStyle(
+                                  color: Color(0XFF15616D),
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+              BlocBuilder<GraphBloc, GraphState>(
+                builder: (context, state) {
+                  return Column(
+                    children: List.generate(state.graphList.length, (index) {
+                      print(
+                          "check graph list : ${state.graphList['graphStatementList']}");
+                      return Text("${state.graphList}");
+                    }),
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-

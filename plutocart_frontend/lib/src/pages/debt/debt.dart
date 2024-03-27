@@ -11,6 +11,7 @@ import 'package:plutocart/src/popups/action_complete_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/more_vert_debt.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DebtPage extends StatefulWidget {
   const DebtPage({Key? key}) : super(key: key);
@@ -27,6 +28,12 @@ class _DebtPageState extends State<DebtPage> {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
+    });
+
+    context.read<DebtBloc>().stream.listen((event) {
+      BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
+        statusCard.add(false);
+      });
     });
     super.initState();
   }

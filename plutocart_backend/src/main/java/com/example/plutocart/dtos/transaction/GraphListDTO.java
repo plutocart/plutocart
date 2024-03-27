@@ -10,6 +10,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class GraphListDTO {
-    private Map<Integer, GraphDetailDTO> graphStatementList;
+    private Map<String, GraphDetailDTO> graphStatementList;
     private BigDecimal totalAmount;
 }

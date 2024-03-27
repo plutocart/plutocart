@@ -1140,6 +1140,8 @@ BEGIN
 
   -- Delete wallets associated with the account
   DELETE FROM wallet WHERE account_id_account = InAccountId;
+   -- Delete graph with the account
+  DELETE FROM graph WHERE account_id_account = InAccountId;
 
   -- Delete the account
   DELETE FROM account WHERE id_account = InAccountId;

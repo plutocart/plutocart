@@ -1,6 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
+import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
+import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
+import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/repository/login_repository.dart';
 
 part 'login_event.dart';
@@ -176,16 +181,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // Delete account bloc
 
     on<DeleteAccount>((event, emit) async {
+      final storage = FlutterSecureStorage();
       try {
         print("start step delete account bloc");
         await LoginRepository().deleteAccountById();
+        ResetLogin();
+        ResetWallet();
+        ResetTransaction();
+        ResetGoal();
+        ResetDebt();
+        ResetGraph();
+        storage.deleteAll();
       } catch (error) {
         print("error delete account bloc: $error");
         throw error;
       }
     });
-
-
 
     // update account bloc
     on<UpdateAccountToMember>((event, emit) async {
@@ -193,16 +204,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       String? email = await storage.read(key: "email");
       try {
         print("start update account in bloc");
-        Map<String, dynamic> response = await LoginRepository().updateEmailToMember();
+        Map<String, dynamic> response =
+            await LoginRepository().updateEmailToMember();
         print("after update in bloc: $response");
-        if (response['data']['email'] == null || (email == " " || email!.isEmpty)) {
+        if (response['data']['email'] == null ||
+            (email == " " || email!.isEmpty)) {
           print(
               "response loginCustomer after update account guest to member repository loginEmailGoole working ? : ${response['data']}");
           emit(state.copyWith(
               signInGoogleStatus: false,
               accountRole: "Guest",
               email: null,
-              isUpdateAccount: false ));
+              isUpdateAccount: false));
         } else {
           print(
               "signin customer after update account guest to member repository loginEmailGoole working ? :");
@@ -210,7 +223,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             email: response['data']['email'],
             signInGoogleStatus: true,
             isUpdateAccount: true,
-             isUpdateFail: false ,
+            isUpdateFail: false,
             accountRole: "Member",
           ));
         }
@@ -220,15 +233,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final newState = state.copyWith(
           signInGoogleStatus: false,
           isUpdateAccount: false,
-          isUpdateFail: true ,
+          isUpdateFail: true,
           accountRole: "Guest",
-        );            
+        );
         emit(newState);
-             print(
+        print(
             'Error loginEmailGoole during account guest to member creation: $state');
       }
     });
-
-
   }
 }

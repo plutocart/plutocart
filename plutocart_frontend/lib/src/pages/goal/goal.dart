@@ -25,11 +25,15 @@ class _GoalPageState extends State<GoalPage> {
 
   @override
   void initState() {
-    context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
+    });
+    context.read<GoalBloc>().stream.listen((event) {
+      BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
+        statusCard.add(false);
+      });
     });
 
     super.initState();

@@ -84,19 +84,15 @@ class BlocLogin extends Bloc<LoginEvent, LoginState> {
   }
 }
 
-
-
 // BlocPage
 
 class ResetPageSate extends PageEvent {}
 
-class BlocPage
-    extends Bloc<PageEvent, PageState> {
+class BlocPage extends Bloc<PageEvent, PageState> {
   BlocPage() : super(PageState());
 
   @override
-  Stream<PageState> mapEventToState(
-      PageEvent event) async* {
+  Stream<PageState> mapEventToState(PageEvent event) async* {
     if (event is ResetPageSate) {
       // Clear or reset data within the state
       yield PageState(); // Replace with your actual initial state

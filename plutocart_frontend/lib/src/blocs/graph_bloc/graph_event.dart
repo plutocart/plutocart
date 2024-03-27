@@ -9,3 +9,5 @@ class GetGraph extends GraphEvent {
   final int stmType;
   GetGraph(this.stmType);
 }
+
+class ResetGraph extends GraphEvent {}

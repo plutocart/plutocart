@@ -22,6 +22,10 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
       emit(state.copyWith(goalComplete: false));
     });
 
+    on<ResetGoal>((event, emit) async {
+      emit(GoalState());
+    });
+
     on<ResetUpdateGoalStatus>((event, emit) async {
       emit(state.copyWith(updateGoalStatus: GoalStatus.loading));
     });

@@ -27,22 +27,21 @@ class _TransactionPageState extends State<TransactionPage> {
   void initState() {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
+    context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
+    BlocProvider.of<TransactionBloc>(context)
+        .state
+        .transactionList
+        .forEach((_) {
+      statusCard.add(false);
+    });
     context.read<TransactionBloc>().stream.listen((event) {
-      statusCard = [];
-      context.read<TransactionBloc>().add(GetTransactionList(event.filterWalletId , event.filterMonth , event.filterYear));
+      // context.read<TransactionBloc>().add(GetTransactionList( event.filterWalletId, event.filterMonth, event.filterYear));
       BlocProvider.of<TransactionBloc>(context)
           .state
           .transactionList
           .forEach((_) {
         statusCard.add(false);
       });
-    });
-    context.read<TransactionBloc>().add(GetTransactionList(0 , 0 , 0));
-    BlocProvider.of<TransactionBloc>(context)
-        .state
-        .transactionList
-        .forEach((_) {
-      statusCard.add(false);
     });
     super.initState();
   }

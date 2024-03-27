@@ -7,16 +7,19 @@ part 'graph_state.dart';
 
 class GraphBloc extends Bloc<GraphEvent, GraphState> {
   GraphBloc() : super(GraphState()) {
+    on<ResetGraph>((event, emit) {
+      emit(GraphState()); // Reset the state to the initial state
+    });
     on<GetGraph>(
       (event, emit) async {
-        Map<String,dynamic> response =
-            await GraphRepository().getTransactionForGraphByAccountId(event.stmType);
+        Map<String, dynamic> response = await GraphRepository()
+            .getTransactionForGraphByAccountId(event.stmType);
         print(event.stmType);
         print("Start get transaction by account id");
         try {
           emit(state.copyWith(
-            graphList : response,
-            ));
+            graphList: response,
+          ));
           print("state.transactionsList : ${state.graphList[0]}");
         } catch (e) {
           print("Error state.transactionList");

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/main.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/page_bloc/page_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
@@ -24,7 +25,7 @@ class SettingPopup extends StatefulWidget {
 
 class _SettingPopupState extends State<SettingPopup> {
   TextStyle globalTextStyleRedHeadline = TextStyle(
-    color: Color(0XFFDD0000) ,
+    color: Color(0XFFDD0000),
     fontSize: 16,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w500,
@@ -276,6 +277,7 @@ class _SettingPopupState extends State<SettingPopup> {
     context.read<PageBloc>().add(ResetPage());
     context.read<GoalBloc>().add(ResetGoal());
     context.read<DebtBloc>().add(ResetDebt());
+    context.read<GraphBloc>().add(ResetGraph());
   }
 
   ActionDeleteAccount() async {

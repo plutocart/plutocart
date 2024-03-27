@@ -17,7 +17,8 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
 
           if (response.isNotEmpty) {
             print("response is:  ${response}");
-            emit(state.copyWith(debtList: response));
+            emit(state.copyWith(
+                debtList: response, getDebtStatus: DebtStatus.loaded));
           }
         } catch (e) {
           print("Error: $e");
