@@ -54,8 +54,7 @@ public class GraphService {
 
         List<Graph> graphList = graphRepository.viewGraphByAccountIdAndStmType(acId, stmType);
 //        List<GraphDTO> graphDTOList = graphList.stream().map(graph -> modelMapper.map(graph, GraphDTO.class)).collect(Collectors.toList());
-
-        Map<String, GraphDetailDTO> graphInfoList = new HashMap<>();
+        Map<Integer, GraphDetailDTO> graphInfoList = new HashMap<>();
         for (int i = 0; i < graphList.size(); i++) {
             GraphDetailDTO graphDTO = new GraphDetailDTO();
 //            if (graphInfoList.containsKey(graphList.get(i).getTranCategoryIdCategory().getId())) {
@@ -64,7 +63,7 @@ public class GraphService {
                 graphDTO.setTransactionCategory(graphList.get(i).getTranCategoryIdCategory());
                 graphDTO.setTotalInTransactionCategory(graphList.get(i).getTotalInGraph());
 
-                graphInfoList.put("graphTransactionCategory", graphDTO);
+                graphInfoList.put(i, graphDTO);
 //            }
             totalIncome = totalIncome.add(graphList.get(i).getTotalInGraph());
         }

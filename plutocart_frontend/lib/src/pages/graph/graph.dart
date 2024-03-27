@@ -154,9 +154,11 @@ class _GraphPageState extends State<GraphPage> {
                 builder: (context, state) {
                   return Column(
                     children: List.generate(state.graphList.length, (index) {
+                      print("check graph list number  : ${index}");
                       print(
-                          "check graph list : ${state.graphList['graphStatementList']}");
-                      return Text("${state.graphList}");
+                          "check graph list : ${state.graphList['graphStatementList']['graphTransactionCategory']['transactionCategory']['nameTransactionCategory']}");
+                      return Text(
+                          "${state.graphList['graphStatementList']['graphTransactionCategory']['transactionCategory']['nameTransactionCategory']}");
                     }),
                   );
                 },
