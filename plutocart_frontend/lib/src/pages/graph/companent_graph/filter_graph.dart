@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 
 class FilterGraph extends StatefulWidget {
   const FilterGraph({Key? key}) : super(key: key);
@@ -54,6 +56,8 @@ class _FilterGraphState extends State<FilterGraph> {
                         Colors.white,
                         Color(0xFF15616D),
                       ];
+                      context.read<GraphBloc>().add(GetGraph(1));
+                      context.read<GraphBloc>().add(UpdateTypeGraph(1));
                     });
                   },
                   child: Text(
@@ -89,6 +93,8 @@ class _FilterGraphState extends State<FilterGraph> {
                         Color(0xFF15616D),
                         Colors.white,
                       ];
+                      context.read<GraphBloc>().add(GetGraph(2));
+                      context.read<GraphBloc>().add(UpdateTypeGraph(2));
                     });
                   },
                   child: Text(

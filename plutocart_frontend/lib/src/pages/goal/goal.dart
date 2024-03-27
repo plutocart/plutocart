@@ -29,6 +29,7 @@ class _GoalPageState extends State<GoalPage> {
     context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GraphBloc>().add(GetGraph(1));
+     context.read<GraphBloc>().add(UpdateTypeGraph(1));
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });

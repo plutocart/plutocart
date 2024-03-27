@@ -37,6 +37,9 @@ class _GraphPageState extends State<GraphPage> {
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
     context.read<GraphBloc>().add(GetGraph(1));
+    context.read<GraphBloc>().stream.listen((event) {
+      context.read<GraphBloc>().add(GetGraph(event.updateTypeGraph));
+    });
     super.initState();
   }
 
@@ -97,22 +100,55 @@ class _GraphPageState extends State<GraphPage> {
                   children: [
                     FilterGraph(),
                     SizedBox(height: 16),
-                    Container(
-                      height: 300, // Adjust height as needed
-                      child: SfCircularChart(
-                          legend: Legend(
-                              isVisible: true,
-                              overflowMode: LegendItemOverflowMode.wrap),
-                          series: <CircularSeries<SalesData, String>>[
-                            DoughnutSeries<SalesData, String>(
-                                dataSource: data,
-                                xValueMapper: (SalesData data, _) => data.year,
-                                yValueMapper: (SalesData data, _) => data.sales,
-                                dataLabelSettings:
-                                    DataLabelSettings(isVisible: true),
-                                enableTooltip: true),
-                          ]),
-                    ),
+                    context
+                                .read<GraphBloc>()
+                                .state
+                                .graphList['graphStatementList']
+                                .length ==
+                            0
+                        ? Container(
+                            height: MediaQuery.of(context).size.height * 0.9,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        'assets/icon/icon_launch.png'),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 157),
+                                    child: Text("No record",
+                                        style: TextStyle(
+                                            color: Color(0xFF15616D),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "Roboto")),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: 300, // Adjust height as needed
+                            child: SfCircularChart(
+                                legend: Legend(
+                                    isVisible: true,
+                                    overflowMode: LegendItemOverflowMode.wrap),
+                                series: <CircularSeries<SalesData, String>>[
+                                  DoughnutSeries<SalesData, String>(
+                                      dataSource: data,
+                                      xValueMapper: (SalesData data, _) =>
+                                          data.year,
+                                      yValueMapper: (SalesData data, _) =>
+                                          data.sales,
+                                      dataLabelSettings:
+                                          DataLabelSettings(isVisible: true),
+                                      enableTooltip: true),
+                                ]),
+                          ),
                     Container(
                       child: Column(
                         children: [
@@ -253,7 +289,7 @@ class _GraphPageState extends State<GraphPage> {
                         );
                       },
                     ),
-                    state.graphList['graphStatementList'].length < 6
+                    state.graphList['graphStatementListOther'].length == 0
                         ? SizedBox.shrink()
                         : GestureDetector(
                             onTap: () {
@@ -271,7 +307,7 @@ class _GraphPageState extends State<GraphPage> {
                                   height: toggleOther == false
                                       ? MediaQuery.of(context).size.height *
                                           0.07
-                                      : MediaQuery.of(context).size.height * 2,
+                                      : null,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
@@ -379,8 +415,135 @@ class _GraphPageState extends State<GraphPage> {
                                               )
                                             : SizedBox.shrink(),
                                         toggleOther == true
-                                            ? Text(
-                                                "${state.graphList['graphStatementListOther']}")
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 20),
+                                                child: Column(
+                                                  children: [
+                                                    Column(
+                                                      children: List.generate(
+                                                          state
+                                                              .graphList[
+                                                                  'graphStatementListOther']
+                                                              .length, (index) {
+                                                        int i = index + 5;
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 16,
+                                                                  left: 20,
+                                                                  right: 20),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "${state.graphList['graphStatementListOther']["${i}"]['transactionCategory']['nameTransactionCategory']}",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Color(
+                                                                          0XFF707070),
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontFamily:
+                                                                          'Roboto',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      height: 0,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text(
+                                                                    "${(state.graphList['graphStatementListOther']["${i}"]['totalInTransactionCategory'] / state.graphList['totalAmount']).toStringAsFixed(2)}%",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Color(
+                                                                          0XFF707070),
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontFamily:
+                                                                          'Roboto',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      height: 0,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Text(
+                                                                "${NumberFormat("#,##0.00").format(state.graphList['graphStatementListOther']['${i}']['totalInTransactionCategory'])} ฿",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0XFF15616D),
+                                                                  fontSize: 16,
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  height: 0,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        );
+                                                      }),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 16,
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.06,
+                                                      child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20)),
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0XFF15616D)),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(
+                                                            "Close",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 16,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              height: 0,
+                                                            ),
+                                                          )),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
                                             : SizedBox.shrink()
                                       ],
                                     ),

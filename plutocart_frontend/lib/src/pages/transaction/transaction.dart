@@ -29,6 +29,7 @@ class _TransactionPageState extends State<TransactionPage> {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GraphBloc>().add(GetGraph(1));
+    context.read<GraphBloc>().add(UpdateTypeGraph(1));
     context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
     BlocProvider.of<TransactionBloc>(context)
         .state

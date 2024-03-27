@@ -11,3 +11,10 @@ class GetGraph extends GraphEvent {
 }
 
 class ResetGraph extends GraphEvent {}
+
+class UpdateTypeGraph extends GraphEvent {
+  final int stmType;
+  UpdateTypeGraph(this.stmType);
+}
+
+class ResetGraphList extends GraphEvent {}

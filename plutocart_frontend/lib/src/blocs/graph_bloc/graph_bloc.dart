@@ -10,6 +10,17 @@ class GraphBloc extends Bloc<GraphEvent, GraphState> {
     on<ResetGraph>((event, emit) {
       emit(GraphState()); // Reset the state to the initial state
     });
+    on<ResetGraphList>((event, emit) {
+      emit(state.copyWith(
+          graphList: {},
+          updateTypeGraph: 1)); // Reset the state to the initial state
+    });
+    on<UpdateTypeGraph>((event, emit) {
+      emit(state.copyWith(
+          updateTypeGraph:
+              event.stmType)); // Reset the state to the initial state
+    });
+
     on<GetGraph>(
       (event, emit) async {
         Map<String, dynamic> response = await GraphRepository()
