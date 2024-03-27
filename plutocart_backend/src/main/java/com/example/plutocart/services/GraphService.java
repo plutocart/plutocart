@@ -51,18 +51,23 @@ public class GraphService {
         List<Graph> graphList = graphRepository.viewGraphByAccountIdAndStmType(acId, stmType);
 //        List<GraphDTO> graphDTOList = graphList.stream().map(graph -> modelMapper.map(graph, GraphDTO.class)).collect(Collectors.toList());
         Map<Integer, GraphDetailDTO> graphInfoList = new HashMap<>();
+        Map<Integer, GraphDetailDTO> graphInfoOtherList = new HashMap<>();
         for (int i = 0; i < graphList.size(); i++) {
             GraphDetailDTO graphDTO = new GraphDetailDTO();
+            GraphDetailDTO graphDTOOther = new GraphDetailDTO();
 //            if (graphInfoList.containsKey(graphList.get(i).getTranCategoryIdCategory().getId())) {
 //
 //            } else {
+            if(i <= 4){
                 graphDTO.setTransactionCategory(graphList.get(i).getTranCategoryIdCategory());
                 graphDTO.setTotalInTransactionCategory(graphList.get(i).getTotalInGraph());
-
                 graphInfoList.put(i, graphDTO);
+            }
 //            }
-
-            if(i > 4){
+            else{
+                graphDTOOther.setTransactionCategory(graphList.get(i).getTranCategoryIdCategory());
+                graphDTOOther.setTotalInTransactionCategory(graphList.get(i).getTotalInGraph());
+                graphInfoOtherList.put(i, graphDTOOther);
                 totalAmountOther = totalAmountOther.add(graphList.get(i).getTotalInGraph());
             }
             
@@ -70,6 +75,7 @@ public class GraphService {
         }
 //        graphResponse.setGraphDTO(graphDTOList);
         graphResponse.setGraphStatementList(graphInfoList);
+        graphResponse.setGraphStatementListOther(graphInfoOtherList);
         graphResponse.setTotalAmountOther(totalAmountOther);
         graphResponse.setTotalAmount(totalAmount);
 
