@@ -6,7 +6,8 @@ class GraphRepository {
   final Dio dio = Dio();
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  Future<Map<String,dynamic>> getTransactionForGraphByAccountId(int? stmType) async {
+  Future<Map<String, dynamic>> getTransactionForGraphByAccountId(
+      int? stmType) async {
     await dotenv.load();
     String? accountId = await storage.read(key: "accountId");
     int acId = int.parse(accountId!);

@@ -15,12 +15,10 @@ class GraphBloc extends Bloc<GraphEvent, GraphState> {
         Map<String, dynamic> response = await GraphRepository()
             .getTransactionForGraphByAccountId(event.stmType);
         print(event.stmType);
-        print("Start get transaction by account id");
+        print("Start get transactionsssss by account id : ${response}");
         try {
           emit(state.copyWith(
-            graphList: response,
-          ));
-          print("state.transactionsList : ${state.graphList[0]}");
+              graphList: response, getLoading: GraphStatus.loaded));
         } catch (e) {
           print("Error state.transactionList");
         }

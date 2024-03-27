@@ -1160,6 +1160,7 @@ CREATE PROCEDURE viewGraphByAccountIdAndStmType(
 BEGIN
 	select g.* from graph g 
     join transaction_category t on g.tran_category_id_category = t.id_transaction_category
-    where g.account_id_account = accountId and t.type_category = stmType;
+    where g.account_id_account = accountId and t.type_category = stmType
+      order by g.total_in_graph desc;
 END//
 DELIMITER ;

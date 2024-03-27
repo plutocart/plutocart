@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
@@ -174,11 +175,13 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
           indexTransactionType: indexTransactionType,
           onChanged: (newValue) {
             setState(() {
-              indexTransactionType = typeTransaction.listTypeTransaction.indexWhere((element) => element['typeName'] == newValue);
-              if(indexTransactionType == 3 && context.read<DebtBloc>().state.debtList.length == 0){
+              indexTransactionType = typeTransaction.listTypeTransaction
+                  .indexWhere((element) => element['typeName'] == newValue);
+              if (indexTransactionType == 3 &&
+                  context.read<DebtBloc>().state.debtList.length == 0) {
                 createDebt();
-              }
-              else if (indexTransactionType == 2 && context.read<GoalBloc>().state.goalList!.length == 0){
+              } else if (indexTransactionType == 2 &&
+                  context.read<GoalBloc>().state.goalList!.length == 0) {
                 createGoal();
               }
               resetData();
@@ -444,9 +447,12 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                     if (isDropdownDataMissing) {
                       null;
                     } else {
-                      int walletId = context.read<TransactionBloc>().state.filterWalletId;
-                        int month = context.read<TransactionBloc>().state.filterMonth;
-                          int year = context.read<TransactionBloc>().state.filterYear;
+                      int walletId =
+                          context.read<TransactionBloc>().state.filterWalletId;
+                      int month =
+                          context.read<TransactionBloc>().state.filterMonth;
+                      int year =
+                          context.read<TransactionBloc>().state.filterYear;
                       switch (indexTransactionType) {
                         case 0:
                         case 1:
@@ -479,15 +485,15 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionDailyInEx());
-                              context
-                                  .read<TransactionBloc>()
-                                  .add(GetTransactionList(walletId, month, year));
+                              context.read<TransactionBloc>().add(
+                                  GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionLimit3());
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionStatus());
+                              context.read<GraphBloc>().add(GetGraph(1));
                               Navigator.of(context).pop();
                               Navigator.pop(context);
                             }
@@ -518,9 +524,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             if (state.goalStatus == TransactionStatus.loaded) {
                               context.read<WalletBloc>().add(GetAllWallet());
 
-                         context
-                                  .read<TransactionBloc>()
-                                  .add(GetTransactionList(walletId, month, year));
+                              context.read<TransactionBloc>().add(
+                                  GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionDailyInEx());
@@ -536,6 +541,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<GoalBloc>()
                                   .add(CheckGoalComplete(idGoalFormat));
+                              context.read<GraphBloc>().add(GetGraph(1));
                               Navigator.pop(context);
                               Navigator.pop(context);
                             }
@@ -566,9 +572,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                             if (state.debtStatus == TransactionStatus.loaded) {
                               print("Check t");
                               context.read<WalletBloc>().add(GetAllWallet());
-                      context
-                                  .read<TransactionBloc>()
-                                  .add(GetTransactionList(walletId, month, year));
+                              context.read<TransactionBloc>().add(
+                                  GetTransactionList(walletId, month, year));
                               context
                                   .read<TransactionBloc>()
                                   .add(GetTransactionDailyInEx());
@@ -581,6 +586,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionDebtStatus());
+                              context.read<GraphBloc>().add(GetGraph(1));
                               Navigator.pop(context);
                               Navigator.pop(context);
                             }
@@ -595,7 +601,8 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
       ],
     ));
   }
-      createDebt() async {
+
+  createDebt() async {
     showSlideDialog(
         context: context,
         child: AddDebtPopup(),
@@ -604,7 +611,7 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
         hightCard: 2.15);
   }
 
-   createGoal() async {
+  createGoal() async {
     showSlideDialog(
         context: context,
         child: AddGoalPopup(),
