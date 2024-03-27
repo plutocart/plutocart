@@ -58,7 +58,7 @@ public class GraphService {
 //            if (graphInfoList.containsKey(graphList.get(i).getTranCategoryIdCategory().getId())) {
 //
 //            } else {
-            if(i <= 5){
+            if(i <= 4){
                 graphDTO.setTransactionCategory(graphList.get(i).getTranCategoryIdCategory());
                 graphDTO.setTotalInTransactionCategory(graphList.get(i).getTotalInGraph());
                 graphInfoList.put(i, graphDTO);

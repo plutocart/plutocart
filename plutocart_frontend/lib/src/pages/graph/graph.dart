@@ -253,7 +253,7 @@ class _GraphPageState extends State<GraphPage> {
                         );
                       },
                     ),
-                    state.graphList['graphStatementList'].length <= 5
+                    state.graphList['graphStatementList'].length < 6
                         ? SizedBox.shrink()
                         : GestureDetector(
                             onTap: () {
@@ -271,8 +271,7 @@ class _GraphPageState extends State<GraphPage> {
                                   height: toggleOther == false
                                       ? MediaQuery.of(context).size.height *
                                           0.07
-                                      : MediaQuery.of(context).size.height *
-                                          0.3,
+                                      : MediaQuery.of(context).size.height * 2,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
@@ -380,7 +379,8 @@ class _GraphPageState extends State<GraphPage> {
                                               )
                                             : SizedBox.shrink(),
                                         toggleOther == true
-                                            ? Text("${state.graphList}")
+                                            ? Text(
+                                                "${state.graphList['graphStatementListOther']}")
                                             : SizedBox.shrink()
                                       ],
                                     ),
