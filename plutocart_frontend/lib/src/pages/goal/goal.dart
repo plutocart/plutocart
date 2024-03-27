@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/goal/companent_goal/filter_goal.dart';
@@ -27,6 +28,7 @@ class _GoalPageState extends State<GoalPage> {
   void initState() {
     context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
+    context.read<GraphBloc>().add(GetGraph(1));
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });

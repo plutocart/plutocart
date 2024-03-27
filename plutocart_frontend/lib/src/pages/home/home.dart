@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_bloc/bloc/transaction_bloc.dart';
 import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_category_bloc.dart';
@@ -22,10 +23,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<TransactionCategoryBloc>().add(GetTransactionCategoryIncome());
-    context.read<TransactionCategoryBloc>().add(GetTransactionCategoryExpense());
-    context.read<TransactionBloc>().add(GetTransactionList(0 , 0 , 0));
+    context
+        .read<TransactionCategoryBloc>()
+        .add(GetTransactionCategoryExpense());
+    context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
     context.read<TransactionBloc>().add(GetTransactionDailyInEx());
     context.read<TransactionBloc>().add(GetTransactionLimit3());
+    context.read<GraphBloc>().add(GetGraph(1));
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     super.initState();

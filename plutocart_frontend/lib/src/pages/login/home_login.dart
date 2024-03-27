@@ -101,7 +101,7 @@ class _HomeLoginState extends State<HomeLogin> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                         Navigator.pushNamed(context, AppRoute.signIn);
+                          Navigator.pushNamed(context, AppRoute.signIn);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -116,7 +116,7 @@ class _HomeLoginState extends State<HomeLogin> {
                           ),
                         ),
                         child: Text(
-                          'Sign In',
+                          'Log-in',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

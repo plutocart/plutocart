@@ -20,6 +20,8 @@ class GraphPage extends StatefulWidget {
 }
 
 class _GraphPageState extends State<GraphPage> {
+  bool? toggleOther;
+  double? totalOther;
   List<SalesData> data = [
     SalesData('Jan', 35),
     SalesData('Feb', 28),
@@ -30,6 +32,7 @@ class _GraphPageState extends State<GraphPage> {
 
   @override
   void initState() {
+    toggleOther = false;
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
@@ -252,7 +255,140 @@ class _GraphPageState extends State<GraphPage> {
                     ),
                     state.graphList['graphStatementList'].length <= 5
                         ? SizedBox.shrink()
-                        : Text("sssss"),
+                        : GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                toggleOther = !toggleOther!;
+                              });
+                            },
+                            child: AbsorbPointer(
+                              absorbing: true,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height: toggleOther == false
+                                      ? MediaQuery.of(context).size.height *
+                                          0.07
+                                      : MediaQuery.of(context).size.height *
+                                          0.3,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        width: 1.5,
+                                        color: Color(0XFF15616D),
+                                      )),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: toggleOther == true ? 10 : 10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              toggleOther == true
+                                                  ? CrossAxisAlignment.start
+                                                  : CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0XFF43AA8B),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20)),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: Text(
+                                                    "Other",
+                                                    style: TextStyle(
+                                                      color: Color(0XFF15616D),
+                                                      fontSize: 16,
+                                                      fontFamily: 'Roboto',
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      height: 0,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            toggleOther == false
+                                                ? Row(
+                                                    children: [
+                                                      Text(
+                                                        "${NumberFormat("#,##0.00").format(state.graphList['totalAmountOther'])} ฿",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0XFF15616D),
+                                                          fontSize: 16,
+                                                          fontFamily: 'Roboto',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          height: 0,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10),
+                                                          child: Icon(Icons
+                                                              .expand_more_outlined))
+                                                    ],
+                                                  )
+                                                : SizedBox.shrink()
+                                          ],
+                                        ),
+                                        toggleOther == true
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 16),
+                                                child: Container(
+                                                  height: 1,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.8,
+                                                  decoration: ShapeDecoration(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                        width: 0.5,
+                                                        color:
+                                                            Color(0XFF898989),
+                                                      ),
+                                                      borderRadius: BorderRadius
+                                                          .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox.shrink(),
+                                        toggleOther == true
+                                            ? Text("${state.graphList}")
+                                            : SizedBox.shrink()
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     )

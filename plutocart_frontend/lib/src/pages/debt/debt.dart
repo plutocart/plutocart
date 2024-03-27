@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:plutocart/src/blocs/debt_bloc/debt_bloc.dart';
 import 'package:plutocart/src/blocs/goal_bloc/goal_bloc.dart';
+import 'package:plutocart/src/blocs/graph_bloc/graph_bloc.dart';
 import 'package:plutocart/src/blocs/login_bloc/login_bloc.dart';
 import 'package:plutocart/src/interfaces/slide_pop_up/slide_popup_dialog.dart';
 import 'package:plutocart/src/pages/debt/companent_debt/detailDebt.dart';
@@ -26,6 +27,7 @@ class _DebtPageState extends State<DebtPage> {
   void initState() {
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
+    context.read<GraphBloc>().add(GetGraph(1));
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
     });
@@ -302,13 +304,13 @@ class _DebtPageState extends State<DebtPage> {
                                                 ? Column(
                                                     children: [
                                                       Container(
-                                                        height: 2,
+                                                        height: 1,
                                                         decoration:
                                                             ShapeDecoration(
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             side: BorderSide(
-                                                              width: 1,
+                                                              width: 0.5,
                                                               color: Color(
                                                                   0XFF898989),
                                                             ),

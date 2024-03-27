@@ -54,13 +54,44 @@ class _SignInState extends State<SignIn> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 20),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image(
-                  image:
-                      AssetImage('assets/icon/plutocart_welcome_des_icon.png'),
-                  width: MediaQuery.of(context).size.width * 0.8,
+                Text(
+                  "PLUTOCART",
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Color(0XFF15616D),
+                    fontSize: 32,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome home.",
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0XFF15616D),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      "Let's start accounting for income and expenses.",
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0XFF15616D),
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -83,7 +114,7 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                     children: [
                       Text(
-                        "Sign in by google account",
+                        "Or do you already have an account?",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           color: Color(0xFF15616D),

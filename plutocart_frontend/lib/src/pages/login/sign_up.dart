@@ -49,10 +49,45 @@ class _SignUpState extends State<SignUp> {
             padding: const EdgeInsets.only(left: 20, top: 20),
             child: Row(
               children: [
-                Image(
-                  image: AssetImage('assets/icon/plutocart_des_icon.png'),
-                  width: MediaQuery.of(context).size.width * 0.5,
-                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "PLUTOCART",
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Color(0XFF15616D),
+                        fontSize: 32,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "Accounting for your income",
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Color(0XFF15616D),
+                            fontSize: 16,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          "and expenses will be simple.",
+                          style: TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Color(0XFF15616D),
+                            fontSize: 16,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -74,8 +109,8 @@ class _SignUpState extends State<SignUp> {
                       (state.hasAccountMember == true &&
                           state.signUpMemberSuccess == false)) {
                   } else {
-                    customAlertPopup(
-                        context, "Possesses a registered account" , Icons.error_outline_rounded  , Colors.red.shade200);
+                    customAlertPopup(context, "Possesses a registered account",
+                        Icons.error_outline_rounded, Colors.red.shade200);
                   }
                 }, child: BlocBuilder<LoginBloc, LoginState>(
                   builder: (context, state) {
@@ -90,7 +125,9 @@ class _SignUpState extends State<SignUp> {
                             ),
                             onPressed: () async {
                               print("start sign up account guest");
-                              context.read<LoginBloc>().add(CreateAccountGuest());
+                              context
+                                  .read<LoginBloc>()
+                                  .add(CreateAccountGuest());
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -136,22 +173,12 @@ class _SignUpState extends State<SignUp> {
                           "Or sign up by google account? ",
                           style: TextStyle(
                             decoration: TextDecoration.none,
-                            color: Color(0xFF15616D),
+                            color: Color(0xFF1A9CB0),
                             fontSize: 16,
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        Text(
-                      "Has an account? Google will automatically log in.",
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Color(0xFF15616D),
-                        fontSize: 14,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                       ],
                     ),
                     BlocListener<LoginBloc, LoginState>(
@@ -205,7 +232,6 @@ class _SignUpState extends State<SignUp> {
                             context
                                 .read<LoginBloc>()
                                 .add(CreateAccountMember());
-                                
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
