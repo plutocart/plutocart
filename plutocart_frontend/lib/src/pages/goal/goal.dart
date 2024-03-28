@@ -29,7 +29,8 @@ class _GoalPageState extends State<GoalPage> {
     context.read<DebtBloc>().add(UpdateStatusNumberDebt(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GraphBloc>().add(GetGraph(1));
-     context.read<GraphBloc>().add(UpdateTypeGraph(1));
+    context.read<GraphBloc>().add(UpdateTypeGraph(1));
+    context.read<GraphBloc>().add(UpdateGraphList());
     BlocProvider.of<GoalBloc>(context).state.goalList!.forEach((_) {
       statusCard.add(false);
     });
@@ -641,6 +642,9 @@ class _GoalPageState extends State<GoalPage> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                  )
                 ],
               ),
             ),

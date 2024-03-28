@@ -1,5 +1,7 @@
-class SalesData {
-  SalesData(this.year, this.sales );
-  final String year;
-  final double sales;
+class GraphData {
+  final String transactionCategoryName;
+  final double totalInTransactionCategory;
+  final String color;
+  GraphData(this.transactionCategoryName, this.totalInTransactionCategory,
+      this.color);
 }

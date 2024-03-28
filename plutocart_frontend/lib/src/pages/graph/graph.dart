@@ -22,14 +22,7 @@ class GraphPage extends StatefulWidget {
 class _GraphPageState extends State<GraphPage> {
   bool? toggleOther;
   double? totalOther;
-  List<SalesData> data = [
-    SalesData('Jan', 35),
-    SalesData('Feb', 28),
-    SalesData('Mar', 34),
-    SalesData('Apr', 32),
-    SalesData('May', 40)
-  ];
-
+  List<GraphData> data = [];
   @override
   void initState() {
     toggleOther = false;
@@ -40,7 +33,50 @@ class _GraphPageState extends State<GraphPage> {
     context.read<GraphBloc>().stream.listen((event) {
       context.read<GraphBloc>().add(GetGraph(event.updateTypeGraph));
     });
+    print("Check Data graph : ${data}");
+
+    data = [];
+    int size = context.read<GraphBloc>().state.graphList.length <= 5
+        ? context.read<GraphBloc>().state.graphList.length
+        : 5;
+    for (int i = 0; i <= size; i++) {
+      data.add(GraphData(
+          context.read<GraphBloc>().state.graphList['graphStatementList']
+              ['${i}']['transactionCategory']['nameTransactionCategory'],
+          context.read<GraphBloc>().state.graphList['graphStatementList']
+              ['${i}']['totalInTransactionCategory'],
+          context.read<GraphBloc>().state.graphList['graphStatementList']
+              ['${i}']['transactionCategory']['colorGraph']));
+    }
+    data.add(GraphData(
+        "Other",
+        context.read<GraphBloc>().state.graphList['totalAmountOther'],
+        "0XFF989898"));
+
+    context.read<GraphBloc>().stream.listen((event) {
+      data = [];
+      int size = context.read<GraphBloc>().state.graphList.length <= 5
+          ? context.read<GraphBloc>().state.graphList.length
+          : 5;
+      for (int i = 0; i <= size; i++) {
+        data.add(GraphData(
+            context.read<GraphBloc>().state.graphList['graphStatementList']
+                ['${i}']['transactionCategory']['nameTransactionCategory'],
+            context.read<GraphBloc>().state.graphList['graphStatementList']
+                ['${i}']['totalInTransactionCategory'],
+            context.read<GraphBloc>().state.graphList['graphStatementList']
+                ['${i}']['transactionCategory']['colorGraph']));
+      }
+      data.add(GraphData(
+          "Other",
+          context.read<GraphBloc>().state.graphList['totalAmountOther'],
+          "0XFF989898"));
+
+      context.read<GraphBloc>().add(ResetGraphAnalysic());
+    });
     super.initState();
+
+    print("Check color : ${data[0].color}");
   }
 
   @override
@@ -99,7 +135,9 @@ class _GraphPageState extends State<GraphPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     FilterGraph(),
-                    SizedBox(height: 16),
+                    state.graphList['graphStatementList'].length > 3
+                        ? SizedBox(height: 15)
+                        : SizedBox.shrink(),
                     context
                                 .read<GraphBloc>()
                                 .state
@@ -132,23 +170,76 @@ class _GraphPageState extends State<GraphPage> {
                             ),
                           )
                         : Container(
-                            height: 300, // Adjust height as needed
-                            child: SfCircularChart(
-                                legend: Legend(
-                                    isVisible: true,
-                                    overflowMode: LegendItemOverflowMode.wrap),
-                                series: <CircularSeries<SalesData, String>>[
-                                  DoughnutSeries<SalesData, String>(
-                                      dataSource: data,
-                                      xValueMapper: (SalesData data, _) =>
-                                          data.year,
-                                      yValueMapper: (SalesData data, _) =>
-                                          data.sales,
-                                      dataLabelSettings:
-                                          DataLabelSettings(isVisible: true),
-                                      enableTooltip: true),
-                                ]),
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: Stack(
+                              children: [
+                                SfCircularChart(
+                                    legend: Legend(
+                                        isVisible: true,
+                                        position: LegendPosition.bottom,
+                                        overflowMode:
+                                            LegendItemOverflowMode.wrap,
+                                        alignment: ChartAlignment.center),
+                                    tooltipBehavior:
+                                        TooltipBehavior(enable: true),
+                                    series: <CircularSeries<GraphData, String>>[
+                                      DoughnutSeries<GraphData, String>(
+                                          dataSource: data,
+                                          dataLabelMapper: (datum, index) {
+                                            return '${double.parse(((data[index].totalInTransactionCategory / state.graphList['totalAmount']) * 100).toStringAsFixed(2))}%';
+                                          },
+                                          xValueMapper: (GraphData data, _) =>
+                                              data.transactionCategoryName,
+                                          yValueMapper: (GraphData data, _) =>
+                                              double.parse(
+                                                  ((data.totalInTransactionCategory /
+                                                              state.graphList[
+                                                                  'totalAmount']) *
+                                                          100)
+                                                      .toStringAsFixed(2)),
+                                          dataLabelSettings: DataLabelSettings(
+                                            isVisible: true,
+                                          ),
+                                          animationDuration: 500,
+                                          enableTooltip: true,
+                                          pointColorMapper:
+                                              (GraphData data, _) =>
+                                                  Color(int.parse(data.color))),
+                                    ]),
+                                Center(
+                                  child: Padding(
+                                    padding: state
+                                                .graphList['graphStatementList']
+                                                .length >
+                                            3
+                                        ? const EdgeInsets.only(bottom: 70)
+                                        : const EdgeInsets.only(bottom: 40),
+                                    child: Text(
+                                      "${state.updateTypeGraph == 1 ? "Income" : "Expense"}",
+                                      style: TextStyle(
+                                        color: Color(0xFF15616D),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "Roboto",
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.black.withOpacity(
+                                                0.3), // Shadow color and opacity
+                                            offset: Offset(
+                                                2, 2), // Shadow position (X,Y)
+                                            blurRadius: 2, // Shadow blur radius
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                    SizedBox(
+                      height: 16,
+                    ),
                     Container(
                       child: Column(
                         children: [
@@ -163,11 +254,22 @@ class _GraphPageState extends State<GraphPage> {
                                         MediaQuery.of(context).size.width *
                                             0.5),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    border: Border.all(
-                                      width: 1.5,
-                                      color: Color(0xFF15616D),
-                                    )),
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Color(0XFF15616D),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 0,
+                                      blurRadius: 2,
+                                      offset: Offset(2, 2),
+                                    ),
+                                  ],
+                                  color: Colors.white, // Background color
+                                ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -182,7 +284,7 @@ class _GraphPageState extends State<GraphPage> {
                                       ),
                                     ),
                                     Text(
-                                      "${state.graphList['totalAmount']} ฿",
+                                      "${NumberFormat("#,##0.00").format(state.graphList['totalAmount'])} ฿",
                                       style: TextStyle(
                                         color: Color(0XFF15616D),
                                         fontSize: 16,
@@ -229,11 +331,22 @@ class _GraphPageState extends State<GraphPage> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.07,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        width: 1.5,
-                                        color: Color(0XFF15616D),
-                                      )),
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Color(0XFF15616D),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: Offset(2, 2),
+                                      ),
+                                    ],
+                                    color: Colors.white, // Background color
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10, right: 10),
@@ -309,11 +422,22 @@ class _GraphPageState extends State<GraphPage> {
                                           0.07
                                       : null,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        width: 1.5,
-                                        color: Color(0XFF15616D),
-                                      )),
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Color(0XFF15616D),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: Offset(2, 2),
+                                      ),
+                                    ],
+                                    color: Colors.white, // Background color
+                                  ),
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                         top: toggleOther == true ? 10 : 10),
@@ -338,7 +462,7 @@ class _GraphPageState extends State<GraphPage> {
                                                     height: 30,
                                                     decoration: BoxDecoration(
                                                         color:
-                                                            Color(0XFF43AA8B),
+                                                            Color(0XFF989898),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(20)),
@@ -461,7 +585,7 @@ class _GraphPageState extends State<GraphPage> {
                                                                     width: 10,
                                                                   ),
                                                                   Text(
-                                                                    "${(state.graphList['graphStatementListOther']["${i}"]['totalInTransactionCategory'] / state.graphList['totalAmount']).toStringAsFixed(2)}%",
+                                                                    "${((state.graphList['graphStatementListOther']["${i}"]['totalInTransactionCategory'] / state.graphList['totalAmount']) * 100).toStringAsFixed(2)}%",
                                                                     style:
                                                                         TextStyle(
                                                                       color: Color(

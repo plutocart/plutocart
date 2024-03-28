@@ -17,49 +17,48 @@ import 'package:plutocart/src/blocs/transaction_category_bloc/bloc/transaction_c
 import 'package:plutocart/src/blocs/wallet_bloc/bloc/wallet_bloc.dart';
 import 'package:plutocart/src/pages/connection_internet/no_connection_internet.dart';
 
-
 Future<void> main() async {
-     ErrorWidget.builder = (FlutterErrorDetails details) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Container(
-          height: 500,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(
-                  image: AssetImage('assets/icon/icon_launch.png'),
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: [
-                    Text("Please restart application ",
-                        style: TextStyle(
-                            color: Color(0xFF15616D),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Roboto")),
-                    Text("or change menu slow down!",
-                        style: TextStyle(
-                            color: Color(0xFF15616D),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Roboto")),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Container(
+        height: 500,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage('assets/icon/icon_launch.png'),
+                height: 100,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: [
+                  Text("Please restart application ",
+                      style: TextStyle(
+                          color: Color(0xFF15616D),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Roboto")),
+                  Text("or change menu slow down!",
+                      style: TextStyle(
+                          color: Color(0xFF15616D),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Roboto")),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
         ),
-      );
-    };
+      ),
+    );
+  };
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -93,7 +92,6 @@ class _MyWidgetState extends State<MyWidget> {
   bool isConnected = true;
   @override
   Widget build(BuildContext context) {
- 
     final walletBloc = BlocProvider(create: (context) => WalletBloc());
     final loginBloc = BlocProvider(create: (context) => LoginBloc());
     final transactionCategoryBloc =

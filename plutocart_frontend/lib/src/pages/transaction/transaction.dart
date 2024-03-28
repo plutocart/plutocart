@@ -30,6 +30,7 @@ class _TransactionPageState extends State<TransactionPage> {
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     context.read<GraphBloc>().add(GetGraph(1));
     context.read<GraphBloc>().add(UpdateTypeGraph(1));
+    context.read<GraphBloc>().add(UpdateGraphList());
     context.read<TransactionBloc>().add(GetTransactionList(0, 0, 0));
     BlocProvider.of<TransactionBloc>(context)
         .state
@@ -153,439 +154,456 @@ class _TransactionPageState extends State<TransactionPage> {
                         ),
                       ),
                     )
-                  : Column(
-                      children:
-                          List.generate(state.transactionList.length, (index) {
-                      final Map<String, dynamic> transaction =
-                          state.transactionList[index];
-                      final DateTime inputDate =
-                          DateTime.parse(transaction['dateTransaction']);
-                      final String formattedDate =
-                          DateFormat('dd MMM yyyy HH:mm ').format(inputDate);
-                      return OutlinedButton(
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all<BorderSide>(
-                              BorderSide.none),
-                          overlayColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                        ),
-                        onPressed: () {
-                          print(transaction);
-                          statusCard[index] = !statusCard[index];
-                          setState(() {});
-                          print("status : ${statusCard}");
-                        },
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Container(
-                              height: statusCard[index] == true
-                                  ? transaction['imageUrl'] == null
-                                      ? MediaQuery.of(context).size.height *
-                                          0.28
-                                      : MediaQuery.of(context).size.height * 0.5
-                                  : MediaQuery.of(context).size.height * 0.08,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  width: 1,
-                                  color: Color(0XFF15616D),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 0,
-                                    blurRadius: 2,
-                                    offset: Offset(2, 2),
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      child: Column(
+                          children: List.generate(state.transactionList.length,
+                              (index) {
+                        final Map<String, dynamic> transaction =
+                            state.transactionList[index];
+                        final DateTime inputDate =
+                            DateTime.parse(transaction['dateTransaction']);
+                        final String formattedDate =
+                            DateFormat('dd MMM yyyy HH:mm ').format(inputDate);
+                        return OutlinedButton(
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide.none),
+                            overlayColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                          ),
+                          onPressed: () {
+                            print(transaction);
+                            statusCard[index] = !statusCard[index];
+                            setState(() {});
+                            print("status : ${statusCard}");
+                          },
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Container(
+                                height: statusCard[index] == true
+                                    ? transaction['imageUrl'] == null
+                                        ? MediaQuery.of(context).size.height *
+                                            0.28
+                                        : MediaQuery.of(context).size.height *
+                                            0.5
+                                    : MediaQuery.of(context).size.height * 0.08,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Color(0XFF15616D),
                                   ),
-                                ],
-                                color: Colors.white, // Background color
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Column(
-                                  mainAxisAlignment: statusCard[index] == false
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              statusCard[index] == false
-                                                  ? CrossAxisAlignment.center
-                                                  : CrossAxisAlignment.start,
-                                          children: [
-                                            Image.network(
-                                              transaction[
-                                                      'tranCategoryIdCategory']
-                                                  ['imageIconUrl'],
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.1,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    statusCard[index] == false
-                                                        ? MainAxisAlignment
-                                                            .center
-                                                        : MainAxisAlignment
-                                                            .start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    transaction[
-                                                            'tranCategoryIdCategory']
-                                                        [
-                                                        'nameTransactionCategory'],
-                                                    style: TextStyle(
-                                                      color: Color(0xFF15616D),
-                                                      fontSize: 16,
-                                                      fontFamily: 'Roboto',
-                                                      height: 0,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    transaction[
-                                                            'walletIdWallet']
-                                                        ['walletName'],
-                                                    style: TextStyle(
-                                                      color: Color(0xFF6F6F6F),
-                                                      fontSize: 14,
-                                                      fontFamily: 'Roboto',
-                                                      height: 0,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: statusCard[index] == false
-                                              ? const EdgeInsets.all(0)
-                                              : const EdgeInsets.only(
-                                                  top: 10, right: 10),
-                                          child: Row(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 0,
+                                      blurRadius: 2,
+                                      offset: Offset(2, 2),
+                                    ),
+                                  ],
+                                  color: Colors.white, // Background color
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        statusCard[index] == false
+                                            ? MainAxisAlignment.center
+                                            : MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
                                             crossAxisAlignment:
-                                                statusCard[index] == true
-                                                    ? CrossAxisAlignment.start
-                                                    : CrossAxisAlignment.center,
+                                                statusCard[index] == false
+                                                    ? CrossAxisAlignment.center
+                                                    : CrossAxisAlignment.start,
                                             children: [
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  statusCard[index] == false
-                                                      ? Text(
-                                                          "${transaction['statementType'] == "income" ? "+${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}" : "-${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"}",
+                                              Image.network(
+                                                transaction[
+                                                        'tranCategoryIdCategory']
+                                                    ['imageIconUrl'],
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      statusCard[index] == false
+                                                          ? MainAxisAlignment
+                                                              .center
+                                                          : MainAxisAlignment
+                                                              .start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      transaction[
+                                                              'tranCategoryIdCategory']
+                                                          [
+                                                          'nameTransactionCategory'],
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFF15616D),
+                                                        fontSize: 16,
+                                                        fontFamily: 'Roboto',
+                                                        height: 0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      transaction[
+                                                              'walletIdWallet']
+                                                          ['walletName'],
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFF6F6F6F),
+                                                        fontSize: 14,
+                                                        fontFamily: 'Roboto',
+                                                        height: 0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: statusCard[index] == false
+                                                ? const EdgeInsets.all(0)
+                                                : const EdgeInsets.only(
+                                                    top: 10, right: 10),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  statusCard[index] == true
+                                                      ? CrossAxisAlignment.start
+                                                      : CrossAxisAlignment
+                                                          .center,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    statusCard[index] == false
+                                                        ? Text(
+                                                            "${transaction['statementType'] == "income" ? "+${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}" : "-${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"}",
+                                                            style: TextStyle(
+                                                              color: transaction[
+                                                                          'statementType'] ==
+                                                                      "income"
+                                                                  ? Color(
+                                                                      0xFF2DC653)
+                                                                  : Color(
+                                                                      0XFFDD0000),
+                                                              fontSize: 16,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              height: 0,
+                                                            ),
+                                                          )
+                                                        : SizedBox.shrink(),
+                                                    statusCard[index] == false
+                                                        ? Text(
+                                                            "${formattedDate}",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF6F6F6F),
+                                                              fontSize: 14,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              height: 0,
+                                                            ),
+                                                          )
+                                                        : SizedBox.shrink()
+                                                  ],
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.08,
+                                                  child: IconButton(
+                                                    icon: Icon(
+                                                      Icons.more_vert_outlined,
+                                                      color: Color(
+                                                          0XFF898989), // Set the color here
+                                                    ),
+                                                    onPressed: () async {
+                                                      more_vert(
+                                                          transaction['id'],
+                                                          transaction);
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      statusCard[index] == false
+                                          ? SizedBox.shrink()
+                                          : Container(
+                                              height: transaction['imageUrl'] ==
+                                                      null
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.2
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.4,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      height: 2,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          right: 10,
+                                                          left: 10,
+                                                        ),
+                                                        child: Container(
+                                                          height: 40,
+                                                          decoration:
+                                                              ShapeDecoration(
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              side: BorderSide(
+                                                                width: 1,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .zero,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Price",
                                                           style: TextStyle(
-                                                            color: transaction[
-                                                                        'statementType'] ==
-                                                                    "income"
-                                                                ? Color(
-                                                                    0xFF2DC653)
-                                                                : Color(
-                                                                    0XFFDD0000),
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Color(
+                                                                0XFF898989),
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            height: 0,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "${"${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"}฿",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0XFF15616D),
                                                             fontSize: 16,
                                                             fontFamily:
                                                                 'Roboto',
                                                             height: 0,
                                                           ),
                                                         )
-                                                      : SizedBox.shrink(),
-                                                  statusCard[index] == false
-                                                      ? Text(
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Date",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Color(
+                                                                0XFF898989),
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            height: 0,
+                                                          ),
+                                                        ),
+                                                        Text(
                                                           "${formattedDate}",
                                                           style: TextStyle(
                                                             color: Color(
-                                                                0xFF6F6F6F),
-                                                            fontSize: 14,
+                                                                0XFF15616D),
+                                                            fontSize: 16,
                                                             fontFamily:
                                                                 'Roboto',
                                                             height: 0,
                                                           ),
                                                         )
-                                                      : SizedBox.shrink()
-                                                ],
-                                              ),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.08,
-                                                child: IconButton(
-                                                  icon: Icon(
-                                                    Icons.more_vert_outlined,
-                                                    color: Color(
-                                                        0XFF898989), // Set the color here
-                                                  ),
-                                                  onPressed: () async {
-                                                    more_vert(transaction['id'],
-                                                        transaction);
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    statusCard[index] == false
-                                        ? SizedBox.shrink()
-                                        : Container(
-                                            height:
-                                                transaction['imageUrl'] == null
-                                                    ? MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.2
-                                                    : MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.4,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10, right: 10),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    height: 2,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        right: 10,
-                                                        left: 10,
-                                                      ),
-                                                      child: Container(
-                                                        height: 40,
-                                                        decoration:
-                                                            ShapeDecoration(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            side: BorderSide(
-                                                              width: 1,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .zero,
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Description",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0XFF898989),
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            height: 0,
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Price",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              Color(0XFF898989),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "${"${NumberFormat("#,##0.00").format(transaction['stmTransaction'])}"}฿",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0XFF15616D),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Date",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              Color(0XFF898989),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "${formattedDate}",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0XFF15616D),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Description",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0XFF898989),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          height: 0,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "${transaction['description'] == "null" ? "-" : transaction['description']}",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0XFF15616D),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        "Photo",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0XFF898989),
-                                                          fontSize: 16,
-                                                          fontFamily: 'Roboto',
-                                                          height: 0,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                        ),
-                                                      ),
-                                                      transaction['imageUrl'] !=
-                                                              null
-                                                          ? SizedBox.shrink()
-                                                          : Text(
-                                                              "-",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0XFF15616D),
-                                                                fontSize: 16,
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                height: 0,
-                                                              ),
-                                                            )
-                                                    ],
-                                                  ),
-                                                  transaction['imageUrl'] !=
-                                                          null
-                                                      ? Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            OutlinedButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                side: MaterialStateProperty.all<
-                                                                        BorderSide>(
-                                                                    BorderSide
-                                                                        .none),
-                                                                overlayColor:
-                                                                    MaterialStateProperty.all<
-                                                                            Color>(
-                                                                        Colors
-                                                                            .white),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) {
-                                                                  return Scaffold(
-                                                                    appBar:
-                                                                        AppBar(
-                                                                      backgroundColor:
-                                                                          Color(
-                                                                              0xFF15616D),
-                                                                    ),
-                                                                    body:
-                                                                        Center(
-                                                                      child: Image
-                                                                          .network(
-                                                                        '${transaction['imageUrl']}',
-                                                                        fit: BoxFit
-                                                                            .contain,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }));
-                                                              },
-                                                              child:
-                                                                  Image.network(
-                                                                '${transaction['imageUrl']}',
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.3,
-                                                                height: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height *
-                                                                    0.2,
-                                                              ),
-                                                            )
-                                                          ],
+                                                        Text(
+                                                          "${transaction['description'] == "null" ? "-" : transaction['description']}",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0XFF15616D),
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            height: 0,
+                                                          ),
                                                         )
-                                                      : SizedBox.shrink()
-                                                ],
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Photo",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0XFF898989),
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            height: 0,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                        transaction['imageUrl'] !=
+                                                                null
+                                                            ? SizedBox.shrink()
+                                                            : Text(
+                                                                "-",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0XFF15616D),
+                                                                  fontSize: 16,
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  height: 0,
+                                                                ),
+                                                              )
+                                                      ],
+                                                    ),
+                                                    transaction['imageUrl'] !=
+                                                            null
+                                                        ? Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              OutlinedButton(
+                                                                style:
+                                                                    ButtonStyle(
+                                                                  side: MaterialStateProperty.all<
+                                                                          BorderSide>(
+                                                                      BorderSide
+                                                                          .none),
+                                                                  overlayColor:
+                                                                      MaterialStateProperty.all<
+                                                                              Color>(
+                                                                          Colors
+                                                                              .white),
+                                                                ),
+                                                                onPressed: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder:
+                                                                              (context) {
+                                                                    return Scaffold(
+                                                                      appBar:
+                                                                          AppBar(
+                                                                        backgroundColor:
+                                                                            Color(0xFF15616D),
+                                                                      ),
+                                                                      body:
+                                                                          Center(
+                                                                        child: Image
+                                                                            .network(
+                                                                          '${transaction['imageUrl']}',
+                                                                          fit: BoxFit
+                                                                              .contain,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }));
+                                                                },
+                                                                child: Image
+                                                                    .network(
+                                                                  '${transaction['imageUrl']}',
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.3,
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.2,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                                        : SizedBox.shrink()
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }));
+                        );
+                      })),
+                    );
             },
           ),
         ),

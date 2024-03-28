@@ -10,10 +10,21 @@ class GraphBloc extends Bloc<GraphEvent, GraphState> {
     on<ResetGraph>((event, emit) {
       emit(GraphState()); // Reset the state to the initial state
     });
+
+    on<UpdateGraphList>((event, emit) {
+      emit(state.copyWith(
+          loadingGraph:
+              GraphStatus.loaded)); // Reset the state to the initial state
+    });
     on<ResetGraphList>((event, emit) {
       emit(state.copyWith(
           graphList: {},
           updateTypeGraph: 1)); // Reset the state to the initial state
+    });
+    on<ResetGraphAnalysic>((event, emit) {
+      emit(state.copyWith(
+        loadingGraph: GraphStatus.loading,
+      )); // Reset the state to the initial state
     });
     on<UpdateTypeGraph>((event, emit) {
       emit(state.copyWith(

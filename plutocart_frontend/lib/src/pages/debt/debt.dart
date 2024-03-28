@@ -28,6 +28,7 @@ class _DebtPageState extends State<DebtPage> {
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<GraphBloc>().add(GetGraph(1));
     context.read<GraphBloc>().add(UpdateTypeGraph(1));
+    context.read<GraphBloc>().add(UpdateGraphList());
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
     });
@@ -602,6 +603,9 @@ class _DebtPageState extends State<DebtPage> {
                 ),
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.09,
+            )
           ],
         ),
       ),

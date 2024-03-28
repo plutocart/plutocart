@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     context.read<TransactionBloc>().add(GetTransactionLimit3());
     context.read<GraphBloc>().add(GetGraph(1));
     context.read<GraphBloc>().add(UpdateTypeGraph(1));
+    context.read<GraphBloc>().add(UpdateGraphList());
     context.read<GoalBloc>().add(GetGoalByAccountId(0));
     context.read<DebtBloc>().add(GetDebtByAccountId(0));
     super.initState();
@@ -141,6 +142,9 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.09,
+                )
               ],
             ),
           ),

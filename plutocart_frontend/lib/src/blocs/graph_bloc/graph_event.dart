@@ -18,3 +18,7 @@ class UpdateTypeGraph extends GraphEvent {
 }
 
 class ResetGraphList extends GraphEvent {}
+
+class ResetGraphAnalysic extends GraphEvent {}
+
+class UpdateGraphList extends GraphEvent {}
