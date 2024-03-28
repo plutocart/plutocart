@@ -22,6 +22,7 @@ class GraphPage extends StatefulWidget {
 class _GraphPageState extends State<GraphPage> {
   bool? toggleOther;
   double? totalOther;
+  int? size;
   List<GraphData> data = [];
   @override
   void initState() {
@@ -35,11 +36,18 @@ class _GraphPageState extends State<GraphPage> {
     });
     print("Check Data graph : ${data}");
 
-    data = [];
-    int size = context.read<GraphBloc>().state.graphList.length <= 5
-        ? context.read<GraphBloc>().state.graphList.length
+    data.clear();
+    size = context
+                .read<GraphBloc>()
+                .state
+                .graphList['graphStatementList']
+                .length <=
+            5
+        ? context.read<GraphBloc>().state.graphList['graphStatementList'].length
         : 5;
-    for (int i = 0; i <= size; i++) {
+
+    print("Check Data graphs : ${size}");
+    for (int i = 0; i < size!; i++) {
       data.add(GraphData(
           context.read<GraphBloc>().state.graphList['graphStatementList']
               ['${i}']['transactionCategory']['nameTransactionCategory'],
@@ -48,17 +56,28 @@ class _GraphPageState extends State<GraphPage> {
           context.read<GraphBloc>().state.graphList['graphStatementList']
               ['${i}']['transactionCategory']['colorGraph']));
     }
-    data.add(GraphData(
-        "Other",
-        context.read<GraphBloc>().state.graphList['totalAmountOther'],
-        "0XFF989898"));
+    if (size! >= 5) {
+      data.add(GraphData(
+          "Other",
+          context.read<GraphBloc>().state.graphList['totalAmountOther'],
+          "0XFF989898"));
+    }
 
     context.read<GraphBloc>().stream.listen((event) {
-      data = [];
-      int size = context.read<GraphBloc>().state.graphList.length <= 5
-          ? context.read<GraphBloc>().state.graphList.length
+      data.clear();
+      size = context
+                  .read<GraphBloc>()
+                  .state
+                  .graphList['graphStatementList']
+                  .length <=
+              5
+          ? context
+              .read<GraphBloc>()
+              .state
+              .graphList['graphStatementList']
+              .length
           : 5;
-      for (int i = 0; i <= size; i++) {
+      for (int i = 0; i < size!; i++) {
         data.add(GraphData(
             context.read<GraphBloc>().state.graphList['graphStatementList']
                 ['${i}']['transactionCategory']['nameTransactionCategory'],
@@ -67,16 +86,16 @@ class _GraphPageState extends State<GraphPage> {
             context.read<GraphBloc>().state.graphList['graphStatementList']
                 ['${i}']['transactionCategory']['colorGraph']));
       }
-      data.add(GraphData(
-          "Other",
-          context.read<GraphBloc>().state.graphList['totalAmountOther'],
-          "0XFF989898"));
+      if (size! >= 5) {
+        data.add(GraphData(
+            "Other",
+            context.read<GraphBloc>().state.graphList['totalAmountOther'],
+            "0XFF989898"));
+      }
 
       context.read<GraphBloc>().add(ResetGraphAnalysic());
     });
     super.initState();
-
-    print("Check color : ${data[0].color}");
   }
 
   @override
@@ -135,15 +154,7 @@ class _GraphPageState extends State<GraphPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     FilterGraph(),
-                    state.graphList['graphStatementList'].length > 3
-                        ? SizedBox(height: 15)
-                        : SizedBox.shrink(),
-                    context
-                                .read<GraphBloc>()
-                                .state
-                                .graphList['graphStatementList']
-                                .length ==
-                            0
+                    size == 0
                         ? Container(
                             height: MediaQuery.of(context).size.height * 0.9,
                             child: Center(

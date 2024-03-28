@@ -493,11 +493,21 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionStatus());
-                              context.read<GraphBloc>().add(
-                                  GetGraph(indexTransactionType == 0 ? 1 : 2));
+                              context.read<GraphBloc>().add(GetGraph(context
+                                  .read<GraphBloc>()
+                                  .state
+                                  .updateTypeGraph));
                               context.read<GraphBloc>().add(UpdateTypeGraph(
-                                  indexTransactionType == 0 ? 1 : 2));
+                                  context
+                                      .read<GraphBloc>()
+                                      .state
+                                      .updateTypeGraph));
+                              // context.read<GraphBloc>().add(
+                              //     GetGraph(indexTransactionType == 0 ? 1 : 2));
+                              // context.read<GraphBloc>().add(UpdateTypeGraph(
+                              //     indexTransactionType == 0 ? 1 : 2));
                               context.read<GraphBloc>().add(UpdateGraphList());
+
                               Navigator.of(context).pop();
                               Navigator.pop(context);
                             }
@@ -545,8 +555,15 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<GoalBloc>()
                                   .add(CheckGoalComplete(idGoalFormat));
-                              context.read<GraphBloc>().add(GetGraph(2));
-                              context.read<GraphBloc>().add(UpdateTypeGraph(2));
+                              context.read<GraphBloc>().add(GetGraph(context
+                                  .read<GraphBloc>()
+                                  .state
+                                  .updateTypeGraph));
+                              context.read<GraphBloc>().add(UpdateTypeGraph(
+                                  context
+                                      .read<GraphBloc>()
+                                      .state
+                                      .updateTypeGraph));
                               context.read<GraphBloc>().add(UpdateGraphList());
                               Navigator.pop(context);
                               Navigator.pop(context);
@@ -592,8 +609,15 @@ class _CardTransactionPopupState extends State<CardTransactionPopup> {
                               context
                                   .read<TransactionBloc>()
                                   .add(ResetTransactionDebtStatus());
-                              context.read<GraphBloc>().add(GetGraph(2));
-                              context.read<GraphBloc>().add(UpdateTypeGraph(2));
+                              context.read<GraphBloc>().add(GetGraph(context
+                                  .read<GraphBloc>()
+                                  .state
+                                  .updateTypeGraph));
+                              context.read<GraphBloc>().add(UpdateTypeGraph(
+                                  context
+                                      .read<GraphBloc>()
+                                      .state
+                                      .updateTypeGraph));
                               context.read<GraphBloc>().add(UpdateGraphList());
                               Navigator.pop(context);
                               Navigator.pop(context);
