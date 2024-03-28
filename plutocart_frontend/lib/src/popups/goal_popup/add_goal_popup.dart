@@ -19,11 +19,16 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
   TextEditingController yourSaveMoneyController = TextEditingController();
   TextEditingController tranDateController = TextEditingController();
   TextEditingController nameGoalController = TextEditingController();
-  bool ? fullField;
+  bool? fullField;
 
-  void checkFullField(){
-   fullField = ( budgetGoalController.text.length <= 0 || yourSaveMoneyController.text.length <= 0 || nameGoalController.text.length <= 0 ) ? false : true;
+  void checkFullField() {
+    fullField = (budgetGoalController.text.length <= 0 ||
+            yourSaveMoneyController.text.length <= 0 ||
+            nameGoalController.text.length <= 0)
+        ? false
+        : true;
   }
+
   @override
   void initState() {
     DateTime now = DateTime.now();
@@ -32,12 +37,12 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
         checkFullField();
       });
     });
-     budgetGoalController.addListener(() {
+    budgetGoalController.addListener(() {
       setState(() {
         checkFullField();
       });
     });
-     yourSaveMoneyController.addListener(() {
+    yourSaveMoneyController.addListener(() {
       setState(() {
         checkFullField();
       });
@@ -45,7 +50,8 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
     String formattedDateTime =
         '${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
     tranDateController.text = formattedDateTime;
-    context.read<GoalBloc>().add(GetGoalByAccountId(context.read<GoalBloc>().state.statusFilterGoalNumber));
+    context.read<GoalBloc>().add(GetGoalByAccountId(
+        context.read<GoalBloc>().state.statusFilterGoalNumber));
     super.initState();
   }
 
@@ -124,6 +130,10 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                 fontWeight: FontWeight.w400,
               ),
               onChanged: (value) {
+                if (value.contains(' ') &&
+                    nameGoalController.text.length == 1) {
+                  nameGoalController.text = value.replaceAll(' ', '');
+                }
                 setState(() {});
               },
             ),
@@ -150,7 +160,7 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                 if (nameGoalController.text.length <= 0 ||
                     budgetGoalController.text.length <= 0 ||
                     yourSaveMoneyController.text.length <= 0 ||
-                    tranDateController.text.length <= 0) {    
+                    tranDateController.text.length <= 0) {
                   // customAlertPopup(context, "Information missing",
                   //     Icons.error_outline_rounded, Colors.red.shade200);
                   null;
@@ -168,13 +178,15 @@ class _AddGoalPopupState extends State<AddGoalPopup> {
                       tranDateFormat));
                   context.read<GoalBloc>().stream.listen((state) {
                     if (state.createGoalStatus == GoalStatus.loaded) {
-                      print("status goal number : ${state.statusFilterGoalNumber}");
+                      print(
+                          "status goal number : ${state.statusFilterGoalNumber}");
                       context.read<GoalBloc>().add(ResetGoalStatus());
-                      context.read<GoalBloc>().add(UpdateStatusNumberGoal(state.statusFilterGoalNumber));
-                      context.read<GoalBloc>().add(GetGoalByAccountId(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(
+                          UpdateStatusNumberGoal(state.statusFilterGoalNumber));
+                      context.read<GoalBloc>().add(
+                          GetGoalByAccountId(state.statusFilterGoalNumber));
                       Navigator.pop(context);
                       Navigator.pop(context);
-                     
                     }
                   });
                 }

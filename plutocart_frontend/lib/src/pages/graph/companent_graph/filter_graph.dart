@@ -61,7 +61,7 @@ class _FilterGraphState extends State<FilterGraph> {
                     });
                   },
                   child: Text(
-                    "income",
+                    "Income",
                     style: TextStyle(
                         color: textColorList![0],
                         fontSize: 16,

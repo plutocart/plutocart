@@ -141,7 +141,10 @@ class _CardGroupState extends State<CardGroup> {
                                             state.transactionLimit3[index];
                                         return Skeleton.replace(
                                           child: Container(
-                                            width: MediaQuery.of(context).size.width * 0.88,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.88,
                                             height: 57,
                                             margin: const EdgeInsets.only(
                                                 bottom: 10),
@@ -194,28 +197,30 @@ class _CardGroupState extends State<CardGroup> {
                                                                 [
                                                                 'nameTransactionCategory'],
                                                             style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF15616D),
-                                                              fontSize: 16,
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              height: 0,
-                                                              fontWeight:FontWeight.w500 
-                                                            ),
+                                                                color: Color(
+                                                                    0xFF15616D),
+                                                                fontSize: 16,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                height: 0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
                                                           ),
                                                           Text(
                                                             transaction[
                                                                     'walletIdWallet']
                                                                 ['walletName'],
                                                             style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF6F6F6F),
-                                                              fontSize: 14,
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              height: 0,
-                                                              fontWeight:FontWeight.w500 
-                                                            ),
+                                                                color: Color(
+                                                                    0xFF6F6F6F),
+                                                                fontSize: 14,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                height: 0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
                                                           )
                                                         ],
                                                       ),
@@ -234,7 +239,8 @@ class _CardGroupState extends State<CardGroup> {
                                                           color: transaction[
                                                                       'statementType'] ==
                                                                   "expense"
-                                                              ? Color(0XFFDD0000)
+                                                              ? Color(
+                                                                  0XFFDD0000)
                                                               : Color(
                                                                   0xFF2DC653),
                                                           fontSize: 16,
@@ -492,7 +498,7 @@ class _CardGroupState extends State<CardGroup> {
                                                           style: TextStyle(
                                                               color: Color(
                                                                   0XFF898989),
-                                                              fontSize: 14,
+                                                              fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w400,
@@ -618,7 +624,7 @@ class _CardGroupState extends State<CardGroup> {
         hightCard: 2.5);
   }
 
-   createDebt() async {
+  createDebt() async {
     showSlideDialog(
         context: context,
         child: AddDebtPopup(),

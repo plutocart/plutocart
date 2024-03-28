@@ -478,7 +478,7 @@ class _GoalPageState extends State<GoalPage> {
                                                                         color: Color(
                                                                             0XFF898989),
                                                                         fontSize:
-                                                                            14,
+                                                                            12,
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .w400,

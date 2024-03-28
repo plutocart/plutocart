@@ -131,6 +131,10 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                 fontWeight: FontWeight.w400,
               ),
               onChanged: (value) {
+                if (value.contains(' ') &&
+                    nameGoalController.text.length == 1) {
+                  nameGoalController.text = value.replaceAll(' ', '');
+                }
                 setState(() {});
               },
             ),
@@ -176,7 +180,7 @@ class _EditGoalPopupState extends State<EditGoalPopup> {
                           GetGoalByAccountId(state.statusFilterGoalNumber));
                       context.read<GoalBloc>().add(ResetUpdateGoalStatus());
                       print("check statetus : ${state.updateGoalStatus}");
-                     Navigator.popUntil(context, (route) => route.isFirst);                   
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     }
                   });
                 } else {

@@ -12,6 +12,7 @@ import 'package:plutocart/src/popups/action_complete_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/add_debt_popup.dart';
 import 'package:plutocart/src/popups/debt_popup/more_vert_debt.dart';
 import 'package:plutocart/src/popups/setting_popup.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DebtPage extends StatefulWidget {
   const DebtPage({Key? key}) : super(key: key);
@@ -32,8 +33,8 @@ class _DebtPageState extends State<DebtPage> {
     BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
       statusCard.add(false);
     });
-
     context.read<DebtBloc>().stream.listen((event) {
+      statusCard.clear();
       BlocProvider.of<DebtBloc>(context).state.debtList.forEach((_) {
         statusCard.add(false);
       });
@@ -127,320 +128,156 @@ class _DebtPageState extends State<DebtPage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FilterDebt(),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: BlocBuilder<DebtBloc, DebtState>(
-                  builder: (context, state) {
-                    return state.debtList.length == 0
-                        ? Center(
-                            child: Container(
-                              constraints: BoxConstraints(
-                                  minHeight:
-                                      MediaQuery.of(context).size.height * 0.9),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    image: AssetImage(
-                                        'assets/icon/icon_launch.png'),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 157),
-                                    child: Text("No record",
-                                        style: TextStyle(
-                                            color: Color(0xFF15616D),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: "Roboto")),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Column(
-                            children:
-                                List.generate(state.debtList.length, (index) {
-                              final Map<String, dynamic> debt =
-                                  state.debtList[index];
-                              final DateTime inputDate;
-                              final dynamic formattedDate;
-                              if (debt['latestPayDate'] != null) {
-                                inputDate =
-                                    DateTime.parse(debt['latestPayDate']);
-                                formattedDate =
-                                    DateFormat('dd MMM yyyy').format(inputDate);
-                              } else {
-                                formattedDate = null;
-                              }
-
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: OutlinedButton(
-                                  style: ButtonStyle(
-                                    side: MaterialStateProperty.all<BorderSide>(
-                                        BorderSide.none),
-                                    overlayColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.white),
-                                  ),
-                                  onPressed: () {
-                                    statusCard[index] = !statusCard[index];
-                                    setState(() {});
-                                  },
-                                  child: Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      height: statusCard[index] == true
-                                          ? debt['statusDebt'] != 1
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.31
-                                              : MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.38
-                                          : MediaQuery.of(context).size.height *
-                                              0.15,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          width: 1,
-                                          color: Color(0XFF15616D),
+        child: BlocBuilder<DebtBloc, DebtState>(
+          builder: (context, state) {
+            return Skeletonizer(
+              enabled: state.getDebtStatus == DebtStatus.loading,
+              child: Column(
+                children: [
+                  FilterDebt(),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: BlocBuilder<DebtBloc, DebtState>(
+                        builder: (context, state) {
+                          return state.debtList.length == 0
+                              ? Center(
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                        minHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.9),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(
+                                              'assets/icon/icon_launch.png'),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
                                         ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.2),
-                                            spreadRadius: 0,
-                                            blurRadius: 2,
-                                            offset: Offset(2, 2),
-                                          ),
-                                        ],
-                                        color: Colors.white, // Background color
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10, top: 10),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Image.network(
-                                                      'https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441750/category_images/Debts_89cb0a76-a6c2-49c6-8ff3-e4a70555330d.png',
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.1,
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "${debt['nameDebt']}",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xFF15616D),
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                "Roboto",
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          "${debt['moneyLender']}",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0XFF898989),
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                "Roboto",
-                                                          ),
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 157),
+                                          child: Text("No record",
+                                              style: TextStyle(
+                                                  color: Color(0xFF15616D),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Roboto")),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Column(
+                                  children: List.generate(state.debtList.length,
+                                      (index) {
+                                    final Map<String, dynamic> debt =
+                                        state.debtList[index];
+                                    final DateTime inputDate;
+                                    final dynamic formattedDate;
+                                    if (debt['latestPayDate'] != null) {
+                                      inputDate =
+                                          DateTime.parse(debt['latestPayDate']);
+                                      formattedDate = DateFormat('dd MMM yyyy')
+                                          .format(inputDate);
+                                    } else {
+                                      formattedDate = null;
+                                    }
+
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: OutlinedButton(
+                                        style: ButtonStyle(
+                                          side: MaterialStateProperty.all<
+                                              BorderSide>(BorderSide.none),
+                                          overlayColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white),
+                                        ),
+                                        onPressed: () {
+                                          statusCard[index] =
+                                              !statusCard[index];
+                                          setState(() {});
+                                        },
+                                        child: Center(
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            height: statusCard[index] == true
+                                                ? debt['statusDebt'] != 1
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.31
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.38
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.15,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                width: 1,
+                                                color: Color(0XFF15616D),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.2),
+                                                  spreadRadius: 0,
+                                                  blurRadius: 2,
+                                                  offset: Offset(2, 2),
                                                 ),
-                                                Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.08,
-                                                  child: IconButton(
-                                                    icon: Icon(
-                                                      Icons.more_vert_outlined,
-                                                      color: Color(
-                                                          0XFF898989), // Set the color here
-                                                    ),
-                                                    onPressed: () {
-                                                      more_vert(
-                                                          debt['id'], debt);
-                                                    },
-                                                  ),
-                                                )
                                               ],
+                                              color: Colors
+                                                  .white, // Background color
                                             ),
-                                            SizedBox(height: 10),
-                                            statusCard[index] == true
-                                                ? Column(
-                                                    children: [
-                                                      Container(
-                                                        height: 1,
-                                                        decoration:
-                                                            ShapeDecoration(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            side: BorderSide(
-                                                              width: 0.5,
-                                                              color: Color(
-                                                                  0XFF898989),
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      DetailDebt(
-                                                        value1: "Total periods",
-                                                        value2:
-                                                            debt['totalPeriod'],
-                                                      ),
-                                                      DetailDebt(
-                                                        value1:
-                                                            "Paid period(s)",
-                                                        value2:
-                                                            debt['paidPeriod'],
-                                                      ),
-                                                      DetailDebt(
-                                                        value1:
-                                                            "Monthly payment",
-                                                        value2: NumberFormat(
-                                                                "##,##0.00")
-                                                            .format(
-                                                          debt[
-                                                              'monthlyPayment'],
-                                                        ),
-                                                      ),
-                                                      DetailDebt(
-                                                        value1: "Debt paid",
-                                                        value2: NumberFormat(
-                                                                "##,##0.00")
-                                                            .format(debt[
-                                                                'debtPaid']),
-                                                      ),
-                                                      DetailDebt(
-                                                        value1: "Total debt",
-                                                        value2: NumberFormat(
-                                                                "##,##0.00")
-                                                            .format(debt[
-                                                                'totalDebt']),
-                                                      ),
-                                                      DetailDebt(
-                                                        value1: "Latest paid",
-                                                        value2:
-                                                            "${formattedDate == null ? "-" : formattedDate}",
-                                                      ),
-                                                      debt['statusDebt'] != 1
-                                                          ? SizedBox.shrink()
-                                                          : Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      top: 10),
-                                                              child: Container(
-                                                                width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.9,
-                                                                height: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height *
-                                                                    0.055,
-                                                                child: ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        backgroundColor: Color(0XFF15616D),
-                                                                        shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20),
-                                                                        )),
-                                                                    onPressed: () {
-                                                                      completeDebtAction(
-                                                                          debt,
-                                                                          state);
-                                                                      context
-                                                                          .read<
-                                                                              DebtBloc>()
-                                                                          .stream
-                                                                          .listen(
-                                                                              (event) {
-                                                                        if (event.updateDebtStatus ==
-                                                                            DebtStatus.loaded) {
-                                                                          context
-                                                                              .read<DebtBloc>()
-                                                                              .add(GetDebtByAccountId(event.statusFilterDebtNumber));
-                                                                          context
-                                                                              .read<DebtBloc>()
-                                                                              .add(ResetUpdateDebtStatus());
-                                                                        }
-                                                                      });
-                                                                    },
-                                                                    child: Text("Complete")),
-                                                              ),
-                                                            ),
-                                                    ],
-                                                  )
-                                                : Row(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10, top: 10),
+                                              child: Column(
+                                                children: [
+                                                  Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceEvenly,
+                                                            .spaceBetween,
                                                     children: [
-                                                      Column(
+                                                      Row(
                                                         children: [
-                                                          Text(
-                                                            "Paid period(s)",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0XFF898989),
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Roboto",
-                                                            ),
+                                                          Image.network(
+                                                            'https://res.cloudinary.com/dtczkwnwt/image/upload/v1706441750/category_images/Debts_89cb0a76-a6c2-49c6-8ff3-e4a70555330d.png',
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.1,
                                                           ),
-                                                          Row(
+                                                          SizedBox(width: 10),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Text(
-                                                                "${debt['paidPeriod']}",
+                                                                "${debt['nameDebt']}",
                                                                 style:
                                                                     TextStyle(
                                                                   color: Color(
-                                                                      0XFF15616D),
-                                                                  fontSize: 14,
+                                                                      0xFF15616D),
+                                                                  fontSize: 20,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -449,7 +286,7 @@ class _DebtPageState extends State<DebtPage> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "/",
+                                                                "${debt['moneyLender']}",
                                                                 style:
                                                                     TextStyle(
                                                                   color: Color(
@@ -461,152 +298,349 @@ class _DebtPageState extends State<DebtPage> {
                                                                   fontFamily:
                                                                       "Roboto",
                                                                 ),
-                                                              ),
-                                                              Text(
-                                                                "${debt['totalPeriod']}",
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Color(
-                                                                      0xFF1A9CB0),
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontFamily:
-                                                                      "Roboto",
-                                                                ),
                                                               )
                                                             ],
-                                                          ),
+                                                          )
                                                         ],
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10,
-                                                                left: 10),
-                                                        child: Container(
-                                                          height: 40,
-                                                          decoration:
-                                                              ShapeDecoration(
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              side: BorderSide(
-                                                                width: 1,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                                            ),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.08,
+                                                        child: IconButton(
+                                                          icon: Icon(
+                                                            Icons
+                                                                .more_vert_outlined,
+                                                            color: Color(
+                                                                0XFF898989), // Set the color here
                                                           ),
+                                                          onPressed: () {
+                                                            more_vert(
+                                                                debt['id'],
+                                                                debt);
+                                                          },
                                                         ),
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          Text(
-                                                            "Debt paid",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0XFF898989),
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Roboto",
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "${NumberFormat("#,##0.00").format(debt['debtPaid'])}฿",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF15616D),
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily:
-                                                                  "Roboto",
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10,
-                                                                left: 10),
-                                                        child: Container(
-                                                          height: 40,
-                                                          decoration:
-                                                              ShapeDecoration(
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              side: BorderSide(
-                                                                width: 1,
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          Text(
-                                                            "Latest paid",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0XFF898989),
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontFamily:
-                                                                  "Roboto",
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "${formattedDate == null ? "-" : formattedDate}",
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF15616D),
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily:
-                                                                  "Roboto",
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                      )
                                                     ],
-                                                  )
-                                          ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  statusCard[index] == true
+                                                      ? Column(
+                                                          children: [
+                                                            Container(
+                                                              height: 1,
+                                                              decoration:
+                                                                  ShapeDecoration(
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  side:
+                                                                      BorderSide(
+                                                                    width: 0.5,
+                                                                    color: Color(
+                                                                        0XFF898989),
+                                                                  ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Total periods",
+                                                              value2: debt[
+                                                                  'totalPeriod'],
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Paid period(s)",
+                                                              value2: debt[
+                                                                  'paidPeriod'],
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Monthly payment",
+                                                              value2: NumberFormat(
+                                                                      "##,##0.00")
+                                                                  .format(
+                                                                debt[
+                                                                    'monthlyPayment'],
+                                                              ),
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Debt paid",
+                                                              value2: NumberFormat(
+                                                                      "##,##0.00")
+                                                                  .format(debt[
+                                                                      'debtPaid']),
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Total debt",
+                                                              value2: NumberFormat(
+                                                                      "##,##0.00")
+                                                                  .format(debt[
+                                                                      'totalDebt']),
+                                                            ),
+                                                            DetailDebt(
+                                                              value1:
+                                                                  "Latest paid",
+                                                              value2:
+                                                                  "${formattedDate == null ? "-" : formattedDate}",
+                                                            ),
+                                                            debt['statusDebt'] !=
+                                                                    1
+                                                                ? SizedBox
+                                                                    .shrink()
+                                                                : Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            10),
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.9,
+                                                                      height: MediaQuery.of(context)
+                                                                              .size
+                                                                              .height *
+                                                                          0.055,
+                                                                      child: ElevatedButton(
+                                                                          style: ElevatedButton.styleFrom(
+                                                                              backgroundColor: Color(0XFF15616D),
+                                                                              shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(20),
+                                                                              )),
+                                                                          onPressed: () {
+                                                                            completeDebtAction(debt,
+                                                                                state);
+                                                                            context.read<DebtBloc>().stream.listen((event) {
+                                                                              if (event.updateDebtStatus == DebtStatus.loaded) {
+                                                                                context.read<DebtBloc>().add(GetDebtByAccountId(event.statusFilterDebtNumber));
+                                                                                context.read<DebtBloc>().add(ResetUpdateDebtStatus());
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          child: Text("Complete")),
+                                                                    ),
+                                                                  ),
+                                                          ],
+                                                        )
+                                                      : Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Column(
+                                                              children: [
+                                                                Text(
+                                                                  "Paid period(s)",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0XFF898989),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Roboto",
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      "${debt['paidPeriod']}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0XFF15616D),
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        fontFamily:
+                                                                            "Roboto",
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      "/",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0XFF898989),
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        fontFamily:
+                                                                            "Roboto",
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      "${debt['totalPeriod']}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Color(
+                                                                            0xFF1A9CB0),
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        fontFamily:
+                                                                            "Roboto",
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 10,
+                                                                      left: 10),
+                                                              child: Container(
+                                                                height: 40,
+                                                                decoration:
+                                                                    ShapeDecoration(
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    side:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                Text(
+                                                                  "Debt paid",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0XFF898989),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Roboto",
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "${NumberFormat("#,##0.00").format(debt['debtPaid'])}฿",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF15616D),
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontFamily:
+                                                                        "Roboto",
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 10,
+                                                                      left: 10),
+                                                              child: Container(
+                                                                height: 40,
+                                                                decoration:
+                                                                    ShapeDecoration(
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    side:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .zero, // หรือกำหนดรูปแบบได้ตามที่ต้องการ
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Column(
+                                                              children: [
+                                                                Text(
+                                                                  "Latest paid",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0XFF898989),
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        "Roboto",
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "${formattedDate == null ? "-" : formattedDate}",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF15616D),
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontFamily:
+                                                                        "Roboto",
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          );
-                  },
-                ),
+                                    );
+                                  }),
+                                );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.09,
+                  )
+                ],
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09,
-            )
-          ],
+            );
+          },
         ),
       ),
     );

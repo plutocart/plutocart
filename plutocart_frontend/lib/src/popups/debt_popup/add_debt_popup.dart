@@ -212,6 +212,9 @@ class _AddDebtPopupState extends State<AddDebtPopup> {
               fontWeight: FontWeight.w400,
             ),
             onChanged: (value) {
+              if (value.contains(' ') && nameDebtController.text.length == 1) {
+                nameDebtController.text = value.replaceAll(' ', '');
+              }
               setState(() {});
             },
           ),

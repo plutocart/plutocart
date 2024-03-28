@@ -29,14 +29,14 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
             decoration: InputDecoration(
               labelText: widget.lableTextField1,
               labelStyle: TextStyle(
-                color: widget.nameWalletController.text.length != 0
+                color: widget.nameWalletController.text.isNotEmpty
                     ? Color(0xFF1A9CB0)
                     : Color(0XFFDD0000),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 2,
-                  color: widget.nameWalletController.text.length != 0
+                  color: widget.nameWalletController.text.isNotEmpty
                       ? Color(0xFF15616D)
                       : Color(0XFFDD0000),
                 ),
@@ -45,7 +45,7 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 1,
-                  color: widget.nameWalletController.text.length != 0
+                  color: widget.nameWalletController.text.isNotEmpty
                       ? Color(0xFF15616D)
                       : Color(0XFFDD0000),
                 ),
@@ -59,15 +59,21 @@ class _InputFieldWalletState extends State<InputFieldWallet> {
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w400,
             ),
-            onChanged: (value){
-                setState(() {});
+            onChanged: (value) {
+              if (value.contains(' ') &&
+                  widget.nameWalletController.text.length == 1) {
+                widget.nameWalletController.text = value.replaceAll(' ', '');
+              }
+              setState(() {});
             },
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: AmountTextField(amountMoneyController: widget.amountMoneyController, nameField: "Amount of money",)
-        ),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: AmountTextField(
+              amountMoneyController: widget.amountMoneyController,
+              nameField: "Amount of money",
+            )),
       ],
     );
   }
